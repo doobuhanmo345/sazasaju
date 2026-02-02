@@ -4,15 +4,20 @@ const nextConfig = {
   pageExtensions: ['js', 'jsx', 'ts', 'tsx'],
   
   images: {
-    domains: ['firebasestorage.googleapis.com', 'sazasaju.com'],
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'firebasestorage.googleapis.com',
+      },
+      {
+        protocol: 'https',
+        hostname: 'sazasaju.com',
+      },
+    ],
   },
 
   typescript: {
     ignoreBuildErrors: true,
-  },
-
-  eslint: {
-    ignoreDuringBuilds: true,
   },
 };
 
