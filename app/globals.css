@@ -1,4 +1,21 @@
-@import "tailwindcss";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Custom cursor for input fields */
+textarea,
+input {
+  cursor:
+    url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24'><path d='M7 4h10v2h-4v12h4v2H7v-2h4V6H7V4z' fill='%234338ca'/></svg>")
+      12 12,
+    text !important;
+}
+
+/* Text selection styling */
+::selection {
+  background-color: rgba(255, 255, 255, 0.2); /* indigo-700 with 20% opacity */
+  color: #4338ca;
+}
 
 :root {
   --background: #ffffff;
@@ -14,8 +31,8 @@
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --background: #ffffff;
+    --foreground: #4c4c4c;
   }
 }
 

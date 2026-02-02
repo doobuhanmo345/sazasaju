@@ -1,0 +1,276 @@
+'use client';
+
+import React, { useEffect, useState, useMemo } from 'react';
+import { useLanguage } from '@/contexts/useLanguageContext';
+import { useSajuCalculator } from '@/hooks/useSajuCalculator';
+import { ref, get, child } from 'firebase/database';
+import { database } from '@/lib/firebase';
+import { setDoc, doc, getDoc, arrayUnion } from 'firebase/firestore';
+import {
+  ChevronLeftIcon,
+  PencilSquareIcon,
+ 
+} from '@heroicons/react/24/solid';
+import { addDoc, collection, serverTimestamp } from 'firebase/firestore';
+import { db } from '@/lib/firebase';
+import { useAuthContext } from '@/contexts/useAuthContext';
+import { classNames, parseAiResponse } from '@/utils/helpers';
+import { fetchGeminiAnalysis } from '@/lib/gemini';
+import AmaKr from './AmaKr';
+export default function SazaTalkAdKrPage() {
+  const [guestId, setGuestId] = useState('');
+  const [step, setStep] = useState(0.5);
+  const { setLanguage } = useLanguage();
+  const { user, userData, loadingUser } = useAuthContext();
+  const [userQuestion, setUserQuestion] = useState('');
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    if (loadingUser) return;
+    if (userData) return;
+    let id = localStorage.getItem('guest_id');
+    if (!id) {
+      id = `guest_${Math.random().toString(36).substr(2, 9)}`;
+      localStorage.setItem('guest_id', id);
+    }
+    setGuestId(id);
+    logStep(step, id);
+  }, [step, userData, loadingUser]);
+
+  const logStep = async (stepName, currentGuestId, extraData = {}) => {
+    if (userData) return;
+    try {
+      await addDoc(collection(db, 'sazatalk_funnel_logs'), {
+        step: stepName,
+        uid: currentGuestId || guestId,
+        isLoggedIn: false,
+        timestamp: serverTimestamp(),
+        ...extraData,
+      });
+    } catch (e) {
+      console.error('Log Error: ', e);
+    }
+  };
+
+  useEffect(() => setLanguage('ko'), [setLanguage]);
+
+  const [gender, setGender] = useState('');
+  const [birthData, setBirthData] = useState({
+    year: '',
+    month: '',
+    day: '',
+    hour: '',
+    minute: '',
+  });
+  const [timeUnknown, setTimeUnknown] = useState(false);
+
+  const memoizedBirthDate = useMemo(() => {
+    const { year, month, day, hour, minute } = birthData;
+    if (!year || !month || !day) return null;
+    const pad = (n) => n?.toString().padStart(2, '0') || '00';
+    const formatted = `${year}-${pad(month)}-${pad(day)}T${timeUnknown ? '12' : pad(hour)}:${timeUnknown ? '00' : pad(minute)}`;
+    return new Date(formatted);
+  }, [birthData, timeUnknown]);
+
+  const { saju } = useSajuCalculator(memoizedBirthDate, timeUnknown);
+
+  const isYearDone = birthData.year.length === 4;
+  const isMonthDone = birthData.month.length >= 1;
+  const isDayDone = birthData.day.length >= 1;
+  const isHourDone = birthData.hour.length >= 1;
+  const isMinuteDone = birthData.minute.length >= 1;
+
+  const [aiResult, setAiResult] = useState();
+  const [data, setData] = useState({});
+
+  useEffect(() => {
+    if (aiResult) {
+      const parsedData = parseAiResponse(aiResult);
+      if (parsedData) setData(parsedData);
+    }
+  }, [aiResult]);
+
+  const getProgress = () => {
+    let score = 0;
+    if (gender) score += 20;
+    if (isYearDone) score += 20;
+    if (isMonthDone) score += 20;
+    if (isDayDone) score += 20;
+    if (timeUnknown) score += 20;
+    else {
+      if (isHourDone) score += 10;
+      if (isMinuteDone) score += 10;
+    }
+    return score;
+  };
+
+  const handleBack = () => {
+    if (step === 'input') {
+      setBirthData({ year: '', month: '', day: '', hour: '', minute: '' });
+      setTimeUnknown(false);
+      setGender(null);
+      setStep(1);
+    } else if (step === 1) {
+      setStep(0.5);
+    } else if (step === 'result') {
+      setStep('input');
+    }
+  };
+
+  const sortObject = (obj) => {
+    if (obj === null || typeof obj !== 'object') return obj;
+    return Object.keys(obj).sort().reduce((acc, key) => {
+      acc[key] = sortObject(obj[key]);
+      return acc;
+    }, {});
+  };
+
+  const isFormValid = getProgress() === 100;
+
+  const handleAskSaza = async () => {
+    const currentId = guestId || user?.uid;
+    if (!currentId) return alert('잠시 후 다시 시도하거나 페이지를 새로고침 해주세요.');
+
+    try {
+      const docRef = doc(db, 'sazatalkad_logs', currentId);
+      const docSnap = await getDoc(docRef);
+      if (docSnap.exists()) {
+        const existingData = docSnap.data();
+        if (JSON.stringify(sortObject(existingData.saju)) === JSON.stringify(sortObject(saju))) {
+          alert('사자사주 홈페이지에 방문해 보세요! 로그인만 하면 무료로 하루에 세 개씩 프리미엄 리포트를 확인할 수 있어요.');
+          return;
+        }
+      }
+    } catch (e) {
+      console.error('Check Error:', e);
+    }
+
+    if (!userQuestion.trim()) return alert('질문을 입력해주세요.');
+    setLoading(true);
+
+    try {
+      const dbRef = ref(database);
+      const [basicSnap, strictSnap, formatSnap] = await Promise.all([
+        get(child(dbRef, 'prompt/saza_basic')),
+        get(child(dbRef, `prompt/saza_strict`)),
+        get(child(dbRef, `prompt/saza_format`)),
+      ]);
+
+      const sajuInfo = `성별:${gender}, 생년${birthData.year} 생월${birthData.month} 생일${birthData.day}, 팔자:${JSON.stringify(saju)}. 호칭:${userData?.displayName || '의뢰자'}`;
+      const todayInfo = `현재 시각:${new Date().toLocaleString()}. 2026년=병오년. `;
+
+      const replacements = {
+        '{{STRICT_PROMPT}}': strictSnap.val() || '',
+        '{{SAZA_FORMAT}}': formatSnap.val() || '',
+        '{{myQuestion}}': userQuestion,
+        '{{sajuInfo}}': sajuInfo,
+        '{{todayInfo}}': todayInfo,
+        '{{langPrompt}}': '**한국어로 150~200 단어로**',
+        '{{hanjaPrompt}}': '',
+      };
+
+      let fullPrompt = basicSnap.val();
+      Object.entries(replacements).forEach(([key, value]) => {
+        fullPrompt = fullPrompt.split(key).join(value || '');
+      });
+
+      const safeDate = new Date().toISOString().replace(/[:.]/g, '-');
+      const result = await fetchGeminiAnalysis(fullPrompt);
+
+      await setDoc(doc(db, 'sazatalkad_logs', currentId), {
+        id: currentId,
+        date: safeDate,
+        user: !!user,
+        saju: saju,
+        question_history: arrayUnion({ question: userQuestion, timestamp: new Date().toISOString() }),
+      }, { merge: true });
+
+      setAiResult(result);
+      setStep('result');
+    } catch (e) {
+      alert(e);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleNextStep = () => {
+    const { year, month, day } = birthData;
+    const y = parseInt(year);
+    const m = parseInt(month);
+    const d = parseInt(day);
+    if (!y || y < 1900 || y > 2030) return alert('연도를 1900~2030년 사이로 입력해주세요.');
+    if (!m || m < 1 || m > 12) return alert('월을 1~12월 사이로 입력해주세요.');
+    const lastDay = new Date(y, m, 0).getDate();
+    if (!d || d < 1 || d > lastDay) return alert(`${m}월은 ${lastDay}일까지 있습니다.`);
+    handleAskSaza();
+  };
+
+  const Loading = () => (
+    <div className="bg-[#FDF5F0] min-h-screen flex flex-col items-center justify-center overflow-hidden px-6">
+      <div className="relative flex items-center justify-center w-72 h-72">
+        <div className="absolute w-44 h-44 rounded-full border-2 border-orange-200 border-dashed animate-[spin_10s_linear_infinite] opacity-40"></div>
+        <div className="relative flex flex-col items-center z-10">
+          <div className="absolute inset-0 bg-orange-400/20 blur-3xl rounded-full scale-150"></div>
+          <span className="text-8xl select-none drop-shadow-lg mb-2">🦁</span>
+          <div className="bg-[#F47521] text-white text-[10px] font-black px-3 py-1 rounded-full tracking-widest animate-pulse">ANALYZING</div>
+        </div>
+      </div>
+      <h2 className="text-2xl font-black text-[#4A3428] mt-8">사자가 분석 중...</h2>
+      <p className="text-[15px] text-[#8B6E5E] font-bold mt-2">사자와 27명의 명리학자가 함께 당신의 사주를 풀고 있어요</p>
+    </div>
+  );
+
+  if (loading) return <Loading />;
+
+  return (
+    <div className="bg-white">
+      {step !== 0.5 && step !== 'result' && (
+        <button onClick={handleBack} className="absolute left-5 top-6 z-20 p-2 rounded-full bg-white text-indigo-600 shadow-md border border-slate-100"><ChevronLeftIcon className="w-6 h-6 stroke-[3px]" /></button>
+      )}
+      <div className="max-w-3xl mx-auto">
+        {step === 0.5 && <AmaKr setStep={() => setStep(1)} question={userQuestion} setQuestion={setUserQuestion} />}
+        {step === 1 && (
+          <div className="min-h-screen bg-[#FDF5F0] font-sans text-[#4A3428] px-6 py-10">
+            <div className="text-center mb-8">
+              <div className="flex justify-center items-center gap-1.5 mb-4">
+                <div className="w-8 h-8 bg-orange-100 rounded-full flex items-center justify-center text-xl">🦁</div>
+                <span className="text-xl font-bold tracking-tight text-[#333]">사자사주</span>
+              </div>
+              <h2 className="text-lg font-black leading-tight">생년월일을 바탕으로 나의 오행을 분석합니다</h2>
+            </div>
+            <div className="space-y-3">
+              <div className="flex gap-2">
+                {['male', 'female'].map((g) => (
+                  <button key={g} onClick={() => setGender(g)} className={`flex-1 py-4 rounded-2xl border-2 font-bold shadow-sm ${gender === g ? 'border-[#F47521] bg-white text-[#F47521]' : 'border-white bg-white/50 text-[#C4B5A9]'}`}>{g === 'male' ? '남성' : '여성'}</button>
+                ))}
+              </div>
+              {gender && <input type="number" placeholder="태어난 연도(YYYY)" value={birthData.year} className="w-full p-5 bg-white rounded-2xl border-2 border-transparent focus:border-[#F47521] outline-none font-bold text-center shadow-sm" onChange={(e) => setBirthData({ ...birthData, year: e.target.value.slice(0, 4) })} />}
+              {isYearDone && <input type="number" placeholder="태어난 월(MM)" value={birthData.month} className="w-full p-5 bg-white rounded-2xl border-2 border-transparent focus:border-[#F47521] outline-none font-bold text-center shadow-sm" onChange={(e) => setBirthData({ ...birthData, month: e.target.value.slice(0, 2) })} />}
+              {isMonthDone && isYearDone && <input type="number" placeholder="태어난 날(DD)" value={birthData.day} className="w-full p-5 bg-white rounded-2xl border-2 border-transparent focus:border-[#F47521] outline-none font-bold text-center shadow-sm" onChange={(e) => setBirthData({ ...birthData, day: e.target.value.slice(0, 2) })} />}
+              {isDayDone && (
+                <label className="flex items-center gap-2 cursor-pointer w-fit mx-auto py-2 group"><input type="checkbox" checked={timeUnknown} onChange={(e) => setTimeUnknown(e.target.checked)} className="w-5 h-5 accent-[#F47521]" /><span className="text-md font-bold text-[#C4B5A9] group-hover:text-[#F47521]">시간을 몰라요</span></label>
+              )}
+            </div>
+            <div className="w-full h-2.5 bg-white rounded-full overflow-hidden shadow-sm border border-orange-50 mt-4"><div className="h-full bg-[#F47521] transition-all duration-700" style={{ width: `${getProgress()}%` }} /></div>
+            {isFormValid && <button onClick={handleNextStep} className="w-full py-5 bg-[#F47521] text-white rounded-full font-bold text-lg shadow-lg mt-8">나의 사주 오행 분석하기</button>}
+          </div>
+        )}
+      </div>
+      {step === 'input' && (
+        <div className="max-w-lg min-h-screen mx-auto px-6 py-9">
+          <div className="text-center"><h2 className="text-2xl font-black text-slate-800 mb-4 tracking-tight">무엇이든 물어보사자<br /><span className="text-violet-600">1:1 맞춤 사주 솔루션</span></h2><p className="text-sm text-slate-600 mb-10">27인의 명리 해석을 학습한 AI가 어떤 고민도 차분하게 듣고 해결책을 드려요</p></div>
+          <div className="flex items-center gap-2 mb-4 text-purple-600"><PencilSquareIcon className="w-5 h-5" /><h3 className="font-bold">당신의 고민을 들려주세요</h3></div>
+          <textarea value={userQuestion} onChange={(e) => setUserQuestion(e.target.value)} placeholder="예: 올해 대인관계 운이 궁금해요!" className="w-full h-40 p-4 border border-slate-200 rounded-2xl focus:ring-2 focus:ring-purple-400 outline-none resize-none bg-white placeholder:text-slate-400" />
+          <button onClick={() => userQuestion.trim() && handleAskSaza()} disabled={!userQuestion.trim()} className={classNames('w-full py-4 mt-6 rounded-xl font-bold', userQuestion.trim() ? 'bg-purple-600 text-white shadow-lg' : 'bg-slate-200 text-slate-400 cursor-not-allowed')}>물어보기</button>
+        </div>
+      )}
+      {step === 'result' && (
+        <div className="gap-3 min-h-screen m-10">
+          {userQuestion && <div className="flex justify-end"><div className="max-w-[80%] bg-indigo-600 text-white p-4 rounded-2xl rounded-tr-none shadow-md"><p className="text-sm font-bold">{userQuestion}</p></div></div>}
+          <div className="flex justify-start mt-6"><div className="leading-8 w-full bg-slate-100 p-5 rounded-2xl rounded-tl-none shadow-sm"><div className="leading-8 w-full bg-white p-6 rounded-[24px] shadow-sm">{data.contents?.map((i, idx) => (<p key={idx}>{i}</p>))}<br /><strong>사자의 조언: {data.saza}</strong></div></div></div>
+        </div>
+      )}
+    </div>
+  );
+}

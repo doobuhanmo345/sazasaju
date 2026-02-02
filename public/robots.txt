@@ -1,0 +1,17 @@
+User-agent: *
+Allow: /
+
+# Private and System Pages
+
+Disallow: /admin/
+Disallow: /ad/
+Disallow: /editprofile/
+Disallow: /test/
+Disallow: /test2/
+Disallow: /open-in-browser/
+Disallow: /api/
+Disallow: /nobirthday
+Disallow: /beforelogin
+Disallow: /login
+
+Sitemap: https://sazasaju.com/sitemap.xml
