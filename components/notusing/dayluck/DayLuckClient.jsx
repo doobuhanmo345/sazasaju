@@ -2,22 +2,17 @@
 
 import { useRef, useState, useEffect } from 'react';
 import { AnalysisStepContainer } from '@/components/AnalysisStepContainer';
-import { useSajuCalculator } from '@/hooks/useSajuCalculator';
-import EnergyBadge from '@/ui/EnergyBadge';
 import { useAuthContext } from '@/contexts/useAuthContext';
 import { useUsageLimit } from '@/contexts/useUsageLimit';
 import { useLoading } from '@/contexts/useLoadingContext';
 import { UI_TEXT } from '@/data/constants';
 import { useLanguage } from '@/contexts/useLanguageContext';
-import { classNames } from '@/utils/helpers';
-import { LockClosedIcon } from '@heroicons/react/24/outline';
 import { langPrompt, hanja } from '@/data/constants';
 import { calculateSaju } from '@/lib/sajuCalculator';
-import { calculateSajuData } from '@/lib/sajuLogic';
 import LoadingFourPillar from '@/components/LoadingFourPillar';
 import { SajuAnalysisService, AnalysisPresets } from '@/lib/SajuAnalysisService';
 import CustomCalendar from '@/components/CustomCalendar';
-import ReportTemplateToday from '@/components/ReportTemplateToday';
+import ReportTemplateToday from '@/app/saju/dayluck/ReportTemplateToday';
 
 
 export default function DayLuckPage() {

@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState, useMemo } from 'react';
 import SajuIntroSection from '@/app/ad/SajuIntroSection2';
-import { useLanguageContext } from '@/contexts/useLanguageContext';
+import { useLanguage } from '@/contexts/useLanguageContext';
 import { useSajuCalculator } from '@/hooks/useSajuCalculator';
 import { ChatBubbleLeftRightIcon, CakeIcon, ChevronLeftIcon } from '@heroicons/react/24/solid';
 import { calculateSajuData } from '@/lib/sajuLogic';
@@ -19,7 +19,7 @@ const PayWall = () => {
   const [guestId, setGuestId] = useState('');
   const [sajuData, setSajuData] = useState();
   const [step, setStep] = useState(0.5); // '0.5' '1', 'result'
-  const { language, setLanguage } = useLanguageContext();
+  const { language, setLanguage } = useLanguage();
   const { user, userData, loadingUser } = useAuthContext();
 
   // 1. 비회원용 익명 ID 생성 및 관리

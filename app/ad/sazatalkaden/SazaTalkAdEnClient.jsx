@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useEffect, useState, useMemo } from 'react';
-import { useLanguageContext } from '@/contexts/useLanguageContext';
+import { useLanguage } from '@/contexts/useLanguageContext';
 import { useSajuCalculator } from '@/hooks/useSajuCalculator';
 import { ref, get, child } from 'firebase/database';
 import { database } from '@/lib/firebase';
@@ -20,7 +20,7 @@ import AmaEn from './AmaEn';
 export default function SazaTalkAdEnPage() {
   const [guestId, setGuestId] = useState('');
   const [step, setStep] = useState(0.5);
-  const { setLanguage } = useLanguageContext();
+  const { setLanguage } = useLanguage();
   const { user, userData, loadingUser } = useAuthContext();
   const [userQuestion, setUserQuestion] = useState('');
   const [loading, setLoading] = useState(false);
