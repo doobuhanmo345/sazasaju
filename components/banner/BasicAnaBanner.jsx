@@ -11,24 +11,25 @@ import { ArrowRightIcon } from '@heroicons/react/24/solid';
 import { ENG_MAP } from '@/data/constants';
 
 export default function BasicAnaBanner({ inputDate, isTimeUnknown, gender }) {
-  const { userData,selectedProfile,iljuImagePath } = useAuthContext();
+  const { userData, selectedProfile, iljuImagePath } = useAuthContext();
   const { language } = useLanguage();
   const router = useRouter();
   const saju = useSajuCalculator(inputDate, isTimeUnknown).saju;
-const targetProfile = selectedProfile || userData;
-const selSaju = targetProfile?.saju
+  const targetProfile = selectedProfile || userData;
+  const selSaju = targetProfile?.saju
+  const selGender = targetProfile?.gender
 
 
   const isKo = language === 'ko';
   const currentTitle = (selSaju && selSaju.sky1 && selSaju.grd1)
     ? (isKo
-      ? ILJU_DATA?.[selSaju.sky1 + selSaju.grd1]?.title[gender]?.title
-      : ILJU_DATA_EN?.[selSaju.sky1 + selSaju.grd1]?.title[gender]?.title)
+      ? ILJU_DATA?.[selSaju.sky1 + selSaju.grd1]?.title[selGender]?.title
+      : ILJU_DATA_EN?.[selSaju.sky1 + selSaju.grd1]?.title[selGender]?.title)
     : '';
   const currentDesc = (selSaju && selSaju.sky1 && selSaju.grd1)
     ? (isKo
-      ? ILJU_DATA?.[selSaju.sky1 + selSaju.grd1]?.title[gender]?.desc
-      : ILJU_DATA_EN?.[selSaju.sky1 + selSaju.grd1]?.title[gender]?.desc)
+      ? ILJU_DATA?.[selSaju.sky1 + selSaju.grd1]?.title[selGender]?.desc
+      : ILJU_DATA_EN?.[selSaju.sky1 + selSaju.grd1]?.title[selGender]?.desc)
     : '';
 
   const handleShareImg = async (id) => {
@@ -77,25 +78,25 @@ const selSaju = targetProfile?.saju
       el.style.visibility = originalStyle.visibility || 'hidden';
     }
   };
-  
-const processedTitle = useMemo(() => {
-  if (!currentTitle) return { first: '', second: '' };
 
-  const words = currentTitle.split(' ');
-  const articles = ['a', 'an', 'the'];
+  const processedTitle = useMemo(() => {
+    if (!currentTitle) return { first: '', second: '' };
 
-  // 첫 단어가 관사(a, an, the)이고, 뒤에 단어가 더 있다면 두 단어를 첫 줄로 묶음
-  let splitIndex = 1;
-  if (words.length > 1 && articles.includes(words[0].toLowerCase())) {
-    splitIndex = 2;
-  }
+    const words = currentTitle.split(' ');
+    const articles = ['a', 'an', 'the'];
+
+    // 첫 단어가 관사(a, an, the)이고, 뒤에 단어가 더 있다면 두 단어를 첫 줄로 묶음
+    let splitIndex = 1;
+    if (words.length > 1 && articles.includes(words[0].toLowerCase())) {
+      splitIndex = 2;
+    }
 
 
-  return {
-    first: words.slice(0, splitIndex).join(' '),
-    second: words.slice(splitIndex).join(' '),
-  };
-}, [currentTitle]);
+    return {
+      first: words.slice(0, splitIndex).join(' '),
+      second: words.slice(splitIndex).join(' '),
+    };
+  }, [currentTitle]);
 
   const hasData = !!(userData?.birthDate || targetProfile?.birthDate);
   const displayName = targetProfile?.displayName;
@@ -184,7 +185,7 @@ const processedTitle = useMemo(() => {
               {/* 하단 행동 유도 텍스트 */}
               <div className="mt-3">
                 <span className="inline-flex items-center text-[10px] font-bold py-1 px-3 bg-gray-100 rounded-full text-gray-600 uppercase tracking-tighter group-hover:bg-indigo-600 group-hover:text-white transition-all duration-300">
-                  {hasData 
+                  {hasData
                     ? (isKo ? '상세 분석 확인하기' : 'View Full Report')
                     : (isKo ? '정보 등록하고 확인하기' : 'Register to View')}
                   <span className="ml-1 text-[12px] leading-none">→</span>

@@ -14,7 +14,7 @@ import MyInfoBar from '@/components/MyInfoBar';
 import ImageBanner from '@/components/banner/ImageBanner';
 import BasicAnaBanner from '@/components/banner/BasicAnaBanner';
 import IconWrapper from '@/components/menuicons/IconWrapper';
-
+import SazaTalkInputBanner from '@/components/banner/SazatalkInputBanner';
 
 
 export default function HomeClient() {
@@ -79,13 +79,13 @@ export default function HomeClient() {
           )}
         </div>
       )}
-      
+
       {/* Banners */}
       <ImageBanner />
-      <SazaTalkBanner />
+      <SazaTalkInputBanner />
       <NewYearBanner />
-      
-      <BasicAnaBanner inputDate={inputDate} isTimeUnknown={isTimeUnknown} gender={gender}  />
+
+      <BasicAnaBanner inputDate={inputDate} isTimeUnknown={isTimeUnknown} gender={gender} />
 
       <IconWrapper
         title={

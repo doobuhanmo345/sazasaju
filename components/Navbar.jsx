@@ -14,6 +14,7 @@ import {
   ArrowLeftOnRectangleIcon,
   BoltIcon,
   GlobeAltIcon,
+  ArrowLeftIcon,
 } from '@heroicons/react/24/outline';
 
 import { useLoading } from '@/contexts/useLoadingContext';
@@ -50,7 +51,7 @@ export default function NavBar() {
 
   // useUsageLimit hook handles defaults internally
   const { editCount, MAX_EDIT_COUNT } = useUsageLimit();
-  
+
   const router = useRouter();
   const pathname = usePathname();
   const { setLoading, setLoadingType } = useLoading();
@@ -102,38 +103,44 @@ export default function NavBar() {
   // but for Navbar, most parts should be fine. 
   // We use standard Next.js Image for logos.
 
-  const logoSrc = false 
+  const logoSrc = false
     ? (language === 'ko' ? '/assets/Logo_Kor_DarkMode.png' : '/assets/Logo_Eng_DarkMode.png')
     : (language === 'ko' ? '/assets/Logo_Kor.png' : '/assets/Logo_Eng.png');
 
   return (
-    <div className="flex items-center justify-between py-3 max-w-xl m-auto relative z-20 px-0 select-none">
+    <div className="flex items-center justify-between py-3 max-w-xl m-auto relative z-50 px-4 sticky top-0 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md transition-all border-b border-transparent data-[scrolled=true]:border-slate-100 select-none">
       {isContactModalOpen && (
         <ContactModal onClose={handleCloseContact} email="doobuhanmo3@gmail.com" />
       )}
 
-      {/* [Left] Logo */}
+      {/* [Left] Logo or Back Button */}
       <div
         className="flex items-center gap-3 cursor-pointer hover:opacity-80 transition-opacity"
-        onClick={() => router.push('/')}
+        onClick={() => pathname === '/' ? router.push('/') : router.back()}
       >
-        <div className="relative h-[40px] w-[120px]">
-             <Image
+        {pathname === '/' ? (
+          <div className="relative h-[40px] w-[120px]">
+            <Image
               src={logoSrc}
               alt="Logo"
               fill
               className="object-contain"
               priority
             />
-        </div>
-       
+          </div>
+        ) : (
+          <div className="flex items-center gap-1 pl-1 py-1">
+            <ArrowLeftIcon className="w-5 h-5 text-slate-800 dark:text-white stroke-2" />
+            <span className="text-[15px] font-bold text-slate-800 dark:text-white">{language === 'ko' ? '뒤로' : 'Back'}</span>
+          </div>
+        )}
       </div>
 
       <CreditModal
         isOpen={isOutOfCredit && creditModal}
         onWatchAd={() => setCreditModal(false)}
         onClose={handleCloseModal}
-        language={language} 
+        language={language}
       />
 
       {/* [Right] Utility Buttons */}

@@ -11,13 +11,15 @@ install! 'cocoapods', :disable_input_output_paths => true
 def capacitor_pods
   pod 'Capacitor', :path => '../../node_modules/@capacitor/ios'
   pod 'CapacitorCordova', :path => '../../node_modules/@capacitor/ios'
-  pod 'CapacitorFirebaseAuthentication', :path => '../../node_modules/@capacitor-firebase/authentication'
   pod 'CapacitorApp', :path => '../../node_modules/@capacitor/app'
   pod 'CapacitorDevice', :path => '../../node_modules/@capacitor/device'
   pod 'CapacitorFilesystem', :path => '../../node_modules/@capacitor/filesystem'
   pod 'CapacitorPushNotifications', :path => '../../node_modules/@capacitor/push-notifications'
   pod 'CapacitorShare', :path => '../../node_modules/@capacitor/share'
   pod 'CapacitorStatusBar', :path => '../../node_modules/@capacitor/status-bar'
+  pod 'CodetrixStudioCapacitorGoogleAuth', :path => '../../node_modules/@codetrix-studio/capacitor-google-auth'
+  pod 'HanhokimCapacitorNaverLogin', :path => '../../node_modules/@hanhokim/capacitor-naver-login'
+  pod 'CapacitorKakaoPlugin', :path => '../../node_modules/capacitor-kakao-plugin'
 end
 
 target 'App' do

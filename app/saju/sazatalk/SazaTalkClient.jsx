@@ -1,6 +1,6 @@
 'use client';
 
-import { useRef, useState, useEffect, useMemo } from 'react';
+import { useRef, useState, useEffect, useMemo, Suspense } from 'react';
 import AnalysisStepContainer from '@/components/AnalysisStepContainer';
 import { useAuthContext } from '@/contexts/useAuthContext';
 import { useUsageLimit } from '@/contexts/useUsageLimit';
@@ -16,7 +16,7 @@ import { SajuAnalysisService, AnalysisPresets } from '@/lib/SajuAnalysisService'
 import AnalyzeButton from '@/ui/AnalyzeButton';
 import { langPrompt, hanja } from '@/data/constants';
 import EnergyBadge from '@/ui/EnergyBadge';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import ViewSazaResult from '@/app/saju/sazatalk/ViewSazaResult';
 import { parseAiResponse } from '@/utils/helpers';
 import { aiSajuStyle } from '@/data/aiResultConstants';
@@ -24,15 +24,17 @@ import SazaTalkAppeal from '@/app/saju/sazatalk/SazaTalkAppeal';
 
 const DISABLED_STYLE = 'bg-gray-200 dark:bg-gray-700 text-gray-400 cursor-not-allowed';
 
-export default function SazaTalkPage() {
+function SazaTalkContent() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const initialQuery = searchParams.get('q');
   const { setAiResult } = useLoading();
   const { userData, user, selectedProfile } = useAuthContext(); // selectedProfile 추가
-  
+
   // 컨텍스트 스위칭
   const targetProfile = selectedProfile || userData;
   const { saju, gender, birthDate: inputDate } = targetProfile || {};
-  
+
   const { language } = useLanguage();
   const { setEditCount, MAX_EDIT_COUNT, editCount, isLocked } = useUsageLimit();
   const [step, setStep] = useState('input');
@@ -46,11 +48,12 @@ export default function SazaTalkPage() {
     }
   }, [language]);
 
-  const [userQuestion, setUserQuestion] = useState('');
+  const [userQuestion, setUserQuestion] = useState(initialQuery || '');
   const [loading, setLoading] = useState(false);
   const [latestSazaTalk, setLatestSazaTalk] = useState(null);
   const [isHistoryOpen, setIsHistoryOpen] = useState(false);
   const historyContentRef = useRef(null);
+  const [autoStarted, setAutoStarted] = useState(false);
 
   const handleHistoryCopy = async () => {
     if (!latestSazaTalk?.result) return;
@@ -65,7 +68,7 @@ export default function SazaTalkPage() {
   const handleHistoryCapture = async () => {
     if (historyContentRef.current) {
       const original = historyContentRef.current;
-      
+
       const container = document.createElement('div');
       container.style.position = 'fixed';
       container.style.top = '0';
@@ -75,14 +78,14 @@ export default function SazaTalkPage() {
       document.body.appendChild(container);
 
       const clone = original.cloneNode(true);
-      
+
       clone.style.width = '100%';
       clone.style.height = 'auto';
       clone.style.maxHeight = 'none';
       clone.style.overflow = 'visible';
       clone.style.borderRadius = '0';
       clone.style.background = '#ffffff';
-      
+
       container.appendChild(clone);
 
       await new Promise(resolve => setTimeout(resolve, 300));
@@ -94,7 +97,7 @@ export default function SazaTalkPage() {
           useCORS: true,
           windowWidth: 550,
         });
-        
+
         const link = document.createElement('a');
         link.download = `saza_history_${new Date().toISOString().slice(0, 10)}.png`;
         link.href = canvas.toDataURL('image/png');
@@ -190,6 +193,17 @@ export default function SazaTalkPage() {
     }
   };
 
+  // Helper component to trigger start with the correct callback
+  const AutoTrigger = ({ onStart, onTrigger }) => {
+    useEffect(() => {
+      const timer = setTimeout(() => {
+        onTrigger(onStart);
+      }, 500);
+      return () => clearTimeout(timer);
+    }, [onStart, onTrigger]);
+    return null;
+  };
+
   const Loading = () => {
     const [progress, setProgress] = useState(0);
     const [msgIdx, setMsgIdx] = useState(0);
@@ -256,7 +270,7 @@ export default function SazaTalkPage() {
         {/* Progress bar and text area */}
         <div className="w-full max-w-xs px-6 flex flex-col items-center">
           <div className="w-full bg-slate-100 dark:bg-slate-800 h-2 rounded-full overflow-hidden mb-3 shadow-inner border border-slate-200/50 dark:border-slate-700/50">
-            <div 
+            <div
               className="h-full bg-gradient-to-r from-violet-500 via-indigo-500 to-purple-500 transition-all duration-700 ease-out rounded-full relative"
               style={{ width: `${progress}%` }}
             >
@@ -306,6 +320,15 @@ export default function SazaTalkPage() {
 
     return (
       <>
+        {initialQuery && !autoStarted && inputDate && (
+          <AutoTrigger
+            onStart={onStart}
+            onTrigger={(startFn) => {
+              setAutoStarted(true);
+              handleSazaTest(startFn);
+            }}
+          />
+        )}
         {step === 'intro' ? (
           <div className="max-w-lg mx-auto text-center px-6 animate-in fade-in slide-in-from-bottom-5 duration-700">
             {/* Expert badge */}
@@ -385,7 +408,7 @@ export default function SazaTalkPage() {
                   : 'Fortunes that have already been analyzed do not use credits.'}
               </p>
             )}
-          
+
             {/* SazaTalk Premium Appeal Section */}
             <div className="mt-16 -mx-6">
               <SazaTalkAppeal />
@@ -512,51 +535,51 @@ export default function SazaTalkPage() {
                       </div>
                       <div className="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-violet-100/50 dark:border-violet-900/20 shadow-sm overflow-hidden text-sm leading-relaxed text-slate-600 dark:text-slate-400">
                         {parsedHistoryData && (parsedHistoryData.contents || parsedHistoryData.saza) ? (
-                            <div className="leading-8 w-full">
-                              {parsedHistoryData.contents && Array.isArray(parsedHistoryData.contents) ? (
-                                parsedHistoryData.contents.map((i, idx) => {
-                                  if (typeof i === 'object' && i !== null) {
-                                    return (
-                                      <div key={idx} className="mb-2">
-                                        {i.title && <strong className="block text-indigo-700 dark:text-indigo-300">{i.title}</strong>}
-                                        {i.detail && <p>{i.detail}</p>}
-                                        {!i.title && !i.detail && <p>{JSON.stringify(i)}</p>}
-                                      </div>
-                                    );
-                                  }
-                                  return <p key={idx}>{i}</p>;
-                                })
-                              ) : (
-                                <p>{typeof parsedHistoryData.contents === 'string' ? parsedHistoryData.contents : ''}</p>
-                              )}
-
-                              {parsedHistoryData.saza && (
-                                <div className="mt-4 pt-4 border-t border-slate-50 dark:border-slate-700">
-                                  <strong className="text-indigo-600 dark:text-indigo-400 block mb-1">
-                                    {language === 'en' ? "Saza's Advice" : '사자의 조언'}
-                                  </strong>
-                                  {typeof parsedHistoryData.saza === 'object' ? (
-                                    <div className="text-sm">
-                                      {parsedHistoryData.saza.category && (
-                                        <span className="inline-block px-2 py-0.5 bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 rounded text-[10px] font-bold mr-2">
-                                          {parsedHistoryData.saza.category}
-                                        </span>
-                                      )}
-                                      <p className="inline italic">"{parsedHistoryData.saza.advice}"</p>
+                          <div className="leading-8 w-full">
+                            {parsedHistoryData.contents && Array.isArray(parsedHistoryData.contents) ? (
+                              parsedHistoryData.contents.map((i, idx) => {
+                                if (typeof i === 'object' && i !== null) {
+                                  return (
+                                    <div key={idx} className="mb-2">
+                                      {i.title && <strong className="block text-indigo-700 dark:text-indigo-300">{i.title}</strong>}
+                                      {i.detail && <p>{i.detail}</p>}
+                                      {!i.title && !i.detail && <p>{JSON.stringify(i)}</p>}
                                     </div>
-                                  ) : (
-                                    <p className="italic">"{parsedHistoryData.saza}"</p>
-                                  )}
-                                </div>
-                              )}
-                              {/* Style injection */}
-                              {aiSajuStyle && <div dangerouslySetInnerHTML={{ __html: aiSajuStyle }} />}
-                            </div>
-                          ) : (
-                            <div className="text-slate-400 text-xs italic p-2 text-center">
-                                {language === 'ko' ? '내용을 불러올 수 없습니다.' : 'No content available'}
-                            </div>
-                          )}
+                                  );
+                                }
+                                return <p key={idx}>{i}</p>;
+                              })
+                            ) : (
+                              <p>{typeof parsedHistoryData.contents === 'string' ? parsedHistoryData.contents : ''}</p>
+                            )}
+
+                            {parsedHistoryData.saza && (
+                              <div className="mt-4 pt-4 border-t border-slate-50 dark:border-slate-700">
+                                <strong className="text-indigo-600 dark:text-indigo-400 block mb-1">
+                                  {language === 'en' ? "Saza's Advice" : '사자의 조언'}
+                                </strong>
+                                {typeof parsedHistoryData.saza === 'object' ? (
+                                  <div className="text-sm">
+                                    {parsedHistoryData.saza.category && (
+                                      <span className="inline-block px-2 py-0.5 bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 rounded text-[10px] font-bold mr-2">
+                                        {parsedHistoryData.saza.category}
+                                      </span>
+                                    )}
+                                    <p className="inline italic">"{parsedHistoryData.saza.advice}"</p>
+                                  </div>
+                                ) : (
+                                  <p className="italic">"{parsedHistoryData.saza}"</p>
+                                )}
+                              </div>
+                            )}
+                            {/* Style injection */}
+                            {aiSajuStyle && <div dangerouslySetInnerHTML={{ __html: aiSajuStyle }} />}
+                          </div>
+                        ) : (
+                          <div className="text-slate-400 text-xs italic p-2 text-center">
+                            {language === 'ko' ? '내용을 불러올 수 없습니다.' : 'No content available'}
+                          </div>
+                        )}
                       </div>
                     </div>
                   </div>
@@ -614,6 +637,15 @@ export default function SazaTalkPage() {
         />
       )}
       loadingTime={0}
+      defaultStep={initialQuery ? 'input' : 'intro'}
     />
+  );
+}
+
+export default function SazaTalkPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen"></div>}>
+      <SazaTalkContent />
+    </Suspense>
   );
 }
