@@ -15,7 +15,9 @@ import {
   CreditCardIcon,
   PresentationChartLineIcon,
   IdentificationIcon,
-  ChatBubbleLeftRightIcon
+  ChatBubbleLeftRightIcon,
+  ArrowRightOnRectangleIcon,
+  EnvelopeIcon
 } from '@heroicons/react/24/outline';
 
 import { useAuthContext } from '@/contexts/useAuthContext';
@@ -29,7 +31,7 @@ import { getRomanizedIlju } from '@/data/sajuInt';
 
 export default function MenuBar() {
   const [activeMenu, setActiveMenu] = useState(null);
-  const { user, userData, iljuImagePath, openLoginModal, selectedProfile } = useAuthContext();
+  const { user, userData, iljuImagePath, openLoginModal, selectedProfile, logout } = useAuthContext();
   const router = useRouter();
   const { language } = useLanguage();
 
@@ -62,6 +64,12 @@ export default function MenuBar() {
   };
 
   const handleItemClick = async (item) => {
+    if (item.action) {
+      await item.action();
+      setActiveMenu(null);
+      return;
+    }
+
     if (!item.path) {
       try {
         await addDoc(collection(db, 'menu_click_logs'), {
@@ -123,6 +131,12 @@ export default function MenuBar() {
           desc: isKo ? '생년월일 목록 관리' : 'Manage Birthday List',
           icon: <UserCircleIcon className="w-6 h-6" />,
           path: '/profile/manage',
+        },
+        {
+          name: isKo ? '메시지함' : 'Messages',
+          desc: isKo ? '알림 및 메시지 확인' : 'Check notifications and messages',
+          icon: <EnvelopeIcon className="w-6 h-6" />,
+          path: '/messages',
         },
         {
           name: isKo ? '상담 내역' : 'History',
@@ -367,6 +381,22 @@ export default function MenuBar() {
                            <div className="absolute top-0 right-0 bg-indigo-500 text-white text-[10px] font-bold px-3 py-1 rounded-bl-xl shadow-md z-20">
                              {isKo ? '친구 프로필 보는 중' : 'Viewing Friend Profile'}
                            </div>
+                        )}
+
+                        {/* Logout Button (Only on Own Profile) */}
+                        {selectedProfile && selectedProfile.uid === userData?.uid && (
+                          <button
+                            onClick={async () => {
+                              if (confirm(isKo ? '로그아웃 하시겠습니까?' : 'Are you sure you want to log out?')) {
+                                await logout();
+                                window.location.reload();
+                              }
+                            }}
+                            className="absolute top-5 right-5 p-2 rounded-full bg-slate-50 dark:bg-white/5 text-slate-400 dark:text-slate-500 hover:bg-rose-50 dark:hover:bg-rose-500/10 hover:text-rose-500 dark:hover:text-rose-400 transition-all z-20"
+                            title={isKo ? '로그아웃' : 'Log Out'}
+                          >
+                            <ArrowRightOnRectangleIcon className="w-5 h-5" />
+                          </button>
                         )}
 
                         <div className="absolute -bottom-24 -left-24 w-48 h-48 bg-purple-50 dark:bg-purple-600/10 rounded-full blur-[60px]" />

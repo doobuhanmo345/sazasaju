@@ -15,6 +15,8 @@ import ImageBanner from '@/components/banner/ImageBanner';
 import BasicAnaBanner from '@/components/banner/BasicAnaBanner';
 import IconWrapper from '@/components/menuicons/IconWrapper';
 
+
+
 export default function HomeClient() {
   const { user, userData } = useAuthContext();
   const { language } = useLanguage();

@@ -261,12 +261,12 @@ export default function ProfileManagePage() {
           <div className="space-y-4">
              {/* My Profile */}
              <div 
-               onClick={() => handleSelect(null)} // Null selects self
-               className={`relative p-5 rounded-2xl border transition-all cursor-pointer flex items-center gap-4 ${
-                 (!selectedProfile || (userData && selectedProfile.uid === userData.uid))
-                   ? 'bg-white dark:bg-slate-900 border-indigo-500 ring-1 ring-indigo-500 shadow-md' 
-                   : 'bg-white dark:bg-slate-900 border-slate-100 dark:border-slate-800 hover:border-indigo-200'
-               }`}
+                onClick={() => handleSelect(null)} // Null selects self
+                className={`relative p-5 rounded-2xl border transition-all cursor-pointer flex items-center gap-4 ${
+                  (userData && selectedProfile?.uid === userData.uid && !selectedProfile.id)
+                    ? 'bg-white dark:bg-slate-900 border-indigo-500 ring-1 ring-indigo-500 shadow-md' 
+                    : 'bg-white dark:bg-slate-900 border-slate-100 dark:border-slate-800 hover:border-indigo-200'
+                }`}
              >
                 <div className="w-12 h-12 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center">
                   <UserCircleIcon className="w-8 h-8 text-slate-400" />
@@ -280,7 +280,19 @@ export default function ProfileManagePage() {
                      {userData?.birthDate?.split('T')[0]}
                    </p>
                 </div>
-                {(!selectedProfile || (userData && selectedProfile.uid === userData.uid)) && (
+                
+                {/* Edit Button for Me */}
+                <button 
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    router.push('/profile/edit');
+                  }}
+                  className="p-2 text-slate-300 hover:text-indigo-500 transition-colors"
+                >
+                  <PencilSquareIcon className="w-5 h-5" />
+                </button>
+
+                {(userData && selectedProfile?.uid === userData.uid && !selectedProfile.id) && (
                    <CheckCircleIcon className="w-6 h-6 text-indigo-500" />
                 )}
              </div>
