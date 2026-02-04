@@ -25,6 +25,12 @@ export default function SazaTalkAdEnPage() {
   const [userQuestion, setUserQuestion] = useState('');
   const [loading, setLoading] = useState(false);
 
+  // Client-side Title Update for Localization (Static Export Support)
+  useEffect(() => {
+    // This is an English specific ad page
+    document.title = 'SazaTalk Global | Interactive AI Saju for International Users';
+  }, []);
+
   useEffect(() => {
     if (loadingUser) return;
     if (userData) return;

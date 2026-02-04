@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import Script from 'next/script';
 import { usePathname, useRouter } from 'next/navigation';
 import { useAuthContext } from '@/contexts/useAuthContext';
 import { specialPaths } from '@/lib/constants';
@@ -9,11 +10,25 @@ import LoginLoadingOverlay from '@/components/LoginLoadingOverlay';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import MenuBar from '@/components/MenuBar';
+import LoginModal from '@/components/LoginModal';
+import { usePushNotifications } from '@/hooks/usePushNotifications';
+import { NativeBridge } from '@/utils/nativeBridge';
 
 export default function ClientWrapper({ children }) {
   const pathname = usePathname();
   const router = useRouter();
-  const { user, userData, loadingUser, isLoggingIn, cancelLogin } = useAuthContext();
+  const { user, userData, loadingUser, isLoggingIn, cancelLogin, isLoginModalOpen, closeLoginModal } = useAuthContext();
+  
+  // Call Push Notification Hook
+  usePushNotifications((path) => {
+    router.push(path);
+  });
+
+  // Initialize Native Bridge elements
+  useEffect(() => {
+    NativeBridge.setStatusBarOptions(false); // Default to light mode for now
+  }, []);
+
   const [hasCheckedRedirect, setHasCheckedRedirect] = useState(false);
 
   // Define paths where we should NOT show Navbar/MenuBar/Footer
@@ -57,8 +72,15 @@ export default function ClientWrapper({ children }) {
     }
   }, [user, userData, loadingUser, pathname, router]);
 
-  // Initial Loading (Splash)
-  if (loadingUser) {
+  // Determine if we need to redirect (to show Splash instead of content)
+  const exemptPaths = [...specialPaths, '/nobirthday', '/beforelogin', '/login', '/open-in-browser'];
+  const isExempt = exemptPaths.some(
+    (path) => pathname === path || pathname.startsWith(path + '/')
+  );
+  const shouldRedirect = !loadingUser && user && userData && !userData.birthDate && !isExempt;
+
+  // Initial Loading (Splash) OR Pending Redirect
+  if (loadingUser || shouldRedirect) {
     return <SplashScreen />;
   }
 
@@ -70,7 +92,12 @@ export default function ClientWrapper({ children }) {
       {/* Conditional Navbar */}
       {!isSpecialPath && <Navbar />}
 
-      <main className={!isSpecialPath ? "min-h-screen pt-4" : "min-h-screen"}>
+      <LoginModal 
+        isOpen={isLoginModalOpen} 
+        onClose={closeLoginModal} 
+      />
+
+      <main className={!isSpecialPath ? "min-h-screen" : "min-h-screen"}>
         {children}
       </main>
 
@@ -81,6 +108,28 @@ export default function ClientWrapper({ children }) {
           <MenuBar />
         </>
       )}
+
+      {/* Kakao SDK v1 (for popup login support on Web) */}
+      <Script
+        src="https://developers.kakao.com/sdk/js/kakao.min.js"
+        strategy="afterInteractive"
+        onLoad={() => {
+          try {
+            if (window.Kakao && !window.Kakao.isInitialized()) {
+              window.Kakao.init('344188f5340e9fb502efb20389316a7f');
+              console.log('Kakao SDK v1 Initialized successfully');
+            }
+          } catch (e) {
+            console.error('Kakao SDK Init Error:', e);
+          }
+        }}
+      />
+
+      {/* Naver SDK */}
+      <Script
+        src="https://static.nid.naver.com/js/naveridlogin_js_sdk_2.0.2.js"
+        strategy="lazyOnload"
+      />
     </>
   );
 }

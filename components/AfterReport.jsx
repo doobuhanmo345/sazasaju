@@ -3,6 +3,7 @@ import React from 'react';
 import { MessageCircle, Sparkles, Heart, Star } from 'lucide-react';
 import { useLanguage } from '@/contexts/useLanguageContext';
 import { useRouter } from 'next/navigation';
+import ShareButton from './ShareButton';
 
 export default function AfterReport() {
   const { language } = useLanguage();
@@ -57,8 +58,18 @@ export default function AfterReport() {
               )}
             </p>
 
-            {/* CTA Button - Blue gradient */}
-            <div className="flex justify-center">
+            {/* Share and CTA Buttons */}
+            <div className="flex flex-col items-center gap-4 mb-8">
+              <ShareButton targetId="share-card" fileName="saza-report.png" />
+              
+              <div className="w-full flex items-center gap-4 my-2 px-10">
+                <div className="h-[1px] flex-1 bg-gray-100"></div>
+                <span className="text-[10px] text-gray-300 font-bold uppercase tracking-widest whitespace-nowrap">
+                  {language === 'en' ? 'or' : '또는'}
+                </span>
+                <div className="h-[1px] flex-1 bg-gray-100"></div>
+              </div>
+
               <button
                 onClick={() => navigate('/sazatalk')}
                 className="group relative px-8 py-4 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-full font-semibold text-lg shadow-lg shadow-blue-500/30 hover:shadow-xl hover:shadow-blue-500/40 transition-all duration-300 active:scale-95 flex items-center gap-3"

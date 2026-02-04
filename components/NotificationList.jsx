@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef } from 'react';
 import { db } from '@/lib/firebase';
-import { collection, query, where, onSnapshot, updateDoc, doc } from 'firebase/firestore';
+import { collection, query, where, onSnapshot, updateDoc, doc, getFirestore } from 'firebase/firestore';
 import { useAuthContext } from '@/contexts/useAuthContext';
 import { BellIcon, CheckIcon, XMarkIcon, InboxIcon, ChatBubbleLeftEllipsisIcon } from '@heroicons/react/24/outline';
 import { useLanguage } from '@/contexts/useLanguageContext';
@@ -113,6 +113,7 @@ export default function NotificationList() {
               <XMarkIcon className="w-4 h-4 text-gray-400 hover:text-gray-600" />
             </button>
           </div>
+          
 
           <div className="max-h-80 overflow-y-auto p-3 space-y-2">
             {notifications.filter(n => !n.isRead).length > 0 ? (

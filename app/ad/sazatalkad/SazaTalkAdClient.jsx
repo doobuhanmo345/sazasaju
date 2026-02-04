@@ -35,6 +35,15 @@ export default function SazaTalkAdPage() {
   const [userQuestion, setUserQuestion] = useState('');
   const [loading, setLoading] = useState(false);
 
+  // Client-side Title Update for Localization (Static Export Support)
+  useEffect(() => {
+    if (language === 'ko') {
+      document.title = '사자톡  운세 상담 | 당신의 고민을 해결하는 단 하나의 열쇠';
+    } else {
+      document.title = 'SazaTalk AI Counseling | The Key to Your Destiny';
+    }
+  }, [language]);
+
   // 1. 비회원용 익명 ID 생성 및 관리
   useEffect(() => {
     if (loadingUser) return;

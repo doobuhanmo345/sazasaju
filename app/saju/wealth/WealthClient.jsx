@@ -34,9 +34,20 @@ import { UI_TEXT, langPrompt, hanja } from '@/data/constants';
 
 export default function Wealth({}) {
   const { language } = useLanguage();
-  const { user, userData } = useAuthContext();
-  const { birthDate: inputDate, isTimeUnknown, gender, saju } = userData || {};
+  const { user, userData,selectedProfile } = useAuthContext();
   const { MAX_EDIT_COUNT, isLocked, setEditCount, editCount } = useUsageLimit();
+  // 컨텍스트 스위칭
+  const targetProfile = selectedProfile || userData;
+  const { birthDate: inputDate, isTimeUnknown, gender, saju } = targetProfile || {};
+//컨텍스트 스위칭 끝
+  // Client-side Title Update for Localization (Static Export Support)
+  useEffect(() => {
+    if (language === 'ko') {
+      document.title = '재물운 분석 | 나의 부와 금전의 흐름';
+    } else {
+      document.title = 'Wealth Luck Analysis | Path to Financial Success';
+    }
+  }, [language]);
 
   const [aiResult, setAiResult] = useState('');
   const [step, setStep] = useState(0);
@@ -231,7 +242,7 @@ export default function Wealth({}) {
 
   const service = new SajuAnalysisService({
     user,
-    userData,
+    userData: targetProfile, 
     language,
     maxEditCount: MAX_EDIT_COUNT,
     setEditCount,

@@ -1,12 +1,13 @@
 'use client';
 
-import React from 'react';
+import React,{useState} from 'react';
 import { TicketIcon, LockClosedIcon } from '@heroicons/react/24/outline';
-import { FcGoogle } from 'react-icons/fc';
 import { classNames } from '@/utils/helpers';
 import { useLanguage } from '@/contexts/useLanguageContext';
 import { useAuthContext } from '@/contexts/useAuthContext';
 import { useUsageLimit } from '@/contexts/useUsageLimit';
+import { GiftIcon } from '@heroicons/react/24/outline';
+import LoginModal from '@/components/LoginModal';
 
 const COLOR_MAPS = {
   red: {
@@ -59,7 +60,7 @@ export default function StartButton({
   label,
   color = 'red'
 }) {
-
+  const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
   const DISABLED_STYLE = 'bg-gray-100 text-gray-400 cursor-not-allowed border border-gray-200';
   const { language } = useLanguage();
   const { user, userData, login } = useAuthContext();
@@ -71,21 +72,26 @@ export default function StartButton({
   // 1. Guest View: User is not logged in
   if (!user) {
     return (
-      <button
-        onClick={login}
-        className="w-full relative group px-10 py-5 font-bold rounded-[2rem] shadow-2xl shadow-indigo-100/50 dark:shadow-none transform transition-all flex items-center justify-center gap-3 bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 hover:-translate-y-1 active:scale-[0.98] overflow-hidden"
-      >
-        {/* Subtle hover background effect */}
-        <div className="absolute inset-0 bg-gradient-to-br from-indigo-50/40 via-white to-white dark:from-indigo-900/20 dark:via-slate-800 dark:to-slate-800 opacity-0 group-hover:opacity-100 transition-opacity" />
-        
-        <FcGoogle className="w-6 h-6 relative z-10" />
-        <span className="text-slate-800 dark:text-white text-lg tracking-tight relative z-10">
-          {language === 'ko' ? '오늘 3회 무료로 시작하기' : 'Start with 3 Free Today'}
-        </span>
-
-        {/* Shine effect */}
-        <div className="absolute top-0 -inset-full h-full w-1/2 z-5 block transform -skew-x-12 bg-gradient-to-r from-transparent via-white/40 to-transparent group-hover:animate-shine" />
-      </button>
+      <>
+        <button 
+          onClick={() => setIsLoginModalOpen(true)}
+          className="w-full relative group px-10 py-5 font-bold rounded-[2rem] shadow-2xl shadow-indigo-100/50 dark:shadow-none transform transition-all flex items-center justify-center gap-3 bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 hover:-translate-y-1 active:scale-[0.98] overflow-hidden"
+        >
+          {/* Subtle hover background effect */}
+          <div className="absolute inset-0 bg-gradient-to-br from-indigo-50/40 via-white to-white dark:from-indigo-900/20 dark:via-slate-800 dark:to-slate-800 opacity-0 group-hover:opacity-100 transition-opacity" />
+          <GiftIcon className="w-6 h-6 text-indigo-500 relative z-10" />
+          <span className="text-slate-800 dark:text-white text-lg tracking-tight relative z-10">
+            {language === 'ko' ? '오늘 3회 무료로 시작하기' : 'Start with 3 Free Today'}
+          </span>
+  
+          {/* Shine effect */}
+          <div className="absolute top-0 -inset-full h-full w-1/2 z-5 block transform -skew-x-12 bg-gradient-to-r from-transparent via-white/40 to-transparent group-hover:animate-shine" />
+        </button>
+        <LoginModal 
+          isOpen={isLoginModalOpen} 
+          onClose={() => setIsLoginModalOpen(false)} 
+        />
+      </>
     );
   }
 

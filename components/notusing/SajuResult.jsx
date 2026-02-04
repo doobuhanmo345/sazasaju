@@ -82,7 +82,7 @@ const SajuResult = ({ aiResult }) => {
     }
   }, []);
 
-  const isEn = language === 'en';
+  const isEn = language  !== 'ko';
   const t = (char) => (isEn ? ENG_MAP[char] || char : char);
 
   if (!userData) return <div className="p-10 text-center">유저 정보를 불러오는 중입니다...</div>;

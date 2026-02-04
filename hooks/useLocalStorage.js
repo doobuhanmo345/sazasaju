@@ -12,6 +12,7 @@ import { useState, useEffect } from 'react';
 function useLocalStorage(key, initialValue) {
   // 1. 초기 상태 설정
   const [value, setValue] = useState(() => {
+    if (typeof window === 'undefined') return initialValue;
     try {
       const storedValue = localStorage.getItem(key);
       return storedValue ? JSON.parse(storedValue) : initialValue;

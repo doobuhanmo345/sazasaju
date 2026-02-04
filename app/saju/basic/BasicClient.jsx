@@ -22,15 +22,38 @@ import BasicAnaPreview from '@/app/saju/basic/BasicAnaPreview';
 export default function BasicAnaPage() {
   const [sajuData, setSajuData] = useState(null);
   const { loading, setLoading, setAiResult, aiResult } = useLoading();
-  const { userData, user, isMainDone } = useAuthContext();
-  const { birthDate: inputDate, isTimeUnknown, gender } = userData || {};
+  const { userData, user, isMainDone, selectedProfile } = useAuthContext(); // selectedProfile 추가
+  
+  // 컨텍스트 스위칭: 선택된 프로필이 있으면 그것을 사용, 없으면 본인 정보
+  const targetProfile = selectedProfile || userData;
+  // [FIX] birthTime이 별도로 있는 경우 합쳐서 ISO 포맷으로 만듦
+  const rawDate = targetProfile?.birthDate;
+  const rawTime = targetProfile?.birthTime || '12:00';
+  const inputDate = (targetProfile?.birthTime && rawDate && !rawDate.includes('T'))
+    ? `${rawDate}T${rawTime}`
+    : rawDate;
+  
+  const { isTimeUnknown, gender } = targetProfile || {};
+  
   const { saju } = useSajuCalculator(inputDate, isTimeUnknown);
   const { language } = useLanguage();
   const { setEditCount, MAX_EDIT_COUNT, isLocked } = useUsageLimit();
 
   const DISABLED_STYLE = 'bg-gray-100 text-gray-400 cursor-not-allowed border border-gray-200';
   const isDisabled = !user || loading;
-  const isDisabled2 = !isMainDone && isLocked;
+  // 친구 프로필일 경우(isTargetOthers)에는 isMainDone이 false라도 잠금(isLocked)을 무시하고 분석 가능하게 함
+  // 또한, 평생사주(cost=-1)는 원래 무료이므로 isLocked 체크가 불필요할 수 있으나, 기존 로직 존중하여 친구일 때만 예외 처리
+  const isTargetOthers = !!selectedProfile;
+  const isDisabled2 = !isTargetOthers && !isMainDone && isLocked;
+
+  // Client-side Title Update for Localization (Static Export Support)
+  useEffect(() => {
+    if (language === 'ko') {
+      document.title = '평생 사주 분석 리포트 | 나의 타고난 명식과 대운 풀이';
+    } else {
+      document.title = 'Lifetime Saju Analysis | My Innate Map & Great Luck';
+    }
+  }, [language]);
 
   // ✅ 1. SajuAnalysisService 인스턴스 고정 (가장 중요)
   // useMemo를 안쓰면 렌더링마다 서비스가 새로 생성되어 내부 리렌더링을 유발합니다.
@@ -38,7 +61,7 @@ export default function BasicAnaPage() {
     () =>
       new SajuAnalysisService({
         user,
-        userData,
+        userData: targetProfile, // AI 분석 서비스에 타겟 프로필 전달
         language,
         maxEditCount: MAX_EDIT_COUNT,
         uiText: UI_TEXT,
@@ -46,7 +69,7 @@ export default function BasicAnaPage() {
         setLoading,
         setAiResult,
       }),
-    [user, userData, language, MAX_EDIT_COUNT, setEditCount, setLoading, setAiResult],
+    [user, targetProfile, language, MAX_EDIT_COUNT, setEditCount, setLoading, setAiResult], // 의존성 변경
   );
 
   // ✅ 2. handleStartClick을 useCallback으로 고정
@@ -57,15 +80,39 @@ export default function BasicAnaPage() {
         const data = calculateSajuData(inputDate, gender, isTimeUnknown, language);
         if (!data) return;
 
-        await service.analyze(AnalysisPresets.basic({ saju, gender, language }, data), (result) => {
+        const preset = AnalysisPresets.basic({ saju, gender, language }, data);
+
+        // [CRITICAL FIX] 친구 프로필 분석 시 메인 유저의 saju 데이터 덮어쓰기 방지
+        if (selectedProfile) {
+          preset.buildSaveData = async (result, p, service) => {
+             const todayStr = await service.getToday();
+             return {
+               // saju 필드 생략 (메인 유저 데이터 오염 방지)
+               usageHistory: {
+                 ZApiAnalysis: {
+                   result,
+                   saju: p.saju,
+                   language: p.language,
+                   gender: p.gender,
+                   targetName: selectedProfile.displayName || 'Friend', // 누구 사주인지 기록
+                 },
+               },
+               // 친구 분석은 카운트 증가 안 함 (옵션) -> 일단 기록은 남기되 메인 데이터 보호
+               // dailyUsage: { [todayStr]: firestore.increment(1) }, 
+             };
+          };
+        }
+
+        await service.analyze(preset, (result) => {
           console.log('✅ 평생운세 완료!');
         });
         onstart();
       } catch (error) {
         console.error(error);
+        alert(UI_TEXT.error?.[language] || 'An error occurred.');
       }
     },
-    [inputDate, gender, isTimeUnknown, language, service, saju, setAiResult],
+    [inputDate, gender, isTimeUnknown, language, service, saju, setAiResult, selectedProfile],
   );
 
   // ✅ 3. sajuGuide를 useCallback으로 고정
@@ -76,23 +123,42 @@ export default function BasicAnaPage() {
         return <LoadingFourPillar saju={saju} isTimeUnknown={isTimeUnknown} />;
       }
 
+      const iljuName = saju ? `${saju.sky1}${saju.grd1}` : '';
+      const displayName = targetProfile?.displayName || (language === 'ko' ? '당신' : 'My');
+
       return (
         <div className=" mx-auto text-center px-6 animate-in fade-in slide-in-from-bottom-5 duration-700">
           <div>
-            <h2 className="text-3xl font-black text-slate-800 dark:text-white mb-4 tracking-tight">
-              {language === 'ko' ? '오행으로 읽는' : 'Reading the Five Elements'}
-              <br />
-              <span className="relative text-sky-600 dark:text-sky-500">
-                {language === 'ko' ? '평생운세 & 10년 대운' : 'Saju Analysis'}
-                <div className="absolute inset-0 bg-sky-200/50 dark:bg-sky-800/60 blur-md rounded-full scale-100"></div>
-              </span>
+            <h2 className="text-3xl font-black text-slate-800 dark:text-white mb-4 tracking-tight leading-tight">
+              {saju ? (
+                <>
+                   <span className="text-xl font-bold text-slate-500 block mb-1">
+                     {language === 'ko' ? '오행으로 읽는' : 'Reading the Five Elements'}
+                   </span>
+                   <span className="text-indigo-600 dark:text-indigo-400">{displayName}</span>
+                   {language === 'ko' ? '의 ' : "'s "}
+                   <span className="relative inline-block">
+                     <span className="relative z-10 text-slate-800 dark:text-slate-100"> {language === 'ko' ? '정밀 운세 분석' : 'Saju Analysis'}</span>
+                     <div className="absolute inset-x-0 bottom-1 h-3 bg-indigo-200/50 dark:bg-indigo-800/50 -rotate-1 rounded-full"></div>
+                   </span>
+                </>
+              ) : (
+                <>
+                  {language === 'ko' ? '오행으로 읽는' : 'Reading the Five Elements'}
+                  <br />
+                  <span className="relative text-sky-600 dark:text-sky-500">
+                    {language === 'ko' ? '평생운세 & 10년 대운' : 'Saju Analysis'}
+                    <div className="absolute inset-0 bg-sky-200/50 dark:bg-sky-800/60 blur-md rounded-full scale-100"></div>
+                  </span>
+                </>
+              )}
             </h2>
             <div className="space-y-4 text-slate-600 dark:text-slate-400 mb-10 leading-relaxed break-keep">
               <p className="text-sm">
                 {language === 'ko' ? (
                   <>
-                    <strong>타고난 운명</strong>과 <strong>10년마다 찾아오는 변화의 시기</strong>,
-                    당신의 운명 지도 분석.
+                    타고난 기질과 <strong>10년마다 찾아오는 대운</strong>의 흐름,<br/>
+                    당신의 운명 지도를 분석합니다.
                   </>
                 ) : (
                   'My innate color and the period of change that comes every ten years. Analyzing your destiny map.'

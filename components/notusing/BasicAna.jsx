@@ -144,7 +144,7 @@ const BasicAna = ({ inputDate, saju, inputGender, isTimeUnknown, handleSetViewMo
         time: allChars[6] + allChars[7],
       };
       
-      const isEn = language === 'en';
+      const isEn = language  !== 'ko';
       const ilju = pillars.day;
 
       const calculateShinsal = (pillars, branches, dayMaster) => {
@@ -376,7 +376,7 @@ const BasicAna = ({ inputDate, saju, inputGender, isTimeUnknown, handleSetViewMo
 
   const getDaewoonStory = (dae, currentAge, pillars) => {
     if (!dae || !pillars?.day) return '';
-    const isEn = language === 'en';
+    const isEn = language  !== 'ko';
     const userGan = pillars.day.charAt(0);
     const dGanKor = dae.ganKor;
     

@@ -1,6 +1,6 @@
 'use client';
 
-import { useRef, useState, useEffect } from 'react';
+import { useRef, useState, useEffect, useMemo } from 'react';
 import AnalysisStepContainer from '@/components/AnalysisStepContainer';
 import { useAuthContext } from '@/contexts/useAuthContext';
 import { useUsageLimit } from '@/contexts/useUsageLimit';
@@ -27,11 +27,24 @@ const DISABLED_STYLE = 'bg-gray-200 dark:bg-gray-700 text-gray-400 cursor-not-al
 export default function SazaTalkPage() {
   const router = useRouter();
   const { setAiResult } = useLoading();
-  const { userData, user } = useAuthContext();
-  const { saju, gender, birthDate: inputDate } = userData || {};
+  const { userData, user, selectedProfile } = useAuthContext(); // selectedProfile 추가
+  
+  // 컨텍스트 스위칭
+  const targetProfile = selectedProfile || userData;
+  const { saju, gender, birthDate: inputDate } = targetProfile || {};
+  
   const { language } = useLanguage();
   const { setEditCount, MAX_EDIT_COUNT, editCount, isLocked } = useUsageLimit();
   const [step, setStep] = useState('input');
+
+  // Client-side Title Update for Localization (Static Export Support)
+  useEffect(() => {
+    if (language === 'ko') {
+      document.title = '사자톡 (SazaTalk) |  사주 실시간 상담';
+    } else {
+      document.title = 'SazaTalk | AI Saju Consulting';
+    }
+  }, [language]);
 
   const [userQuestion, setUserQuestion] = useState('');
   const [loading, setLoading] = useState(false);
@@ -116,9 +129,20 @@ export default function SazaTalkPage() {
     }
   }, [user]);
 
+  // Optimize history parsing
+  const parsedHistoryData = useMemo(() => {
+    if (!latestSazaTalk?.result) return null;
+    try {
+      return parseAiResponse(latestSazaTalk.result) || {};
+    } catch (e) {
+      console.error("Failed to parse history:", e);
+      return null;
+    }
+  }, [latestSazaTalk]);
+
   const service = new SajuAnalysisService({
     user,
-    userData,
+    userData: targetProfile, // AI 분석에 타겟 프로필 전달
     language,
     maxEditCount: MAX_EDIT_COUNT,
     uiText: UI_TEXT,
@@ -328,7 +352,7 @@ export default function SazaTalkPage() {
                 'w-full  px-10 py-4 font-bold rounded-xl shadow-lg dark:shadow-none transform transition-all flex items-center justify-center gap-2',
                 isDisabled
                   ? DISABLED_STYLE
-                  : 'bg-gradient-to-r from-violet-600 to-violet-600 hover:from-violet-500 hover:to-violet-500 text-white shadow-violet-200 hover:-translate-y-1',
+                  : 'bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white shadow-purple-200 hover:-translate-y-1',
               )}
             >
               {language === 'ko' ? '사자에게 물어보기' : 'Ask Saza'}
@@ -487,40 +511,52 @@ export default function SazaTalkPage() {
                         {language === 'ko' ? '사자의 답변' : "Saza's Answer"}
                       </div>
                       <div className="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-violet-100/50 dark:border-violet-900/20 shadow-sm overflow-hidden text-sm leading-relaxed text-slate-600 dark:text-slate-400">
-                        {(() => {
-                          const data = parseAiResponse(latestSazaTalk.result) || {};
-                          return (
+                        {parsedHistoryData && (parsedHistoryData.contents || parsedHistoryData.saza) ? (
                             <div className="leading-8 w-full">
-                              {data.contents && Array.isArray(data.contents) ? (
-                                data.contents.map((i, idx) => <p key={idx}>{i}</p>)
+                              {parsedHistoryData.contents && Array.isArray(parsedHistoryData.contents) ? (
+                                parsedHistoryData.contents.map((i, idx) => {
+                                  if (typeof i === 'object' && i !== null) {
+                                    return (
+                                      <div key={idx} className="mb-2">
+                                        {i.title && <strong className="block text-indigo-700 dark:text-indigo-300">{i.title}</strong>}
+                                        {i.detail && <p>{i.detail}</p>}
+                                        {!i.title && !i.detail && <p>{JSON.stringify(i)}</p>}
+                                      </div>
+                                    );
+                                  }
+                                  return <p key={idx}>{i}</p>;
+                                })
                               ) : (
-                                <p>{typeof data.contents === 'string' ? data.contents : ''}</p>
+                                <p>{typeof parsedHistoryData.contents === 'string' ? parsedHistoryData.contents : ''}</p>
                               )}
 
-                              {data.saza && (
+                              {parsedHistoryData.saza && (
                                 <div className="mt-4 pt-4 border-t border-slate-50 dark:border-slate-700">
                                   <strong className="text-indigo-600 dark:text-indigo-400 block mb-1">
                                     {language === 'en' ? "Saza's Advice" : '사자의 조언'}
                                   </strong>
-                                  {typeof data.saza === 'object' ? (
+                                  {typeof parsedHistoryData.saza === 'object' ? (
                                     <div className="text-sm">
-                                      {data.saza.category && (
+                                      {parsedHistoryData.saza.category && (
                                         <span className="inline-block px-2 py-0.5 bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 rounded text-[10px] font-bold mr-2">
-                                          {data.saza.category}
+                                          {parsedHistoryData.saza.category}
                                         </span>
                                       )}
-                                      <p className="inline italic">"{data.saza.advice}"</p>
+                                      <p className="inline italic">"{parsedHistoryData.saza.advice}"</p>
                                     </div>
                                   ) : (
-                                    <p className="italic">"{data.saza}"</p>
+                                    <p className="italic">"{parsedHistoryData.saza}"</p>
                                   )}
                                 </div>
                               )}
                               {/* Style injection */}
-                              <div dangerouslySetInnerHTML={{ __html: aiSajuStyle }} />
+                              {aiSajuStyle && <div dangerouslySetInnerHTML={{ __html: aiSajuStyle }} />}
                             </div>
-                          );
-                        })()}
+                          ) : (
+                            <div className="text-slate-400 text-xs italic p-2 text-center">
+                                {language === 'ko' ? '내용을 불러올 수 없습니다.' : 'No content available'}
+                            </div>
+                          )}
                       </div>
                     </div>
                   </div>

@@ -5,6 +5,7 @@ import useLocalStorage from './useLocalStorage';
 
 export function useLanguageLogic() {
   const determineDefaultLanguage = () => {
+    if (typeof window === 'undefined') return 'en';
     try {
       const savedRaw = localStorage.getItem('userLanguage');
       if (savedRaw) {

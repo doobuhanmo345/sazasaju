@@ -2,6 +2,7 @@
 
 import React, { useMemo } from 'react';
 import { ILJU_DATA, ILJU_DATA_EN } from '@/data/ilju_data';
+import { getRomanizedIlju } from '@/data/sajuInt';
 import { useAuthContext } from '@/contexts/useAuthContext';
 import { useLanguage } from '@/contexts/useLanguageContext';
 import { useSajuCalculator } from '@/hooks/useSajuCalculator';
@@ -10,18 +11,25 @@ import { ArrowRightIcon } from '@heroicons/react/24/solid';
 import { ENG_MAP } from '@/data/constants';
 
 export default function BasicAnaBanner({ inputDate, isTimeUnknown, gender }) {
-  const { userData, iljuImagePath } = useAuthContext();
+  const { userData,selectedProfile,iljuImagePath } = useAuthContext();
   const { language } = useLanguage();
   const router = useRouter();
   const saju = useSajuCalculator(inputDate, isTimeUnknown).saju;
+const targetProfile = selectedProfile || userData;
+const selSaju = targetProfile?.saju
+
 
   const isKo = language === 'ko';
-  const currentTitle = isKo
-    ? ILJU_DATA?.[saju.sky1 + saju.grd1]?.title[gender]?.title
-    : ILJU_DATA_EN?.[saju.sky1 + saju.grd1]?.title[gender]?.title;
-  const currentDesc = isKo
-    ? ILJU_DATA?.[saju.sky1 + saju.grd1]?.title[gender]?.desc
-    : ILJU_DATA_EN?.[saju.sky1 + saju.grd1]?.title[gender]?.desc;
+  const currentTitle = (selSaju && selSaju.sky1 && selSaju.grd1)
+    ? (isKo
+      ? ILJU_DATA?.[selSaju.sky1 + selSaju.grd1]?.title[gender]?.title
+      : ILJU_DATA_EN?.[selSaju.sky1 + selSaju.grd1]?.title[gender]?.title)
+    : '';
+  const currentDesc = (selSaju && selSaju.sky1 && selSaju.grd1)
+    ? (isKo
+      ? ILJU_DATA?.[selSaju.sky1 + selSaju.grd1]?.title[gender]?.desc
+      : ILJU_DATA_EN?.[selSaju.sky1 + selSaju.grd1]?.title[gender]?.desc)
+    : '';
 
   const handleShareImg = async (id) => {
     const html2canvas = (await import('html2canvas')).default;
@@ -82,13 +90,15 @@ const processedTitle = useMemo(() => {
     splitIndex = 2;
   }
 
+
   return {
     first: words.slice(0, splitIndex).join(' '),
     second: words.slice(splitIndex).join(' '),
   };
 }, [currentTitle]);
 
-  const hasData = !!userData?.birthDate;
+  const hasData = !!(userData?.birthDate || targetProfile?.birthDate);
+  const displayName = targetProfile?.displayName;
 
   return (
     <div className="w-full max-w-lg mx-auto">
@@ -127,7 +137,7 @@ const processedTitle = useMemo(() => {
           <div
             style={{ fontSize: '24px', fontWeight: '800', color: '#111827', marginBottom: '10px' }}
           >
-            {hasData ? currentTitle : '??'}
+            {hasData ? (displayName ? `${displayName} ${currentTitle}` : currentTitle) : '??'}
           </div>
           <div style={{ fontSize: '14px', color: '#4b5563', lineHeight: '1.6' }}>
             {hasData ? currentDesc : (isKo ? '정보를 입력하면 당신의 성향을 분석해 드립니다.' : 'Register your info to see your personality analysis.')}
@@ -144,11 +154,11 @@ const processedTitle = useMemo(() => {
         <div className="absolute left-[30%] top-[10%] text-[90px] font-black opacity-[0.05] italic select-none pointer-events-none text-gray-900 whitespace-nowrap">
           {!hasData ? '??' : (language === 'en' ? (
             <>
-              {ENG_MAP[saju.sky1]?.toUpperCase()}
-              {ENG_MAP[saju.grd1]?.toUpperCase()}
+              {ENG_MAP[targetProfile.saju.sky1]?.toUpperCase()}
+              {ENG_MAP[targetProfile.saju.grd1]?.toUpperCase()}
             </>
           ) : (
-            <> {saju.sky1 + saju.grd1}</>
+            <> {targetProfile.saju.sky1 + targetProfile.saju.grd1}</>
           ))}
         </div>
 
@@ -164,7 +174,9 @@ const processedTitle = useMemo(() => {
             {/* 텍스트 정보 */}
             <div className="flex-1 min-w-0 animate-in fade-in slide-in-from-left-5 duration-1000">
               <h2 className="text-2xl sm:text-3xl font-light text-slate-900 leading-tight tracking-tight mb-2">
-                {hasData ? processedTitle.first : (isKo ? '로그인 하고 ' : 'Log in and ')} <br />
+                {hasData ? (
+                  processedTitle.first
+                ) : (isKo ? '로그인 하고 ' : 'Log in and ')} <br />
                 <span className="font-serif italic font-medium text-indigo-700">
                   {hasData ? processedTitle.second : (isKo ? '나의 오행 확인!' : 'Discover My Element!')}
                 </span>

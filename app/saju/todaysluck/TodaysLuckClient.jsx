@@ -22,13 +22,27 @@ import TodaysLuckPreview from '@/app/saju/todaysluck/TodaysLuckPreview';
 export default function TodaysLuckPage() {
   const { loading, setLoading, setLoadingType, aiResult, setAiResult } = useLoading();
   const [sajuData, setSajuData] = useState(null);
-  const { userData, user, isDailyDone } = useAuthContext();
-  const { birthDate: inputDate, isTimeUnknown, gender, saju } = userData || {};
+  const { userData, user, isDailyDone, selectedProfile } = useAuthContext(); // selectedProfile 추가
+  
+  // 컨텍스트 스위칭
+  const targetProfile = selectedProfile || userData;
+  const { birthDate: inputDate, isTimeUnknown, gender, saju } = targetProfile || {};
+  
   const { language } = useLanguage();
   const { editCount, setEditCount, MAX_EDIT_COUNT, isLocked } = useUsageLimit();
   const DISABLED_STYLE = 'bg-gray-100 text-gray-400 cursor-not-allowed border border-gray-200';
   const isDisabled = !user || loading;
-  const isDisabled2 = !isDailyDone && isLocked;
+  const isTargetOthers = !!selectedProfile;
+  const isDisabled2 = !isTargetOthers && !isDailyDone && isLocked;
+
+  // Client-side Title Update for Localization (Static Export Support)
+  useEffect(() => {
+    if (language === 'ko') {
+      document.title = '오늘의 운세 | 당신만을 위한 행운의 컬러와 조언';
+    } else {
+      document.title = 'Todays Fortune | Lucky Color & Daily Advice';
+    }
+  }, [language]);
 
   useEffect(() => {
     if (inputDate) {
@@ -41,7 +55,7 @@ export default function TodaysLuckPage() {
 
   const service = new SajuAnalysisService({
     user,
-    userData,
+    userData: targetProfile, // AI 분석에 타겟 프로필 전달
     language,
     maxEditCount: MAX_EDIT_COUNT,
     uiText: UI_TEXT,

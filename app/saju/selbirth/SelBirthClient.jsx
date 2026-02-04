@@ -24,10 +24,22 @@ import { useRouter } from 'next/navigation';
 export default function SelBirthPage() {
   const router = useRouter();
   const { loading, setLoading, setAiResult, setLastParams } = useLoading();
-  const { userData, user } = useAuthContext();
-  const { saju, gender, isTimeUnknown } = userData || {};
+  const { userData, user, selectedProfile } = useAuthContext();
+  // 컨텍스트 스위칭
+  const targetProfile = selectedProfile || userData;
+  const { birthDate: inputDate, isTimeUnknown, gender, saju } = targetProfile || {};
+//컨텍스트 스위칭 끝
   const { language } = useLanguage();
   const { setEditCount, MAX_EDIT_COUNT, isLocked } = useUsageLimit();
+
+  // Client-side Title Update for Localization (Static Export Support)
+  useEffect(() => {
+    if (language === 'ko') {
+      document.title = '출산 택일 분석 | 신생아를 위한 축복의 시간';
+    } else {
+      document.title = 'Auspicious Birth Selection | Best Time for Newborn';
+    }
+  }, [language]);
 
   const [step, setStep] = useState('input');
 
@@ -66,7 +78,7 @@ export default function SelBirthPage() {
     () =>
       new SajuAnalysisService({
         user,
-        userData,
+        userData: targetProfile,
         language,
         maxEditCount: MAX_EDIT_COUNT,
         uiText: UI_TEXT,

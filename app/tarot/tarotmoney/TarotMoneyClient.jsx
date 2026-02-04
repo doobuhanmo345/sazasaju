@@ -24,6 +24,16 @@ export default function TarotMoneyPage() {
   const { userData, user } = useAuthContext();
   const { language } = useLanguage();
   const { setEditCount, MAX_EDIT_COUNT } = useUsageLimit();
+
+  // Client-side Title Update for Localization (Static Export Support)
+  useEffect(() => {
+    if (language === 'ko') {
+      document.title = '금전 타로 | 부의 흐름과 금전적 성공 가이드';
+    } else {
+      document.title = 'Wealth Tarot | Guide to Financial Success';
+    }
+  }, [language]);
+
   const [cardPicked, setCardPicked] = useState();
   const [flippedIdx, setFlippedIdx] = useState(null);
   const [step, setStep] = useState('intro');

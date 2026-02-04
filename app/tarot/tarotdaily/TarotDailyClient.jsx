@@ -24,6 +24,16 @@ export default function TarotDailyPage() {
   const { userData, user } = useAuthContext();
   const { language } = useLanguage();
   const { setEditCount, MAX_EDIT_COUNT } = useUsageLimit();
+
+  // Client-side Title Update for Localization (Static Export Support)
+  useEffect(() => {
+    if (language === 'ko') {
+      document.title = '오늘의 타로 | 당신을 위한 하루 가이드';
+    } else {
+      document.title = 'Daily Tarot | Your Daily Guidance';
+    }
+  }, [language]);
+
   const [flippedIdx, setFlippedIdx] = useState(null);
   const [step, setStep] = useState('intro');
   const [cardPicked, setCardPicked] = useState();

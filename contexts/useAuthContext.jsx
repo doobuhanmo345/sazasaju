@@ -2,11 +2,12 @@
 
 import { createContext, useContext, useEffect, useState, useMemo } from 'react';
 import { doc, onSnapshot, updateDoc, setDoc, getDoc } from 'firebase/firestore';
-import { login, logout, onUserStateChange, db } from '@/lib/firebase';
+import { login, logout, onUserStateChange, db, auth, getRedirectResult, loginWithKakao, loginWithNaver } from '@/lib/firebase';
 import { useLanguage } from './useLanguageContext';
 import { getRomanizedIlju } from '@/data/sajuInt';
 import { calculateSaju } from '@/lib/sajuCalculator';
 import { specialPaths } from '@/lib/constants';
+import { ProfileService } from '@/lib/profileService';
 
 const AuthContext = createContext();
 
@@ -19,43 +20,129 @@ const checkSajuMatch = (prevSaju, targetSaju) => {
 
 export function AuthContextProvider({ children }) {
   const [user, setUser] = useState(null);
-  const [userData, setUserData] = useState(null);
+  const [userData, setUserData] = useState(null); // Main User Data (Firebase sync)
   const [loadingUser, setLoadingUser] = useState(true);
-  const { language } = useLanguage();
-  const pathname = typeof window !== 'undefined' ? window.location.pathname.trim() : ''; // 공백 제거
+  
+  // Multi-Profile State
+  const [savedProfiles, setSavedProfiles] = useState([]);
+  const [selectedProfile, setSelectedProfile] = useState(null); // Currently Active Profile (User or Friend)
 
-  // 1️⃣ 일주 이미지 경로 계산
+  const { language } = useLanguage();
+  const pathname = typeof window !== 'undefined' ? window.location.pathname.trim() : '';
+
+  // userData 로드 시 selectedProfile 초기화 (기존 유저는 본인이 기본값)
+  useEffect(() => {
+    if (userData && !selectedProfile) {
+      setSelectedProfile(userData);
+    }
+    // userData가 업데이트되면(예: 본인 정보 수정) 현재 선택된 프로필이 '본인'일 경우 같이 업데이트
+    if (userData && selectedProfile && selectedProfile.uid === userData.uid) {
+        setSelectedProfile(prev => ({ ...prev, ...userData }));
+    }
+  }, [userData]);
+
+  // 저장된 프로필 목록 불러오기
+  useEffect(() => {
+    if (user?.uid) {
+      ProfileService.getSavedProfiles(user.uid).then(profiles => {
+        setSavedProfiles(profiles);
+        
+        // [NEW] 이전에 선택된 프로필 복원
+        const lastSelectedId = localStorage.getItem('lastSelectedProfileId');
+        if (lastSelectedId && profiles.length > 0) {
+            const restored = profiles.find(p => p.id === lastSelectedId);
+            if (restored) {
+                setSelectedProfile(restored);
+            }
+        }
+      });
+    } else {
+      setSavedProfiles([]);
+    }
+  }, [user]);
+
+  // 프로필 선택 함수
+  const selectProfile = (profile) => {
+    if (!profile) {
+      setSelectedProfile(userData); // 기본값 복귀
+      localStorage.removeItem('lastSelectedProfileId'); // 로컬 저장소 제거
+    } else {
+      setSelectedProfile(profile);
+      localStorage.setItem('lastSelectedProfileId', profile.id); // 선택 저장
+    }
+  };
+
+  // 프로필 추가 함수
+  const addProfile = async (profileData) => {
+    if (!user) return;
+    const newProfile = await ProfileService.addSavedProfile(user.uid, profileData);
+    setSavedProfiles(prev => [newProfile, ...prev]);
+    return newProfile;
+  };
+
+  // 프로필 삭제 함수
+  const removeProfile = async (profileId) => {
+    if (!user) return;
+    await ProfileService.deleteSavedProfile(user.uid, profileId);
+    setSavedProfiles(prev => prev.filter(p => p.id !== profileId));
+    // 만약 삭제된 프로필을 보고 있었다면 본인 프로필로 복귀
+    if (selectedProfile?.id === profileId) {
+      setSelectedProfile(userData);
+    }
+  };
+
+  // 프로필 수정 함수 (친구용)
+  const updateSavedProfile = async (profileId, newData) => {
+    if (!user) return;
+    const updated = await ProfileService.updateSavedProfile(user.uid, profileId, newData);
+    
+    // 저장된 목록 업데이트
+    setSavedProfiles(prev => prev.map(p => p.id === profileId ? updated : p));
+    
+    // 현재 선택된 프로필이면 그것도 업데이트
+    if (selectedProfile?.id === profileId) {
+       setSelectedProfile(updated);
+    }
+    return updated;
+  };
+
+  // 1️⃣ 일주 이미지 경로 계산 - selectedProfile 기준
   const iljuImagePath = useMemo(() => {
+    const target = selectedProfile || userData; // Fallback
+    
     // [보안/에러 방지] 함수 초기화 여부와 데이터 존재 여부를 동시에 체크
-    if (!userData || !userData.saju || !userData.birthDate || typeof calculateSaju !== 'function') {
+    if (!target || !target.saju || !target.birthDate || typeof calculateSaju !== 'function') {
       return '/images/ilju/default.png';
     }
 
     try {
-      const data = calculateSaju(
-        userData.birthDate,
-        userData.gender,
-        userData.isTimeUnknown,
-        language,
-      );
+      const data = target.saju; // 이미 계산된 사주 사용
 
       const safeIlju =
         data?.sky1 && typeof getRomanizedIlju === 'function'
           ? getRomanizedIlju(data.sky1 + data.grd1)
           : 'gapja';
 
-      const safeGender = userData.gender ? userData.gender.toLowerCase() : 'male';
+      const safeGender = target.gender ? target.gender.toLowerCase() : 'male';
       return `/images/ilju/${safeIlju}_${safeGender}.png`;
     } catch (e) {
       console.error('Ilju image path error:', e);
       return '/images/ilju/default.png';
     }
-  }, [userData, language]);
+  }, [selectedProfile, userData, language]);
 
-  // 2️⃣ 서비스 이용 상태 계산
+  // 2️⃣ 서비스 이용 상태 계산 - selectedProfile 기준
   const status = useMemo(() => {
-    if (!userData || typeof checkSajuMatch !== 'function')
+    const target = selectedProfile || userData;
+    const isOwner = target && userData && target.uid === userData.uid;
+
+    if (!target || !userData || typeof checkSajuMatch !== 'function')
       return { isMainDone: false, isYearDone: false, isDailyDone: false, isCookieDone: false };
+
+    // 친구 프로필인 경우: 항상 열람 가능 (false)
+    // if (!isOwner) {
+    //    return { isMainDone: false, isYearDone: false, isDailyDone: false, isCookieDone: false };
+    // }
 
     const todayStr = new Date().toLocaleDateString('en-CA');
     const nextYear = '2027';
@@ -67,23 +154,23 @@ export function AuthContextProvider({ children }) {
       isMainDone: !!(
         hist.ZApiAnalysis?.language === language &&
         hist.ZApiAnalysis?.gender === gender &&
-        checkSajuMatch(hist.ZApiAnalysis?.saju, currentSaju)
+        checkSajuMatch(hist.ZApiAnalysis?.saju, target.saju)
       ),
       isYearDone: !!(
         String(hist.ZNewYear?.year) === nextYear &&
         hist.ZNewYear?.language === language &&
-        checkSajuMatch(hist.ZNewYear?.saju, currentSaju)
+        checkSajuMatch(hist.ZNewYear?.saju, target.saju)
       ),
       isDailyDone: !!(
         hist.ZLastDaily?.date === todayStr &&
         hist.ZLastDaily?.language === language &&
-        checkSajuMatch(hist.ZLastDaily?.saju, currentSaju)
+        checkSajuMatch(hist.ZLastDaily?.saju, target.saju)
       ),
       isCookieDone: !!(hist.ZCookie?.today === todayStr),
     };
-  }, [userData, language]);
+  }, [selectedProfile, userData, language]);
 
-  // 3️⃣ 인앱 브라우저 체크 및 로그인 감시
+  // 3️⃣ 인앱 브라우저 체크
   useEffect(() => {
     if (typeof window === 'undefined') return;
 
@@ -101,13 +188,33 @@ export function AuthContextProvider({ children }) {
         return;
       }
     }
-
-    const unsubscribe = onUserStateChange((firebaseUser) => {
-      setUser(firebaseUser);
-      if (!firebaseUser) setLoadingUser(false);
-    });
-    return () => unsubscribe?.();
   }, [pathname]);
+
+  // 4️⃣ 로그인 감시 (최초 1회만 실행)
+  useEffect(() => {
+    const unsubscribe = onUserStateChange((firebaseUser) => {
+      if (firebaseUser) {
+        setLoadingUser(true); // Ensure loading state while fetching Cloud Firestore data
+        setUser(firebaseUser);
+      } else {
+        setUser(null);
+        setUserData(null); // Clear stale data
+        setSelectedProfile(null);
+        setLoadingUser(false);
+      }
+    });
+
+    // Handle mobile redirect result
+    getRedirectResult(auth).then((result) => {
+      if (result) {
+        console.log('Mobile redirect login success:', result.user.email);
+      }
+    }).catch((error) => {
+      console.error('Redirect result error:', error);
+    });
+
+    return () => unsubscribe?.();
+  }, []);
 
   // 4️⃣ 데이터 실시간 동기화 및 로그인 날짜/신규유저 업데이트
   useEffect(() => {
@@ -148,11 +255,21 @@ export function AuthContextProvider({ children }) {
           }
         } else {
           // 신규 유저 초기 생성
+          let providerId = user.providerData?.[0]?.providerId;
+          
+          if (!providerId) {
+            // 커스텀 토큰(카카오/네이버)의 경우 providerData가 비어있을 수 있으므로 UID 접두사로 확인
+            if (user.uid.startsWith('kakao:')) providerId = 'kakao.com';
+            else if (user.uid.startsWith('naver:')) providerId = 'naver.com';
+            else providerId = 'firebase'; // 그 외 커스텀/익명 등
+          }
           const initialData = {
             uid: user.uid,
             email: user.email,
             displayName: user.displayName || '사용자',
             photoURL: user.photoURL || '',
+            provider: providerId, // 로그인 제공자 저장 (google.com, kakao.com 등)
+            phoneNumber: user.phoneNumber || '', // 이미 있으면 저장
             role: 'user',
             status: 'active',
             editCount: 0,
@@ -186,14 +303,23 @@ export function AuthContextProvider({ children }) {
   }, [user]);
 
   const [isLoggingIn, setIsLoggingIn] = useState(false);
+  const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
 
-  const handleLogin = async () => {
+  const openLoginModal = () => setIsLoginModalOpen(true);
+  const closeLoginModal = () => setIsLoginModalOpen(false);
+
+  const handleLogin = async (provider = 'google') => {
     setIsLoggingIn(true);
     try {
-      await login();
+      if (provider === 'kakao') {
+        await loginWithKakao();
+      } else if (provider === 'naver') {
+        await loginWithNaver();
+      } else {
+        await login();
+      }
     } catch (error) {
       if (error.code === 'auth/popup-closed-by-user') {
-        // 사용자가 닫았을 때는 조용히 무시
         return;
       }
       console.error('Login Error:', error);
@@ -216,22 +342,30 @@ export function AuthContextProvider({ children }) {
     <AuthContext.Provider
       value={{
         user,
-        userData,
+        userData, // 본인 원본 데이터
+        selectedProfile, // 현재 선택된 프로필 (친구 포함)
+        savedProfiles, // 저장된 친구 목록
         loadingUser,
         isLoggingIn,
-        iljuImagePath,
+        iljuImagePath, // selectedProfile 기준
         login: handleLogin,
-        cancelLogin, // 내보내기
+        isLoginModalOpen,
+        openLoginModal,
+        closeLoginModal,
+        cancelLogin,
         logout,
         updateProfileData,
-        ...status,
+        selectProfile, // 프로필 변경 함수
+        addProfile, // 프로필 추가 함수
+        removeProfile, // 프로필 삭제 함수
+        updateSavedProfile, // 프로필 수정 함수
+        ...status, // selectedProfile 기준 상태
       }}
     >
       {children}
     </AuthContext.Provider>
   );
 }
-
 export function useAuthContext() {
   return useContext(AuthContext);
 }

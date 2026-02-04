@@ -31,7 +31,7 @@ import MatchAppeal from '@/app/saju/match/MatchAppeal';
 import { SajuAnalysisService, AnalysisPresets } from '@/lib/SajuAnalysisService';
 import { parseAiResponse, getEng, classNames } from '@/utils/helpers';
 import { UI_TEXT, langPrompt, hanja } from '@/data/constants';
-
+import SelectPerson from '@/ui/SelectPerson';
 const RELATION_TYPES = [
   {
     id: 'lover',
@@ -121,14 +121,38 @@ const RELATION_TYPES = [
 
 export default function MatchPage() {
   const { language } = useLanguage();
-  const { user, userData } = useAuthContext();
-  const { birthDate: inputDate, isTimeUnknown, gender, saju } = userData || {};
+  const { user, userData, selectedProfile,savedProfiles } = useAuthContext();
+  // 컨텍스트 스위칭
+  const targetProfile = selectedProfile || userData;
+  const { birthDate: inputDate, isTimeUnknown, gender, saju } = targetProfile || {};
+//컨텍스트 스위칭 끝
   const { MAX_EDIT_COUNT, isLocked, setEditCount, editCount } = useUsageLimit();
 
   const [mounted, setMounted] = useState(false);
+
+const onSelect = (id) => {
+  console.log(id)
+  const selectedProfile = savedProfiles.find((profile) => profile.id === id)
+  console.log(selectedProfile)
+  setSaju2(selectedProfile.saju)
+  // const bd = getOriginalDate(selectedProfile.birthDate)
+  setInputDate2(selectedProfile.birthDate+'T'+selectedProfile.birthTime )
+  setIsTimeUnknown2(selectedProfile.isTimeUnknown)
+  setGender2(selectedProfile.gender)
+}
+  // Client-side Title Update for Localization (Static Export Support)
+  useEffect(() => {
+    if (language === 'ko') {
+      document.title = '정밀 궁합 분석 | 두 사람의 오행 조화와 인연';
+    } else {
+      document.title = 'Compatibility Analysis | Harmony of Spirits';
+    }
+  }, [language]);
+
   useEffect(() => {
     setMounted(true);
   }, []);
+
 
   const [aiResult, setAiResult] = useState('');
   const [step, setStep] = useState(0);
@@ -150,9 +174,16 @@ export default function MatchPage() {
       return '2024-01-01T00:00';
     }
   });
+     const { saju: saju2Init } = useSajuCalculator(inputDate2, isTimeUnknown2);
+const [saju2, setSaju2] = useState(saju2Init);
 
+// saju2Init(계산 결과)이 바뀔 때마다 saju2 상태를 업데이트
+useEffect(() => {
+  if (saju2Init) {
+    setSaju2(saju2Init);
+  }
+}, [saju2Init]); // 의존성 배열에 saju2Init을 넣습니다.
   const t = (char) => (language === 'en' ? getEng(char) : char);
-  const { saju: saju2 } = useSajuCalculator(inputDate2, isTimeUnknown2);
 
   const compaEnergy = useConsumeEnergy();
   const totalStep = 4;
@@ -249,7 +280,7 @@ export default function MatchPage() {
   if (!mounted) return null;
 
   return (
-    <main className="min-h-screen pt-20 pb-12 px-4 sm:px-6 lg:px-8">
+    <main className="min-h-screen ">
       <div className="w-full">
         {step > 0 && (
           <Step
@@ -434,6 +465,18 @@ export default function MatchPage() {
                   </div>
 
                   <div className="flex-1 flex flex-col justify-center">
+
+                    {savedProfiles && savedProfiles.length > 0 && (
+                      <div className="mb-6 px-1">
+                        <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2 ml-1">
+                          {language === 'ko' ? '불러오기' : 'Load Profile'}
+                        </label>
+                        <SelectPerson 
+                          list={savedProfiles} 
+                          onSelect={onSelect} 
+                        />
+                      </div>
+                    )}
                     <ModifyBd
                       gender={gender2}
                       inputDate={inputDate2}

@@ -6,6 +6,16 @@ module.exports = {
     './contexts/**/*.{js,ts,jsx,tsx,mdx}',
     './hooks/**/*.{js,ts,jsx,tsx,mdx}',
     './utils/**/*.{js,ts,jsx,tsx,mdx}',
+    './ui/**/*.{js,ts,jsx,tsx,mdx}',
+    './lib/**/*.{js,ts,jsx,tsx,mdx}',
+  ],
+  safelist: [
+    { pattern: /bg-(red|blue|indigo|amber|emerald|rose|purple|teal|violet|pink)-[0-9]+/ },
+    { pattern: /from-(red|blue|indigo|amber|emerald|rose|purple|teal|violet|pink)-[0-9]+/ },
+    { pattern: /to-(red|blue|indigo|amber|emerald|rose|purple|teal|violet|pink)-[0-9]+/ },
+    { pattern: /shadow-(red|blue|indigo|amber|emerald|rose|purple|teal|violet|pink)-[0-9]+/ },
+    { pattern: /hover:from-[a-z]+-[0-9]+/ },
+    { pattern: /hover:to-[a-z]+-[0-9]+/ },
   ],
   darkMode: 'class',
   theme: {

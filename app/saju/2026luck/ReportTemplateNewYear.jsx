@@ -10,7 +10,7 @@ import AfterReport from '@/components/AfterReport';
 const ReportTemplateNewYear = ({}) => {
   const { aiResult } = useLoading();
   const { language } = useLanguage();
-  const isEn = language === 'en';
+  const isEn = language !== 'ko';
   const [data, setData] = useState(null);
 
   useEffect(() => {

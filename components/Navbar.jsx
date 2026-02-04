@@ -42,7 +42,7 @@ const UTILITY_ITEMS = [
 
 export default function NavBar() {
   const { language, setLanguage } = useLanguage();
-  const { user, login, logout, userData, isCookieDone } = useAuthContext();
+  const { user, logout, userData, isCookieDone, openLoginModal } = useAuthContext();
   const { isContactModalOpen, handleCloseContact, handleShowContact } = useContactModal();
 
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -87,7 +87,7 @@ export default function NavBar() {
         logout();
       }
     } else {
-      login();
+      openLoginModal();
     }
     setIsMenuOpen(false);
   };
@@ -107,7 +107,7 @@ export default function NavBar() {
     : (language === 'ko' ? '/assets/Logo_Kor.png' : '/assets/Logo_Eng.png');
 
   return (
-    <div className="flex items-center justify-between py-3 max-w-xl m-auto relative z-20 px-2 select-none">
+    <div className="flex items-center justify-between py-3 max-w-xl m-auto relative z-20 px-0 select-none">
       {isContactModalOpen && (
         <ContactModal onClose={handleCloseContact} email="doobuhanmo3@gmail.com" />
       )}

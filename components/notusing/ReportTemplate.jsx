@@ -10,7 +10,7 @@ import AfterReport from './AfterReport';
 const ReportTemplate = ({}) => {
   const { aiResult } = useLoading();
   const { language } = useLanguage();
-  const isEn = language === 'en';
+  const isEn = language  !== 'ko';
   const data = parseAiResponse(aiResult);
 
   if (!data) return null;

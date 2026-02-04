@@ -23,14 +23,27 @@ export default function YearlyLuckPage() {
   const { setLoadingType, aiResult, setAiResult } = useLoading();
   const [loading, setLoading] = useState(false);
   const [sajuData, setSajuData] = useState(null);
-  const { userData, user, isYearDone } = useAuthContext();
-  const { birthDate: inputDate, isTimeUnknown, gender, saju } = userData || {};
-
+  const { userData, user, isYearDone, selectedProfile } = useAuthContext(); // selectedProfile 추가
+  
+  // 컨텍스트 스위칭
+  const targetProfile = selectedProfile || userData;
+  const { birthDate: inputDate, isTimeUnknown, gender, saju } = targetProfile || {};
+//컨텍스트 스위칭 끝
   const { language } = useLanguage();
   const { editCount, setEditCount, MAX_EDIT_COUNT, isLocked } = useUsageLimit();
   const DISABLED_STYLE = 'bg-gray-100 text-gray-400 cursor-not-allowed border border-gray-200';
   const isDisabled = !user || loading;
-  const isDisabled2 = !isYearDone && isLocked;
+  const isTargetOthers = !!selectedProfile;
+  const isDisabled2 = !isTargetOthers && !isYearDone && isLocked;
+
+  // Client-side Title Update for Localization (Static Export Support)
+  useEffect(() => {
+    if (language === 'ko') {
+      document.title = '2026년 신년운세 | 병오년 기운으로 보는 나의 한 해';
+    } else {
+      document.title = '2026 New Year Fortune | Year of the Red Horse';
+    }
+  }, [language]);
 
   useEffect(() => {
     if (inputDate) {
@@ -43,7 +56,7 @@ export default function YearlyLuckPage() {
 
   const service = new SajuAnalysisService({
     user,
-    userData,
+    userData: targetProfile, // AI 분석에 타겟 프로필 전달
     language,
     maxEditCount: MAX_EDIT_COUNT,
     uiText: UI_TEXT,

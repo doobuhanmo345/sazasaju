@@ -225,7 +225,7 @@ export default function AdminPage() {
   };
 
   return (
-    <div className="bg-gray-50 dark:bg-gray-900 py-12 px-4 sm:px-6 lg:px-8 transition-colors duration-300 max-w-xl m-auto">
+    <div className="bg-gray-50 dark:bg-gray-900 transition-colors duration-300 max-w-xl m-auto">
       <div className="max-w-xl mx-auto space-y-8">
         {/* 헤더 섹션 */}
         <header className="bg-white dark:bg-gray-900 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800 p-8">

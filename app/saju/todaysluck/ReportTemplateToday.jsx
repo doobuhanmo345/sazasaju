@@ -10,7 +10,7 @@ import AfterReport from '@/components/AfterReport';
 const ReportTemplateToday = ({}) => {
   const { aiResult } = useLoading();
   const { language } = useLanguage();
-  const isEn = language === 'en';
+  const isEn = language  !== 'ko';
   const [gaugeScore, setGaugeScore] = useState(0);
   const [data, setData] = useState(null); // 파싱된 데이터를 담을 로컬 상태
 

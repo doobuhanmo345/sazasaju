@@ -47,33 +47,24 @@ export default function NoBirthdayPage() {
   const [nameConfirmed, setNameConfirmed] = useState(false);
   const [isWelcome, setIsWelcome] = useState(false);
 
-  // Redirect to home if isWelcome is true
-  useEffect(() => {
-    if (isWelcome) {
-      const timer = setTimeout(() => {
-        router.push('/');
-      }, 3000);
-      return () => clearTimeout(timer);
-    }
-  }, [isWelcome, router]);
 
   // Intro transition timers
   useEffect(() => {
     if (isIntro) {
       const timers = [
-        setTimeout(() => setIntroStep(1), 300),
-        setTimeout(() => setIntroStep(2), 800),
-        setTimeout(() => setIntroStep(3), 1300),
-        setTimeout(() => setIntroStep(4), 1800),
-        setTimeout(() => setIntroStep(5), 2300),
-        setTimeout(() => setIntroStep(6), 2800),
-        setTimeout(() => setIntroStep(7), 3300),
-        setTimeout(() => setIntroStep(8), 3800),
+        setTimeout(() => setIntroStep(1), 100),
+        setTimeout(() => setIntroStep(2), 300),
+        setTimeout(() => setIntroStep(3), 500),
+        setTimeout(() => setIntroStep(4), 700),
+        setTimeout(() => setIntroStep(5), 900),
+        setTimeout(() => setIntroStep(6), 1100),
+        setTimeout(() => setIntroStep(7), 1300),
+        setTimeout(() => setIntroStep(8), 1500),
       ];
       
       const finishTimer = setTimeout(() => {
         setIsIntro(false);
-      }, 5000);
+      }, 3000);
       
       return () => {
         timers.forEach(clearTimeout);
@@ -105,6 +96,21 @@ export default function NoBirthdayPage() {
     (formData.isTimeUnknown || formData.birthTime) &&
     formData.birthCity;
 
+  const [isSubmitted, setIsSubmitted] = useState(false);
+
+ useEffect(() => {
+    if (isWelcome||userData?.birthDate) {
+   
+      
+      const finishTimer = setTimeout(() => {
+        setIsWelcome(false);
+        router.push('/')
+      }, 2000);
+      
+     
+    }
+    
+  }, [isWelcome]);
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!formData.birthDate || !formData.gender) {
@@ -127,17 +133,22 @@ export default function NoBirthdayPage() {
 
       setIsWelcome(true);
       
-      await new Promise(resolve => setTimeout(resolve, 3500));
-
-      await updateProfileData(updateData);
+      // Run animation and save in parallel
+      // Ensures we wait AT LEAST 3 seconds, but also don't redirect until save finishes
+      await Promise.all([
+        new Promise(resolve => setTimeout(resolve, 3000)),
+        updateProfileData(updateData)
+      ]);
+      
+      setIsSubmitted(true);
       
     } catch (error) {
       console.error('Save failed:', error);
       setIsWelcome(false);
       alert(language === 'ko' ? '저장 중 오류가 발생했습니다.' : 'Error saving details.');
-    } finally {
       setIsSaving(false);
-    }
+    } 
+    // Do not set isSaving(false) on success to prevent button re-enable during redirect
   };
 
   const progress = Math.min(((step - 1) / 5) * 100, 100);

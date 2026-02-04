@@ -27,6 +27,16 @@ export default function TarotCounselingPage() {
   const { userData, user } = useAuthContext();
   const { language } = useLanguage();
   const { setEditCount, MAX_EDIT_COUNT } = useUsageLimit();
+
+  // Client-side Title Update for Localization (Static Export Support)
+  useEffect(() => {
+    if (language === 'ko') {
+      document.title = '타로 심층 상담 |  타로 마스터와의 대화';
+    } else {
+      document.title = 'Deep Tarot Counseling | AI Tarot Master Session';
+    }
+  }, [language]);
+
   const [cardPicked, setCardPicked] = useState();
   const [step, setStep] = useState('intro');
   const [flippedIdx, setFlippedIdx] = useState(null);

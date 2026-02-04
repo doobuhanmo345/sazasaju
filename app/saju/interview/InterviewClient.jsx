@@ -127,14 +127,25 @@ export default function InterviewPage() {
 
   const [question, setQuestion] = useState('');
   const [selectedDateSaju, setSelectedDateSaju] = useState(null);
-  const { userData, user, isDailyDone } = useAuthContext();
-  const { birthDate, isTimeUnknown, gender, saju } = userData || {};
-
+  const { userData, user, selectedProfile } = useAuthContext();
+  // 컨텍스트 스위칭
+  const targetProfile = selectedProfile || userData;
+  const { birthDate: inputDate, isTimeUnknown, gender, saju } = targetProfile || {};
+//컨텍스트 스위칭 끝
   const { language } = useLanguage();
   const { setEditCount, MAX_EDIT_COUNT, isLocked } = useUsageLimit();
 
+  // Client-side Title Update for Localization (Static Export Support)
+  useEffect(() => {
+    if (language === 'ko') {
+      document.title = '면접 및 합격운 분석 | 나의 경쟁력 확인하기';
+    } else {
+      document.title = 'Interview & Success Luck | Boosting Your Career';
+    }
+  }, [language]);
+
   const isDisabled = !user || loading || !selectedDate;
-  const isDisabled2 = !isDailyDone && isLocked;
+  const isDisabled2 =  isLocked;
 
   const selDate = useMemo(() => {
     if (!selectedDate) return '';
@@ -153,7 +164,7 @@ export default function InterviewPage() {
     () =>
       new SajuAnalysisService({
         user,
-        userData,
+        userData: targetProfile,
         language,
         maxEditCount: MAX_EDIT_COUNT,
         uiText: UI_TEXT,

@@ -21,13 +21,15 @@ import {
 import { useAuthContext } from '@/contexts/useAuthContext';
 import { RiAdminFill } from 'react-icons/ri';
 import { GiYinYang } from 'react-icons/gi';
+import { SiGoogle, SiKakaotalk, SiNaver } from "react-icons/si";
 import { useLanguage } from '@/contexts/useLanguageContext';
 import { db } from '@/lib/firebase';
 import { addDoc, collection, serverTimestamp } from 'firebase/firestore';
+import { getRomanizedIlju } from '@/data/sajuInt';
 
 export default function MenuBar() {
   const [activeMenu, setActiveMenu] = useState(null);
-  const { user, userData, iljuImagePath, login } = useAuthContext();
+  const { user, userData, iljuImagePath, openLoginModal, selectedProfile } = useAuthContext();
   const router = useRouter();
   const { language } = useLanguage();
 
@@ -115,6 +117,12 @@ export default function MenuBar() {
           desc: isKo ? '이름, 생년월일 정보 변경' : 'Change Name, Birthdate',
           icon: <UserCircleIcon className="w-6 h-6" />,
           path: '/profile/edit',
+        },
+        {
+          name: isKo ? '생일 관리' : 'Birthday Management',
+          desc: isKo ? '생년월일 목록 관리' : 'Manage Birthday List',
+          icon: <UserCircleIcon className="w-6 h-6" />,
+          path: '/profile/manage',
         },
         {
           name: isKo ? '상담 내역' : 'History',
@@ -315,76 +323,142 @@ export default function MenuBar() {
               {activeMenu === 'profile' && (
                 <div className="mb-8">
                   {user ? (
-                    <div className="relative overflow-hidden p-6 rounded-[2rem] bg-white dark:bg-[#1a1a2e] text-slate-800 dark:text-white shadow-xl border border-slate-100 dark:border-white/5 group transition-colors">
-                      <div className="absolute -bottom-24 -left-24 w-48 h-48 bg-purple-50 dark:bg-purple-600/10 rounded-full blur-[60px]" />
-
-                      <div className="relative z-10">
-                        <div className="flex items-center gap-6">
-                          {/* Character Image */}
-                          <div className="relative shrink-0 w-32 h-32 h-32">
-                             <div className="absolute inset-0 bg-gradient-to-tr from-indigo-100 to-purple-100 dark:from-indigo-500/20 dark:to-purple-500/20 rounded-3xl rotate-6 group-hover:rotate-12 transition-transform duration-500" />
-                             <div className="absolute inset-0 bg-white/60 dark:bg-white/5 backdrop-blur-md rounded-3xl border border-white dark:border-white/10 shadow-inner" />
-                             {/* Use Next Image for optimization */}
-                             <div className="relative w-full h-full p-2 hover:scale-110 transition-transform duration-500">
-                                <Image
-                                  src={iljuImagePath}
-                                  alt="ilju character"
-                                  fill
-                                  className="object-contain"
-                                />
-                             </div>
+                    <>
+                      {/* [Sub Display] Logged-in User Info (If checking friend's profile) */}
+                      {selectedProfile && selectedProfile.uid !== userData?.uid && (
+                        <div 
+                          className="mb-4 flex items-center gap-3 p-3 rounded-2xl bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 shadow-sm cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors"
+                          onClick={() => selectProfile(null)} // Click to switch back to self
+                        >
+                          <div className="relative w-10 h-10 rounded-full overflow-hidden border border-slate-200 dark:border-slate-700 bg-slate-100">
+                             {(() => {
+                                // Calculate User's calculate Ilju Image manually
+                                const mySaju = userData?.saju;
+                                const myGender = userData?.gender || 'female';
+                                let myImg = '/images/ilju/default.png';
+                                if (mySaju) {
+                                  // getRomanizedIlju is needed, but assuming simple mapping or default if not available
+                                  // For now, simpler approach: if selectedProfile is friend, iljuImagePath is friend's.
+                                  // So we need to recalculate or store user's path.
+                                  // Since we can't easily import helper here without verify, let's use a simple fallback or just user icon.
+                                  // Actually, let's try to trust the context or just show initials/icon if image fails.
+                                  // Better: use a default avatar if calculation is complex, but user wants image.
+                                  // Let's rely on standard path format if possible: /images/ilju/[ilju]_[gender].png
+                                  
+                                  const iljuCode = mySaju.sky1 && mySaju.grd1 ? getRomanizedIlju(mySaju.sky1 + mySaju.grd1) : 'gapja';
+                                  myImg = `/images/ilju/${iljuCode}_${myGender}.png`;
+                                }
+                                return <Image src={myImg} alt="Me" fill className="object-cover" />;
+                             })()}
                           </div>
+                          <div className="flex-1">
+                            <p className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Logged in as</p>
+                            <p className="text-sm font-bold text-slate-800 dark:text-slate-200">{userData?.displayName}</p>
+                          </div>
+                          <div className="text-xs font-bold text-indigo-500 bg-indigo-50 dark:bg-indigo-900/20 px-2 py-1 rounded-lg">
+                            {isKo ? '내 정보로 복귀' : 'Switch to Me'}
+                          </div>
+                        </div>
+                      )}
 
-                          {/* User Info */}
-                          <div className="flex-1 min-w-0">
-                            <div className="mb-3">
-                              <p className="text-[10px] font-black text-indigo-500 dark:text-indigo-400 tracking-[0.2em] uppercase mb-1">
-                                User Information
-                              </p>
-                              <h2 className="text-2xl font-black truncate tracking-tight text-slate-900 dark:text-white">
-                                {userData?.displayName || 'User'}
-                              </h2>
+                      {/* [Main Display] Selected Profile Info (Friend or Self) */}
+                      <div className={`relative overflow-hidden p-6 rounded-[2rem] bg-white dark:bg-[#1a1a2e] text-slate-800 dark:text-white shadow-xl border border-slate-100 dark:border-white/5 group transition-colors ${selectedProfile && selectedProfile.uid !== userData?.uid ? 'ring-2 ring-indigo-500 ring-offset-2 dark:ring-offset-slate-950' : ''}`}>
+                        {selectedProfile && selectedProfile.uid !== userData?.uid && (
+                           <div className="absolute top-0 right-0 bg-indigo-500 text-white text-[10px] font-bold px-3 py-1 rounded-bl-xl shadow-md z-20">
+                             {isKo ? '친구 프로필 보는 중' : 'Viewing Friend Profile'}
+                           </div>
+                        )}
+
+                        <div className="absolute -bottom-24 -left-24 w-48 h-48 bg-purple-50 dark:bg-purple-600/10 rounded-full blur-[60px]" />
+
+                        <div className="relative z-10">
+                          <div className="flex items-center gap-6">
+                            {/* Character Image (Always reflects selectedProfile via iljuImagePath from context) */}
+                            <div className="relative shrink-0 w-32 h-32 h-32">
+                               <div className="absolute inset-0 bg-gradient-to-tr from-indigo-100 to-purple-100 dark:from-indigo-500/20 dark:to-purple-500/20 rounded-3xl rotate-6 group-hover:rotate-12 transition-transform duration-500" />
+                               <div className="absolute inset-0 bg-white/60 dark:bg-white/5 backdrop-blur-md rounded-3xl border border-white dark:border-white/10 shadow-inner" />
+                               <div className="relative w-full h-full p-2 hover:scale-110 transition-transform duration-500">
+                                  <Image
+                                    src={iljuImagePath}
+                                    alt="ilju character"
+                                    fill
+                                    className="object-contain"
+                                  />
+                               </div>
                             </div>
 
-                            <div className="space-y-2">
-                              <div className="flex items-center gap-3 text-[13px]">
-                                <span className="text-slate-400 dark:text-white/40 font-bold w-12">
-                                  {isKo ? '성별' : 'Gender'}
-                                </span>
-                                <span className="font-semibold text-slate-700 dark:text-white/90">
-                                  {userData?.gender === 'male'
-                                    ? isKo
-                                      ? '남성'
-                                      : 'Male'
-                                    : isKo
-                                      ? '여성'
-                                      : 'Female'}
-                                </span>
+                            {/* Info */}
+                            <div className="flex-1 min-w-0">
+                              <div className="mb-3">
+                                <p className="text-[10px] font-black text-indigo-500 dark:text-indigo-400 tracking-[0.2em] uppercase mb-1">
+                                  {selectedProfile?.uid !== userData?.uid ? (isKo ? 'FRIEND INFO' : 'FRIEND INFO') : 'USER INFORMATION'}
+                                </p>
+                                <div className="flex items-center gap-2">
+                                  <h2 className="text-2xl font-black truncate tracking-tight text-slate-900 dark:text-white">
+                                    {selectedProfile?.displayName || userData?.displayName || 'User'}
+                                  </h2>
+                                  {/* Badges only for main user */}
+                                  {selectedProfile?.uid === userData?.uid && (
+                                    <>
+                                      {userData?.provider?.includes('google') && <SiGoogle className="w-4 h-4 text-[#4285F4]" />}
+                                      {userData?.provider?.includes('kakao') && <SiKakaotalk className="w-4 h-4 text-[#FEE500]" />}
+                                      {userData?.provider?.includes('naver') && <SiNaver className="w-4 h-4 text-[#03C75A]" />}
+                                    </>
+                                  )}
+                                </div>
                               </div>
 
-                              <div className="w-full h-[1px] bg-slate-100 dark:bg-white/10" />
+                              <div className="space-y-2">
+                                {/* Only show phone number if it exists (Main user usually has it, friends don't) */}
+                                {(selectedProfile || userData)?.phoneNumber && (
+                                  <div className="flex items-center gap-3 text-[13px]">
+                                    <span className="text-slate-400 dark:text-white/40 font-bold w-12 text-[10px]">
+                                      {isKo ? '연락처' : 'Contact'}
+                                    </span>
+                                    <span className="font-semibold text-slate-700 dark:text-white/90">
+                                      {(selectedProfile || userData).phoneNumber}
+                                    </span>
+                                  </div>
+                                )}
+                                <div className="flex items-center gap-3 text-[13px]">
+                                  <span className="text-slate-400 dark:text-white/40 font-bold w-12">
+                                    {isKo ? '성별' : 'Gender'}
+                                  </span>
+                                  <span className="font-semibold text-slate-700 dark:text-white/90">
+                                    {(selectedProfile || userData)?.gender === 'male'
+                                      ? isKo ? '남성' : 'Male'
+                                      : isKo ? '여성' : 'Female'}
+                                  </span>
+                                </div>
 
-                              <div className="flex items-center gap-3 text-[13px]">
-                                <span className="text-slate-400 dark:text-white/40 font-bold w-12">
-                                  {isKo ? '생일' : 'Birth'}
-                                </span>
-                                <span className="font-semibold text-slate-700 dark:text-white/90">
-                                  {userData?.isTimeUnknown ? (
-                                    formatBirth(userData?.birthDate).slice(0, -10)
-                                  ) : (
-                                    <div
-                                      dangerouslySetInnerHTML={{
-                                        __html: formatBirth(userData?.birthDate),
-                                      }}
-                                    />
-                                  )}
-                                </span>
+                                <div className="w-full h-[1px] bg-slate-100 dark:bg-white/10" />
+
+                                <div className="flex items-center gap-3 text-[13px]">
+                                  <span className="text-slate-400 dark:text-white/40 font-bold w-12">
+                                    {isKo ? '생일' : 'Birth'}
+                                  </span>
+                                  <span className="font-semibold text-slate-700 dark:text-white/90">
+                                    {(selectedProfile || userData)?.isTimeUnknown ? (
+                                      formatBirth((selectedProfile || userData)?.birthDate).slice(0, -10)
+                                    ) : (
+                                      <div
+                                        dangerouslySetInnerHTML={{
+                                          __html: formatBirth(
+                                              (selectedProfile || userData)?.birthTime 
+                                                ? `${(selectedProfile || userData)?.birthDate}T${(selectedProfile || userData)?.birthTime}`
+                                                : (selectedProfile || userData)?.birthDate
+                                          ),
+                                        }}
+                                      />
+                                    )}
+                                  </span>
+                                </div>
                               </div>
                             </div>
                           </div>
                         </div>
                       </div>
-                    </div>
+                    </>
                   ) : (
                     <div className="relative overflow-hidden p-8 rounded-2xl bg-slate-50/50 dark:bg-slate-900/50 border border-slate-100 dark:border-slate-800 flex flex-col items-center text-center transition-all">
                       <div className="w-16 h-16 bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700 flex items-center justify-center mb-5">
@@ -403,7 +477,7 @@ export default function MenuBar() {
                       
                       <button
                         onClick={() => {
-                          login();
+                          openLoginModal();
                           setActiveMenu(null);
                         }}
                         className="w-full py-3.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl font-bold text-[14px] transition-all active:scale-95 shadow-lg shadow-indigo-500/20"
@@ -470,8 +544,20 @@ export default function MenuBar() {
             onClick={() => setActiveMenu('profile')}
             className={`flex flex-col items-center gap-1 ${activeMenu === 'profile' ? 'text-indigo-600' : 'text-slate-400'}`}
           >
-            <UserCircleIcon className="w-6 h-6" />
-            <span className="text-[10px] font-black">{user ? (isKo ? '내 정보' : 'Profile') : (isKo ? '마이 페이지' : 'My Page')}</span>
+
+            
+            <div className="relative">
+              <UserCircleIcon className="w-6 h-6" />
+              {user && selectedProfile && (
+                <span className="absolute -top-0.5 -right-0.5 w-2.5 h-2.5 bg-sky-500 rounded-full border-2 border-white dark:border-slate-900" />
+              )}
+            </div>
+            <span className="text-[10px] font-black max-w-[4rem] truncate">
+              {user && selectedProfile 
+                ? selectedProfile.displayName 
+                : (user ? (isKo ? '내 정보' : 'Profile') : (isKo ? '마이 페이지' : 'My Page'))
+              }
+            </span>
           </button>
         </div>
       </nav>

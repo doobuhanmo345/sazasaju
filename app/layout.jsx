@@ -26,7 +26,7 @@ export const metadata = {
   manifest: '/site.webmanifest',
   openGraph: {
     title: '사자사주 (SAZA SAJU) - 당신의 기운을 찾아서',
-    description: '질문하면 바로 답해주는 인공지능 사주 분석. 오늘의 운세와 사주 리포트를 확인하세요. | Personalized AI Saju & Tarot reading. Check your daily fortune and premium reports.',
+    description: '질문하면 바로 답해주는  사주 분석. 오늘의 운세와 사주 리포트를 확인하세요. | Personalized AI Saju & Tarot reading. Check your daily fortune and premium reports.',
     url: 'https://sazasaju.com/',
     siteName: '사자사주 (SAZA SAJU)',
     type: 'website',

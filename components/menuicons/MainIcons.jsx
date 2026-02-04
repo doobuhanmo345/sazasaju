@@ -62,7 +62,7 @@ const MainIcons = () => {
       label: `${ko ? '사자와의 대화' : 'Chat with SAZA'}`,
       path: '/saju/sazatalk',
       isAi: true,
-      desc: ko ? '인공지능 사자가 고민을 들어드려요' : 'AI SAZA will listen to your concerns',
+      desc: ko ? ' 사자가 고민을 들어드려요' : 'AI SAZA will listen to your concerns',
       icon: (
         <path
           strokeLinecap="round"

@@ -25,6 +25,12 @@ export default function SazaTalkAdKrPage() {
   const [userQuestion, setUserQuestion] = useState('');
   const [loading, setLoading] = useState(false);
 
+  // Client-side Title Update for Localization (Static Export Support)
+  useEffect(() => {
+    // This is a Korean specific ad page, but we follow the pattern for consistency
+    document.title = '사자톡 프리미엄 상담 | 질문하면 바로 답해주는  사주';
+  }, []);
+
   useEffect(() => {
     if (loadingUser) return;
     if (userData) return;

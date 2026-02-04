@@ -89,10 +89,22 @@ export default function FirstDatePage() {
   const [selectedDate, setSelectedDate] = useState(null);
   const detailSectionRef = useRef(null);
 
-  const { userData, user, isDailyDone } = useAuthContext();
-  const { isTimeUnknown, gender = 'female', saju } = userData || {};
+  const { userData, user, selectedProfile } = useAuthContext();
+  // 컨텍스트 스위칭
+  const targetProfile = selectedProfile || userData;
+  const { birthDate: inputDate, isTimeUnknown, gender, saju } = targetProfile || {};
+//컨텍스트 스위칭 끝
   const { language } = useLanguage();
   const { setEditCount, MAX_EDIT_COUNT, isLocked } = useUsageLimit();
+
+  // Client-side Title Update for Localization (Static Export Support)
+  useEffect(() => {
+    if (language === 'ko') {
+      document.title = '연애 및 데이트운 분석 | 완벽한 만남을 위한 조언';
+    } else {
+      document.title = 'Date & Romance Luck | Tips for Perfect Meeting';
+    }
+  }, [language]);
 
   const FIRST_DATE_OPTIONS = useMemo(() => GET_FIRST_DATE_OPTIONS(gender), [gender]);
 
@@ -106,7 +118,7 @@ export default function FirstDatePage() {
   const [selectedDateSaju, setSelectedDateSaju] = useState(null);
 
   const isDisabled = !user || loading || !selectedDate;
-  const isDisabled2 = !isDailyDone && isLocked;
+  const isDisabled2 =  isLocked;
 
   const selDate = useMemo(() => {
     if (!selectedDate) return '';
@@ -127,7 +139,7 @@ export default function FirstDatePage() {
     () =>
       new SajuAnalysisService({
         user,
-        userData,
+        userData: targetProfile,
         language,
         maxEditCount: MAX_EDIT_COUNT,
         uiText: UI_TEXT,
@@ -330,7 +342,7 @@ export default function FirstDatePage() {
   );
 
   return (
-    <main className="min-h-screen pt-20 pb-12 px-4 sm:px-6 lg:px-8">
+    <main className="min-h-screen">
       <AnalysisStepContainer
         guideContent={sajuGuide}
         loadingContent={<LoadingFourPillar saju={saju} isTimeUnknown={isTimeUnknown} />}

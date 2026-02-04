@@ -22,7 +22,7 @@ import CityInput from '@/ui/CityInput';
 
 export default function BeforeLoginPage() {
   const router = useRouter();
-  const { user, userData, login } = useAuthContext();
+  const { user, userData, openLoginModal } = useAuthContext();
   const { language, setLanguage } = useLanguage();
   
   const [isSaving, setIsSaving] = useState(false);
@@ -39,6 +39,7 @@ export default function BeforeLoginPage() {
   const [birthData, setBirthData] = useState(birthInit);
   const [timeUnknown, setTimeUnknown] = useState(false);
   const [birthCity, setBirthCity] = useState('');
+  const [phoneNumber, setPhoneNumber] = useState('');
 
   const [showIntro, setShowIntro] = useState(true);
 
@@ -138,6 +139,7 @@ export default function BeforeLoginPage() {
               saju: saju,
               birthDate: birthDate,
               birthCity: birthCity,
+              phoneNumber: phoneNumber,
               gender: gender,
               isTimeUnknown: timeUnknown,
               createdAt: userData?.createdAt || new Date(),
@@ -260,7 +262,7 @@ export default function BeforeLoginPage() {
       setTryLogin(true);
       if (!user) {
           try {
-             await login();
+             openLoginModal();
           } catch (e) {
               console.error(e);
               setStep(3);
@@ -396,10 +398,20 @@ export default function BeforeLoginPage() {
             </div>
 
             <div className="pt-4 space-y-4">
-               <div>
-                  <p className="text-[11px] font-black text-slate-400 uppercase tracking-widest mb-2">{language === 'ko' ? '태어난 장소 (선택)' : 'Birth Place (Optional)'}</p>
-                  <CityInput value={birthCity} onChange={(e) => setBirthCity(e.target.value)} language={language} className="!p-4 !rounded-xl !border-2 !border-slate-100 dark:!border-slate-800 !bg-slate-50 dark:!bg-slate-800 !text-sm !font-bold" />
-               </div>
+                <div>
+                   <p className="text-[11px] font-black text-slate-400 uppercase tracking-widest mb-2">{language === 'ko' ? '태어난 장소 (선택)' : 'Birth Place (Optional)'}</p>
+                   <CityInput value={birthCity} onChange={(e) => setBirthCity(e.target.value)} language={language} className="!p-4 !rounded-xl !border-2 !border-slate-100 dark:!border-slate-800 !bg-slate-50 dark:!bg-slate-800 !text-sm !font-bold" />
+                </div>
+                <div>
+                   <p className="text-[11px] font-black text-slate-400 uppercase tracking-widest mb-2">{language === 'ko' ? '휴대폰 번호 (선택)' : 'Phone Number (Optional)'}</p>
+                   <input 
+                     type="tel" 
+                     placeholder="010-0000-0000" 
+                     value={phoneNumber} 
+                     onChange={(e) => setPhoneNumber(e.target.value)}
+                     className="w-full p-4 rounded-xl border-2 border-slate-100 dark:border-slate-800 bg-slate-50 dark:bg-slate-800 text-sm font-bold outline-none focus:border-indigo-500 transition-all dark:text-white"
+                   />
+                </div>
                <button onClick={handleLoginAndSave} className="w-full py-5 bg-indigo-600 hover:bg-indigo-500 text-white rounded-2xl font-black shadow-xl shadow-indigo-200 dark:shadow-none transition-all active:scale-95">{language === 'ko' ? '로그인하고 리포트 확인하기' : 'Log in to See Report'}</button>
             </div>
           </div>

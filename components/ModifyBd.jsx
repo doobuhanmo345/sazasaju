@@ -1,5 +1,5 @@
 'use client';
-
+import { useState, useEffect } from 'react';
 import { UI_TEXT, BD_EDIT_UI } from '@/data/constants';
 import { CalendarDaysIcon } from '@heroicons/react/24/outline';
 import { useLanguage } from '@/contexts/useLanguageContext';
@@ -20,17 +20,49 @@ export default function ModifyBd({
   const { user } = useAuthContext();
   const { language } = useLanguage();
   const t = (char) => (language === 'en' ? getEng(char) : char);
-  
+const [inputValue, setInputValue] = useState(() => {
+    // 1. 외부에서 받아온 값이 있으면 우선 사용
+    if (inputDate) return inputDate;
+
+    // 2. 값이 없으면 현재 시간으로 초기화 (기존 로직 유지)
+    try {
+      const now = new Date();
+      const offset = now.getTimezoneOffset() * 60000;
+      return new Date(now.getTime() - offset).toISOString().slice(0, 16);
+    } catch (e) {
+      return '2024-01-01T00:00';
+    }
+  });
+
+  const [timeUnknown, setTimeUnknown] = useState(() => {
+    // 1. 외부에서 받아온 값이 있으면 우선 사용
+    if (isTimeUnknown) return isTimeUnknown;
+    else {return false}
+  });
+
+  // props가 변경될 때 내부 상태 업데이트
+  useEffect(() => {
+    if (inputDate) {
+      setInputValue(inputDate);
+    }
+  }, [inputDate]);
+
+  useEffect(() => {
+    if (isTimeUnknown !== undefined) {
+      setTimeUnknown(isTimeUnknown);
+    }
+  }, [isTimeUnknown]);
+
   return (
     <div className="flex flex-col gap-1 pt-1">
       <div className="gap-1.5 flex items-center justify-center gap-2 text-sm font-medium text-gray-500 dark:text-gray-400">
         <CalendarDaysIcon className="w-4 h-4 text-indigo-400" />
         <span className="font-mono tracking-wide">
-          {isTimeUnknown ? <>{inputDate.split('T')[0]}</> : <>{inputDate.replace('T', ' ')}</>}
+          {timeUnknown ? <>{inputValue.split('T')[0]}</> : <>{inputValue.replace('T', ' ')}</>}
         </span>
 
         {gender === 'male' ? '👨' : '👩'}
-        {isTimeUnknown && (
+        {timeUnknown && (
           <span className="px-1.5 py-0.5 text-[10px] bg-gray-100 dark:bg-gray-700 rounded text-gray-400">
             {UI_TEXT.unknownTime[language]}
           </span>
@@ -68,26 +100,29 @@ export default function ModifyBd({
               <label className="flex items-center gap-1 cursor-pointer hover:opacity-80 transition-opacity">
                 <input
                   type="checkbox"
-                  checked={isTimeUnknown}
-                  onChange={(e) => setIsTimeUnknown(e.target.checked)}
+                  checked={timeUnknown}
+                  onChange={(e) => {setTimeUnknown(e.target.checked);setIsTimeUnknown(e.target.checked)}}
                   className="w-4 h-4 text-indigo-600 rounded focus:ring-indigo-500 dark:bg-slate-700"
                 />
                 <span className="text-xs font-bold text-gray-500 dark:text-gray-400">
                   {UI_TEXT.unknownTime[language]}
                 </span>
               </label>
+
             </div>
             <div className="relative w-full p-1">
-              <input
-                type={isTimeUnknown ? 'date' : 'datetime-local'}
-                value={isTimeUnknown ? inputDate.split('T')[0] : inputDate}
-                onChange={(e) => {
-                  let val = e.target.value;
-                  if (isTimeUnknown) val += 'T00:00';
-                  setInputDate(val);
-                }}
-                className="w-full p-2 bg-gray-50 dark:bg-slate-900/50 border rounded-xl outline-none focus:ring-2 focus:ring-indigo-500 dark:text-white dark:[color-scheme:dark]"
-              />
+             <input
+      type={timeUnknown ? 'date' : 'datetime-local'}
+      value={timeUnknown ? inputValue.split('T')[0] : inputValue}
+      onChange={(e) => {
+        let val = e.target.value;
+        if (timeUnknown) val += 'T00:00';
+        setInputValue(val);
+        setInputDate(val);
+      }}
+      className="w-full p-2 bg-gray-50 dark:bg-slate-900/50 border rounded-xl outline-none focus:ring-2 focus:ring-indigo-500 dark:text-white dark:[color-scheme:dark]"
+    />
+              
             </div>
           </div>
           <button

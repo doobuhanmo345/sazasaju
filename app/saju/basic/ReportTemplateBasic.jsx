@@ -45,7 +45,7 @@ const ReportTemplateBasic = ({}) => {
 
   // 1. 함수 정의를 하나로 통합 (useCallback을 써도 좋지만 간단하게 외부에 정의 가능)
 
-  const isEn = language === 'en';
+  const isEn = language  !== 'ko';
   const t = (char) => (isEn ? ENG_MAP[char] || char : char);
 
   useEffect(() => {

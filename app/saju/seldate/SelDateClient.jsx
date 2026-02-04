@@ -29,10 +29,22 @@ const PURPOSE_OPTIONS = [
 
 export default function SelDatePage() {
   const { loading, setLoading, setAiResult, aiResult } = useLoading();
-  const { userData, user } = useAuthContext();
-  const { saju, gender, isTimeUnknown } = userData || {};
+  const { userData, user, selectedProfile } = useAuthContext();
+  // 컨텍스트 스위칭
+  const targetProfile = selectedProfile || userData;
+  const { birthDate: inputDate, isTimeUnknown, gender, saju } = targetProfile || {};
+//컨텍스트 스위칭 끝
   const { language } = useLanguage();
   const { setEditCount, MAX_EDIT_COUNT, isLocked } = useUsageLimit();
+
+  // Client-side Title Update for Localization (Static Export Support)
+  useEffect(() => {
+    if (language === 'ko') {
+      document.title = '좋은 날 택일 분석 | 성공을 위한 완벽한 타이밍';
+    } else {
+      document.title = 'Auspicious Date Selection | Perfect Timing for Success';
+    }
+  }, [language]);
 
   const [selectedPurpose, setSelectedPurpose] = useState('');
   const [startDate, setStartDate] = useState(() => {
@@ -72,7 +84,7 @@ export default function SelDatePage() {
     () =>
       new SajuAnalysisService({
         user,
-        userData,
+        userData: targetProfile,
         language,
         maxEditCount: MAX_EDIT_COUNT,
         uiText: UI_TEXT,

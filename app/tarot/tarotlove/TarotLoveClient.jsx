@@ -30,6 +30,16 @@ export default function TarotLovePage() {
   const { userData, user } = useAuthContext();
   const { language } = useLanguage();
   const { setEditCount, MAX_EDIT_COUNT } = useUsageLimit();
+
+  // Client-side Title Update for Localization (Static Export Support)
+  useEffect(() => {
+    if (language === 'ko') {
+      document.title = '연애 타로 | 당신의 사랑과 인연의 흐름';
+    } else {
+      document.title = 'Love Tarot | Insights into Romance & Connections';
+    }
+  }, [language]);
+
   const [cardPicked, setCardPicked] = useState();
   const [flippedIdx, setFlippedIdx] = useState(null);
   const [step, setStep] = useState('intro');
