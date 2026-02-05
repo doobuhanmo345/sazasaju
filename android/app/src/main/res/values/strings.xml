@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">sazasaju</string>
+    <string name="title_activity_main">sazasaju</string>
+    <string name="package_name">com.your.package.name</string>
+    <string name="custom_url_scheme">com.your.package.name</string>
+</resources>
