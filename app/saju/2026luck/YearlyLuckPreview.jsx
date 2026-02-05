@@ -10,44 +10,44 @@ export default function YearlyLuckPreview({ onStart, isDisabled, isDisabled2, lo
   const { language } = useLanguage();
 
   return (
-    <div className="mt-16 text-left">
-        <style>{reportStyleBlue}</style>
-        <div className="mx-4 my-10 flex flex-col items-center">
-            <div className="flex items-center gap-2 px-3 py-1 rounded-full border border-red-200 bg-red-50/50 mb-3">
-            <span className="relative flex h-2 w-2">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-red-500"></span>
-            </span>
-            <span className="text-[11px] font-bold text-red-600 tracking-tight uppercase">
-                Preview Mode
-            </span>
-            </div>
-
-            <div className="text-center">
-            <h3 className="text-lg font-bold text-slate-800 dark:text-white mb-2">
-                {language === 'ko' ? '2026년 운세 미리보기' : "2026 Fortune Preview"}
-            </h3>
-            <p className="text-sm text-slate-500 dark:text-slate-400 leading-relaxed max-w-[280px] mx-auto break-keep text-center">
-                {language === 'ko'
-                ? '당신의 2026년을 위한 핵심 테마와 주의해야 할 시기를 미리 확인하세요'
-                : 'Preview key themes and caution periods for your 2026'}
-            </p>
-            </div>
+    <div className="mt-16 text-left max-w-3xl mx-auto">
+      <style>{reportStyleBlue}</style>
+      <div className="mx-4 my-10 flex flex-col items-center">
+        <div className="flex items-center gap-2 px-3 py-1 rounded-full border border-red-200 bg-red-50/50 mb-3">
+          <span className="relative flex h-2 w-2">
+            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
+            <span className="relative inline-flex rounded-full h-2 w-2 bg-red-500"></span>
+          </span>
+          <span className="text-[11px] font-bold text-red-600 tracking-tight uppercase">
+            Preview Mode
+          </span>
         </div>
+
+        <div className="text-center">
+          <h3 className="text-lg font-bold text-slate-800 dark:text-white mb-2">
+            {language === 'ko' ? '2026년 운세 미리보기' : "2026 Fortune Preview"}
+          </h3>
+          <p className="text-sm text-slate-500 dark:text-slate-400 leading-relaxed max-w-[280px] mx-auto break-keep text-center">
+            {language === 'ko'
+              ? '당신의 2026년을 위한 핵심 테마와 주의해야 할 시기를 미리 확인하세요'
+              : 'Preview key themes and caution periods for your 2026'}
+          </p>
+        </div>
+      </div>
 
       <div className="sjsj-report-container !mx-0 !p-0 bg-transparent">
         <div className="sjsj-content-inner !p-0">
-          
+
           {/* 1. Overview Section */}
-          <section className="relative sjsj-section !p-0 !mb-10 overflow-hidden">
-            <div className="px-6 pt-6 opacity-40 grayscale contrast-75 select-none pointer-events-none">
+          <section className="relative sjsj-section !p-0 !mb-10 overflow-hidden rounded-[2rem]">
+            <div className="px-6 pt-6 opacity-40 grayscale contrast-75 select-none pointer-events-none max-w-md mx-auto w-full">
               <div className="sjsj-section-label">
                 <h2 className="sjsj-subTitle">{language === 'ko' ? '2026년 총운' : '2026 Overview'}</h2>
               </div>
               <div className="sjsj-quote-box mb-6 border-l-4 border-red-500 bg-red-50 p-4">
                 <p className="font-serif italic text-lg text-slate-700 leading-relaxed">
-                  {language === 'ko' 
-                    ? '"붉은 말의 해, 당신은 질주하는 에너지와 마주하게 됩니다."' 
+                  {language === 'ko'
+                    ? '"붉은 말의 해, 당신은 질주하는 에너지와 마주하게 됩니다."'
                     : '"Year of the Red Horse, you will encounter galloping energy."'}
                 </p>
               </div>
@@ -69,8 +69,8 @@ export default function YearlyLuckPreview({ onStart, isDisabled, isDisabled2, lo
           </section>
 
           {/* 2. Key Keywords Section */}
-          <section className="relative sjsj-section !p-0 !mb-10 overflow-hidden">
-            <div className="px-6 pt-6 select-none pointer-events-none opacity-40 grayscale">
+          <section className="relative sjsj-section !p-0 !mb-10 overflow-hidden rounded-[2rem]">
+            <div className="px-6 pt-6 select-none pointer-events-none opacity-40 grayscale max-w-md mx-auto w-full">
               <div className="sjsj-section-label">
                 <h2 className="sjsj-subTitle">{language === 'ko' ? '올해의 핵심 키워드' : 'Keywords of the Year'}</h2>
               </div>
@@ -82,11 +82,11 @@ export default function YearlyLuckPreview({ onStart, isDisabled, isDisabled2, lo
                 ))}
               </div>
               <div className="sjsj-analysis-box bg-slate-50 p-4 rounded-xl">
-                 <p className="text-xs text-slate-500 leading-relaxed">
-                   {language === 'ko' 
-                     ? '이 키워드들은 당신의 한 해를 관통하는 핵심 주제가 될 것입니다. 각 키워드가 당신의 삶에서 어떤 구체적인 현상으로 나타날지...'
-                     : 'These keywords will be the core themes penetrating your year. How each keyword will manifest as specific phenomena in your life...'}
-                 </p>
+                <p className="text-xs text-slate-500 leading-relaxed">
+                  {language === 'ko'
+                    ? '이 키워드들은 당신의 한 해를 관통하는 핵심 주제가 될 것입니다. 각 키워드가 당신의 삶에서 어떤 구체적인 현상으로 나타날지...'
+                    : 'These keywords will be the core themes penetrating your year. How each keyword will manifest as specific phenomena in your life...'}
+                </p>
               </div>
             </div>
             <ReportHid
@@ -101,8 +101,8 @@ export default function YearlyLuckPreview({ onStart, isDisabled, isDisabled2, lo
           </section>
 
           {/* 3. 테마 분석 Section */}
-          <section className="relative sjsj-section !p-0 !mb-10 overflow-hidden">
-            <div className="px-6 pt-6 select-none pointer-events-none opacity-40 grayscale">
+          <section className="relative sjsj-section !p-0 !mb-10 overflow-hidden rounded-[2rem]">
+            <div className="px-6 pt-6 select-none pointer-events-none opacity-40 grayscale max-w-md mx-auto w-full">
               <div className="sjsj-section-label">
                 <h2 className="sjsj-subTitle">{language === 'ko' ? '테마별 상세 분석' : 'Theme Analysis'}</h2>
               </div>
@@ -145,8 +145,8 @@ export default function YearlyLuckPreview({ onStart, isDisabled, isDisabled2, lo
           </section>
 
           {/* 4. 주의할 점 Section */}
-          <section className="relative sjsj-section !p-0 !mb-10 overflow-hidden">
-            <div className="px-6 pt-6 select-none pointer-events-none opacity-40 grayscale">
+          <section className="relative sjsj-section !p-0 !mb-10 overflow-hidden rounded-[2rem]">
+            <div className="px-6 pt-6 select-none pointer-events-none opacity-40 grayscale max-w-md mx-auto w-full">
               <div className="sjsj-section-label">
                 <h2 className="sjsj-subTitle">{language === 'ko' ? '특별히 주의해야 할 기간' : 'Special Periods'}</h2>
               </div>
@@ -161,8 +161,8 @@ export default function YearlyLuckPreview({ onStart, isDisabled, isDisabled2, lo
                 </div>
               </div>
               <p className="sjsj-long-text select-none pointer-events-none text-sm text-slate-500 leading-relaxed">
-                {language === 'ko' 
-                  ? '특정 오행의 기운이 충돌하거나 과해지는 시기에는 평소보다 차분한 대응이 필요합니다. 특히 병오년의 화기운이 정점에 달하는 여름철에는...' 
+                {language === 'ko'
+                  ? '특정 오행의 기운이 충돌하거나 과해지는 시기에는 평소보다 차분한 대응이 필요합니다. 특히 병오년의 화기운이 정점에 달하는 여름철에는...'
                   : 'During periods when certain Five Elements energy collide or become excessive, a calmer response than usual is needed. Especially during the summer when the Fire energy of the Red Horse Year peaks...'}
               </p>
             </div>
@@ -179,29 +179,7 @@ export default function YearlyLuckPreview({ onStart, isDisabled, isDisabled2, lo
         </div>
       </div>
 
-      <div className="mt-12">
-        <AnalyzeButton
-          onClick={onStart}
-          disabled={isDisabled || isDisabled2}
-          loading={loading}
-          isDone={isDone}
-          label={language === 'ko' ? '2026 신년 운세 보기' : 'Check the 2026 Fortune'}
-          color="red"
-          cost={-1}
-        />
-        {isLocked ? (
-            <p className="mt-4 text-rose-600 font-black text-sm flex items-center justify-center gap-1 animate-pulse">
-            <ExclamationTriangleIcon className="w-4 h-4" />
-            {language === 'ko' ? '크레딧이 부족합니다..' : 'Not Enough credit'}
-            </p>
-        ) : (
-            <p className="mt-4 text-[11px] text-slate-400 text-center">
-            {language === 'ko'
-                ? '이미 분석된 운세는 크래딧을 재소모하지 않습니다.'
-                : 'Fortunes already analyzed do not use credits.'}
-            </p>
-        )}
-      </div>
+
     </div>
   );
 }

@@ -2,11 +2,11 @@
 
 import { useRouter } from 'next/navigation';
 import { useLanguage } from '@/contexts/useLanguageContext';
-import { 
-  CalendarDaysIcon, 
-  SparklesIcon, 
-  HeartIcon, 
-  AcademicCapIcon 
+import {
+  CalendarDaysIcon,
+  SparklesIcon,
+  HeartIcon,
+  AcademicCapIcon
 } from '@heroicons/react/24/outline';
 
 const SelIcons = () => {
@@ -29,7 +29,7 @@ const SelIcons = () => {
     },
     {
       label: `${ko ? '특별한 만남' : 'First Date'}`,
-      path: '/saju/firstdate',
+      path: '/saju/date',
       desc: ko ? '설레는 첫 만남, 그 날의 기운은?' : 'Energy of the fluttering first meeting',
       icon: <HeartIcon className="w-6 h-6" />,
     },
@@ -55,9 +55,9 @@ const SelIcons = () => {
         >
           {/* 아이콘 영역 */}
           <div className="relative flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-slate-50 sm:bg-transparent text-slate-400 transition-colors group-hover:text-indigo-600">
-             <div className="h-7 w-7 text-current">
-               {item.icon}
-             </div>
+            <div className="h-7 w-7 text-current">
+              {item.icon}
+            </div>
           </div>
 
           {/* 텍스트 영역 */}

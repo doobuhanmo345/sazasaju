@@ -415,81 +415,85 @@ function SazaTalkContent() {
             </div>
           </div>
         ) : (
-          <div className="max-w-lg mx-auto px-6 animate-in slide-in-from-bottom duration-500">
-            <div className="text-center">
-              <div className="flex justify-center mb-3">
-                <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-violet-50 dark:bg-violet-900/20 border border-violet-100 dark:border-violet-800 shadow-sm">
-                  <div className="relative flex h-2 w-2">
-                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-violet-400 opacity-75"></span>
-                    <span className="relative inline-flex rounded-full h-2 w-2 bg-violet-500"></span>
+          <div className="animate-in slide-in-from-bottom duration-500">
+
+            <div className=" max-w-lg mx-auto">
+              <div className="text-center">
+                <div className="flex justify-center mb-3">
+                  <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-violet-50 dark:bg-violet-900/20 border border-violet-100 dark:border-violet-800 shadow-sm">
+                    <div className="relative flex h-2 w-2">
+                      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-violet-400 opacity-75"></span>
+                      <span className="relative inline-flex rounded-full h-2 w-2 bg-violet-500"></span>
+                    </div>
+                    <span className="text-[10px] font-bold tracking-wider text-violet-600 dark:text-violet-400 uppercase">
+                      Expert Intelligence Analysis
+                    </span>
                   </div>
-                  <span className="text-[10px] font-bold tracking-wider text-violet-600 dark:text-violet-400 uppercase">
-                    Expert Intelligence Analysis
+                </div>
+                <h2 className=" text-2xl font-black text-slate-800 dark:text-white mb-4 tracking-tight">
+                  {language === 'ko' ? '무엇이든 물어보사자' : 'Clear Solutions for Any Concern'}
+                  <br />
+                  <span className="relative text-violet-600 dark:text-violet-400">
+                    {language === 'ko' ? '1:1 맞춤 사주 솔루션' : 'Personalized 1:1 Saju Solution'}
+                    <div className="absolute inset-0 bg-violet-200/50 dark:bg-violet-900/30 blur-md rounded-full scale-100"></div>
                   </span>
+                </h2>
+                {/* Description */}
+                <div className="space-y-4 text-slate-600 dark:text-slate-400 mb-10 leading-relaxed break-keep">
+                  <div className="text-sm">
+                    {language === 'ko' ? (
+                      <>
+                        <p>27인의 명리 해석을 집대성하여 </p>
+                        <p>어떤 고민도 차분하게 듣고 해결책을 드려요</p>
+                      </>
+                    ) : (
+                      <>
+                        <p>Synthesized from 27 expert Myeongni interpretations</p>
+                        <p>listens calmly to your concerns and provides solutions.</p>
+                      </>
+                    )}
+                  </div>
                 </div>
               </div>
-              <h2 className=" text-2xl font-black text-slate-800 dark:text-white mb-4 tracking-tight">
-                {language === 'ko' ? '무엇이든 물어보사자' : 'Clear Solutions for Any Concern'}
-                <br />
-                <span className="relative text-violet-600 dark:text-violet-400">
-                  {language === 'ko' ? '1:1 맞춤 사주 솔루션' : 'Personalized 1:1 Saju Solution'}
-                  <div className="absolute inset-0 bg-violet-200/50 dark:bg-violet-900/30 blur-md rounded-full scale-100"></div>
-                </span>
-              </h2>
-              {/* Description */}
-              <div className="space-y-4 text-slate-600 dark:text-slate-400 mb-10 leading-relaxed break-keep">
-                <div className="text-sm">
-                  {language === 'ko' ? (
-                    <>
-                      <p>27인의 명리 해석을 집대성하여 </p>
-                      <p>어떤 고민도 차분하게 듣고 해결책을 드려요</p>
-                    </>
-                  ) : (
-                    <>
-                      <p>Synthesized from 27 expert Myeongni interpretations</p>
-                      <p>listens calmly to your concerns and provides solutions.</p>
-                    </>
-                  )}
+
+              <div className="flex items-center justify-between mb-4">
+                <div className="flex items-center gap-2 text-purple-600">
+                  <PencilSquareIcon className="w-5 h-5" />
+                  <h3 className="font-bold">
+                    {language === 'ko' ? '당신의 고민을 들려주세요' : 'Tell me what is on your mind'}
+                  </h3>
                 </div>
+                {latestSazaTalk && (
+                  <button
+                    onClick={() => setIsHistoryOpen(true)}
+                    className="px-3 py-1.5 rounded-full bg-violet-50 dark:bg-violet-900/30 border border-violet-100 dark:border-violet-800 text-violet-600 dark:text-violet-400 text-[10px] font-bold flex items-center gap-1 hover:bg-violet-100 transition-colors shadow-sm"
+                  >
+                    <ClockIcon className="w-3 h-3" />
+                    {language === 'ko' ? '최근 결과' : 'Recent Result'}
+                  </button>
+                )}
               </div>
+              <textarea
+                value={userQuestion}
+                onChange={(e) => setUserQuestion(e.target.value)}
+                placeholder={
+                  language === 'ko'
+                    ? '예: 과 동아리 선배 한명이랑 유독 안 맞는데, 제 올해 대인관계 운이 궁금해요!"'
+                    : "Ex: I really don't get along with one of the seniors in my college club. I'm curious about my relationship luck for this year!"
+                }
+                className="w-full h-40 p-4 border border-slate-200 dark:border-slate-700 rounded-2xl focus:ring-2 focus:ring-purple-400 dark:focus:ring-purple-500 focus:border-transparent outline-none resize-none text-slate-700 dark:text-slate-200 bg-white dark:bg-slate-800 shadow-inner placeholder:text-slate-400 dark:placeholder:text-slate-500"
+              />
+              <AnalyzeButton
+                onClick={() => userQuestion.trim() && handleSazaTest(onStart)}
+                disabled={!userQuestion.trim()}
+                loading={loading}
+                isDone={false}
+                label={language === 'ko' ? '사자에게 물어보기' : 'Ask Saza'}
+                color="purple"
+                cost={-1}
+              />
             </div>
 
-            <div className="flex items-center justify-between mb-4">
-              <div className="flex items-center gap-2 text-purple-600">
-                <PencilSquareIcon className="w-5 h-5" />
-                <h3 className="font-bold">
-                  {language === 'ko' ? '당신의 고민을 들려주세요' : 'Tell me what is on your mind'}
-                </h3>
-              </div>
-              {latestSazaTalk && (
-                <button
-                  onClick={() => setIsHistoryOpen(true)}
-                  className="px-3 py-1.5 rounded-full bg-violet-50 dark:bg-violet-900/30 border border-violet-100 dark:border-violet-800 text-violet-600 dark:text-violet-400 text-[10px] font-bold flex items-center gap-1 hover:bg-violet-100 transition-colors shadow-sm"
-                >
-                  <ClockIcon className="w-3 h-3" />
-                  {language === 'ko' ? '최근 결과' : 'Recent Result'}
-                </button>
-              )}
-            </div>
-            <textarea
-              value={userQuestion}
-              onChange={(e) => setUserQuestion(e.target.value)}
-              placeholder={
-                language === 'ko'
-                  ? '예: 과 동아리 선배 한명이랑 유독 안 맞는데, 제 올해 대인관계 운이 궁금해요!"'
-                  : "Ex: I really don't get along with one of the seniors in my college club. I'm curious about my relationship luck for this year!"
-              }
-              className="w-full h-40 p-4 border border-slate-200 dark:border-slate-700 rounded-2xl focus:ring-2 focus:ring-purple-400 dark:focus:ring-purple-500 focus:border-transparent outline-none resize-none text-slate-700 dark:text-slate-200 bg-white dark:bg-slate-800 shadow-inner placeholder:text-slate-400 dark:placeholder:text-slate-500"
-            />
-            <AnalyzeButton
-              onClick={() => userQuestion.trim() && handleSazaTest(onStart)}
-              disabled={!userQuestion.trim()}
-              loading={loading}
-              isDone={false}
-              label={language === 'ko' ? '사자에게 물어보기' : 'Ask Saza'}
-              color="purple"
-              cost={-1}
-            />
             {/* SazaTalk Premium Appeal Section */}
             <div className="mt-16 -mx-6">
               <SazaTalkAppeal />

@@ -24,11 +24,11 @@ export default function YearlyLuckPage() {
   const [loading, setLoading] = useState(false);
   const [sajuData, setSajuData] = useState(null);
   const { userData, user, isYearDone, selectedProfile } = useAuthContext(); // selectedProfile 추가
-  
+
   // 컨텍스트 스위칭
   const targetProfile = selectedProfile || userData;
   const { birthDate: inputDate, isTimeUnknown, gender, saju } = targetProfile || {};
-//컨텍스트 스위칭 끝
+  //컨텍스트 스위칭 끝
   const { language } = useLanguage();
   const { editCount, setEditCount, MAX_EDIT_COUNT, isLocked } = useUsageLimit();
   const DISABLED_STYLE = 'bg-gray-100 text-gray-400 cursor-not-allowed border border-gray-200';
@@ -112,7 +112,7 @@ export default function YearlyLuckPage() {
             />
           </div>
         </div>
- {/* Primary Analyze Button */}
+        {/* Primary Analyze Button */}
         <div className="mb-12 max-w-lg mx-auto">
           <AnalyzeButton
             onClick={() => handleStartClick(onStart)}
@@ -143,16 +143,43 @@ export default function YearlyLuckPage() {
           <YearlyLuckAppeal />
         </div>
 
-       
+
         {/* Preview Section - Yearly Luck Teaser */}
-        <YearlyLuckPreview 
-          onStart={() => handleStartClick(onStart)} 
-          isDisabled={isDisabled} 
-          isDisabled2={isDisabled2} 
-          loading={loading} 
-          isDone={isYearDone} 
+        <YearlyLuckPreview
+          onStart={() => handleStartClick(onStart)}
+          isDisabled={isDisabled}
+          isDisabled2={isDisabled2}
+          loading={loading}
+          isDone={isYearDone}
           isLocked={isLocked}
         />
+
+        {/* Secondary Analyze Button (Bottom) */}
+        <div className="mx-w-lg mx-auto mt-8">
+          <div className="mb-12 max-w-lg mx-auto">
+            <AnalyzeButton
+              onClick={() => handleStartClick(onStart)}
+              disabled={isDisabled || isDisabled2}
+              loading={loading}
+              isDone={isYearDone}
+              label={language === 'ko' ? '2026 신년 운세 보기' : 'Check the 2026 Fortune'}
+              color="red"
+              cost={-1}
+            />
+            {isLocked ? (
+              <p className="mt-4 text-rose-600 font-black text-sm flex items-center justify-center gap-1 animate-pulse">
+                <ExclamationTriangleIcon className="w-4 h-4" />{' '}
+                {language === 'ko' ? '크레딧이 부족합니다..' : 'Not enough credits'}
+              </p>
+            ) : (
+              <p className="mt-4 text-[11px] text-slate-400 text-center">
+                {language === 'ko'
+                  ? '이미 분석된 운세는 크래딧을 재소모하지 않습니다.'
+                  : 'Fortunes that have already been analyzed do not use credits.'}
+              </p>
+            )}
+          </div>
+        </div>
       </div>
     );
   };

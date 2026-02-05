@@ -11,6 +11,9 @@ import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import MenuBar from '@/components/MenuBar';
 import LoginModal from '@/components/LoginModal';
+import CreditModal from '@/components/CreditModal';
+import { useUsageLimit } from '@/contexts/useUsageLimit';
+import { useLanguage } from '@/contexts/useLanguageContext';
 import { usePushNotifications } from '@/hooks/usePushNotifications';
 import { NativeBridge } from '@/utils/nativeBridge';
 
@@ -18,7 +21,12 @@ export default function ClientWrapper({ children }) {
   const pathname = usePathname();
   const router = useRouter();
   const { user, userData, loadingUser, isLoggingIn, cancelLogin, isLoginModalOpen, closeLoginModal } = useAuthContext();
-  
+  const { editCount, MAX_EDIT_COUNT } = useUsageLimit();
+  const { language } = useLanguage();
+  const [showCreditModal, setShowCreditModal] = useState(true);
+
+  const isOutOfCredit = MAX_EDIT_COUNT - editCount === 0;
+
   // Call Push Notification Hook
   usePushNotifications((path) => {
     router.push(path);
@@ -51,7 +59,7 @@ export default function ClientWrapper({ children }) {
       userAgent.includes('line');
 
     const isAlreadyOnGuide = pathname.startsWith('/open-in-browser');
-    
+
     if (isInApp && !isAlreadyOnGuide) {
       router.push('/open-in-browser');
     }
@@ -92,9 +100,9 @@ export default function ClientWrapper({ children }) {
       {/* Conditional Navbar */}
       {!isSpecialPath && <Navbar />}
 
-      <LoginModal 
-        isOpen={isLoginModalOpen} 
-        onClose={closeLoginModal} 
+      <LoginModal
+        isOpen={isLoginModalOpen}
+        onClose={closeLoginModal}
       />
 
       <main className={!isSpecialPath ? "min-h-screen" : "min-h-screen"}>
@@ -129,6 +137,13 @@ export default function ClientWrapper({ children }) {
       <Script
         src="https://static.nid.naver.com/js/naveridlogin_js_sdk_2.0.2.js"
         strategy="lazyOnload"
+      />
+
+      <CreditModal
+        isOpen={isOutOfCredit && showCreditModal}
+        onClose={() => setShowCreditModal(false)}
+        onWatchAd={() => setShowCreditModal(false)}
+        language={language}
       />
     </>
   );

@@ -2,9 +2,9 @@
 
 import React from 'react';
 import { useLanguage } from '@/contexts/useLanguageContext';
-import { 
-  SunIcon, 
-  CalendarDaysIcon, 
+import {
+  SunIcon,
+  CalendarDaysIcon,
   SparklesIcon,
   ChatBubbleLeftRightIcon,
   ShieldCheckIcon
@@ -17,7 +17,7 @@ export default function TodaysLuckAppeal() {
     {
       icon: SunIcon,
       title: language === 'ko' ? '오늘의 에너지' : 'Energy of the Day',
-      desc: language === 'ko' 
+      desc: language === 'ko'
         ? '매일 달라지는 오행의 기운을 분석하여, 오늘 당신에게 가장 유리한 행동과 피해야 할 것을 알려드립니다.'
         : 'Analyze the daily changing energy of Five Elements to inform you of the most favorable actions and what to avoid.'
     },
@@ -54,7 +54,7 @@ export default function TodaysLuckAppeal() {
 
   return (
     <div className="w-full bg-amber-50/30 dark:bg-slate-900 border-t border-amber-100 dark:border-slate-800">
-      
+
       {/* 1. Hero */}
       <section className="py-16 px-6 text-center">
         <div className="max-w-2xl mx-auto space-y-4">
@@ -64,18 +64,18 @@ export default function TodaysLuckAppeal() {
           <h3 className="text-2xl sm:text-3xl font-black text-slate-800 dark:text-white tracking-tight leading-tight">
             {language === 'ko' ? (
               <>
-                <span className="text-amber-600 dark:text-amber-400">오늘 하루</span>, 당신에게<br/>
+                <span className="text-amber-600 dark:text-amber-400">오늘 하루</span>, 당신에게<br />
                 가장 필요한 조언
               </>
             ) : (
               <>
-                Advice you need most<br/>
+                Advice you need most<br />
                 for <span className="text-amber-600 dark:text-amber-400">Today</span>
               </>
             )}
           </h3>
           <p className="text-slate-600 dark:text-slate-400 leading-relaxed text-sm sm:text-base break-keep">
-            {language === 'ko' 
+            {language === 'ko'
               ? '같은 날이라도 사람마다 흐름은 다릅니다. 사자사주가 당신만의 맞춤형 일기예보가 되어드릴게요.'
               : 'Even on the same day, the flow is different for everyone. SazaSaju will be your personalized weather forecast.'}
           </p>
@@ -85,7 +85,7 @@ export default function TodaysLuckAppeal() {
       {/* 2. Features */}
       <section className="py-12 px-6 bg-white dark:bg-slate-900/50">
         <div className="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12 relative">
-          
+
           {/* Decorative connector */}
           <div className="hidden md:block absolute top-[2.25rem] left-16 right-16 h-0.5 bg-gradient-to-r from-transparent via-amber-200 dark:via-amber-800 to-transparent z-0"></div>
 
@@ -114,7 +114,7 @@ export default function TodaysLuckAppeal() {
               {language === 'ko' ? '작은 선택들이 모여 운명을 만듭니다.' : 'Small choices gather to create destiny.'}
             </p>
           </div>
-          
+
           <div className="relative space-y-8 pl-4 sm:pl-0">
             {/* Vertical Line */}
             <div className="absolute left-[1.35rem] sm:left-6 top-4 bottom-4 w-0.5 bg-slate-100 dark:bg-slate-800"></div>
@@ -122,7 +122,7 @@ export default function TodaysLuckAppeal() {
             {examples.map((ex, idx) => (
               <div key={idx} className="relative flex gap-5 items-start">
                 <div className="relative z-10 flex-shrink-0 w-12 h-12 flex items-center justify-center bg-white dark:bg-slate-900 rounded-full border border-slate-100 dark:border-slate-800 shadow-sm">
-                   <span className="text-lg font-black text-amber-300 dark:text-amber-900/50 italic">Q</span>
+                  <span className="text-lg font-black text-amber-300 dark:text-amber-900/50 italic">Q</span>
                 </div>
                 <div className="pt-1">
                   <p className="text-base font-bold text-slate-700 dark:text-slate-200 mb-2">"{ex.q}"</p>

@@ -51,7 +51,7 @@ const Footer = () => {
   };
 
   return (
-    <footer className="w-full bg-slate-50 dark:bg-slate-900/50 py-10 px-6 mt-10 border-t border-slate-100 dark:border-slate-800">
+    <footer className="w-full bg-slate-50 dark:bg-slate-900/50 p-6  border-t border-slate-100 dark:border-slate-800">
       <div className="max-w-lg mx-auto space-y-6">
         {/* Logo/Title */}
         <div className="flex items-center space-x-1">
@@ -77,14 +77,14 @@ const Footer = () => {
 
         {/* Links */}
         <div className="flex items-center space-x-3 text-[11px] text-slate-500 dark:text-slate-400 font-medium">
-          <button 
+          <button
             onClick={() => openModal('terms')}
             className="hover:text-slate-700 dark:hover:text-slate-200 transition-colors"
           >
             {t.terms}
           </button>
           <span className="text-slate-200 dark:text-slate-700 font-light">|</span>
-          <button 
+          <button
             onClick={() => openModal('privacy')}
             className="hover:text-slate-700 dark:hover:text-slate-200 transition-colors"
           >
@@ -98,7 +98,7 @@ const Footer = () => {
         </div>
       </div>
 
-      <PolicyModal 
+      <PolicyModal
         isOpen={modalState.isOpen}
         onClose={() => setModalState({ ...modalState, isOpen: false })}
         title={modalState.title}

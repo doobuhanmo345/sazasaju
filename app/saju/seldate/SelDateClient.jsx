@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useCallback, useMemo,useEffect } from 'react';
+import { useState, useCallback, useMemo, useEffect } from 'react';
 import AnalysisStepContainer from '@/components/AnalysisStepContainer';
 import { useAuthContext } from '@/contexts/useAuthContext';
 import { useUsageLimit } from '@/contexts/useUsageLimit';
@@ -15,6 +15,8 @@ import DateInput from '@/ui/DateInput';
 import SelDateAppeal from '@/app/saju/seldate/SelDateAppeal';
 import SelDatePreview from '@/app/saju/seldate/SelDatePreview';
 import AnalyzeButton from '@/ui/AnalyzeButton';
+import ToTopButton from '@/ui/ToTopButton';
+import { ExclamationTriangleIcon } from '@heroicons/react/24/solid';
 
 const PURPOSE_OPTIONS = [
   { id: 'moving', ko: '이사', en: 'Moving' },
@@ -33,7 +35,7 @@ export default function SelDatePage() {
   // 컨텍스트 스위칭
   const targetProfile = selectedProfile || userData;
   const { birthDate: inputDate, isTimeUnknown, gender, saju } = targetProfile || {};
-//컨텍스트 스위칭 끝
+  //컨텍스트 스위칭 끝
   const { language } = useLanguage();
   const { setEditCount, MAX_EDIT_COUNT, isLocked } = useUsageLimit();
 
@@ -68,16 +70,16 @@ export default function SelDatePage() {
   }, [startDate]);
 
   const handleQuickSelect = (amount, unit = 'months') => {
-     const start = new Date(startDate);
-     const end = new Date(start);
-     
-     if (unit === 'weeks') {
-       end.setDate(start.getDate() + (amount * 7));
-     } else {
-       end.setMonth(start.getMonth() + amount);
-     }
-     
-     setEndDate(end.toISOString().split('T')[0]);
+    const start = new Date(startDate);
+    const end = new Date(start);
+
+    if (unit === 'weeks') {
+      end.setDate(start.getDate() + (amount * 7));
+    } else {
+      end.setMonth(start.getMonth() + amount);
+    }
+
+    setEndDate(end.toISOString().split('T')[0]);
   };
 
   const service = useMemo(
@@ -103,7 +105,7 @@ export default function SelDatePage() {
       const end = new Date(endDate);
       const diffTime = end - start;
       const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-      
+
       if (diffDays > 100) {
         alert(language === 'ko' ? '기간은 최대 100일까지 선택 가능합니다.' : 'Date range cannot exceed 100 days.');
         return;
@@ -113,7 +115,7 @@ export default function SelDatePage() {
       try {
         const purposeLabel = PURPOSE_OPTIONS.find(p => p.id === selectedPurpose);
         const purposeText = language === 'ko' ? purposeLabel?.ko : purposeLabel?.en;
-        
+
         await service.analyze(
           AnalysisPresets.selDate({
             saju,
@@ -149,7 +151,7 @@ export default function SelDatePage() {
               {language === 'ko' ? '어떤 중요한 일을 앞두고 계신가요?' : 'What is the occasion?'}
             </p>
           </header>
-          
+
           <div className="grid grid-cols-2 gap-3">
             {PURPOSE_OPTIONS.map((opt) => (
               <button
@@ -157,10 +159,9 @@ export default function SelDatePage() {
                 onClick={() => setSelectedPurpose(opt.id)}
                 className={`
                   px-4 py-3 text-sm font-medium rounded-lg transition-all duration-300
-                  ${
-                    selectedPurpose === opt.id
-                      ? 'bg-slate-900 dark:bg-white text-white dark:text-slate-900 shadow-md ring-2 ring-emerald-200 dark:ring-emerald-900'
-                      : 'bg-white dark:bg-slate-800 text-slate-500 border border-slate-200 dark:border-slate-700 hover:border-slate-400'
+                  ${selectedPurpose === opt.id
+                    ? 'bg-slate-900 dark:bg-white text-white dark:text-slate-900 shadow-md ring-2 ring-emerald-200 dark:ring-emerald-900'
+                    : 'bg-white dark:bg-slate-800 text-slate-500 border border-slate-200 dark:border-slate-700 hover:border-slate-400'
                   }
                 `}
               >
@@ -187,50 +188,50 @@ export default function SelDatePage() {
             </header>
 
             <div className="bg-white dark:bg-slate-800 p-6 rounded-xl border border-slate-100 dark:border-slate-700 shadow-sm space-y-6">
-               <div className="flex flex-col gap-4">
-                 <DateInput 
-                    label="START DATE"
-                    value={startDate}
-                    onChange={(e) => setStartDate(e.target.value)}
-                    className="w-full"
-                    language={language}
-                    color="emerald"
-                 />
-                 <DateInput 
-                    label="END DATE"
-                    value={endDate}
-                    min={startDate}
-                    max={maxDate}
-                    onChange={(e) => setEndDate(e.target.value)}
-                    className="w-full"
-                    language={language}
-                    color="emerald"
-                 />
-               </div>
+              <div className="flex flex-col gap-4">
+                <DateInput
+                  label="START DATE"
+                  value={startDate}
+                  onChange={(e) => setStartDate(e.target.value)}
+                  className="w-full"
+                  language={language}
+                  color="emerald"
+                />
+                <DateInput
+                  label="END DATE"
+                  value={endDate}
+                  min={startDate}
+                  max={maxDate}
+                  onChange={(e) => setEndDate(e.target.value)}
+                  className="w-full"
+                  language={language}
+                  color="emerald"
+                />
+              </div>
 
-               <div className="flex flex-wrap gap-2 justify-center">
-                 <button 
+              <div className="flex flex-wrap gap-2 justify-center">
+                <button
                   onClick={() => handleQuickSelect(2, 'weeks')}
                   className="px-3 py-1.5 text-xs font-medium text-slate-500 bg-slate-50 hover:bg-slate-100 dark:bg-slate-700 dark:text-slate-300 dark:hover:bg-slate-600 rounded-full border border-slate-200 dark:border-slate-600 transition-colors"
-                 >
-                    +2 {language === 'ko' ? '주' : 'Weeks'}
-                 </button>
-                 <button 
+                >
+                  +2 {language === 'ko' ? '주' : 'Weeks'}
+                </button>
+                <button
                   onClick={() => handleQuickSelect(1, 'months')}
                   className="px-3 py-1.5 text-xs font-medium text-slate-500 bg-slate-50 hover:bg-slate-100 dark:bg-slate-700 dark:text-slate-300 dark:hover:bg-slate-600 rounded-full border border-slate-200 dark:border-slate-600 transition-colors"
-                 >
-                    +1 {language === 'ko' ? '달' : 'Month'}
-                 </button>
-                  <button 
+                >
+                  +1 {language === 'ko' ? '달' : 'Month'}
+                </button>
+                <button
                   onClick={() => handleQuickSelect(2, 'months')}
                   className="px-3 py-1.5 text-xs font-medium text-slate-500 bg-slate-50 hover:bg-slate-100 dark:bg-slate-700 dark:text-slate-300 dark:hover:bg-slate-600 rounded-full border border-slate-200 dark:border-slate-600 transition-colors"
-                 >
-                    +2 {language === 'ko' ? '달' : 'Months'}
-                 </button>
-               </div>
+                >
+                  +2 {language === 'ko' ? '달' : 'Months'}
+                </button>
+              </div>
             </div>
             <p className="text-center mt-3 text-xs text-emerald-600/80 italic">
-                * {language === 'ko' ? '선택하신 기간 중에서 가장 좋은 날짜들을 뽑아드립니다' : 'Finding the best dates within this period'}
+              * {language === 'ko' ? '선택하신 기간 중에서 가장 좋은 날짜들을 뽑아드립니다' : 'Finding the best dates within this period'}
             </p>
           </div>
         )}
@@ -245,60 +246,84 @@ export default function SelDatePage() {
       }
       return (
         <div className="mx-auto px-6 py-12 animate-in fade-in slide-in-from-bottom-3 duration-1000">
-           <div className="max-w-lg mx-auto">
-             <header className="text-right mb-12">
-                <div className="inline-block px-2 py-1 mb-4 bg-slate-50 dark:bg-slate-800 rounded text-[10px] font-black tracking-[0.2em] text-slate-400 dark:text-slate-500 uppercase">
-                  Auspicious Day
-                </div>
-                <h2 className="text-4xl font-light text-slate-900 dark:text-white leading-[1.1] tracking-tight">
-                  {language === 'ko' ? '찾아 드리는' : 'Finding your'} <br />
-                  <span className="font-serif italic font-medium text-emerald-600/80">
-                    {language === 'ko' ? '최고의 날' : 'Best Days'}
-                  </span>
-                </h2>
-                <p className="mt-6 text-[13px] text-slate-400 dark:text-slate-500 leading-relaxed w-full">
-                  {language === 'ko' ? (
-                    <>
-                      중요한 시작을 앞두고 계신가요?<br />
-                      <span className="text-slate-600 dark:text-slate-300 font-medium">
-                        천상의 기운이 당신을 돕는 날
-                      </span>을<br/>
-                      정교하게 분석해 드립니다.
-                    </>
-                  ) : (
-                    <>
-                      Planning something important?<br />
-                      Let us find the days when <br/>
-                      <span className="text-slate-600 dark:text-slate-300 font-medium">
-                        the universe supports you the most.
-                      </span>
-                    </>
-                  )}
-                </p>
-              </header>
+          <div className="max-w-lg mx-auto">
+            <header className="text-right mb-12">
+              <div className="inline-block px-2 py-1 mb-4 bg-slate-50 dark:bg-slate-800 rounded text-[10px] font-black tracking-[0.2em] text-slate-400 dark:text-slate-500 uppercase">
+                Auspicious Day
+              </div>
+              <h2 className="text-4xl font-light text-slate-900 dark:text-white leading-[1.1] tracking-tight">
+                {language === 'ko' ? '찾아 드리는' : 'Finding your'} <br />
+                <span className="font-serif italic font-medium text-emerald-600/80">
+                  {language === 'ko' ? '최고의 날' : 'Best Days'}
+                </span>
+              </h2>
+              <p className="mt-6 text-[13px] text-slate-400 dark:text-slate-500 leading-relaxed w-full">
+                {language === 'ko' ? (
+                  <>
+                    중요한 시작을 앞두고 계신가요?<br />
+                    <span className="text-slate-600 dark:text-slate-300 font-medium">
+                      천상의 기운이 당신을 돕는 날
+                    </span>을<br />
+                    정교하게 분석해 드립니다.
+                  </>
+                ) : (
+                  <>
+                    Planning something important?<br />
+                    Let us find the days when <br />
+                    <span className="text-slate-600 dark:text-slate-300 font-medium">
+                      the universe supports you the most.
+                    </span>
+                  </>
+                )}
+              </p>
+            </header>
 
-              <section className="">{selectionSection()}</section>
+            <section className="">{selectionSection()}</section>
 
-              <footer className="mb-12">
-                <AnalyzeButton
-                  onClick={() => handleStartClick(onStart)}
-                  disabled={isDisabled}
-                  loading={false}
-                  isDone={false}
-                  label={language === 'ko' ? '좋은 날짜 받기' : 'Find Best Dates'}
-                  color='emerald'
-                />
-              </footer>
-           </div>
+            <footer className="mb-12">
+              <AnalyzeButton
+                onClick={() => handleStartClick(onStart)}
+                disabled={isDisabled}
+                loading={false}
+                isDone={false}
+                label={language === 'ko' ? '좋은 날짜 받기' : 'Find Best Dates'}
+                color='emerald'
+              />
+            </footer>
+          </div>
 
           <div className="mb-12 -mx-6">
             <SelDateAppeal />
           </div>
 
-          <SelDatePreview 
+          <SelDatePreview
             onStart={() => handleStartClick(onStart)}
             isDisabled={isDisabled}
           />
+          <div className="mx-w-lg mx-auto mt-8">
+            <div className="mb-12 max-w-lg mx-auto">
+              <ToTopButton
+                onClick={() => handleStartClick(onStart)}
+                disabled={isDisabled}
+                loading={false}
+                isDone={false}
+                label={language === 'ko' ? '좋은 날짜 받기' : 'Find Best Dates'}
+                color='emerald'
+              />
+              {isLocked ? (
+                <p className="mt-4 text-rose-600 font-black text-sm flex items-center justify-center gap-1 animate-pulse">
+                  <ExclamationTriangleIcon className="w-4 h-4" />
+                  {language === 'ko' ? '크레딧이 부족합니다..' : 'Not Enough credit'}
+                </p>
+              ) : (
+                <p className="mt-4 text-[11px] text-slate-400 text-center">
+                  {language === 'ko'
+                    ? '이미 분석된 운세는 크래딧을 재소모하지 않습니다.'
+                    : 'Fortunes already analyzed do not use credits.'}
+                </p>
+              )}
+            </div>
+          </div>
         </div>
       );
     },

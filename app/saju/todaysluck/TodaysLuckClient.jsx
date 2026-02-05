@@ -23,11 +23,11 @@ export default function TodaysLuckPage() {
   const { loading, setLoading, setLoadingType, aiResult, setAiResult } = useLoading();
   const [sajuData, setSajuData] = useState(null);
   const { userData, user, isDailyDone, selectedProfile } = useAuthContext(); // selectedProfile 추가
-  
+
   // 컨텍스트 스위칭
   const targetProfile = selectedProfile || userData;
   const { birthDate: inputDate, isTimeUnknown, gender, saju } = targetProfile || {};
-  
+
   const { language } = useLanguage();
   const { editCount, setEditCount, MAX_EDIT_COUNT, isLocked } = useUsageLimit();
   const DISABLED_STYLE = 'bg-gray-100 text-gray-400 cursor-not-allowed border border-gray-200';
@@ -146,15 +146,42 @@ export default function TodaysLuckPage() {
           <TodaysLuckAppeal />
         </div>
 
-      {/* Preview Section */}
-      <TodaysLuckPreview 
-        onStart={() => handleStartClick(onStart)} 
-        isDisabled={isDisabled} 
-        isDisabled2={isDisabled2} 
-        loading={loading} 
-        isDone={isDailyDone} 
-        isLocked={isLocked}
-      />
+        {/* Preview Section */}
+        <TodaysLuckPreview
+          onStart={() => handleStartClick(onStart)}
+          isDisabled={isDisabled}
+          isDisabled2={isDisabled2}
+          loading={loading}
+          isDone={isDailyDone}
+          isLocked={isLocked}
+        />
+        <div className="mx-w-lg mx-auto">
+          {/* Primary Analyze Button */}
+          <div className="mb-12 max-w-lg mx-auto">
+            <AnalyzeButton
+              onClick={() => handleStartClick(onStart)}
+              disabled={isDisabled || isDisabled2}
+              loading={loading}
+              isDone={isDailyDone}
+              label={language === 'ko' ? '운세 확인하기' : 'Check my Luck'}
+              color="amber"
+              cost={-1}
+            />
+            {isLocked ? (
+              <p className="mt-4 text-rose-600 font-black text-sm flex items-center justify-center gap-1 animate-pulse">
+                <ExclamationTriangleIcon className="w-4 h-4" />{' '}
+                {language === 'ko' ? '크레딧이 부족합니다..' : 'not Enough credit'}
+              </p>
+            ) : (
+              <p className="mt-4 text-[11px] text-slate-400">
+                {language === 'ko'
+                  ? '이미 분석된 운세는 크래딧을 재소모하지 않습니다.'
+                  : 'Fortunes that have already been analyzed do not use credits.'}
+              </p>
+            )}
+          </div>
+
+        </div>
       </div>
     );
   };

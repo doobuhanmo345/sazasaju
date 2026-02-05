@@ -23,7 +23,7 @@ export default function BasicAnaPage() {
   const [sajuData, setSajuData] = useState(null);
   const { loading, setLoading, setAiResult, aiResult } = useLoading();
   const { userData, user, isMainDone, selectedProfile } = useAuthContext(); // selectedProfile 추가
-  
+
   // 컨텍스트 스위칭: 선택된 프로필이 있으면 그것을 사용, 없으면 본인 정보
   const targetProfile = selectedProfile || userData;
   // [FIX] birthTime이 별도로 있는 경우 합쳐서 ISO 포맷으로 만듦
@@ -32,9 +32,9 @@ export default function BasicAnaPage() {
   const inputDate = (targetProfile?.birthTime && rawDate && !rawDate.includes('T'))
     ? `${rawDate}T${rawTime}`
     : rawDate;
-  
+
   const { isTimeUnknown, gender } = targetProfile || {};
-  
+
   const { saju } = useSajuCalculator(inputDate, isTimeUnknown);
   const { language } = useLanguage();
   const { setEditCount, MAX_EDIT_COUNT, isLocked } = useUsageLimit();
@@ -85,21 +85,21 @@ export default function BasicAnaPage() {
         // [CRITICAL FIX] 친구 프로필 분석 시 메인 유저의 saju 데이터 덮어쓰기 방지
         if (selectedProfile) {
           preset.buildSaveData = async (result, p, service) => {
-             const todayStr = await service.getToday();
-             return {
-               // saju 필드 생략 (메인 유저 데이터 오염 방지)
-               usageHistory: {
-                 ZApiAnalysis: {
-                   result,
-                   saju: p.saju,
-                   language: p.language,
-                   gender: p.gender,
-                   targetName: selectedProfile.displayName || 'Friend', // 누구 사주인지 기록
-                 },
-               },
-               // 친구 분석은 카운트 증가 안 함 (옵션) -> 일단 기록은 남기되 메인 데이터 보호
-               // dailyUsage: { [todayStr]: firestore.increment(1) }, 
-             };
+            const todayStr = await service.getToday();
+            return {
+              // saju 필드 생략 (메인 유저 데이터 오염 방지)
+              usageHistory: {
+                ZApiAnalysis: {
+                  result,
+                  saju: p.saju,
+                  language: p.language,
+                  gender: p.gender,
+                  targetName: selectedProfile.displayName || 'Friend', // 누구 사주인지 기록
+                },
+              },
+              // 친구 분석은 카운트 증가 안 함 (옵션) -> 일단 기록은 남기되 메인 데이터 보호
+              // dailyUsage: { [todayStr]: firestore.increment(1) }, 
+            };
           };
         }
 
@@ -132,15 +132,15 @@ export default function BasicAnaPage() {
             <h2 className="text-3xl font-black text-slate-800 dark:text-white mb-4 tracking-tight leading-tight">
               {saju ? (
                 <>
-                   <span className="text-xl font-bold text-slate-500 block mb-1">
-                     {language === 'ko' ? '오행으로 읽는' : 'Reading the Five Elements'}
-                   </span>
-                   <span className="text-indigo-600 dark:text-indigo-400">{displayName}</span>
-                   {language === 'ko' ? '의 ' : "'s "}
-                   <span className="relative inline-block">
-                     <span className="relative z-10 text-slate-800 dark:text-slate-100"> {language === 'ko' ? '정밀 운세 분석' : 'Saju Analysis'}</span>
-                     <div className="absolute inset-x-0 bottom-1 h-3 bg-indigo-200/50 dark:bg-indigo-800/50 -rotate-1 rounded-full"></div>
-                   </span>
+                  <span className="text-xl font-bold text-slate-500 block mb-1">
+                    {language === 'ko' ? '오행으로 읽는' : 'Reading the Five Elements'}
+                  </span>
+                  <span className="text-indigo-600 dark:text-indigo-400">{displayName}</span>
+                  {language === 'ko' ? '의 ' : "'s "}
+                  <span className="relative inline-block">
+                    <span className="relative z-10 text-slate-800 dark:text-slate-100"> {language === 'ko' ? '정밀 운세 분석' : 'Saju Analysis'}</span>
+                    <div className="absolute inset-x-0 bottom-1 h-3 bg-indigo-200/50 dark:bg-indigo-800/50 -rotate-1 rounded-full"></div>
+                  </span>
                 </>
               ) : (
                 <>
@@ -157,7 +157,7 @@ export default function BasicAnaPage() {
               <p className="text-sm">
                 {language === 'ko' ? (
                   <>
-                    타고난 기질과 <strong>10년마다 찾아오는 대운</strong>의 흐름,<br/>
+                    타고난 기질과 <strong>10년마다 찾아오는 대운</strong>의 흐름,<br />
                     당신의 운명 지도를 분석합니다.
                   </>
                 ) : (
@@ -208,14 +208,41 @@ export default function BasicAnaPage() {
           {/* 3단 정보 바 (삭제됨 - Appeal 컴포넌트로 대체) */}
 
           {/* 프리뷰 섹션 시작 */}
-          <BasicAnaPreview 
-            onStart={() => handleStartClick(onStart)} 
-            isDisabled={isDisabled} 
-            isDisabled2={isDisabled2} 
-            loading={loading} 
-            isDone={isMainDone} 
+          <BasicAnaPreview
+            onStart={() => handleStartClick(onStart)}
+            isDisabled={isDisabled}
+            isDisabled2={isDisabled2}
+            loading={loading}
+            isDone={isMainDone}
             isLocked={isLocked}
           />
+
+          {/* [NEW] Secondary Analyze Button (Bottom) */}
+          <div className="mx-w-lg mx-auto mt-8">
+            <div className="mb-12 max-w-lg mx-auto">
+              <AnalyzeButton
+                onClick={() => handleStartClick(onStart)}
+                disabled={isDisabled || isDisabled2}
+                loading={loading}
+                isDone={isMainDone}
+                label={language === 'ko' ? '평생 운세 보기' : 'Analyze Saju'}
+                color="indigo"
+                cost={-1}
+              />
+              {isLocked ? (
+                <p className="mt-4 text-rose-600 font-black text-sm flex items-center justify-center gap-1 animate-pulse">
+                  <ExclamationTriangleIcon className="w-4 h-4" />
+                  {language === 'ko' ? '크레딧이 부족합니다..' : 'Not Enough credit'}
+                </p>
+              ) : (
+                <p className="mt-4 text-[11px] text-slate-400 text-center">
+                  {language === 'ko'
+                    ? '이미 분석된 운세는 크래딧을 재소모하지 않습니다.'
+                    : 'Fortunes already analyzed do not use credits.'}
+                </p>
+              )}
+            </div>
+          </div>
         </div>
       );
     },

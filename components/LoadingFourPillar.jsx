@@ -139,7 +139,7 @@ export default function LoadingFourPillar({ isTimeUnknown, saju }) {
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(14,165,233,0.08)_0%,transparent_70%)] animate-pulse pointer-events-none" />
       )}
 
-      <div className="mb-10 w-full max-w-md text-center">
+      <div className="mb-10 w-full max-w-lg text-center">
         <div className="relative inline-block">
           <div className="flex flex-col items-center">
             <span
@@ -179,8 +179,8 @@ export default function LoadingFourPillar({ isTimeUnknown, saju }) {
             <div className="mt-4 animate-pulse flex items-center justify-center gap-1.5">
               <span className="text-amber-500 dark:text-amber-400 text-xs">⚠️</span>
               <p className="text-[12px] font-bold text-rose-500/90 dark:text-rose-400/90 tracking-tight">
-                {language === 'en' 
-                  ? 'Analysis in progress. Please do not leave this page.' 
+                {language === 'en'
+                  ? 'Analysis in progress. Please do not leave this page.'
                   : '분석 중입니다. 페이지를 나가지 마세요.'}
               </p>
             </div>
@@ -391,7 +391,7 @@ export default function LoadingFourPillar({ isTimeUnknown, saju }) {
 
       <div className="mt-8 w-full flex flex-col items-center px-4">
         <div
-          className={`w-full max-lg h-1.5 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden relative ${isDeepAnalyzing ? 'animate-pulse' : ''}`}
+          className={`w-full max-w-lg h-1.5 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden relative ${isDeepAnalyzing ? 'animate-pulse' : ''}`}
         >
           <div
             className={classNames(

@@ -19,7 +19,9 @@ export default function ReportHid({
         <div
           className="absolute inset-0 pointer-events-none"
           style={{
-            background: `linear-gradient(to bottom, transparent 0%, rgba(255, 255, 255, 0.15) 15%, rgba(255, 255, 255, 0.4) 50%, ${gradientColor} 70%, ${gradientColor} 90%, transparent 100%)`
+            background: `linear-gradient(to bottom, transparent 0%, rgba(255, 255, 255, 0.2) 20%, rgba(255, 255, 255, 0.8) 50%, ${gradientColor} 65%, ${gradientColor} 90%, transparent 100%)`,
+            maskImage: 'linear-gradient(to right, transparent, black 10%, black 90%, transparent)',
+            WebkitMaskImage: 'linear-gradient(to right, transparent, black 10%, black 90%, transparent)'
           }}
         ></div>
 

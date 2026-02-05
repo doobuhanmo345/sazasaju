@@ -8,23 +8,23 @@ export default function InterviewPreview({ onStart, isDisabled, userData, select
   const { language } = useLanguage();
 
   return (
-    <div className="mt-16 text-left">
+    <div className="mt-16 text-left max-w-3xl mx-auto">
       <div className="mx-4 my-10 flex flex-col items-center">
-        <div className="flex items-center gap-2 px-3 py-1 rounded-full border border-blue-200 bg-blue-50/50 mb-3">
+        <div className="flex items-center gap-2 px-3 py-1 rounded-full border border-blue-200 dark:border-blue-900 bg-blue-50/50 dark:bg-blue-900/20 mb-3">
           <span className="relative flex h-2 w-2">
             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
             <span className="relative inline-flex rounded-full h-2 w-2 bg-blue-500"></span>
           </span>
-          <span className="text-[11px] font-bold text-blue-600 tracking-tight uppercase">
+          <span className="text-[11px] font-bold text-blue-600 dark:text-blue-400 tracking-tight uppercase">
             Preview Mode
           </span>
         </div>
 
         <div className="text-center">
-          <h3 className="text-lg font-bold text-slate-800 dark:text-white mb-2">
+          <h3 className="text-xl font-bold text-slate-800 dark:text-white mb-2">
             {language === 'ko' ? '전략적 합격 리포트 미리보기' : 'Strategic Pass Report Preview'}
           </h3>
-          <p className="text-sm text-slate-500 dark:text-slate-400 leading-relaxed max-w-[280px] mx-auto break-keep text-center">
+          <p className="text-sm text-slate-500 dark:text-slate-400 leading-relaxed max-w-sm mx-auto break-keep text-center">
             {language === 'ko'
               ? '성공적인 인터뷰를 위해 사자가 읽어낸 기운과 필승의 바이브를 엿보세요'
               : 'Peek into the energy and winning vibe read by Saza for your success'}
@@ -35,29 +35,30 @@ export default function InterviewPreview({ onStart, isDisabled, userData, select
       <div className="sjsj-report-container !mx-0 !p-0 bg-transparent text-left">
         <div className="sjsj-content-inner !p-0">
           {/* Profile Card Mockup */}
-          <div className="bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-3xl p-6 mb-8 shadow-sm">
-            <div className="flex justify-between items-center mb-6 pb-4 border-b border-dashed border-slate-100 dark:border-slate-800">
-              <span className="text-xl font-black text-slate-800 dark:text-white">{userData?.displayName}</span>
-              <span className="text-[9px] bg-slate-900 text-white px-3 py-1 rounded-full font-black">CANDIDATE</span>
-            </div>
-            <div className="space-y-3 opacity-50">
-              <div className="flex justify-between text-xs">
-                <span className="text-slate-400">TARGET</span>
-                <span className="font-bold">{selections.category || 'Interview'}</span>
+          <div className="px-6 grayscale opacity-40 select-none pointer-events-none max-w-md mx-auto w-full mb-8">
+            <div className="bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-3xl p-6 shadow-sm">
+              <div className="flex justify-between items-center mb-6 pb-4 border-b border-dashed border-slate-100 dark:border-slate-800">
+                <span className="text-xl font-black text-slate-800 dark:text-white">{userData?.displayName || 'CANDIDATE'}</span>
+                <span className="text-[9px] bg-slate-900 text-white px-3 py-1 rounded-full font-black">CANDIDATE</span>
               </div>
-              <div className="flex justify-between text-xs">
-                <span className="text-slate-400">DATE</span>
-                <span className="font-bold">{selectedDate ? new Date(selectedDate).toLocaleDateString() : '2026.01.26'}</span>
+              <div className="space-y-3">
+                <div className="flex justify-between text-xs">
+                  <span className="text-slate-400">TARGET</span>
+                  <span className="font-bold">{selections?.category || 'Interview'}</span>
+                </div>
+                <div className="flex justify-between text-xs">
+                  <span className="text-slate-400">DATE</span>
+                  <span className="font-bold">{selectedDate ? new Date(selectedDate).toLocaleDateString() : '2026.01.26'}</span>
+                </div>
               </div>
             </div>
           </div>
 
           {/* 01. Vibe Strategy */}
-          <section className="relative sjsj-section !p-0 !mb-8 overflow-hidden">
-            <div className="p-6 select-none pointer-events-none opacity-40 grayscale">
-              <div className="flex items-center gap-2 mb-6">
-                <span className="w-1.5 h-6 bg-blue-500 rounded-full"></span>
-                <h2 className="text-lg font-black text-slate-800 dark:text-white">
+          <section className="relative sjsj-section !p-0 !mb-10 overflow-hidden rounded-[2rem]">
+            <div className="px-6 pt-6 opacity-40 grayscale select-none pointer-events-none max-w-md mx-auto w-full">
+              <div className="sjsj-section-label">
+                <h2 className="sjsj-subTitle">
                   {language === 'ko' ? '01. 합격 바이브 전략' : '01. Vibe Strategy'}
                 </h2>
               </div>
@@ -68,18 +69,18 @@ export default function InterviewPreview({ onStart, isDisabled, userData, select
                   <span className="text-sm font-black">{language === 'ko' ? '"지적인 성실함"' : '"Intellectual Sincerity"'}</span>
                 </div>
                 <div className="flex-1 bg-slate-50 dark:bg-slate-800/50 p-4 rounded-2xl border border-slate-100 dark:border-slate-800">
-                  <span className="text-[9px] font-bold text-blue-500 block mb-1">KEY POINT</span>
-                  <span className="text-sm font-black">{language === 'ko' ? '첫 질문의 속도' : 'Speed of first reply'}</span>
+                  <span className="text-[9px] font-bold text-blue-500 block mb-1">POINT</span>
+                  <span className="text-sm font-black">{language === 'ko' ? '첫 질문의 속도' : 'Response Speed'}</span>
                 </div>
               </div>
-              <p className="rt-card__text">
-                {language === 'ko' 
-                  ? '오늘은 평소보다 조금 더 차분한 목소리로 신뢰감을 주는 것이 가장 중요한 포인트입니다. 상대방의 질문에 즉각적으로 답하기보다 1~2초 정도...' 
+              <p className="sjsj-long-text">
+                {language === 'ko'
+                  ? '오늘은 평소보다 조금 더 차분한 목소리로 신뢰감을 주는 것이 가장 중요한 포인트입니다. 상대방의 질문에 즉각적으로 답하기보다 1~2초 정도...'
                   : 'Today, the most important point is to convey trust with a slightly calmer voice than usual. Rather than answering immediately...'}
               </p>
             </div>
             <ReportHid
-              gradientColor="#DBEAFE"
+              gradientColor="#EFF6FF"
               themeColor="#3B82F6"
               badge={['1', language === 'ko' ? '바이브' : 'Vibe']}
               title={language === 'ko' ? <>합격을 부르는 <span className="text-blue-500">필승의 이미지</span></> : <>The <span className="text-blue-500">Winning Image</span> for Pass</>}
@@ -90,11 +91,10 @@ export default function InterviewPreview({ onStart, isDisabled, userData, select
           </section>
 
           {/* 02. Success Index */}
-          <section className="relative sjsj-section !p-0 !mb-8 overflow-hidden">
-            <div className="p-6 select-none pointer-events-none opacity-40 grayscale">
-              <div className="flex items-center gap-2 mb-6">
-                <span className="w-1.5 h-6 bg-blue-500 rounded-full"></span>
-                <h2 className="text-lg font-black text-slate-800 dark:text-white">
+          <section className="relative sjsj-section !p-0 !mb-10 overflow-hidden rounded-[2rem]">
+            <div className="px-6 pt-6 opacity-40 grayscale select-none pointer-events-none max-w-md mx-auto w-full">
+              <div className="sjsj-section-label">
+                <h2 className="sjsj-subTitle">
                   {language === 'ko' ? '02. 면접 합격 지수' : '02. Success Index'}
                 </h2>
               </div>
@@ -104,12 +104,12 @@ export default function InterviewPreview({ onStart, isDisabled, userData, select
                   <div className="h-full bg-blue-500" style={{ width: '82%' }}></div>
                 </div>
               </div>
-              <p className="text-xs text-slate-500 text-center">
+              <p className="text-xs text-slate-500 text-center mb-4">
                 {language === 'ko' ? '당신의 에너지와 오늘의 기운이 강력한 시너지를 내고 있습니다.' : 'Your energy and today\'s energy are creating powerful synergy.'}
               </p>
             </div>
             <ReportHid
-              gradientColor="#DBEAFE"
+              gradientColor="#EFF6FF"
               themeColor="#3B82F6"
               badge={['2', language === 'ko' ? '확률' : 'Probability']}
               title={language === 'ko' ? <>데이터로 증명된 <span className="text-blue-500">합격 가능성</span></> : <>The <span className="text-blue-500">Pass Probability</span> Proven by Data</>}
@@ -119,16 +119,6 @@ export default function InterviewPreview({ onStart, isDisabled, userData, select
             />
           </section>
         </div>
-      </div>
-      <div className="mt-8 mb-12">
-        <AnalyzeButton
-          onClick={onStart}
-          loading={false}
-          isDone={false}
-          disabled={isDisabled}
-          label={language === 'ko' ? '면접/시험 분석 받기' : 'Get Analysis Analysis'}
-          color='blue'
-        />  
       </div>
     </div>
   );
