@@ -159,6 +159,7 @@ export default function SazaTalkAdKrPage() {
         const existingData = docSnap.data();
         if (JSON.stringify(sortObject(existingData.saju)) === JSON.stringify(sortObject(saju))) {
           alert('사자사주 홈페이지에 방문해 보세요! 로그인만 하면 무료로 하루에 세 개씩 프리미엄 리포트를 확인할 수 있어요.');
+          router.push('/');
           return;
         }
       }

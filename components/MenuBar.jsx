@@ -31,12 +31,12 @@ import { getRomanizedIlju } from '@/data/sajuInt';
 
 export default function MenuBar() {
   const [activeMenu, setActiveMenu] = useState(null);
-  const { user, userData, iljuImagePath, openLoginModal, selectedProfile, logout } = useAuthContext();
+  const { user, userData, iljuImagePath, openLoginModal, selectedProfile, logout, selectProfile } = useAuthContext();
   const router = useRouter();
   const { language } = useLanguage();
 
   const isKo = language === 'ko';
-  
+
   useEffect(() => {
     if (activeMenu) {
       document.body.style.overflow = 'hidden';
@@ -221,7 +221,7 @@ export default function MenuBar() {
                   : 'Find the most auspicious days for your important events.',
                 icon: <CalendarDaysIcon className="w-6 h-6" />,
                 path: '/saju/seldate',
-              },  {
+              }, {
                 name: isKo ? '출산 택일' : 'Childbirth Selection',
                 desc: isKo
                   ? '아이와 부모의 기운에 맞는 조화로운 출산 택일'
@@ -340,30 +340,30 @@ export default function MenuBar() {
                     <>
                       {/* [Sub Display] Logged-in User Info (If checking friend's profile) */}
                       {selectedProfile && selectedProfile.uid !== userData?.uid && (
-                        <div 
+                        <div
                           className="mb-4 flex items-center gap-3 p-3 rounded-2xl bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 shadow-sm cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors"
                           onClick={() => selectProfile(null)} // Click to switch back to self
                         >
                           <div className="relative w-10 h-10 rounded-full overflow-hidden border border-slate-200 dark:border-slate-700 bg-slate-100">
-                             {(() => {
-                                // Calculate User's calculate Ilju Image manually
-                                const mySaju = userData?.saju;
-                                const myGender = userData?.gender || 'female';
-                                let myImg = '/images/ilju/default.png';
-                                if (mySaju) {
-                                  // getRomanizedIlju is needed, but assuming simple mapping or default if not available
-                                  // For now, simpler approach: if selectedProfile is friend, iljuImagePath is friend's.
-                                  // So we need to recalculate or store user's path.
-                                  // Since we can't easily import helper here without verify, let's use a simple fallback or just user icon.
-                                  // Actually, let's try to trust the context or just show initials/icon if image fails.
-                                  // Better: use a default avatar if calculation is complex, but user wants image.
-                                  // Let's rely on standard path format if possible: /images/ilju/[ilju]_[gender].png
-                                  
-                                  const iljuCode = mySaju.sky1 && mySaju.grd1 ? getRomanizedIlju(mySaju.sky1 + mySaju.grd1) : 'gapja';
-                                  myImg = `/images/ilju/${iljuCode}_${myGender}.png`;
-                                }
-                                return <Image src={myImg} alt="Me" fill className="object-cover" />;
-                             })()}
+                            {(() => {
+                              // Calculate User's calculate Ilju Image manually
+                              const mySaju = userData?.saju;
+                              const myGender = userData?.gender || 'female';
+                              let myImg = '/images/ilju/default.png';
+                              if (mySaju) {
+                                // getRomanizedIlju is needed, but assuming simple mapping or default if not available
+                                // For now, simpler approach: if selectedProfile is friend, iljuImagePath is friend's.
+                                // So we need to recalculate or store user's path.
+                                // Since we can't easily import helper here without verify, let's use a simple fallback or just user icon.
+                                // Actually, let's try to trust the context or just show initials/icon if image fails.
+                                // Better: use a default avatar if calculation is complex, but user wants image.
+                                // Let's rely on standard path format if possible: /images/ilju/[ilju]_[gender].png
+
+                                const iljuCode = mySaju.sky1 && mySaju.grd1 ? getRomanizedIlju(mySaju.sky1 + mySaju.grd1) : 'gapja';
+                                myImg = `/images/ilju/${iljuCode}_${myGender}.png`;
+                              }
+                              return <Image src={myImg} alt="Me" fill className="object-cover" />;
+                            })()}
                           </div>
                           <div className="flex-1">
                             <p className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Logged in as</p>
@@ -378,9 +378,9 @@ export default function MenuBar() {
                       {/* [Main Display] Selected Profile Info (Friend or Self) */}
                       <div className={`relative overflow-hidden p-6 rounded-[2rem] bg-white dark:bg-[#1a1a2e] text-slate-800 dark:text-white shadow-xl border border-slate-100 dark:border-white/5 group transition-colors ${selectedProfile && selectedProfile.uid !== userData?.uid ? 'ring-2 ring-indigo-500 ring-offset-2 dark:ring-offset-slate-950' : ''}`}>
                         {selectedProfile && selectedProfile.uid !== userData?.uid && (
-                           <div className="absolute top-0 right-0 bg-indigo-500 text-white text-[10px] font-bold px-3 py-1 rounded-bl-xl shadow-md z-20">
-                             {isKo ? '친구 프로필 보는 중' : 'Viewing Friend Profile'}
-                           </div>
+                          <div className="absolute top-0 right-0 bg-indigo-500 text-white text-[10px] font-bold px-3 py-1 rounded-bl-xl shadow-md z-20">
+                            {isKo ? '친구 프로필 보는 중' : 'Viewing Friend Profile'}
+                          </div>
                         )}
 
                         {/* Logout Button (Only on Own Profile) */}
@@ -405,16 +405,16 @@ export default function MenuBar() {
                           <div className="flex items-center gap-6">
                             {/* Character Image (Always reflects selectedProfile via iljuImagePath from context) */}
                             <div className="relative shrink-0 w-32 h-32 h-32">
-                               <div className="absolute inset-0 bg-gradient-to-tr from-indigo-100 to-purple-100 dark:from-indigo-500/20 dark:to-purple-500/20 rounded-3xl rotate-6 group-hover:rotate-12 transition-transform duration-500" />
-                               <div className="absolute inset-0 bg-white/60 dark:bg-white/5 backdrop-blur-md rounded-3xl border border-white dark:border-white/10 shadow-inner" />
-                               <div className="relative w-full h-full p-2 hover:scale-110 transition-transform duration-500">
-                                  <Image
-                                    src={iljuImagePath}
-                                    alt="ilju character"
-                                    fill
-                                    className="object-contain"
-                                  />
-                               </div>
+                              <div className="absolute inset-0 bg-gradient-to-tr from-indigo-100 to-purple-100 dark:from-indigo-500/20 dark:to-purple-500/20 rounded-3xl rotate-6 group-hover:rotate-12 transition-transform duration-500" />
+                              <div className="absolute inset-0 bg-white/60 dark:bg-white/5 backdrop-blur-md rounded-3xl border border-white dark:border-white/10 shadow-inner" />
+                              <div className="relative w-full h-full p-2 hover:scale-110 transition-transform duration-500">
+                                <Image
+                                  src={iljuImagePath}
+                                  alt="ilju character"
+                                  fill
+                                  className="object-contain"
+                                />
+                              </div>
                             </div>
 
                             {/* Info */}
@@ -474,9 +474,9 @@ export default function MenuBar() {
                                       <div
                                         dangerouslySetInnerHTML={{
                                           __html: formatBirth(
-                                              (selectedProfile || userData)?.birthTime 
-                                                ? `${(selectedProfile || userData)?.birthDate}T${(selectedProfile || userData)?.birthTime}`
-                                                : (selectedProfile || userData)?.birthDate
+                                            (selectedProfile || userData)?.birthTime
+                                              ? `${(selectedProfile || userData)?.birthDate}T${(selectedProfile || userData)?.birthTime}`
+                                              : (selectedProfile || userData)?.birthDate
                                           ),
                                         }}
                                       />
@@ -494,17 +494,17 @@ export default function MenuBar() {
                       <div className="w-16 h-16 bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700 flex items-center justify-center mb-5">
                         <SparklesIcon className="w-8 h-8 text-indigo-500" />
                       </div>
-                      
+
                       <h2 className="text-xl font-bold text-slate-800 dark:text-white mb-2">
                         {isKo ? '당신의 운명을 그려보세요' : 'Discover Your Destiny'}
                       </h2>
-                      
+
                       <p className="text-[13px] text-slate-400 dark:text-slate-500 mb-6 leading-relaxed break-keep">
-                        {isKo 
-                          ? '로그인 한 번으로 정밀한 사주 분석과 매일 새로운 운세를 경험하세요.' 
+                        {isKo
+                          ? '로그인 한 번으로 정밀한 사주 분석과 매일 새로운 운세를 경험하세요.'
                           : 'Sign in to unlock personalized Saju insights and daily updates.'}
                       </p>
-                      
+
                       <button
                         onClick={() => {
                           openLoginModal();
@@ -522,23 +522,23 @@ export default function MenuBar() {
               <div className="space-y-3">
                 {activeMenu === 'fortune'
                   ? menuData.fortune.sections.map((section, sIdx) => (
-                      <div key={sIdx} className="space-y-3">
-                        <div className="flex items-center gap-2 px-2">
-                          <div className="w-1 h-3 bg-indigo-500 rounded-full"></div>
-                          <h3 className="text-[11px] font-black text-slate-500 uppercase tracking-widest">
-                            {section.subtitle}
-                          </h3>
-                        </div>
-                        <div className="grid grid-cols-1 gap-2">
-                          {section.items.map((item, idx) => (
-                            <MenuItem key={idx} item={item} color={menuData.fortune.color} />
-                          ))}
-                        </div>
+                    <div key={sIdx} className="space-y-3">
+                      <div className="flex items-center gap-2 px-2">
+                        <div className="w-1 h-3 bg-indigo-500 rounded-full"></div>
+                        <h3 className="text-[11px] font-black text-slate-500 uppercase tracking-widest">
+                          {section.subtitle}
+                        </h3>
                       </div>
-                    ))
+                      <div className="grid grid-cols-1 gap-2">
+                        {section.items.map((item, idx) => (
+                          <MenuItem key={idx} item={item} color={menuData.fortune.color} />
+                        ))}
+                      </div>
+                    </div>
+                  ))
                   : menuData[activeMenu]?.items?.map(
-                      (item, idx) => <MenuItem key={idx} item={item} color={menuData[activeMenu].color} />,
-                    )}
+                    (item, idx) => <MenuItem key={idx} item={item} color={menuData[activeMenu].color} />,
+                  )}
               </div>
             </div>
           )}
@@ -575,7 +575,7 @@ export default function MenuBar() {
             className={`flex flex-col items-center gap-1 ${activeMenu === 'profile' ? 'text-indigo-600' : 'text-slate-400'}`}
           >
 
-            
+
             <div className="relative">
               <UserCircleIcon className="w-6 h-6" />
               {user && selectedProfile && (
@@ -583,8 +583,8 @@ export default function MenuBar() {
               )}
             </div>
             <span className="text-[10px] font-black max-w-[4rem] truncate">
-              {user && selectedProfile 
-                ? selectedProfile.displayName 
+              {user && selectedProfile
+                ? selectedProfile.displayName
                 : (user ? (isKo ? '내 정보' : 'Profile') : (isKo ? '마이 페이지' : 'My Page'))
               }
             </span>
