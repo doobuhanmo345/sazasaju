@@ -25,7 +25,7 @@ export default function NewYearKr({ setStep }) {
     <div className="min-h-screen bg-indigo-50 text-slate-900 font-sans pb-20">
       <>
         <div className="w-full min-h-screen bg-indigo-50 text-slate-900 font-sans flex flex-col items-center">
-          <div className=" w-full py-10 flex flex-col items-center">
+          <div className=" w-full max-w-4xl py-10 flex flex-col items-center">
             {/* 1. 상단 로고 */}
             <div className="flex items-center gap-1.5 mb-8">
               <div className="w-8 h-8 bg-indigo-100 rounded-full flex items-center justify-center text-xl">
@@ -46,10 +46,10 @@ export default function NewYearKr({ setStep }) {
                 사자사주에서 무료로 봐드려요!
               </p>
             </div>
-            <div className="w-full">
+            <div className="w-full flex justify-center">
               <img
                 src="/images/adImage/newyear/newyear_main_clay.png"
-                className="w-full h-[400px] my-6 object-cover [mask-image:linear-gradient(to_bottom,transparent_0%,black_15%,black_85%,transparent_100%)]"
+                className="w-full max-w-4xl h-[500px] my-6 object-cover [mask-image:linear-gradient(to_bottom,transparent_0%,black_15%,black_85%,transparent_100%)]"
                 alt="사자사주 메인"
               />
             </div>
