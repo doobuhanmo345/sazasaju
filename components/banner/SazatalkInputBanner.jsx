@@ -21,9 +21,15 @@ const SazatalkInputBanner = () => {
     useEffect(() => {
         if (isOpen) {
             document.body.style.overflow = 'hidden';
+            document.documentElement.style.overflow = 'hidden';
         } else {
-            document.body.style.overflow = 'unset';
+            document.body.style.overflow = '';
+            document.documentElement.style.overflow = '';
         }
+        return () => {
+            document.body.style.overflow = '';
+            document.documentElement.style.overflow = '';
+        };
     }, [isOpen]);
 
     return (
@@ -70,7 +76,7 @@ const SazatalkInputBanner = () => {
 
             {/* 2. 카카오톡 스타일 전체 화면 모달 */}
             {isOpen && (
-                <div className="fixed inset-0 z-[100] flex items-end sm:items-center justify-center bg-black/50 backdrop-blur-sm animate-in fade-in duration-300">
+                <div className="fixed inset-0 z-[100] flex items-end justify-center bg-[#abc1d1] sm:bg-black/50 backdrop-blur-sm animate-in fade-in duration-300">
                     <div className="relative w-full max-w-lg h-full sm:h-[90vh] bg-[#abc1d1] sm:rounded-t-[32px] overflow-hidden flex flex-col animate-in slide-in-from-bottom-full duration-500">
 
                         {/* 헤더 */}
@@ -118,7 +124,6 @@ const SazatalkInputBanner = () => {
                         {/* 하단 텍스트 에어리어 */}
                         <div className="bg-white dark:bg-slate-800 p-4 pb-10 sm:pb-6 border-t border-slate-100 dark:border-slate-700 flex flex-col">
                             <textarea
-                                autoFocus
                                 value={inputValue}
                                 onChange={(e) => setInputValue(e.target.value)}
                                 className="w-full min-h-[140px] max-h-[300px] py-2 text-[19px] font-black text-slate-900 dark:text-white outline-none resize-none leading-relaxed placeholder:font-normal placeholder:text-slate-300 dark:placeholder:text-slate-500 bg-transparent"
