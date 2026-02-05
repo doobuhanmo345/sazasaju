@@ -59,17 +59,7 @@ const NewYearAdKr = () => {
     logStep(step, id);
   }, [step, userData, loadingUser]); // 의존성 배열에 loading과 userData 추가
 
-  // [NEW] 인앱 브라우저가 아닌 경우 메인으로 리다이렉트 (외부 브라우저 열기 대응)
-  useEffect(() => {
-    const ua = navigator.userAgent.toLowerCase();
-    const isInApp = /kakaotalk|instagram|naver|facebook|fban|fbav|line|snapchat|threads|whatsapp|zalo/.test(ua);
-    const isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
 
-    // 인앱 브라우저도 아니고 로컬 호스트도 아니면 메인으로 리다이렉트
-    if (!isInApp && !isLocal) {
-      window.location.replace('/');
-    }
-  }, []);
 
   // 공통 로그 저장 함수
   const logStep = async (stepName, currentGuestId, extraData = {}) => {
