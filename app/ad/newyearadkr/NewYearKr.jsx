@@ -48,8 +48,8 @@ export default function NewYearKr({ setStep }) {
             </div>
             <div className="w-full">
               <img
-                src="/images/adImage/newyear/main.png"
-                className="w-full my-6 object-cover [mask-image:linear-gradient(to_bottom,transparent_0%,black_15%,black_85%,transparent_100%)] hue-rotate-[260deg] saturation-[0.8]"
+                src="/images/adImage/newyear/newyear_main_clay.png"
+                className="w-full h-[400px] my-6 object-cover [mask-image:linear-gradient(to_bottom,transparent_0%,black_15%,black_85%,transparent_100%)]"
                 alt="사자사주 메인"
               />
             </div>
@@ -140,7 +140,7 @@ export default function NewYearKr({ setStep }) {
             </div>
           </div>
         </div>
-        <div className="bg-white/60 backdrop-blur-sm rounded-3xl border border-indigo-50 shadow-sm mx-4 mb-20">
+        <div className="backdrop-blur-sm rounded-3xl border border-indigo-50 shadow-sm mx-4 mb-20">
           <div></div>
           <header className="pt-12 pb-8 px-4 text-center bg-gradient-to-b from-indigo-50/50 to-transparent rounded-t-3xl">
             <h1 className="text-2xl font-black mb-2 tracking-tight text-slate-900">2026년 병오년 종합 리포트</h1>
@@ -153,7 +153,7 @@ export default function NewYearKr({ setStep }) {
 
             <div className="inline-flex items-center bg-white border border-indigo-100 rounded-full px-4 py-1.5 text-xs text-indigo-600 font-bold shadow-sm">1분 핵심 요약</div>
           </header>
-          <section className="relative mb-12 px-6">
+          <section className="relative mb-12 px-6 max-w-3xl mx-auto">
             <div className="text-center mb-8">
               <h2 className="text-xl font-bold text-indigo-900 mb-2">책임과 도전 속에서 빛나는 성장과 변화의 해</h2>
               <p className="text-[15px] font-bold text-slate-700 leading-snug break-keep">
@@ -307,6 +307,87 @@ export default function NewYearKr({ setStep }) {
                 }
                 badge={['2', '종합분석']}
               />
+
+              {/* 3. 테마 분석 Section */}
+              <div className="mt-16 relative">
+                <div className="px-6 select-none pointer-events-none opacity-40 grayscale contrast-75">
+                  <div className="text-center mb-6">
+                    <h2 className="text-[20px] font-bold text-[#a68b7c] mb-1">테마별 상세 분석</h2>
+                  </div>
+                  <div className="space-y-4 mb-6">
+                    <div>
+                      <h3 className="text-[18px] text-[#8c7a70] mb-3 border-l-4 border-indigo-600 pl-2.5 font-bold mt-6">재물/투자운</h3>
+                      <p className="text-sm text-slate-600 leading-relaxed break-keep">
+                        올해 당신의 재물운은 큰 흐름에서 상승곡선을 그리고 있습니다. 특히 상반기보다는 하반기에 투자의 결실이 맺힐 가능성이 높으며...
+                      </p>
+                    </div>
+                    <div>
+                      <h3 className="text-[18px] text-[#8c7a70] mb-3 border-l-4 border-indigo-600 pl-2.5 font-bold mt-6">직장/사업운</h3>
+                      <p className="text-sm text-slate-600 leading-relaxed break-keep">
+                        승진의 기회, 이직의 타이밍, 혹은 새로운 사업을 시작하기에 적합한 달을 짚어드립니다. 사회적 위치가 한 단계 격상될 수 있는 핵심적인 처세술을 사주 기반으로 제안합니다...
+                      </p>
+                    </div>
+                    <div>
+                      <h3 className="text-[18px] text-[#8c7a70] mb-3 border-l-4 border-indigo-600 pl-2.5 font-bold mt-6">건강/웰니스</h3>
+                      <p className="text-sm text-slate-600 leading-relaxed break-keep">
+                        사주 오행상 취약해지기 쉬운 신체 부위를 사전에 예방하고, 한 해 동안 최상의 컨디션을 유지하기 위한 맞춤형 생활 습관과 운동법을 추천해 드립니다...
+                      </p>
+                    </div>
+                  </div>
+                </div>
+                <AdHid
+                  title={
+                    <>
+                      인생의 <span className="text-indigo-600">4대 핵심 영역</span> 진단
+                    </>
+                  }
+                  des={
+                    <>
+                      재물, 애정, 건강, 직장운까지 당신이 가장 궁금해하는 모든 것을 공개합니다.
+                    </>
+                  }
+                  badge={['3', '테마분석']}
+                  hClass="h-[600px]"
+                  mClass="mt-[-300px]"
+                />
+              </div>
+
+              {/* 4. 주의할 점 Section */}
+              <div className="mt-16 relative">
+                <div className="px-6 select-none pointer-events-none opacity-40 grayscale contrast-75">
+                  <div className="text-center mb-6">
+                    <h2 className="text-[20px] font-bold text-[#a68b7c] mb-1">특별히 주의해야 할 기간</h2>
+                  </div>
+                  <div className="grid grid-cols-2 gap-3 mb-6">
+                    <div className="bg-[#eef2ff] p-4 rounded-xl border border-indigo-100">
+                      <div className="font-bold text-indigo-700 text-xs uppercase mb-1">기운이 복돋는 달</div>
+                      <p className="text-xs mt-2 text-slate-500">2월, 6월, 10월</p>
+                    </div>
+                    <div className="bg-slate-50 p-4 rounded-xl border border-slate-200">
+                      <div className="font-bold text-slate-700 text-xs uppercase mb-1">신중함이 필요한 달</div>
+                      <p className="text-xs mt-2 text-slate-500">4월, 8월, 12월</p>
+                    </div>
+                  </div>
+                  <p className="text-sm text-slate-600 leading-relaxed break-keep">
+                    특정 오행의 기운이 충돌하거나 과해지는 시기에는 평소보다 차분한 대응이 필요합니다. 특히 병오년의 화기운이 정점에 달하는 여름철에는...
+                  </p>
+                </div>
+                <AdHid
+                  title={
+                    <>
+                      절대 놓치면 안 될 <span className="text-indigo-600">핵심 터닝포인트</span>
+                    </>
+                  }
+                  des={
+                    <>
+                      한 해 중 운이 가장 폭발하는 시기와 반대로 자중하며 내실을 다져야 할 시기를 정확히 짚어드립니다.
+                    </>
+                  }
+                  badge={['4', '주의기간']}
+                  hClass="h-[500px]"
+                  mClass="mt-[-250px]"
+                />
+              </div>
             </section>
           </div>
         </div>
