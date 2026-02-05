@@ -5,13 +5,11 @@ import AnalysisStepContainer from '@/components/AnalysisStepContainer';
 import ViewTarotResult from '@/app/tarot/ViewTarotResult';
 import { useAuthContext } from '@/contexts/useAuthContext';
 import { useUsageLimit } from '@/contexts/useUsageLimit';
-import { db } from '@/lib/firebase';
-import { setDoc, doc, increment } from 'firebase/firestore';
 import { useLoading } from '@/contexts/useLoadingContext';
-import { UI_TEXT } from '@/data/constants';
 import { useLanguage } from '@/contexts/useLanguageContext';
+import { UI_TEXT } from '@/data/constants';
 import { classNames } from '@/utils/helpers';
-import { fetchGeminiAnalysis } from '@/lib/gemini';
+import TarotAnalysisService, { TarotPresets } from '@/lib/TarotAnalysisService';
 import { TARO_CARDS } from '@/data/tarotConstants';
 import {
   HeartIcon,
@@ -46,22 +44,18 @@ export default function TarotLovePage() {
   const [loveType, setLoveType] = useState('');
 
   const loveTypes = language === 'ko'
-      ? [
-          { id: 'solo', label: '새로운 인연 (솔로)', icon: <UserMinusIcon className="w-6 h-6" />, desc: '앞으로 다가올 인연과 나의 매력' },
-          { id: 'couple', label: '현재 관계 (커플)', icon: <UserGroupIcon className="w-6 h-6" />, desc: '상대방의 속마음과 우리의 미래' },
-          { id: 'reunion', label: '과거의 인연 (재회)', icon: <ArrowsRightLeftIcon className="w-6 h-6" />, desc: '그 사람의 소식과 다시 만날 가능성' },
-        ]
-      : [
-          { id: 'solo', label: 'New relationship', icon: <UserMinusIcon className="w-6 h-6" />, desc: 'upcoming fate connection and my charm' },
-          { id: 'couple', label: 'Current relationship', icon: <UserGroupIcon className="w-6 h-6" />, desc: "opponent's inner thoughts and our future" },
-          { id: 'reunion', label: 'Past relationship', icon: <ArrowsRightLeftIcon className="w-6 h-6" />, desc: 'Possibility of meeting again' },
-        ];
+    ? [
+      { id: 'solo', label: '새로운 인연 (솔로)', icon: <UserMinusIcon className="w-6 h-6" />, desc: '앞으로 다가올 인연과 나의 매력' },
+      { id: 'couple', label: '현재 관계 (커플)', icon: <UserGroupIcon className="w-6 h-6" />, desc: '상대방의 속마음과 우리의 미래' },
+      { id: 'reunion', label: '과거의 인연 (재회)', icon: <ArrowsRightLeftIcon className="w-6 h-6" />, desc: '그 사람의 소식과 다시 만날 가능성' },
+    ]
+    : [
+      { id: 'solo', label: 'New relationship', icon: <UserMinusIcon className="w-6 h-6" />, desc: 'upcoming fate connection and my charm' },
+      { id: 'couple', label: 'Current relationship', icon: <UserGroupIcon className="w-6 h-6" />, desc: "opponent's inner thoughts and our future" },
+      { id: 'reunion', label: 'Past relationship', icon: <ArrowsRightLeftIcon className="w-6 h-6" />, desc: 'Possibility of meeting again' },
+    ];
 
   const handleCardPick = async (onStart, index) => {
-    if (!user) return alert(UI_TEXT.loginReq[language]);
-    const currentCount = userData?.editCount || 0;
-    if (currentCount >= MAX_EDIT_COUNT) return alert(UI_TEXT.limitReached[language]);
-
     const pickedCard = TARO_CARDS[Math.floor(Math.random() * TARO_CARDS.length)];
     const typeLabel = loveTypes.find((t) => t.id === loveType)?.label;
 
@@ -69,65 +63,25 @@ export default function TarotLovePage() {
     setFlippedIdx(index);
 
     setTimeout(async () => {
-      setLoading(true);
-      setLoadingType('tarot_love');
       setFlippedIdx(null);
 
+      const service = new TarotAnalysisService({
+        user,
+        userData,
+        language,
+        maxEditCount: MAX_EDIT_COUNT,
+        uiText: UI_TEXT,
+        setEditCount,
+        setLoading,
+        setLoadingType,
+        setAiResult,
+        onStart,
+      });
+
       try {
-        const lovePrompt = `
-당신은 연애 심리 전문 타로 마스터입니다. 
-상황(${typeLabel})에 따른 정밀 연애 타로 리포트를 작성하세요.
-반드시 아래의 **JSON 구조**로만 응답하세요.
-
-### [데이터]
-- 연애 상황: ${typeLabel} 
-- 카드: ${pickedCard.kor} (${pickedCard.name})
-- 키워드: ${pickedCard.keyword}
-
-### [JSON 구조 (필수)]
-{
-  "title": "${language === 'ko' ? '연애운 분석' : 'Tarot Love'}-${typeLabel}",
-  "subTitle": "${ typeLabel + ' 상황 분석'}",
-  "cardName": "${pickedCard.kor} (${pickedCard.name})",
-  "tags": ["#연애운", "#상대방속마음", "#인연"],
-  "description": "선택된 카드(${pickedCard.kor})가 이번 연애운에서 가지는 본질적 의미와 상징적 해석을 상세히 설명하세요.",
-  "analysisTitle": "${typeLabel} 맞춤 상황 분석",
-  "analysisList": [
-    "상대방의 현재 심리나 두 사람 사이의 에너지 분석",
-    "현재 상황에서 가장 큰 영향을 미치고 있는 핵심 요소",
-    "조만간 나타날 연애 흐름의 결정적 변화"
-  ],
-  "adviceTitle": "연애 성공을 위한 실천 지침",
-  "adviceList": [
-    "관계를 발전시키기 위한 구체적 행동 1",
-    "관계를 발전시키기 위한 구체적 행동 2",
-    "관계를 발전시키기 위한 구체적 행동 3"
-  ],
-  "footerTags": ["#행운의타이밍", "#확신", "#설렘", "#소통", "#인연"]
-}
-
-### [규칙]
-1. 마크다운(\`\`\`) 없이 순수 JSON 텍스트만 출력.
-2. 한자 사용 금지, 연애 심리에 특화된 따뜻한 어조 유지.
-3. 답변 언어: ${language === 'ko' ? '한국어' : 'English'}.
-`;
-        const result = await fetchGeminiAnalysis(lovePrompt);
-        const todayDate = await DateService.getTodayDate();
-
-        await setDoc(doc(db, 'users', user.uid), {
-            editCount: increment(1),
-            lastEditDate: todayDate,
-            dailyUsage: { [todayDate]: increment(1) },
-            usageHistory: { tarotLove: { [todayDate]: { [typeLabel]: increment(1) } } },
-          }, { merge: true });
-
-        setEditCount((prev) => prev + 1);
-        setAiResult(result);
-        onStart();
+        await service.analyze(TarotPresets.love({ pickedCard, typeLabel }));
       } catch (e) {
-        alert(e.message);
-      } finally {
-        setLoading(false);
+        // Error is alerted in the service
       }
     }, 1000);
   };
@@ -182,7 +136,7 @@ export default function TarotLovePage() {
               style={{ transformStyle: 'preserve-3d' }}>
               <div className="w-full h-full transition-transform duration-700 shadow-xl rounded-2xl relative" style={{ transformStyle: 'preserve-3d', transform: flippedIdx === i ? 'rotateY(180deg)' : 'rotateY(0deg)' }}>
                 <div className="absolute inset-0 w-full h-full z-10 [backface-visibility:hidden]" style={{ backfaceVisibility: 'hidden', WebkitBackfaceVisibility: 'hidden' }}>
-                    <img src="/images/tarot/cardback.png" alt="tarot card" className="w-full h-full object-cover rounded-md border border-white/10" />
+                  <img src="/images/tarot/cardback.png" alt="tarot card" className="w-full h-full object-cover rounded-md border border-white/10" />
                 </div>
                 <div className="absolute inset-0 w-full h-full z-20 bg-white dark:bg-slate-800 flex items-center justify-center rounded-md overflow-hidden" style={{ backfaceVisibility: 'hidden', WebkitBackfaceVisibility: 'hidden', transform: 'rotateY(180deg)' }}>
                   {cardPicked && <img src={`/images/tarot/${cardPicked.id}.jpg`} alt={cardPicked.kor} className="w-full h-full object-cover" />}

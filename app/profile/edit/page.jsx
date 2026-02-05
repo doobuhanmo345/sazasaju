@@ -18,6 +18,8 @@ import FourPillarVis from '@/components/FourPillarVis';
 import { useSajuCalculator } from '@/hooks/useSajuCalculator';
 import { DateService } from '@/utils/dateService';
 import CityInput from '@/ui/CityInput';
+import { calculateSaju } from '@/lib/sajuCalculator';
+import { getRomanizedIlju } from '@/data/sajuInt';
 
 export default function EditProfilePage() {
   const { user, userData, updateProfileData } = useAuthContext();
@@ -60,6 +62,14 @@ export default function EditProfilePage() {
   // 3. Saju Hook
   const { saju: manse } = useSajuCalculator(InputDateFull, formData.isTimeUnknown);
 
+  // Get Ilju image path
+  const getIljuImage = () => {
+    if (!manse || !manse.sky1) return null;
+    const romanized = getRomanizedIlju(manse.sky1 + manse.grd1);
+    const genderSuffix = formData.gender === 'female' ? 'female' : 'male';
+    return `/images/ilju/${romanized}_${genderSuffix}.png`;
+  };
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
@@ -78,7 +88,7 @@ export default function EditProfilePage() {
     setIsSaving(true);
 
     try {
-       const todayDate = await DateService.getTodayDate();
+      const todayDate = await DateService.getTodayDate();
       const updateData = {
         displayName: formData.displayName,
         birthDate: `${formData.birthDate}T${effectiveTime}`,
@@ -121,13 +131,29 @@ export default function EditProfilePage() {
         <div className="bg-white/70 dark:bg-slate-800/60 p-6 rounded-3xl border border-indigo-50 dark:border-indigo-500/20 shadow-xl backdrop-blur-md">
           {/* Profile Image */}
           <div className="flex flex-col items-center mb-8">
-            <div className="relative">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src={user.photoURL}
-                alt="Profile"
-                className="w-24 h-24 rounded-full border-4 border-white dark:border-slate-700 shadow-lg object-cover"
-              />
+            <div className="relative group">
+              <div className="w-24 h-24 rounded-full border-4 border-white dark:border-slate-700 shadow-lg overflow-hidden relative">
+                {getIljuImage() ? (
+                  <img
+                    src={getIljuImage()}
+                    alt="Ilju Symbol"
+                    className="w-full h-full object-cover"
+                  />
+                ) : (
+                  <img
+                    src={user?.photoURL || '/images/ilju/default.png'}
+                    alt="Profile"
+                    className="w-full h-full object-cover"
+                  />
+                )}
+              </div>
+              {user?.photoURL && getIljuImage() && (
+                <img
+                  src={user.photoURL}
+                  className="absolute -bottom-1 -right-1 w-8 h-8 rounded-full border-2 border-white dark:border-slate-800 shadow-sm object-cover"
+                  alt="Social profile"
+                />
+              )}
             </div>
           </div>
 
@@ -174,11 +200,10 @@ export default function EditProfilePage() {
                     key={g}
                     type="button"
                     onClick={() => setFormData((prev) => ({ ...prev, gender: g }))}
-                    className={`flex-1 py-2.5 rounded-xl text-sm transition-all ${
-                      formData.gender === g
+                    className={`flex-1 py-2.5 rounded-xl text-sm transition-all ${formData.gender === g
                         ? 'bg-white dark:bg-slate-700 text-indigo-600 dark:text-indigo-300 shadow-sm'
                         : 'text-gray-400 hover:text-gray-600 dark:hover:text-gray-200'
-                    }`}
+                      }`}
                   >
                     {g === 'male'
                       ? language === 'ko'
@@ -254,30 +279,29 @@ export default function EditProfilePage() {
                     value={formData.isTimeUnknown ? '12:00' : formData.birthTime}
                     onChange={handleChange}
                     disabled={formData.isTimeUnknown}
-                    className={`w-full border rounded-2xl pl-12 pr-4 py-3 outline-none transition-all font-bold ${
-                      formData.isTimeUnknown
+                    className={`w-full border rounded-2xl pl-12 pr-4 py-3 outline-none transition-all font-bold ${formData.isTimeUnknown
                         ? 'bg-gray-100/50 dark:bg-slate-900/30 border-transparent text-gray-300 dark:text-slate-700 cursor-not-allowed'
                         : 'bg-white/50 dark:bg-slate-900/50 border-indigo-50 dark:border-slate-700 text-gray-800 dark:text-white focus:ring-2 focus:ring-indigo-500'
-                    }`}
+                      }`}
                     required={!formData.isTimeUnknown}
                   />
                 </div>
               </div>
             </div>
-            
-             {/* Birth City */}
-             <div>
-                <label className="block text-xs font-black text-indigo-500 uppercase tracking-wider mb-2 ml-1">
-                  {language === 'ko' ? '태어난 도시' : 'City of Birth'}
-                </label>
-                <CityInput
-                   name="birthCity"
-                   value={formData.birthCity || ''}
-                   language={language}
-                   onChange={handleChange}
-                   className=""
-                />
-             </div>
+
+            {/* Birth City */}
+            <div>
+              <label className="block text-xs font-black text-indigo-500 uppercase tracking-wider mb-2 ml-1">
+                {language === 'ko' ? '태어난 도시' : 'City of Birth'}
+              </label>
+              <CityInput
+                name="birthCity"
+                value={formData.birthCity || ''}
+                language={language}
+                onChange={handleChange}
+                className=""
+              />
+            </div>
           </div>
         </div>
 
@@ -306,7 +330,7 @@ export default function EditProfilePage() {
           </button>
         </div>
       </form>
-      
+
       {/* Consultant Apply Link */}
       {userData?.role === 'user' && (
         <button

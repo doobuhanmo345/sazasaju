@@ -1,4 +1,5 @@
 const { onCall, HttpsError } = require("firebase-functions/v2/https");
+const { onSchedule } = require("firebase-functions/v2/scheduler");
 const { setGlobalOptions } = require("firebase-functions/v2");
 const { defineSecret } = require('firebase-functions/params');
 const admin = require('firebase-admin');
@@ -45,6 +46,28 @@ exports.fetchGeminiAnalysis = onCall(
     } catch (error) {
       console.error('Gemini 서버 에러 상세:', error);
       throw new HttpsError('internal', error.message || 'AI 분석 중 알 수 없는 오류가 발생했습니다.');
+    }
+  }
+);
+
+/**
+ * 5분마다 실행되어 Gemini 인스턴스를 따뜻하게 유지하는 하트비트 함수입니다. (웜업 방식)
+ */
+exports.warmupGemini = onSchedule(
+  {
+    schedule: "every 5 minutes",
+    secrets: [GEMINI_API_KEY],
+    region: "asia-northeast3",
+  },
+  async (event) => {
+    try {
+      const genAI = new GoogleGenerativeAI(GEMINI_API_KEY.value());
+      const model = genAI.getGenerativeModel({ model: 'gemini-2.5-flash' });
+      // 아주 짧은 프롬프트를 보내 인스턴스를 활성화 상태로 유지합니다.
+      await model.generateContent("ping");
+      console.log('Gemini Warm-up successful');
+    } catch (error) {
+      console.error('Gemini Warm-up failed:', error);
     }
   }
 );

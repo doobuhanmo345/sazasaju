@@ -5,13 +5,11 @@ import TarotLoading from '@/app/tarot/TarotLoading';
 import AnalysisStepContainer from '@/components/AnalysisStepContainer';
 import { useAuthContext } from '@/contexts/useAuthContext';
 import { useUsageLimit } from '@/contexts/useUsageLimit';
-import { db } from '@/lib/firebase';
-import { setDoc, doc, increment } from 'firebase/firestore';
 import { useLoading } from '@/contexts/useLoadingContext';
-import { UI_TEXT } from '@/data/constants';
 import { useLanguage } from '@/contexts/useLanguageContext';
+import { UI_TEXT } from '@/data/constants';
 import { classNames } from '@/utils/helpers';
-import { fetchGeminiAnalysis } from '@/lib/gemini';
+import TarotAnalysisService, { TarotPresets } from '@/lib/TarotAnalysisService';
 import { TARO_CARDS } from '@/data/tarotConstants';
 import { BanknotesIcon, ChevronRightIcon } from '@heroicons/react/24/outline';
 import CreditIcon from '@/ui/CreditIcon';
@@ -40,20 +38,20 @@ export default function TarotMoneyPage() {
   const [selectedCategory, setSelectedCategory] = useState('');
 
   const moneyCategories = language === 'ko'
-      ? [
-          { id: 'business', label: '사업 및 장사운', icon: '💼' },
-          { id: 'investment', label: '주식 및 재테크', icon: '📈' },
-          { id: 'job', label: '취업 및 승진', icon: '🏆' },
-          { id: 'unexpected', label: '뜻밖의 횡재수', icon: '🎁' },
-          { id: 'general', label: '전반적인 흐름', icon: '💰' },
-        ]
-      : [
-          { id: 'business', label: 'Business Fortune', icon: '💼' },
-          { id: 'investment', label: 'Financial Management Fortune', icon: '📈' },
-          { id: 'job', label: 'Career Fortune', icon: '🏆' },
-          { id: 'unexpected', label: 'Unexpected windful', icon: '🎁' },
-          { id: 'general', label: 'General wealth flow', icon: '💰' },
-        ];
+    ? [
+      { id: 'business', label: '사업 및 장사운', icon: '💼' },
+      { id: 'investment', label: '주식 및 재테크', icon: '📈' },
+      { id: 'job', label: '취업 및 승진', icon: '🏆' },
+      { id: 'unexpected', label: '뜻밖의 횡재수', icon: '🎁' },
+      { id: 'general', label: '전반적인 흐름', icon: '💰' },
+    ]
+    : [
+      { id: 'business', label: 'Business Fortune', icon: '💼' },
+      { id: 'investment', label: 'Financial Management Fortune', icon: '📈' },
+      { id: 'job', label: 'Career Fortune', icon: '🏆' },
+      { id: 'unexpected', label: 'Unexpected windful', icon: '🎁' },
+      { id: 'general', label: 'General wealth flow', icon: '💰' },
+    ];
 
   const getMoneyDeck = () => {
     const pentacles = TARO_CARDS.filter((c) => c.suite === 'Pentacles');
@@ -62,9 +60,6 @@ export default function TarotMoneyPage() {
   };
 
   const handleCardPick = async (onStart, index) => {
-    if (!user) return alert(UI_TEXT.loginReq[language]);
-    const currentCount = userData?.editCount || 0;
-    if (currentCount >= MAX_EDIT_COUNT) return alert(UI_TEXT.limitReached[language]);
     const moneyDeck = getMoneyDeck();
     const pickedCard = moneyDeck[Math.floor(Math.random() * moneyDeck.length)];
     const categoryLabel = moneyCategories.find((c) => c.id === selectedCategory)?.label;
@@ -72,66 +67,25 @@ export default function TarotMoneyPage() {
     setFlippedIdx(index);
 
     setTimeout(async () => {
-      setLoading(true);
-      setLoadingType('tarot_money');
       setFlippedIdx(null);
 
+      const service = new TarotAnalysisService({
+        user,
+        userData,
+        language,
+        maxEditCount: MAX_EDIT_COUNT,
+        uiText: UI_TEXT,
+        setEditCount,
+        setLoading,
+        setLoadingType,
+        setAiResult,
+        onStart,
+      });
+
       try {
-        const moneyPrompt = `
-당신은 자산 관리 및 비즈니스 전문 타로 마스터입니다. 
-제공된 데이터를 바탕으로 경제적 통찰력이 담긴 정밀 재무 리포트를 작성하세요.
-반드시 아래의 **JSON 구조**로만 응답해야 합니다.
-
-### [데이터]
-- 분야: ${categoryLabel}
-- 카드: ${pickedCard.kor} (${pickedCard.name})
-- 키워드: ${pickedCard.keyword}
-
-### [JSON 구조 (필수)]
-{
-  "title": "${language === 'ko' ? '타로 금전운 리포트' : 'Financial Tarot Report'} - ${categoryLabel}",
-  "subTitle": "${categoryLabel} 분야 자금 흐름 분석",
-  "cardName": "${pickedCard.kor} (${pickedCard.name})",
-  "tags": ["#자금흐름", "#재무기회", "#리스크관리"],
-  "description": "이 카드가 암시하는 현재의 자금 흐름과 경제적 상황에 대한 본질적 의미를 분석하세요.",
-  "analysisTitle": "${categoryLabel} 맞춤 재무 전망",
-  "analysisList": [
-    "현재 분야(${categoryLabel})에서의 구체적인 재무 상황 진단",
-    "투자/지출/수입 등 타이밍에 대한 냉철한 분석",
-    "가장 주의해야 할 경제적 변수와 대응 방향"
-  ],
-  "adviceTitle": "자산 관리 전략 (Action Plan)",
-  "adviceList": [
-    "당장 실천해야 할 구체적인 경제적 행동 지침 1",
-    "당장 실천해야 할 구체적인 경제적 행동 지침 2",
-    "당장 실천해야 할 구체적인 경제적 행동 지침 3"
-  ],
-  "footerTags": ["#수익창출", "#지출통제", "#자산증식", "#재테크", "#안정권"]
-}
-
-### [절대 규칙]
-1. 마크다운(\`\`\`) 없이 순수 JSON 텍스트만 출력할 것.
-2. 한자(Hanja) 사용 금지.
-3. 답변 언어: ${language === 'ko' ? '한국어' : 'English'}. (JSON 키값은 영문 유지)
-4. 어조: 냉철하고 전문적인 자산 관리사의 어조를 유지하면서도 희망적인 포인트를 짚어줄 것.
-`;
-        const result = await fetchGeminiAnalysis(moneyPrompt);
-        const todayDate = await DateService.getTodayDate();
-
-        await setDoc(doc(db, 'users', user.uid), {
-            editCount: increment(1),
-            lastEditDate: todayDate,
-            dailyUsage: { [todayDate]: increment(1) },
-            usageHistory: { tarotMoney: { [todayDate]: { [categoryLabel]: increment(1) } } },
-          }, { merge: true });
-
-        setEditCount((prev) => prev + 1);
-        setAiResult(result);
-        onStart();
+        await service.analyze(TarotPresets.money({ pickedCard, categoryLabel }));
       } catch (e) {
-        alert(e.message);
-      } finally {
-        setLoading(false);
+        // Error is alerted in the service
       }
     }, 1000);
   };
@@ -153,7 +107,7 @@ export default function TarotMoneyPage() {
           <div className="m-auto my-3 max-w-sm rounded-2xl overflow-hidden shadow-sm border border-slate-100 dark:border-slate-800">
             <img src="/images/introcard/tarot_1.webp" alt="sazatalk" className="w-full h-auto" />
           </div>
-          <StartButton onClick={() => setStep('category')} color='amber'/>
+          <StartButton onClick={() => setStep('category')} color='amber' />
         </div>
       );
     }

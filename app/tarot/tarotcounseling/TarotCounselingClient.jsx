@@ -5,16 +5,14 @@ import AnalysisStepContainer from '@/components/AnalysisStepContainer';
 import ViewTarotResult from '@/app/tarot/ViewTarotResult';
 import { useAuthContext } from '@/contexts/useAuthContext';
 import { useUsageLimit } from '@/contexts/useUsageLimit';
-import { db } from '@/lib/firebase';
-import { setDoc, doc, increment } from 'firebase/firestore';
 import { useLoading } from '@/contexts/useLoadingContext';
-import { UI_TEXT } from '@/data/constants';
 import { useLanguage } from '@/contexts/useLanguageContext';
+import { UI_TEXT } from '@/data/constants';
 import { classNames } from '@/utils/helpers';
-import { fetchGeminiAnalysis } from '@/lib/gemini';
+import TarotAnalysisService, { TarotPresets } from '@/lib/TarotAnalysisService';
+import { DateService } from '@/utils/dateService';
 import CreditIcon from '@/ui/CreditIcon';
 import { TARO_CARDS } from '@/data/tarotConstants';
-import { DateService } from '@/utils/dateService';
 import {
   ChatBubbleLeftRightIcon,
   PencilSquareIcon,
@@ -45,71 +43,31 @@ export default function TarotCounselingPage() {
   const allCards = TARO_CARDS;
 
   const handleCardPick = async (onStart, index) => {
-    if (!user) return alert(UI_TEXT.loginReq[language]);
     if (!userQuestion.trim()) return alert('고민 내용을 입력해주세요.');
-    const currentCount = userData?.editCount || 0;
-    if (currentCount >= MAX_EDIT_COUNT) return alert(UI_TEXT.limitReached[language]);
 
     const pickedCard = allCards[Math.floor(Math.random() * allCards.length)];
     setCardPicked(pickedCard);
     setFlippedIdx(index);
     setTimeout(async () => {
-      setLoading(true);
-      setLoadingType('tarot_counseling');
       setFlippedIdx(null);
+
+      const service = new TarotAnalysisService({
+        user,
+        userData,
+        language,
+        maxEditCount: MAX_EDIT_COUNT,
+        uiText: UI_TEXT,
+        setEditCount,
+        setLoading,
+        setLoadingType,
+        setAiResult,
+        onStart,
+      });
+
       try {
-        const counselingPrompt = `
-당신은 공감 능력이 뛰어난 심리 상담가이자 타로 마스터입니다. 
-다음 데이터를 바탕으로 사용자의 마음을 어루만지는 심리 리포트를 작성하세요.
-반드시 아래의 **JSON 구조**로만 응답하세요.
-
-### [데이터]
-- 고민내용: ${userQuestion}
-- 카드: ${pickedCard.kor} (${pickedCard.name})
-- 키워드: ${pickedCard.keyword}
-
-### [JSON 구조 (필수)]
-{
-  "title": "${language === 'ko' ? '마음 상담 리포트' : 'Psychological Report'}",
-  "subTitle": "${userQuestion}",
-  "cardName": "${pickedCard.kor} (${pickedCard.name})",
-  "tags": ["#힐링", "#공감", "#마음챙김"],
-  "description": "선택된 카드(${pickedCard.kor})가 현재 사용자의 내면 상태에 대해 들려주는 따뜻한 메시지를 작성하세요.",
-  "analysisTitle": "현재 상황 분석 (Deep Counseling)",
-  "analysisList": [
-    "사용자의 고민 상황에 깊이 공감하는 내용",
-    "카드의 상징을 통해 본 현재 심리적 어려움 분석",
-    "변화를 위해 내면에서 찾아야 할 긍정적인 통찰"
-  ],
-  "adviceTitle": "마음을 위한 실천 지침 (Healing Plan)",
-  "adviceList": [
-    "오늘 바로 실천할 수 있는 마음 회복 행동 1",
-    "오늘 바로 실천할 수 있는 마음 회복 행동 2",
-    "오늘 바로 실천할 수 있는 마음 회복 행동 3"
-  ],
-  "footerTags": ["#자존감", "#회복", "#안정", "#위로", "#희망"]
-}
-
-### [규칙]
-1. 마크다운(\`\`\`) 없이 순수 JSON 텍스트만 출력.
-2. 한자 사용 금지, 어조는 매우 다정하고 전문적이어야 함.
-3. 답변 언어: ${language === 'ko' ? '한국어' : 'English'}.
-`;
-        const result = await fetchGeminiAnalysis(counselingPrompt);
-        const todayDate = await DateService.getTodayDate();
-        await setDoc(doc(db, 'users', user.uid), {
-            editCount: increment(1),
-            lastEditDate: todayDate,
-            dailyUsage: { [todayDate]: increment(1) },
-            usageHistory: { tarotCounseling: { [todayDate]: { [userQuestion]: increment(1) } } },
-          }, { merge: true });
-        setEditCount((prev) => prev + 1);
-        setAiResult(result);
-        onStart();
+        await service.analyze(TarotPresets.counseling({ pickedCard, userQuestion }));
       } catch (e) {
-        alert(e.message);
-      } finally {
-        setLoading(false);
+        // Error is alerted in the service
       }
     }, 1000);
   };
@@ -129,7 +87,7 @@ export default function TarotCounselingPage() {
           <div className="m-auto my-3 max-w-sm rounded-2xl overflow-hidden shadow-sm border border-slate-100 dark:border-slate-800">
             <img src="/images/introcard/tarot_1.webp" alt="sazatalk" className="w-full h-auto" />
           </div>
-          <StartButton onClick={() => setStep('input')} color='purple'/>
+          <StartButton onClick={() => setStep('input')} color='purple' />
         </div>
       );
     }
@@ -164,7 +122,7 @@ export default function TarotCounselingPage() {
               style={{ transformStyle: 'preserve-3d' }}>
               <div className="w-full h-full transition-transform duration-700 shadow-xl rounded-md relative" style={{ transformStyle: 'preserve-3d', transform: flippedIdx === i ? 'rotateY(180deg)' : 'rotateY(0deg)' }}>
                 <div className="absolute inset-0 w-full h-full z-10 [backface-visibility:hidden]" style={{ backfaceVisibility: 'hidden', WebkitBackfaceVisibility: 'hidden' }}>
-                    <img src="/images/tarot/cardback.png" alt="tarot card" className="w-full h-full object-cover rounded-md border border-white/10" />
+                  <img src="/images/tarot/cardback.png" alt="tarot card" className="w-full h-full object-cover rounded-md border border-white/10" />
                 </div>
                 <div className="absolute inset-0 w-full h-full z-20 bg-white dark:bg-slate-800 flex items-center justify-center rounded-md overflow-hidden" style={{ backfaceVisibility: 'hidden', WebkitBackfaceVisibility: 'hidden', transform: 'rotateY(180deg)' }}>
                   {cardPicked && <img src={`/images/tarot/${cardPicked.id}.jpg`} alt={cardPicked.kor} className="w-full h-full object-cover" />}
