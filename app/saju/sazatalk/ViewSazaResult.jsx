@@ -53,7 +53,7 @@ export default function ViewSazaResult({ userQuestion, onReset, aiResultOverride
   };
 
   if (loading) return <>로딩중</>;
-  
+
   return (
     <div ref={scrollElRef} className="max-w-lg m-auto p-4 space-y-6">
       {/* User Question (Right-aligned bubble) */}
@@ -99,14 +99,14 @@ export default function ViewSazaResult({ userQuestion, onReset, aiResultOverride
 
         {/* Utility buttons (copy / save) */}
         <div className="flex items-center gap-2 mt-2 ml-1">
-          <button 
+          <button
             onClick={handleCopy}
             className="flex items-center gap-1 text-[10px] sm:text-xs text-slate-400 hover:text-slate-600 transition-colors px-2 py-1 rounded-md hover:bg-slate-100 dark:hover:bg-slate-800"
           >
             <ClipboardDocumentIcon className="w-3 h-3 sm:w-4 sm:h-4" />
             {language === 'ko' ? '텍스트 복사' : 'Copy Text'}
           </button>
-          <button 
+          <button
             onClick={handleCapture}
             className="flex items-center gap-1 text-[10px] sm:text-xs text-slate-400 hover:text-slate-600 transition-colors px-2 py-1 rounded-md hover:bg-slate-100 dark:hover:bg-slate-800"
           >
@@ -115,7 +115,7 @@ export default function ViewSazaResult({ userQuestion, onReset, aiResultOverride
           </button>
         </div>
       </div>
-      
+
       {!hideButtons && (
         <div className="flex flex-col gap-2 pt-6">
           <button
@@ -125,7 +125,7 @@ export default function ViewSazaResult({ userQuestion, onReset, aiResultOverride
             <PlusIcon className="w-5 h-5" />
             {language === 'en' ? 'Ask another question' : '다른 질문하기'}
           </button>
-  
+
           <p className="text-[11px] text-slate-400 text-center font-medium">
             {language === 'en'
               ? 'Enter a new question to restart the Saju analysis.'
@@ -133,7 +133,7 @@ export default function ViewSazaResult({ userQuestion, onReset, aiResultOverride
           </p>
         </div>
       )}
-      
+
       {/* Style injection */}
       <div dangerouslySetInnerHTML={{ __html: aiSajuStyle }} />
     </div>

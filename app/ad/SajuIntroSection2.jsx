@@ -23,7 +23,7 @@ const SajuIntroSection2 = ({ language, setStep }) => {
     children.forEach((child) => observer.observe(child));
 
     return () => observer.disconnect();
-  }, []);
+  }, [language]);
 
   return (
     <div
@@ -33,9 +33,8 @@ const SajuIntroSection2 = ({ language, setStep }) => {
       {/* SECTION 1 */}
       <div
         id="item1"
-        className={`scroll-item transition-all duration-1000 transform ${
-          visibleItems.item1 ? 'translate-y-0 opacity-100' : 'translate-y-20 opacity-0'
-        }`}
+        className={`scroll-item transition-all duration-1000 transform ${visibleItems.item1 ? 'translate-y-0 opacity-100' : 'translate-y-20 opacity-0'
+          }`}
       >
         <p className="text-indigo-600 font-black text-[11px] tracking-[0.3em] uppercase mb-4">
           Ancient Logic meets Modern Tech
@@ -103,9 +102,8 @@ const SajuIntroSection2 = ({ language, setStep }) => {
           <div
             key={card.id}
             id={card.id}
-            className={`scroll-item flex flex-col gap-6 transition-all duration-1000 transform ${
-              visibleItems[card.id] ? 'translate-x-0 opacity-100' : '-translate-x-20 opacity-0'
-            }`}
+            className={`scroll-item flex flex-col gap-6 transition-all duration-1000 transform ${visibleItems[card.id] ? 'translate-x-0 opacity-100' : '-translate-x-20 opacity-0'
+              }`}
           >
             <div
               className={`w-20 h-20 ${card.bg} rounded-[32px] flex items-center justify-center text-4xl shadow-inner`}
@@ -123,9 +121,8 @@ const SajuIntroSection2 = ({ language, setStep }) => {
       {/* SECTION 4 */}
       <div
         id="item7"
-        className={`scroll-item text-center space-y-8 transition-all duration-1000 ${
-          visibleItems.item7 ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'
-        }`}
+        className={`scroll-item text-center space-y-8 transition-all duration-1000 ${visibleItems.item7 ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'
+          }`}
       >
         <p className="text-slate-400 font-bold text-sm tracking-tighter italic px-4">
           {language === 'ko'

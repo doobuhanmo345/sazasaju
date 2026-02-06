@@ -1,4 +1,17 @@
+dependencyResolutionManagement {
+    // FAIL_ON_PROJECT_REPOS 대신 PREFER_SETTINGS를 사용합니다.
+    // 이렇게 하면 개별 파일에 저장소 설정이 있어도 에러를 내지 않고 settings 설정을 우선해서 씁니다.
+    repositoriesMode.set(RepositoriesMode.PREFER_SETTINGS) 
+    repositories {
+        google()
+        mavenCentral()
+        maven { url "https://devrepo.kakao.com/nexus/content/groups/public/" }
+    }
+}
+// 2. 프로젝트 구성
+rootProject.name = 'android'
 include ':app'
+include ':capacitor-android'
 include ':capacitor-cordova-android-plugins'
 project(':capacitor-cordova-android-plugins').projectDir = new File('./capacitor-cordova-android-plugins/')
 

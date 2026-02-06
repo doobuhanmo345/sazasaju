@@ -88,7 +88,8 @@ export default function EditProfilePage() {
     setIsSaving(true);
 
     try {
-      const todayDate = await DateService.getTodayDate();
+      // 불필요한 네트워크 fetch 제거하여 저장 속도 개선
+      const todayDate = new Date().toISOString();
       const updateData = {
         displayName: formData.displayName,
         birthDate: `${formData.birthDate}T${effectiveTime}`,
@@ -100,7 +101,7 @@ export default function EditProfilePage() {
       };
 
       await updateProfileData(updateData);
-      alert(language === 'ko' ? '프로필이 저장되었습니다.' : 'Profile saved successfully.');
+      // alert 대신 즉시 뒤로가기 수행 (사용자 체감 속도 향상)
       router.back();
     } catch (error) {
       console.error('Save failed:', error);
@@ -201,8 +202,8 @@ export default function EditProfilePage() {
                     type="button"
                     onClick={() => setFormData((prev) => ({ ...prev, gender: g }))}
                     className={`flex-1 py-2.5 rounded-xl text-sm transition-all ${formData.gender === g
-                        ? 'bg-white dark:bg-slate-700 text-indigo-600 dark:text-indigo-300 shadow-sm'
-                        : 'text-gray-400 hover:text-gray-600 dark:hover:text-gray-200'
+                      ? 'bg-white dark:bg-slate-700 text-indigo-600 dark:text-indigo-300 shadow-sm'
+                      : 'text-gray-400 hover:text-gray-600 dark:hover:text-gray-200'
                       }`}
                   >
                     {g === 'male'
@@ -280,8 +281,8 @@ export default function EditProfilePage() {
                     onChange={handleChange}
                     disabled={formData.isTimeUnknown}
                     className={`w-full border rounded-2xl pl-12 pr-4 py-3 outline-none transition-all font-bold ${formData.isTimeUnknown
-                        ? 'bg-gray-100/50 dark:bg-slate-900/30 border-transparent text-gray-300 dark:text-slate-700 cursor-not-allowed'
-                        : 'bg-white/50 dark:bg-slate-900/50 border-indigo-50 dark:border-slate-700 text-gray-800 dark:text-white focus:ring-2 focus:ring-indigo-500'
+                      ? 'bg-gray-100/50 dark:bg-slate-900/30 border-transparent text-gray-300 dark:text-slate-700 cursor-not-allowed'
+                      : 'bg-white/50 dark:bg-slate-900/50 border-indigo-50 dark:border-slate-700 text-gray-800 dark:text-white focus:ring-2 focus:ring-indigo-500'
                       }`}
                     required={!formData.isTimeUnknown}
                   />

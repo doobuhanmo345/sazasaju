@@ -22,8 +22,6 @@ import { useLanguage } from '@/contexts/useLanguageContext';
 import { useAuthContext } from '@/contexts/useAuthContext';
 import { useUsageLimit } from '@/contexts/useUsageLimit';
 import NotificationList from '@/components/NotificationList';
-import useContactModal from '@/hooks/useContactModal';
-import ContactModal from '@/components/ContactModal';
 
 
 const MAIN_MENUS = [
@@ -43,8 +41,7 @@ const UTILITY_ITEMS = [
 
 export default function NavBar() {
   const { language, setLanguage } = useLanguage();
-  const { user, logout, userData, isCookieDone, openLoginModal } = useAuthContext();
-  const { isContactModalOpen, handleCloseContact, handleShowContact } = useContactModal();
+  const { user, logout, userData, isCookieDone, openLoginModal, openContactModal } = useAuthContext();
 
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
@@ -76,8 +73,8 @@ export default function NavBar() {
   };
 
   const handleUtilityClick = (item) => {
-    if (item.action === 'SHOW_CONTACT_MODAL' && handleShowContact) {
-      handleShowContact();
+    if (item.action === 'SHOW_CONTACT_MODAL' && openContactModal) {
+      openContactModal();
     }
     setIsMenuOpen(false);
   };
@@ -104,11 +101,8 @@ export default function NavBar() {
     : (language === 'ko' ? '/assets/Logo_Kor.png' : '/assets/Logo_Eng.png');
 
   return (
-    <div className='flex items-center justify-center w-full relative z-50 px-4 sticky top-0 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md transition-all border-b border-transparent data-[scrolled=true]:border-slate-100 select-none'>
+    <div className='flex items-center justify-center w-full relative z-50 px-4 pt-7 sm:pt-0 sticky top-0 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md transition-all border-b border-transparent data-[scrolled=true]:border-slate-100 select-none'>
       <div className="flex w-full items-center justify-between py-3 max-w-xl m-auto ">
-        {isContactModalOpen && (
-          <ContactModal onClose={handleCloseContact} email="doobuhanmo3@gmail.com" />
-        )}
 
         {/* [Left] Logo or Back Button */}
         <div

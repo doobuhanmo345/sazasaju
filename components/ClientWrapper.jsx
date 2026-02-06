@@ -11,6 +11,7 @@ import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import MenuBar from '@/components/MenuBar';
 import LoginModal from '@/components/LoginModal';
+import ContactModal from '@/components/ContactModal';
 import CreditModal from '@/components/CreditModal';
 import { useUsageLimit } from '@/contexts/useUsageLimit';
 import { useLanguage } from '@/contexts/useLanguageContext';
@@ -20,7 +21,7 @@ import { NativeBridge } from '@/utils/nativeBridge';
 export default function ClientWrapper({ children }) {
   const pathname = usePathname();
   const router = useRouter();
-  const { user, userData, loadingUser, isLoggingIn, cancelLogin, isLoginModalOpen, closeLoginModal } = useAuthContext();
+  const { user, userData, loadingUser, isLoggingIn, cancelLogin, isLoginModalOpen, closeLoginModal, isContactModalOpen, closeContactModal } = useAuthContext();
   const { editCount, MAX_EDIT_COUNT } = useUsageLimit();
   const { language } = useLanguage();
   const [showCreditModal, setShowCreditModal] = useState(true);
@@ -76,7 +77,14 @@ export default function ClientWrapper({ children }) {
     );
 
     if (user && userData && !userData.birthDate && !isExempt) {
-      router.push('/nobirthday');
+      // 데이터가 실제 없는지 확인하기 위해 아주 짧은 지연 후 리다이렉트 (깜빡임 방지)
+      const timer = setTimeout(() => {
+        if (!userData.birthDate) {
+          console.log('Redirecting to nobirthday: User data exists but birthDate is missing.');
+          router.push('/nobirthday');
+        }
+      }, 500);
+      return () => clearTimeout(timer);
     }
   }, [user, userData, loadingUser, pathname, router]);
 
@@ -104,6 +112,13 @@ export default function ClientWrapper({ children }) {
         isOpen={isLoginModalOpen}
         onClose={closeLoginModal}
       />
+
+      {isContactModalOpen && (
+        <ContactModal
+          onClose={closeContactModal}
+          email="doobuhanmo3@gmail.com"
+        />
+      )}
 
       <main className={!isSpecialPath ? "min-h-screen" : "min-h-screen"}>
         {children}

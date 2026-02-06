@@ -43,13 +43,19 @@ export default function NoBirthdayPage() {
 
   const [step, setStep] = useState(1);
   const [isIntro, setIsIntro] = useState(true);
-  const [introStep, setIntroStep] = useState(0); 
+  const [introStep, setIntroStep] = useState(0);
   const [nameConfirmed, setNameConfirmed] = useState(false);
   const [isWelcome, setIsWelcome] = useState(false);
 
 
   // Intro transition timers
   useEffect(() => {
+    // 만약 이미 정보가 있는 상태라면 인트로를 보여주지 않음
+    if (userData?.birthDate) {
+      setIsIntro(false);
+      return;
+    }
+
     if (isIntro) {
       const timers = [
         setTimeout(() => setIntroStep(1), 100),
@@ -61,36 +67,36 @@ export default function NoBirthdayPage() {
         setTimeout(() => setIntroStep(7), 1300),
         setTimeout(() => setIntroStep(8), 1500),
       ];
-      
+
       const finishTimer = setTimeout(() => {
         setIsIntro(false);
       }, 3000);
-      
+
       return () => {
         timers.forEach(clearTimeout);
         clearTimeout(finishTimer);
       };
     }
-  }, [isIntro]);
+  }, [isIntro, userData?.birthDate]);
 
   // Auto-advance steps
   useEffect(() => {
     if (isIntro || isWelcome) return;
-    
+
     let nextStep = 1;
     if (formData.displayName.trim().length > 0 && nameConfirmed) nextStep = 2;
     if (nextStep === 2 && formData.gender) nextStep = 3;
     if (nextStep === 3 && formData.birthDate) nextStep = 4;
-    
+
     const isTimeDone = formData.isTimeUnknown || formData.birthTime;
     if (nextStep === 4 && isTimeDone) nextStep = 5;
-    
+
     if (nextStep === 5 && formData.birthCity) nextStep = 6;
-    
+
     setStep(nextStep);
   }, [formData, nameConfirmed, isIntro, isWelcome]);
 
-  const isFormValid = 
+  const isFormValid =
     formData.displayName.trim().length > 0 &&
     formData.birthDate &&
     (formData.isTimeUnknown || formData.birthTime) &&
@@ -98,19 +104,18 @@ export default function NoBirthdayPage() {
 
   const [isSubmitted, setIsSubmitted] = useState(false);
 
- useEffect(() => {
-    if (isWelcome||userData?.birthDate) {
-   
-      
+  useEffect(() => {
+    if (isWelcome) {
       const finishTimer = setTimeout(() => {
         setIsWelcome(false);
-        router.push('/')
+        router.push('/');
       }, 2000);
-      
-     
+      return () => clearTimeout(finishTimer);
+    } else if (userData?.birthDate && !isIntro) {
+      // 이미 정보가 있다면 즉시 메인으로 리다이렉트
+      router.push('/');
     }
-    
-  }, [isWelcome]);
+  }, [isWelcome, userData?.birthDate, isIntro, router]);
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!formData.birthDate || !formData.gender) {
@@ -132,29 +137,29 @@ export default function NoBirthdayPage() {
       };
 
       setIsWelcome(true);
-      
+
       // Run animation and save in parallel
       // Ensures we wait AT LEAST 3 seconds, but also don't redirect until save finishes
       await Promise.all([
         new Promise(resolve => setTimeout(resolve, 3000)),
         updateProfileData(updateData)
       ]);
-      
+
       setIsSubmitted(true);
-      
+
     } catch (error) {
       console.error('Save failed:', error);
       setIsWelcome(false);
       alert(language === 'ko' ? '저장 중 오류가 발생했습니다.' : 'Error saving details.');
       setIsSaving(false);
-    } 
+    }
     // Do not set isSaving(false) on success to prevent button re-enable during redirect
   };
 
   const progress = Math.min(((step - 1) / 5) * 100, 100);
 
   const getStepDirection = () => {
-    switch(step) {
+    switch (step) {
       case 1: return language === 'ko' ? '이름을 알려주세요' : 'Tell me your name';
       case 2: return language === 'ko' ? '성별을 선택해 주세요' : 'Select your gender';
       case 3: return language === 'ko' ? '태어난 날짜를 입력해 주세요' : 'Enter your birth date';
@@ -200,7 +205,7 @@ export default function NoBirthdayPage() {
               <div className={`${lineClass} ${getVisible(5)} text-indigo-500/80 dark:text-indigo-400/80 font-bold`}>
                 {language === 'ko' ? '반갑습니다.' : 'It is nice to meet you.'}
               </div>
-              
+
               <div className="pt-4 flex flex-col items-end space-y-1">
                 <div className={`${lineClass} ${getVisible(6)}`}>
                   {language === 'ko' ? '당신의' : 'Please enter the'}
@@ -234,7 +239,7 @@ export default function NoBirthdayPage() {
               {language === 'ko' ? '환영합니다!' : 'Welcome!'}
             </h2>
           </div>
-          
+
           <div className="animate-in fade-in slide-in-from-bottom-8 duration-1000 delay-[500ms] fill-mode-both ease-out">
             <p className="text-xl sm:text-2xl text-slate-500 dark:text-slate-400 font-medium">
               {language === 'ko' ? (
@@ -252,11 +257,11 @@ export default function NoBirthdayPage() {
           </div>
 
           <div className="animate-in fade-in duration-1000 delay-[1500ms] fill-mode-both">
-             <div className="flex justify-center gap-1">
-                {[0, 1, 2].map(i => (
-                  <div key={i} className={`w-1.5 h-1.5 rounded-full bg-indigo-500/30 animate-bounce`} style={{ animationDelay: `${i * 150}ms` }} />
-                ))}
-             </div>
+            <div className="flex justify-center gap-1">
+              {[0, 1, 2].map(i => (
+                <div key={i} className={`w-1.5 h-1.5 rounded-full bg-indigo-500/30 animate-bounce`} style={{ animationDelay: `${i * 150}ms` }} />
+              ))}
+            </div>
           </div>
         </div>
       </div>
@@ -268,21 +273,21 @@ export default function NoBirthdayPage() {
       {/* Progress Header */}
       <div className="fixed top-0 left-0 w-full z-50">
         <div className="w-full h-1 bg-slate-50 dark:bg-slate-900">
-          <div 
+          <div
             className="h-full bg-indigo-500 transition-all duration-1000 ease-in-out"
             style={{ width: `${progress}%` }}
           />
         </div>
         <div className="px-6 py-4 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 bg-white/50 dark:bg-slate-950/50 backdrop-blur-xl border-b border-slate-100 dark:border-white/5">
-           <div key={step} className="animate-in fade-in slide-in-from-left-4 duration-500">
-             <span className="text-sm font-bold text-slate-900 dark:text-white flex items-center gap-2">
-               <span className="w-2 h-2 rounded-full bg-indigo-500" />
-               {getStepDirection()}
-             </span>
-           </div>
-           <span className="text-[10px] font-black text-slate-400 dark:text-slate-500 tracking-[0.2em] uppercase">
+          <div key={step} className="animate-in fade-in slide-in-from-left-4 duration-500">
+            <span className="text-sm font-bold text-slate-900 dark:text-white flex items-center gap-2">
+              <span className="w-2 h-2 rounded-full bg-indigo-500" />
+              {getStepDirection()}
+            </span>
+          </div>
+          <span className="text-[10px] font-black text-slate-400 dark:text-slate-500 tracking-[0.2em] uppercase">
             {Math.round(progress)}% COMPLETE — {step} / 6
-           </span>
+          </span>
         </div>
       </div>
 
@@ -291,7 +296,7 @@ export default function NoBirthdayPage() {
 
       <div className={`${containerClass} animate-in fade-in slide-in-from-bottom-12 duration-1000`}>
         <form onSubmit={handleSubmit} className="">
-          
+
           <div className="space-y-4 pb-12">
             <header className="px-1 border-b border-slate-100 dark:border-slate-800 pb-2">
               <div className="flex items-baseline gap-3">
@@ -319,18 +324,17 @@ export default function NoBirthdayPage() {
                   type="button"
                   onClick={() => setNameConfirmed(true)}
                   disabled={formData.displayName.trim().length === 0 || nameConfirmed}
-                  className={`px-6 py-3 rounded-full text-xs font-black tracking-widest transition-all ${
-                    nameConfirmed 
-                      ? 'bg-indigo-50 text-indigo-500 dark:bg-indigo-900/30' 
-                      : formData.displayName.trim().length > 0 
-                        ? 'bg-indigo-600 text-white shadow-lg active:scale-95' 
-                        : 'bg-slate-100 text-slate-300 dark:bg-slate-900 cursor-not-allowed'
-                  }`}
+                  className={`px-6 py-3 rounded-full text-xs font-black tracking-widest transition-all ${nameConfirmed
+                    ? 'bg-indigo-50 text-indigo-500 dark:bg-indigo-900/30'
+                    : formData.displayName.trim().length > 0
+                      ? 'bg-indigo-600 text-white shadow-lg active:scale-95'
+                      : 'bg-slate-100 text-slate-300 dark:bg-slate-900 cursor-not-allowed'
+                    }`}
                 >
                   {nameConfirmed ? (
                     <div className="flex items-center gap-2">
-                       <CheckIcon className="w-4 h-4" />
-                       {language === 'ko' ? '확인됨' : 'CONFIRMED'}
+                      <CheckIcon className="w-4 h-4" />
+                      {language === 'ko' ? '확인됨' : 'CONFIRMED'}
                     </div>
                   ) : (
                     language === 'ko' ? '확인' : 'CONFIRM'
@@ -362,14 +366,12 @@ export default function NoBirthdayPage() {
                       onClick={() => setFormData((prev) => ({ ...prev, gender: g }))}
                       className={`relative flex items-center gap-2 group transition-all`}
                     >
-                      <div className={`w-5 h-5 rounded-full border flex items-center justify-center transition-all ${
-                        formData.gender === g ? 'border-indigo-500 bg-indigo-500' : 'border-slate-300 dark:border-slate-700'
-                      }`}>
-                          {formData.gender === g && <div className="w-2 h-2 rounded-full bg-white" />}
+                      <div className={`w-5 h-5 rounded-full border flex items-center justify-center transition-all ${formData.gender === g ? 'border-indigo-500 bg-indigo-500' : 'border-slate-300 dark:border-slate-700'
+                        }`}>
+                        {formData.gender === g && <div className="w-2 h-2 rounded-full bg-white" />}
                       </div>
-                      <span className={`text-sm font-bold transition-colors ${
-                        formData.gender === g ? 'text-indigo-600 dark:text-indigo-400' : 'text-slate-400 group-hover:text-slate-600'
-                      }`}>
+                      <span className={`text-sm font-bold transition-colors ${formData.gender === g ? 'text-indigo-600 dark:text-indigo-400' : 'text-slate-400 group-hover:text-slate-600'
+                        }`}>
                         {g === 'male' ? (language === 'ko' ? '남성' : 'Male') : (language === 'ko' ? '여성' : 'Female')}
                       </span>
                     </button>
@@ -438,11 +440,10 @@ export default function NoBirthdayPage() {
                   value={formData.birthTime}
                   onChange={handleChange}
                   disabled={formData.isTimeUnknown}
-                  className={`w-full bg-transparent border-b rounded-none px-1 py-3 outline-none transition-all font-bold text-lg ${
-                    formData.isTimeUnknown
-                      ? 'border-transparent text-slate-200 dark:text-slate-800 cursor-not-allowed'
-                      : 'border-slate-200 dark:border-slate-800 text-slate-800 dark:text-white focus:border-indigo-500/50'
-                  }`}
+                  className={`w-full bg-transparent border-b rounded-none px-1 py-3 outline-none transition-all font-bold text-lg ${formData.isTimeUnknown
+                    ? 'border-transparent text-slate-200 dark:text-slate-800 cursor-not-allowed'
+                    : 'border-slate-200 dark:border-slate-800 text-slate-800 dark:text-white focus:border-indigo-500/50'
+                    }`}
                   required={!formData.isTimeUnknown}
                 />
               </div>
@@ -491,11 +492,10 @@ export default function NoBirthdayPage() {
                 <button
                   type="submit"
                   disabled={!isFormValid || isSaving}
-                  className={`w-full py-5 rounded-xl font-black text-sm uppercase tracking-[0.3em] transition-all active:scale-[0.98] shadow-2xl ${
-                    !isFormValid || isSaving
-                      ? 'bg-slate-100 dark:bg-slate-900 text-slate-300 dark:text-slate-700 cursor-not-allowed shadow-none'
-                      : 'bg-slate-900 dark:bg-white text-white dark:text-slate-900 hover:bg-black dark:hover:bg-slate-100'
-                  }`}
+                  className={`w-full py-5 rounded-xl font-black text-sm uppercase tracking-[0.3em] transition-all active:scale-[0.98] shadow-2xl ${!isFormValid || isSaving
+                    ? 'bg-slate-100 dark:bg-slate-900 text-slate-300 dark:text-slate-700 cursor-not-allowed shadow-none'
+                    : 'bg-slate-900 dark:bg-white text-white dark:text-slate-900 hover:bg-black dark:hover:bg-slate-100'
+                    }`}
                 >
                   {isSaving ? (
                     <div className="w-5 h-5 border-2 border-slate-400 border-t-transparent rounded-full animate-spin mx-auto" />

@@ -74,13 +74,17 @@ export const NativeBridge = {
     }
 
     try {
-      // Dynamic import to avoid errors on web
-      const { KakaoLogin } = await import('capacitor-kakao-plugin');
-      
-      // Initialize if needed (check plugin docs, usually automatic via config)
-      // await KakaoLogin.initializeKakao({ appKey: "..." });
+      // registerPlugin을 통해 직접 플러그인 객체 획득
+      const plugin = registerPlugin('CapacitorKakao');
 
-      const result = await KakaoLogin.kakaoLogin();
+      if (!plugin) {
+        throw new Error('Kakao plugin not found');
+      }
+
+      // Initialize if needed (check plugin docs, usually automatic via config)
+      // await CapacitorKakao.initializeKakao({ appKey: "..." });
+
+      const result = await plugin.kakaoLogin();
       // Result structure depends on plugin, usually returns accessToken
       return result;
     } catch (err) {

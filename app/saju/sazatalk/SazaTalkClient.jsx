@@ -330,7 +330,7 @@ function SazaTalkContent() {
           />
         )}
         {step === 'intro' ? (
-          <div className="max-w-lg mx-auto text-center px-6 animate-in fade-in slide-in-from-bottom-5 duration-700">
+          <div className="max-w-lg mx-auto p-3 text-center px-6 animate-in fade-in slide-in-from-bottom-5 duration-700">
             {/* Expert badge */}
             <div className="flex justify-center mb-3">
               <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-violet-50 dark:bg-violet-900/20 border border-violet-100 dark:border-violet-800 shadow-sm">
@@ -417,7 +417,7 @@ function SazaTalkContent() {
         ) : (
           <div className="animate-in slide-in-from-bottom duration-500">
 
-            <div className=" max-w-lg mx-auto">
+            <div className=" max-w-lg mx-auto px-3 pt-6">
               <div className="text-center">
                 <div className="flex justify-center mb-3">
                   <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-violet-50 dark:bg-violet-900/20 border border-violet-100 dark:border-violet-800 shadow-sm">
@@ -623,12 +623,10 @@ function SazaTalkContent() {
     );
   };
 
-  // Scroll to top when loading starts
+  // Scroll to top when loading starts or step changes
   useEffect(() => {
-    if (loading) {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
-  }, [loading]);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, [loading, step]);
 
   return (
     <AnalysisStepContainer

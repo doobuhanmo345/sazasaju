@@ -1,10 +1,10 @@
 buildscript {
-    
     ext {
-        compileSdkVersion = 35
-        targetSdkVersion = 35
+        compileSdkVersion = 36 // 35 -> 36으로 변경
+        targetSdkVersion = 36  // 35 -> 36으로 변경
         minSdkVersion = 24
-        androidxAppCompatVersion = '1.6.1'
+        javaVersion = JavaVersion.VERSION_21 // 17 -> 21로 변경 (이미 설치하신 버전)
+        androidxAppCompatVersion = '1.7.0' // 에러 메시지에 감지된 버전과 맞춤
         androidxCoordinatorLayoutVersion = '1.2.0'
         coreSplashScreenVersion = '1.0.1'
         androidxJunitVersion = '1.1.5'
@@ -12,37 +12,26 @@ buildscript {
         junitVersion = '4.13.2'
         kotlinVersion = '2.1.0'
     }
-    
-    repositories {
+ repositories {
         google()
         mavenCentral()
     }
-    
-dependencies {
-    // 8.13.2 -> 8.2.2 또는 8.5.0으로 변경
-    classpath 'com.android.tools.build:gradle:8.2.2' 
-    classpath 'com.google.gms:google-services:4.4.0'
-    classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
-}
-}
-allprojects {
-    repositories {
-        google()
-        mavenCentral()
-    }
-    
-    configurations.all {
-        resolutionStrategy {
-            force 'androidx.core:core:1.12.0'
-            force 'androidx.core:core-ktx:1.12.0'
-            force 'androidx.activity:activity:1.8.2'
-            force 'androidx.activity:activity-ktx:1.8.2'
-            // 아래 줄을 추가해서 문제가 되는 라이브러리 버전을 꼬이지 않게 강제합니다.
-            force 'androidx.lifecycle:lifecycle-process:2.6.1' 
-            force 'androidx.lifecycle:lifecycle-runtime-ktx:2.6.1'
-        }
+    dependencies {
+        // 8.7.0 -> 8.9.1로 상향 (SDK 36 지원을 위해 필수)
+        classpath 'com.android.tools.build:gradle:8.9.1' 
+        classpath 'com.google.gms:google-services:4.4.2'
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
     }
 }
+
+// allprojects {
+//     repositories {
+//         google()
+//         mavenCentral()
+//         // 카카오 SDK 저장소 누락 주의
+//         maven { url 'https://devrepo.kakao.com/nexus/content/groups/public/' }
+//     }
+// }
 
 task clean(type: Delete) {
     delete rootProject.buildDir

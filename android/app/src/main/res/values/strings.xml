@@ -4,4 +4,7 @@
     <string name="title_activity_main">sazasaju</string>
     <string name="package_name">com.your.package.name</string>
     <string name="custom_url_scheme">com.your.package.name</string>
+    <string name="kakao_app_key">a3881d152093a032f1236a0ca8aa1134</string>
+    <string name="kakao_scheme">kakaoa3881d152093a032f1236a0ca8aa1134</string>
+    <string name="kakaolink_host">kakaolink</string>
 </resources>

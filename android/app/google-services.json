@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "680410565024-4h9etpfk2qktsqvt3l4t7j8a16kuu2jr.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.sazasaju.app",
+            "certificate_hash": "49ed9995bef794f418a79206fe87b7aca8352ffe"
+          }
+        },
+        {
           "client_id": "680410565024-o2s75du508jtpuqpbh235bdljmbi9m5e.apps.googleusercontent.com",
           "client_type": 3
         }

@@ -22,7 +22,7 @@ export function AuthContextProvider({ children }) {
   const [user, setUser] = useState(null);
   const [userData, setUserData] = useState(null); // Main User Data (Firebase sync)
   const [loadingUser, setLoadingUser] = useState(true);
-  
+
   // Multi-Profile State
   const [savedProfiles, setSavedProfiles] = useState([]);
   const [selectedProfile, setSelectedProfile] = useState(null); // Currently Active Profile (User or Friend)
@@ -32,28 +32,39 @@ export function AuthContextProvider({ children }) {
 
   // userData 로드 시 selectedProfile 초기화 (기존 유저는 본인이 기본값)
   useEffect(() => {
-    if (userData && !selectedProfile) {
+    if (!userData) return;
+
+    // 1. 최초 초기화: 선택된 프로필이 없고 userData가 처음 로드되었을 때
+    if (!selectedProfile) {
+      // 로컬 스토리지에서 복원하려는 시도가 이미 있었는지 확인 (savedProfiles 로드 로직과 연결)
       setSelectedProfile(userData);
+      return;
     }
-    // userData가 업데이트되면(예: 본인 정보 수정) 현재 선택된 프로필이 '본인'일 경우 같이 업데이트
-    if (userData && selectedProfile && selectedProfile.uid === userData.uid) {
-        setSelectedProfile(prev => ({ ...prev, ...userData }));
+
+    // 2. 데이터 동기화: 현재 선택된 프로필이 '본인(userData)'인 경우, 최신 userData 반영
+    const isOwnerSelected = selectedProfile && (selectedProfile.uid === userData.uid && !selectedProfile.id);
+
+    if (isOwnerSelected) {
+      // 무한 루프 방지를 위해 실제 값이 다를 때만 업데이트
+      if (JSON.stringify(selectedProfile) !== JSON.stringify(userData)) {
+        setSelectedProfile(userData);
+      }
     }
-  }, [userData]);
+  }, [userData, selectedProfile]);
 
   // 저장된 프로필 목록 불러오기
   useEffect(() => {
     if (user?.uid) {
       ProfileService.getSavedProfiles(user.uid).then(profiles => {
         setSavedProfiles(profiles);
-        
+
         // [NEW] 이전에 선택된 프로필 복원
         const lastSelectedId = localStorage.getItem('lastSelectedProfileId');
         if (lastSelectedId && profiles.length > 0) {
-            const restored = profiles.find(p => p.id === lastSelectedId);
-            if (restored) {
-                setSelectedProfile(restored);
-            }
+          const restored = profiles.find(p => p.id === lastSelectedId);
+          if (restored) {
+            setSelectedProfile(restored);
+          }
         }
       });
     } else {
@@ -95,13 +106,13 @@ export function AuthContextProvider({ children }) {
   const updateSavedProfile = async (profileId, newData) => {
     if (!user) return;
     const updated = await ProfileService.updateSavedProfile(user.uid, profileId, newData);
-    
+
     // 저장된 목록 업데이트
     setSavedProfiles(prev => prev.map(p => p.id === profileId ? updated : p));
-    
+
     // 현재 선택된 프로필이면 그것도 업데이트
     if (selectedProfile?.id === profileId) {
-       setSelectedProfile(updated);
+      setSelectedProfile(updated);
     }
     return updated;
   };
@@ -109,7 +120,7 @@ export function AuthContextProvider({ children }) {
   // 1️⃣ 일주 이미지 경로 계산 - selectedProfile 기준
   const iljuImagePath = useMemo(() => {
     const target = selectedProfile || userData; // Fallback
-    
+
     // [보안/에러 방지] 함수 초기화 여부와 데이터 존재 여부를 동시에 체크
     if (!target || !target.saju || !target.birthDate || typeof calculateSaju !== 'function') {
       return '/images/ilju/default.png';
@@ -256,7 +267,7 @@ export function AuthContextProvider({ children }) {
         } else {
           // 신규 유저 초기 생성
           let providerId = user.providerData?.[0]?.providerId;
-          
+
           if (!providerId) {
             // 커스텀 토큰(카카오/네이버)의 경우 providerData가 비어있을 수 있으므로 UID 접두사로 확인
             if (user.uid.startsWith('kakao:')) providerId = 'kakao.com';
@@ -304,9 +315,12 @@ export function AuthContextProvider({ children }) {
 
   const [isLoggingIn, setIsLoggingIn] = useState(false);
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
+  const [isContactModalOpen, setIsContactModalOpen] = useState(false);
 
   const openLoginModal = () => setIsLoginModalOpen(true);
   const closeLoginModal = () => setIsLoginModalOpen(false);
+  const openContactModal = () => setIsContactModalOpen(true);
+  const closeContactModal = () => setIsContactModalOpen(false);
 
   const handleLogin = async (provider = 'google') => {
     setIsLoggingIn(true);
@@ -352,6 +366,9 @@ export function AuthContextProvider({ children }) {
         isLoginModalOpen,
         openLoginModal,
         closeLoginModal,
+        isContactModalOpen,
+        openContactModal,
+        closeContactModal,
         cancelLogin,
         logout,
         updateProfileData,

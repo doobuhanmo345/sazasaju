@@ -80,7 +80,7 @@ const SazatalkInputBanner = () => {
                     <div className="relative w-full max-w-lg h-full sm:h-[90vh] bg-[#abc1d1] sm:rounded-t-[32px] overflow-hidden flex flex-col animate-in slide-in-from-bottom-full duration-500">
 
                         {/* 헤더 */}
-                        <div className="flex items-center justify-between px-5 py-4 bg-indigo-50 dark:bg-slate-900 border-b border-indigo-100/50 dark:border-slate-800">
+                        <div className="flex items-center justify-between px-5 pt-9 pb-4 bg-indigo-50 dark:bg-slate-900 border-b border-indigo-100/50 dark:border-slate-800">
                             <div className="flex items-center space-x-3">
                                 <button onClick={() => setIsOpen(false)} className="p-1 text-slate-500 dark:text-slate-400">
                                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M15 18l-6-6 6-6" /></svg>

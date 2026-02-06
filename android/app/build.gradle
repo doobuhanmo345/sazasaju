@@ -1,13 +1,14 @@
 apply plugin: 'com.android.application'
-
+apply plugin: 'kotlin-android'  // 이 줄을 반드시 추가하세요!
+apply plugin: 'com.google.gms.google-services'
 android {
     namespace "com.sazasaju.app"
-    compileSdk 35
+    compileSdk 36
 
     defaultConfig {
         applicationId "com.sazasaju.app"
         minSdkVersion 24
-        targetSdkVersion 35
+        targetSdkVersion 36
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -17,6 +18,10 @@ android {
             ignoreAssetsPattern '!.svn:!.git:!.ds_store:!*.scc:.*:!CVS:!thumbs.db:!picasa.ini:!*~'
         }
     }
+    dexOptions {
+        // 빌드 시 사용할 최대 힙 크기를 설정합니다
+        javaMaxHeapSize "4g"
+    }
 
     buildTypes {
         release {
@@ -24,14 +29,21 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_21
+        targetCompatibility JavaVersion.VERSION_21
+    }
+    kotlinOptions {
+        jvmTarget = '21'
+    }
 }
 
-repositories {
-    flatDir{
-        dirs '../capacitor-cordova-android-plugins/src/main/libs', 'libs'
-    }
-    maven { url 'https://devrepo.kakao.com/nexus/content/groups/public/' }
-}
+// repositories {
+//     flatDir{
+//         dirs '../capacitor-cordova-android-plugins/src/main/libs', 'libs'
+//     }
+//     maven { url 'https://devrepo.kakao.com/nexus/content/groups/public/' }
+// }
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
@@ -43,6 +55,7 @@ dependencies {
     androidTestImplementation "androidx.test.ext:junit:1.1.5"
     androidTestImplementation "androidx.test.espresso:espresso-core:3.5.1"
     implementation project(':capacitor-cordova-android-plugins')
+    implementation "com.kakao.sdk:v2-all:2.20.1"
 }
 
 apply from: 'capacitor.build.gradle'

@@ -319,19 +319,22 @@ export default function MenuBar() {
       <div
         className={`fixed inset-0 z-[60] bg-white dark:bg-slate-950 transition-transform duration-500 ease-in-out ${activeMenu ? 'translate-y-0' : 'translate-y-full'}`}
       >
+        {activeMenu && (
+          <button
+            onClick={() => setActiveMenu(null)}
+            className="absolute top-10 right-6 z-[70] p-2 bg-slate-100 dark:bg-slate-800 rounded-full active:scale-90"
+          >
+            <XMarkIcon className="w-6 h-6 dark:text-white" />
+          </button>
+        )}
+
         {activeMenu &&
           menuData[activeMenu] && (
-            <div className="flex flex-col h-full p-6 pb-32 overflow-y-auto">
+            <div className="flex flex-col h-full p-6 pb-32 pt-10 overflow-y-auto">
               <div className="flex justify-between items-center mb-8">
                 <h2 className="text-3xl font-black tracking-tighter dark:text-white uppercase">
                   {menuData[activeMenu].title}
                 </h2>
-                <button
-                  onClick={() => setActiveMenu(null)}
-                  className="p-2 bg-slate-100 dark:bg-slate-800 rounded-full active:scale-90"
-                >
-                  <XMarkIcon className="w-6 h-6 dark:text-white" />
-                </button>
               </div>
 
               {activeMenu === 'profile' && (

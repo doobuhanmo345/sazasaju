@@ -37,7 +37,7 @@ const NewYearAdKr = () => {
   useEffect(() => {
     // This is a Korean specific ad page
     document.title = '2026 병오년 신년운세 | 나의 한 해 운명 총정리';
-  }, []);
+  }, [language]);
 
   // 1. 비회원용 익명 ID 생성 및 관리
   useEffect(() => {

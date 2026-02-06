@@ -29,6 +29,11 @@ export const AnalysisStepContainer = ({
     }
   }, [stage, loadingTime]);
 
+  // 단계 변경 시 화면 맨 위로 스크롤
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, [stage]);
+
   return (
     <div className="w-full transition-all duration-500">
       {/* 1. 안내 단계 */}
