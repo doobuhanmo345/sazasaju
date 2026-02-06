@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
+import { useRouter } from 'next/navigation';
 import { db } from '@/lib/firebase';
 import { collection, query, where, onSnapshot, updateDoc, doc, getFirestore } from 'firebase/firestore';
 import { useAuthContext } from '@/contexts/useAuthContext';
@@ -17,6 +18,19 @@ export default function NotificationList() {
   const [selectedMsgId, setSelectedMsgId] = useState(null);
   const dropdownRef = useRef(null);
   const { language } = useLanguage();
+  const router = useRouter();
+
+  const handleNotificationClick = async (note) => {
+    // 1. Mark as read
+    if (!note.isRead) {
+      await handleMarkAsRead(note.id);
+    }
+    // 2. Redirect if targetPath exists
+    if (note.targetPath) {
+      router.push(note.targetPath);
+      setIsOpen(false); // Close dropdown
+    }
+  };
 
   const unreadCount = notifications.filter((n) => !n.isRead).length;
 
@@ -120,7 +134,8 @@ export default function NotificationList() {
               notifications.filter(n => !n.isRead).map((note) => (
                 <div
                   key={note.id}
-                  className="p-3 rounded-2xl border transition-all bg-white dark:bg-slate-800 border-purple-50 dark:border-purple-900/20 shadow-sm"
+                  onClick={() => handleNotificationClick(note)}
+                  className="p-3 rounded-2xl border transition-all bg-white dark:bg-slate-800 border-purple-50 dark:border-purple-900/20 shadow-sm cursor-pointer hover:bg-purple-50 dark:hover:bg-slate-700"
                 >
                   <div className="flex justify-between items-start gap-2">
                     <div className="flex-grow">

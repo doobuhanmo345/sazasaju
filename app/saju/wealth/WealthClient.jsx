@@ -1,5 +1,6 @@
 'use client';
 
+import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import {
   CircleStackIcon,
@@ -34,6 +35,7 @@ import { UI_TEXT, langPrompt, hanja } from '@/data/constants';
 
 export default function Wealth({ }) {
   const { language } = useLanguage();
+  const router = useRouter();
   const { user, userData, selectedProfile } = useAuthContext();
   const { MAX_EDIT_COUNT, isLocked, setEditCount, editCount } = useUsageLimit();
   // 컨텍스트 스위칭
@@ -275,12 +277,11 @@ export default function Wealth({ }) {
 
   useEffect(() => {
     if (aiResult) {
-      const parsedData = parseAiResponse(aiResult);
-      if (parsedData) {
-        setData(parsedData);
-      }
+      // [NEW] Reactive Redirect
+      router.push('/saju/wealth/result');
     }
-  }, [aiResult]);
+  }, [aiResult, router]);
+
 
   const handleStartClick = () => setStep(1);
   const handleBack = () => step > 1 && setStep(step - 1);
@@ -292,6 +293,8 @@ export default function Wealth({ }) {
   };
   const toConfirm = () => setStep(3);
 
+  // [REMOVED] Auto-redirect logic based on isAnalysisDone. 
+  // We only check it to show the "Free" badge.
   const isAnalysisDone =
     userData?.usageHistory?.ZWealthAnalysis &&
     userData.usageHistory.ZWealthAnalysis.language === language &&
@@ -305,7 +308,7 @@ export default function Wealth({ }) {
 
   return (
     <div className="w-full">
-      {step > 0 && (
+      {step > 0 && step < 4 && (
         <Step
           step={step}
           totalStep={totalStep}
@@ -560,84 +563,6 @@ export default function Wealth({ }) {
               {language === 'ko' ? '이미 분석된 운세는 크래딧을 재소모하지 않습니다.' : 'Fortunes that have already been analyzed do not use credits.'}
             </p>
           )}
-        </div>
-      )}
-
-      {step === 4 && (
-        <div className="w-full max-w-4xl mx-auto px-1 animate-in fade-in duration-500">
-          <div className="bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm p-5 mb-8 relative overflow-hidden">
-            <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-indigo-500 via-purple-500 to-emerald-500"></div>
-            <div className="flex flex-col gap-6">
-              <div className="flex justify-center">
-                <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-slate-100 dark:bg-slate-700 border border-slate-200 dark:border-slate-600">
-                  <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Topic</span>
-                  <span className="text-sm font-bold text-slate-700 dark:text-slate-200 flex items-center">
-                    {(() => {
-                      const r = Q_TYPES.find((t) => t.id === selectedQ);
-                      return r ? (language === 'en' ? r.sub : r.label) : selectedQ;
-                    })()}
-                    {(() => {
-                      const subData = (SUB_Q_TYPES[selectedQ] || []).find((s) => s.id === selectedSubQ);
-                      return subData && (
-                        <>
-                          <span className="mx-2 text-slate-300 dark:text-slate-500 font-normal">/</span>
-                          <span className="text-indigo-600 dark:text-indigo-400">{language === 'en' ? subData.labelEn : subData.label}</span>
-                        </>
-                      );
-                    })()}
-                  </span>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div className="prose prose-slate dark:prose-invert max-w-none bg-white dark:bg-slate-800 p-6 sm:p-8 rounded-2xl shadow-sm border border-indigo-50 dark:border-slate-700">
-            <div className="bg-indigo-50/30 dark:bg-slate-800/50 rounded-2xl border border-indigo-100/50 dark:border-slate-700 p-5 sm:p-6 shadow-sm">
-              {data && (
-                <div className="flex flex-col gap-8 py-2">
-                  <section className="text-center">
-                    <h2 className="text-xl font-black text-slate-800 dark:text-white mb-1">{data.header.title}</h2>
-                    <p className="text-sm text-indigo-500 font-semibold">{data.header.summary}</p>
-                  </section>
-                  <section className="border-t border-slate-100 dark:border-slate-800 pt-6 text-center">
-                    <p className="mb-4">{data.header.keywordSummary}</p>
-                    <div className="flex flex-wrap justify-center gap-2">
-                      {data.header.keywords.map((word, i) => (
-                        <span key={i} className="text-[10px] font-medium text-slate-400">#{word}</span>
-                      ))}
-                    </div>
-                  </section>
-                  <section className="grid grid-cols-1 gap-y-6 border-t border-slate-100 dark:border-slate-800 pt-6">
-                    <div>
-                      {data.contents.map((content, i) => (
-                        <div key={i} className="mb-5">
-                          <h4 className="text-sm font-black text-slate-600 uppercase tracking-widest mb-2">{content.title}</h4>
-                          <p className="text-xs leading-relaxed text-slate-500 dark:text-slate-400">{content.desc}</p>
-                        </div>
-                      ))}
-                    </div>
-                  </section>
-                  <section className="border-t border-slate-100 dark:border-slate-800 pt-6 pb-4">
-                    <h4 className="text-xs font-black text-indigo-500 uppercase tracking-widest mb-3 text-center">Master's Conclusion</h4>
-                    <p className="text-[14px] font-medium text-slate-700 dark:text-slate-200 leading-relaxed text-center max-w-md mx-auto mb-4">{data.conclusion.title}</p>
-                    <p className="text-[13px] leading-relaxed text-slate-500 dark:text-slate-400 text-center">{data.conclusion.desc}</p>
-                    <div className="mt-8 pt-6 border-t border-slate-50 dark:border-slate-900 text-center">
-                      <span className="text-xs text-slate-800 font-bold italic">{data.tosaza} {language === 'ko' ? '사자에게 물어보기를 이용해 보세요.' : 'Try asking Saza more questions.'}</span>
-                    </div>
-                  </section>
-                </div>
-              )}
-            </div>
-          </div>
-
-          <div className="mt-8 text-center">
-            <button
-              onClick={() => setStep(1)}
-              className="text-sm text-slate-400 hover:text-indigo-500 underline underline-offset-4 transition-colors"
-            >
-              {language === 'en' ? 'Check Another Topic' : '다른 재물운 보기'}
-            </button>
-          </div>
         </div>
       )}
     </div>

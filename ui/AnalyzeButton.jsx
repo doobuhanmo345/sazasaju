@@ -9,6 +9,7 @@ import { classNames } from '@/utils/helpers';
 import { useLanguage } from '@/contexts/useLanguageContext';
 import { useAuthContext } from '@/contexts/useAuthContext';
 import { useUsageLimit } from '@/contexts/useUsageLimit';
+import { useLoading } from '@/contexts/useLoadingContext';
 
 const COLOR_MAPS = {
   red: {
@@ -56,7 +57,13 @@ export default function AnalyzeButton({
   const { user, userData, login } = useAuthContext();
   const { isLocked } = useUsageLimit();
 
+  const { loading: contextLoading } = useLoading(); // [NEW] Global loading state
+
+  // Combine local loading prop with global loading context and user analyzing state
+  const isAnalyzing = loading || contextLoading || userData?.isAnalyzing;
+
   const lockCheck = () => {
+    if (isAnalyzing) return true; // [NEW] Lock if analyzing
     if (isLocked) {
       if (isDone) {
         return false
@@ -68,6 +75,10 @@ export default function AnalyzeButton({
     }
   }
   const buttonClicked = () => {
+    if (isAnalyzing) {
+      alert(language === 'ko' ? '다른 분석이 진행 중입니다. 잠시만 기다려주세요.' : 'Another analysis is in progress. Please wait.');
+      return;
+    }
     if (lockCheck()) {
       alert(language === 'ko' ? '크레딧을 다 사용하셨습니다.' : 'You have used all your credits.');
       return;
