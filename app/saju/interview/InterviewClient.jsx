@@ -16,8 +16,8 @@ import { calculateSaju } from '@/lib/sajuCalculator';
 import { ExclamationTriangleIcon } from '@heroicons/react/24/solid';
 import LoadingFourPillar from '@/components/LoadingFourPillar';
 import { SajuAnalysisService, AnalysisPresets, getPromptFromDB } from '@/lib/SajuAnalysisService';
+import { useRouter } from 'next/navigation';
 import CustomCalendar from '@/components/CustomCalendar';
-import ReportTemplateInterview from '@/app/saju/interview/ReportTemplateInterview';
 import AnalyzeButton from '@/ui/AnalyzeButton';
 import InterviewAppeal from '@/app/saju/interview/InterviewAppeal';
 import InterviewPreview from '@/app/saju/interview/InterviewPreview';
@@ -106,9 +106,23 @@ const INTERVIEW_GROUPS = [
 
 export default function InterviewPage() {
   const activeTheme = { text: 'text-blue-500' };
-  const { setLoadingType, setAiResult } = useLoading();
+  const { aiResult, setAiResult } = useLoading();
   const [loading, setLoading] = useState(false)
   const [selectedDate, setSelectedDate] = useState(null);
+  const selDate = useMemo(() => {
+    if (!selectedDate) return '';
+    const d = new Date(selectedDate);
+    return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}T12:00`;
+  }, [selectedDate]);
+
+  const selectedDateSaju = useMemo(() => {
+    if (selectedDate) {
+      const result = calculateSaju(selDate, true);
+      return result
+    }
+    return null;
+  }, [selectedDate, selDate]);
+
   const detailSectionRef = useRef(null);
   const [dbPrompt, setDbPrompt] = useState('');
 
@@ -118,7 +132,7 @@ export default function InterviewPage() {
       setDbPrompt(content);
     };
     loadData();
-  }, []);
+  }, [selectedDate]);
 
   useEffect(() => {
     if (selectedDate && detailSectionRef.current) {
@@ -127,14 +141,37 @@ export default function InterviewPage() {
   }, [selectedDate]);
 
   const [question, setQuestion] = useState('');
-  const [selectedDateSaju, setSelectedDateSaju] = useState(null);
+
   const { userData, user, selectedProfile } = useAuthContext();
+  const router = useRouter();
+
   // 컨텍스트 스위칭
   const targetProfile = selectedProfile || userData;
   const { birthDate: inputDate, isTimeUnknown, gender, saju } = targetProfile || {};
   //컨텍스트 스위칭 끝
   const { language } = useLanguage();
   const { setEditCount, MAX_EDIT_COUNT, isLocked } = useUsageLimit();
+
+  // [NEW] Strict Analysis Check (Interview uses 'dailySpecific', stored in Zinterview)
+  const prevData = userData?.usageHistory?.Zinterview;
+
+  const isAnalysisDone = useMemo(() => {
+    if (!prevData || !prevData.result) return false;
+
+    // 1. 프로필 검증
+    if (prevData.gender !== gender) return false;
+    if (!SajuAnalysisService.compareSaju(prevData.saju, saju)) return false;
+
+    //  sajuDate: selectedDateSaju,
+    if (!SajuAnalysisService.compareSaju(prevData.sajuDate, selectedDateSaju)) return false;
+
+
+    // 질문 비교 (옵션 변경시 재분석)
+    if (prevData.question !== question) return false;
+
+    return true;
+  }, [prevData, gender, saju, selectedDate, question]);
+
 
   // Client-side Title Update for Localization (Static Export Support)
   useEffect(() => {
@@ -145,21 +182,15 @@ export default function InterviewPage() {
     }
   }, [language]);
 
-  const isDisabled = !user || loading || !selectedDate;
-  const isDisabled2 = isLocked;
-
-  const selDate = useMemo(() => {
-    if (!selectedDate) return '';
-    const d = new Date(selectedDate);
-    return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}T12:00`;
-  }, [selectedDate]);
-
+  // [UX FIX] Reset AI Result on Mount to prevent instant redirect
   useEffect(() => {
-    if (selectedDate) {
-      const result = calculateSaju(selDate, true);
-      setSelectedDateSaju(result);
-    }
-  }, [selectedDate, selDate]);
+    setAiResult('');
+  }, [setAiResult]);
+
+  const isDisabled = !user || loading || !selectedDate || !dbPrompt;
+  const isDisabled2 = !isAnalysisDone && isLocked;
+
+
 
   const service = useMemo(
     () =>
@@ -180,6 +211,19 @@ export default function InterviewPage() {
 
   const handleStartClick = useCallback(
     async (onstart) => {
+      // [UX FIX] 로딩 화면 먼저 진입
+      onstart();
+
+      // [NEW] 이미 저장된 데이터와 입력값이 같으면 잠시 대기 후 결과 페이지로 이동
+      if (isAnalysisDone) {
+        console.log('✅ 이미 분석된 데이터(옵션 일치)가 있어 결과 페이지로 이동합니다.');
+        setLoading(true); // Manually trigger loading state for UI transition
+        setTimeout(() => {
+          router.push('/saju/interview/result');
+        }, 2000);
+        return;
+      }
+
       setAiResult('');
       try {
         await service.analyze(
@@ -194,12 +238,12 @@ export default function InterviewPage() {
             promptAdd: dbPrompt,
           }),
         );
-        onstart();
+        // 콜백 제거
       } catch (error) {
         console.error(error);
       }
     },
-    [service, saju, gender, language, selectedDate, question, selectedDateSaju, setAiResult, dbPrompt],
+    [service, saju, gender, language, selectedDate, question, selectedDateSaju, setAiResult, dbPrompt, isAnalysisDone, router],
   );
 
   const [selections, setSelections] = useState({ category: '', vibe: '', concern: '' });
@@ -215,7 +259,7 @@ export default function InterviewPage() {
         return foundOption ? foundOption.prompt : null;
       });
 
-      const combined = '이 날 면접(평가)은 ' + updatedPrompts.filter(Boolean).join(', ');
+      const combined = updatedPrompts.filter(Boolean).join(', ');
       setQuestion(combined);
       return newSelections;
     });
@@ -323,7 +367,7 @@ export default function InterviewPage() {
                 onClick={() => handleStartClick(onStart)}
                 disabled={isDisabled || isDisabled2}
                 loading={loading}
-                isDone={false}
+                isDone={isAnalysisDone}
                 label={language === 'ko' ? '합격운 확인하기' : 'Check Pass Luck'}
                 color="blue"
                 cost={-1}
@@ -399,16 +443,24 @@ export default function InterviewPage() {
       userData,
       selections,
       selectedDate,
+      isAnalysisDone
     ],
   );
+
+  // [NEW] Reactive Redirect
+  useEffect(() => {
+    if (!loading && aiResult && aiResult.length > 0) {
+      router.push('/saju/interview/result');
+    }
+  }, [loading, aiResult, router]);
 
   return (
     <>
       <AnalysisStepContainer
         guideContent={sajuGuide}
         loadingContent={<LoadingFourPillar saju={saju} isTimeUnknown={isTimeUnknown} />}
-        resultComponent={ReportTemplateInterview}
-        loadingTime={0}
+        resultComponent={null}
+        loadingTime={10000000}
       />
     </>
   );

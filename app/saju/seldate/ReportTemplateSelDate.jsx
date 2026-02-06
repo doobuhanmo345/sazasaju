@@ -8,30 +8,61 @@ import { toymdt, parseAiResponse } from '@/utils/helpers';
 import { useLoading } from '@/contexts/useLoadingContext';
 import AfterReport from '@/components/AfterReport';
 
+import { useRouter } from 'next/navigation';
+
 export default function ReportTemplateSelDate() {
   const { aiResult } = useLoading();
   const { language } = useLanguage();
-  const { userData } = useAuthContext();
+  const { userData, selectedProfile } = useAuthContext();
+  const targetProfile = selectedProfile || userData;
+  const router = useRouter();
+
   const [data, setData] = useState(null);
   const [isLoaded, setIsLoaded] = useState(false);
 
   useEffect(() => {
+    // 1. aiResult가 있으면 우선 사용
     if (aiResult) {
       const parsedData = parseAiResponse(aiResult);
       if (parsedData) {
         setData(parsedData);
+        return;
       }
     }
-  }, [aiResult]);
+
+
+    // 2. 없으면 DB에서 로드
+    if (userData && !aiResult) {
+      const savedResult = userData?.usageHistory?.ZSelDate?.result;
+      if (savedResult) {
+        const parsed = parseAiResponse(savedResult);
+        if (parsed) setData(parsed);
+      } else {
+        // 데이터 없음 -> 리다이렉트
+        router.replace('/saju/seldate');
+      }
+    }
+  }, [aiResult, userData, router]);
 
   useEffect(() => {
     setIsLoaded(true);
   }, []);
+  console.log(data)
+  if (!userData) return <div className="p-10 text-center text-slate-400 animate-pulse">Loading User Data...</div>;
 
-  if (!userData || !aiResult || !data) return null;
+  if (!data) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-[40vh] gap-4">
+        <div className="w-8 h-8 rounded-full border-4 border-indigo-200 border-t-indigo-500 animate-spin"></div>
+        <div className="text-center text-indigo-400 font-medium animate-pulse text-sm">
+          {language === 'en' ? 'Retrieving Analysis Results...' : '분석 결과를 불러오는 중입니다...'}
+        </div>
+      </div>
+    );
+  }
 
-  const { displayName, birthDate, isTimeUnknown } = userData;
-  const saju = userData.saju || {};
+  const { displayName, birthDate, isTimeUnknown } = targetProfile;
+  const saju = targetProfile.saju || {};
   const bd = toymdt(birthDate);
 
   return (
@@ -124,7 +155,7 @@ export default function ReportTemplateSelDate() {
           </section>
         )}
 
-       <AfterReport/>
+        <AfterReport />
       </main>
     </div>
   );

@@ -16,13 +16,29 @@ import CreditIcon from '@/ui/CreditIcon';
 import ViewTarotResult from '@/app/tarot/ViewTarotResult';
 import { DateService } from '@/utils/dateService';
 import StartButton from '@/ui/StartButton';
+import { useRouter } from 'next/navigation';
 
 export default function TarotMoneyPage() {
-  const { setLoadingType, setAiResult } = useLoading();
+  const router = useRouter();
+  const { setLoadingType, setAiResult, aiResult } = useLoading();
   const [loading, setLoading] = useState(false);
   const { userData, user } = useAuthContext();
   const { language } = useLanguage();
   const { setEditCount, MAX_EDIT_COUNT } = useUsageLimit();
+
+
+
+  // [UX FIX] Reset AI Result on Mount
+  useEffect(() => {
+    setAiResult('');
+  }, [setAiResult]);
+
+  // [NEW] Reactive Redirect
+  useEffect(() => {
+    if (!loading && aiResult && aiResult.length > 0) {
+      router.push('/saju/tarot/tarotmoney/result');
+    }
+  }, [loading, aiResult, router]);
 
   // Client-side Title Update for Localization (Static Export Support)
   useEffect(() => {
@@ -70,6 +86,8 @@ export default function TarotMoneyPage() {
     setTimeout(async () => {
       setFlippedIdx(null);
 
+      onStart(); // Trigger loading UI immediately
+
       const service = new TarotAnalysisService({
         user,
         userData,
@@ -86,7 +104,7 @@ export default function TarotMoneyPage() {
       try {
         await service.analyze(TarotPresets.money({ pickedCard, categoryLabel }));
       } catch (e) {
-        // Error is alerted in the service
+        // Error handling
       }
     }, 1000);
   };
@@ -156,18 +174,14 @@ export default function TarotMoneyPage() {
     );
   };
 
-  useEffect(() => {
-    if (loading) window.scrollTo({ top: 0, behavior: 'smooth' });
-  }, [loading]);
 
-  const ResultComponent = useCallback(() => <ViewTarotResult cardPicked={cardPicked} loading={loading} />, [cardPicked, loading]);
 
   return (
     <AnalysisStepContainer
       guideContent={renderContent}
-      loadingContent={<TarotLoading />}
-      resultComponent={ResultComponent}
-      loadingTime={0}
+      loadingContent={<TarotLoading cardPicked={cardPicked} />}
+      resultComponent={null}
+      loadingTime={10000000}
     />
   );
 }

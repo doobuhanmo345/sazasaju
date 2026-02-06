@@ -5,8 +5,9 @@ import AfterReport from '@/components/AfterReport';
 import { useLoading } from '@/contexts/useLoadingContext';
 import { aiSajuStyle, reportStyle } from '@/data/aiResultConstants';
 
-export default function ViewResult({}) {
+export default function ViewResult({ }) {
   const { loading, aiResult } = useLoading();
+
   const scrollElRef = useRef(null);
   const activeTabRef = useRef(0);
 

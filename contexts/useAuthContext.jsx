@@ -72,16 +72,56 @@ export function AuthContextProvider({ children }) {
     }
   }, [user]);
 
-  // 프로필 선택 함수
-  const selectProfile = (profile) => {
-    if (!profile) {
-      setSelectedProfile(userData); // 기본값 복귀
-      localStorage.removeItem('lastSelectedProfileId'); // 로컬 저장소 제거
-    } else {
-      setSelectedProfile(profile);
-      localStorage.setItem('lastSelectedProfileId', profile.id); // 선택 저장
+  // 프로필 선택 함수 (Firebase 연동)
+  const selectProfile = async (profile) => {
+    if (!user) return;
+    const userDocRef = doc(db, 'users', user.uid);
+    try {
+      // profile이 없거나, profile이 본인(uid 일치)인 경우 -> 본인 선택으로 처리
+      const isSelf = !profile || (profile.uid === user.uid);
+
+      if (isSelf) {
+        setSelectedProfile(userData); // UI 즉시 반영
+        await updateDoc(userDocRef, { currentProfileId: null }); // DB 저장 (본인)
+        localStorage.removeItem('lastSelectedProfileId');
+      } else {
+        setSelectedProfile(profile); // UI 즉시 반영
+        await updateDoc(userDocRef, { currentProfileId: profile.id }); // DB 저장
+        localStorage.setItem('lastSelectedProfileId', profile.id);
+      }
+    } catch (e) {
+      console.error("Failed to save selected profile:", e);
     }
   };
+
+  // [NEW] Firestore 및 localStorage 기반의 프로필 복원 로직 통합
+  useEffect(() => {
+    if (!userData || !savedProfiles || savedProfiles.length === 0) return;
+
+    const dbProfileId = userData.currentProfileId;
+    const localProfileId = localStorage.getItem('lastSelectedProfileId');
+    const targetId = dbProfileId !== undefined ? dbProfileId : localProfileId;
+
+    if (targetId) {
+      const found = savedProfiles.find(p => p.id === targetId);
+      if (found) {
+        // 현재 선택된 것과 다를 때만 업데이트
+        if (selectedProfile?.id !== found.id) {
+          setSelectedProfile(found);
+        }
+      } else {
+        // ID는 있는데 목록에 없으면(삭제됨 등) 본인으로 리셋
+        if (selectedProfile?.id) {
+          setSelectedProfile(userData);
+        }
+      }
+    } else {
+      // targetId가 null/undefined면 본인
+      if (selectedProfile?.id) { // 이미 본인이면 패스
+        setSelectedProfile(userData);
+      }
+    }
+  }, [userData?.currentProfileId, savedProfiles]); // userData 전체보다는 ID만 의존 추천하지만 userData가 객체라.. 간단히
 
   // 프로필 추가 함수
   const addProfile = async (profileData) => {
@@ -98,7 +138,7 @@ export function AuthContextProvider({ children }) {
     setSavedProfiles(prev => prev.filter(p => p.id !== profileId));
     // 만약 삭제된 프로필을 보고 있었다면 본인 프로필로 복귀
     if (selectedProfile?.id === profileId) {
-      setSelectedProfile(userData);
+      selectProfile(null); // DB 업데이트 포함
     }
   };
 

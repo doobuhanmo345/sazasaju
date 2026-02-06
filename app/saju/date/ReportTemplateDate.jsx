@@ -8,31 +8,67 @@ import { toymdt } from '@/utils/helpers';
 import { useLoading } from '@/contexts/useLoadingContext';
 import { parseAiResponse } from '@/utils/helpers';
 import AfterReport from '@/components/AfterReport';
+import { useRouter } from 'next/navigation';
 
-const ReportTemplateDate = ({}) => {
+const ReportTemplateDate = ({ }) => {
   const { aiResult } = useLoading();
   const { language } = useLanguage();
-  const { userData } = useAuthContext();
+  const { userData, selectedProfile } = useAuthContext();
+  const router = useRouter();
+
+  const targetProfile = selectedProfile || userData;
+
   const [data, setData] = useState(null);
   const [isLoaded, setIsLoaded] = useState(false);
 
   useEffect(() => {
+    // 1. aiResult가 있으면 우선 사용
     if (aiResult) {
       const parsedData = parseAiResponse(aiResult);
       if (parsedData) {
         setData(parsedData);
+        return;
       }
     }
-  }, [aiResult]);
+
+    // 2. 없으면 DB에서 로드 (persistence)
+    if (userData && !aiResult) {
+      // NOTE: First Date uses 'dailySpecific' type with 'firstdate' subtype -> Zfirstdate
+      const savedResult = userData?.usageHistory?.Zfirstdate?.result;
+      if (savedResult) {
+        const parsed = parseAiResponse(savedResult);
+        if (parsed) {
+          setData(parsed);
+        }
+      } else {
+        // No Data -> Redirect
+        router.replace('/saju/date');
+      }
+    }
+  }, [aiResult, userData, router]);
 
   useEffect(() => {
     setIsLoaded(true);
   }, []);
 
-  if (!userData || !aiResult || !data) return null;
+  if (!userData) {
+    return <div className="p-10 text-center text-rose-500 animate-pulse">유저 정보를 불러오는 중입니다...</div>;
+  }
 
-  const { displayName, birthDate, isTimeUnknown } = userData;
-  const saju = userData.saju || {};
+  // [NEW] Loading State (match Basic Saju style)
+  if (!data) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-[40vh] gap-4">
+        <div className="w-8 h-8 rounded-full border-4 border-rose-200 border-t-rose-500 animate-spin"></div>
+        <div className="text-center text-rose-400 font-medium animate-pulse text-sm">
+          {language === 'en' ? 'Retrieving Date Analysis...' : '데이트 운세 데이터를 불러오는 중...'}
+        </div>
+      </div>
+    );
+  }
+
+  const { displayName, birthDate, isTimeUnknown } = targetProfile;
+  const saju = targetProfile.saju || {};
   const bd = toymdt(birthDate);
 
   return (
@@ -208,7 +244,7 @@ const ReportTemplateDate = ({}) => {
           {language === 'en' ? 'Save Full Report' : '전체 리포트 저장하기'}
         </button>
       </footer>
-      
+
       <AfterReport />
     </div>
   );

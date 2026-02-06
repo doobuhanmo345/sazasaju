@@ -22,13 +22,27 @@ import CreditIcon from '@/ui/CreditIcon';
 import TarotLoading from '@/app/tarot/TarotLoading';
 import { DateService } from '@/utils/dateService';
 import StartButton from '@/ui/StartButton';
+import { useRouter } from 'next/navigation';
 
 export default function TarotLovePage() {
-  const { setLoadingType, setAiResult } = useLoading();
+  const router = useRouter();
+  const { setLoadingType, setAiResult, aiResult } = useLoading();
   const [loading, setLoading] = useState(false)
   const { userData, user } = useAuthContext();
   const { language } = useLanguage();
   const { setEditCount, MAX_EDIT_COUNT } = useUsageLimit();
+
+  // [UX FIX] Reset AI Result on Mount
+  useEffect(() => {
+    setAiResult('');
+  }, [setAiResult]);
+
+  // [NEW] Reactive Redirect (Only for NEW analysis)
+  useEffect(() => {
+    if (!loading && aiResult && aiResult.length > 0) {
+      router.push('/saju/tarot/tarotlove/result');
+    }
+  }, [loading, aiResult, router]);
 
   // Client-side Title Update for Localization (Static Export Support)
   useEffect(() => {
@@ -65,6 +79,17 @@ export default function TarotLovePage() {
 
     setTimeout(async () => {
       setFlippedIdx(null);
+
+      // [NEW] Check persistence before calling API?
+      // Actually if we want to force "One per Day", we should have checked isAnalysisDone.
+      // If isAnalysisDone is true, we should have redirected already (see useEffect).
+      // But if we are here, it means isAnalysisDone is false (or user ignored it?).
+      // Wait, if isAnalysisDone is true, `handleCardPick` shouldn't be reachable?
+      // Unless we hide the input UI. 
+      // Current pattern: If isAnalysisDone, we redirect immediately on mount (or after delay).
+      // So we don't need to check here.
+
+      onStart(); // Trigger loading UI immediately
 
       const service = new TarotAnalysisService({
         user,
@@ -151,18 +176,14 @@ export default function TarotLovePage() {
     );
   };
 
-  useEffect(() => {
-    if (loading) window.scrollTo({ top: 0, behavior: 'smooth' });
-  }, [loading]);
 
-  const ResultComponent = useCallback(() => <ViewTarotResult cardPicked={cardPicked} loading={loading} />, [cardPicked, loading]);
 
   return (
     <AnalysisStepContainer
       guideContent={renderContent}
-      loadingContent={<TarotLoading />}
-      resultComponent={ResultComponent}
-      loadingTime={0}
+      loadingContent={<TarotLoading cardPicked={cardPicked} />}
+      resultComponent={null}
+      loadingTime={10000000}
     />
   );
 }

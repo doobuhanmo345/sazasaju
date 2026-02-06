@@ -1,6 +1,6 @@
 'use client';
 
-import { useRef, useState, useEffect, useCallback } from 'react';
+import { useRef, useState, useEffect, useMemo } from 'react';
 import AnalysisStepContainer from '@/components/AnalysisStepContainer';
 import ViewTarotResult from '@/app/tarot/ViewTarotResult';
 import { useAuthContext } from '@/contexts/useAuthContext';
@@ -16,13 +16,29 @@ import CreditIcon from '@/ui/CreditIcon';
 import TarotLoading from '@/app/tarot/TarotLoading';
 import { DateService } from '@/utils/dateService';
 import StartButton from '@/ui/StartButton';
+import { useRouter } from 'next/navigation';
 
 export default function TarotDailyPage() {
-  const { setLoadingType, setAiResult } = useLoading();
+  const router = useRouter();
+  const { setLoadingType, setAiResult, aiResult } = useLoading();
   const [loading, setLoading] = useState(false);
   const { userData, user } = useAuthContext();
   const { language } = useLanguage();
   const { setEditCount, MAX_EDIT_COUNT } = useUsageLimit();
+
+
+
+  // [UX FIX] Reset AI Result on Mount
+  useEffect(() => {
+    setAiResult('');
+  }, [setAiResult]);
+
+  // [NEW] Reactive Redirect
+  useEffect(() => {
+    if (!loading && aiResult && aiResult.length > 0) {
+      router.push('/saju/tarot/tarotdaily/result');
+    }
+  }, [loading, aiResult, router]);
 
   // Client-side Title Update for Localization (Static Export Support)
   useEffect(() => {
@@ -45,6 +61,7 @@ export default function TarotDailyPage() {
 
     setTimeout(async () => {
       setFlippedIdx(null);
+      onStart(); // Trigger loading
 
       const service = new TarotAnalysisService({
         user,
@@ -62,7 +79,7 @@ export default function TarotDailyPage() {
       try {
         await service.analyze(TarotPresets.daily({ pickedCard }));
       } catch (e) {
-        // Error is alerted in the service
+        // error
       }
     }, 1000);
   };
@@ -132,18 +149,14 @@ export default function TarotDailyPage() {
     );
   };
 
-  useEffect(() => {
-    if (loading) window.scrollTo({ top: 0, behavior: 'smooth' });
-  }, [loading]);
 
-  const ResultComponent = useCallback(() => <ViewTarotResult cardPicked={cardPicked} loading={loading} />, [cardPicked, loading]);
 
   return (
     <AnalysisStepContainer
       guideContent={tarotContent}
-      loadingContent={<TarotLoading />}
-      resultComponent={ResultComponent}
-      loadingTime={0}
+      loadingContent={<TarotLoading cardPicked={cardPicked} />}
+      resultComponent={null}
+      loadingTime={10000000}
     />
   );
 }

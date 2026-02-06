@@ -14,17 +14,18 @@ import { calculateSajuData } from '@/lib/sajuLogic';
 import LoadingFourPillar from '@/components/LoadingFourPillar';
 import { SajuAnalysisService, AnalysisPresets } from '@/lib/SajuAnalysisService';
 import { reportStyleBlue } from '@/data/aiResultConstants';
-import ReportTemplateNewYear from '@/app/saju/2026luck/ReportTemplateNewYear';
+import { useRouter } from 'next/navigation';
 import AnalyzeButton from '@/ui/AnalyzeButton';
 import YearlyLuckAppeal from '@/app/saju/2026luck/YearlyLuckAppeal';
 import YearlyLuckPreview from '@/app/saju/2026luck/YearlyLuckPreview';
 
 export default function YearlyLuckPage() {
   const { setLoadingType, aiResult, setAiResult } = useLoading();
+
   const [loading, setLoading] = useState(false);
   const [sajuData, setSajuData] = useState(null);
-  const { userData, user, isYearDone, selectedProfile } = useAuthContext(); // selectedProfile 추가
-
+  const { userData, user, selectedProfile } = useAuthContext(); // selectedProfile 추가
+  const router = useRouter();
   // 컨텍스트 스위칭
   const targetProfile = selectedProfile || userData;
   const { birthDate: inputDate, isTimeUnknown, gender, saju } = targetProfile || {};
@@ -34,7 +35,20 @@ export default function YearlyLuckPage() {
   const DISABLED_STYLE = 'bg-gray-100 text-gray-400 cursor-not-allowed border border-gray-200';
   const isDisabled = !user || loading;
   const isTargetOthers = !!selectedProfile;
-  const isDisabled2 = !isTargetOthers && !isYearDone && isLocked;
+
+  // [NEW] Strict Analysis Check from User Data
+  const prevData = userData?.usageHistory?.ZNewYear;
+  // Note: Assuming ZNewYear is the key. Provide manual fallback if key differs?
+  // Based on context, it seems standard.
+  const isAnalysisDone = (() => { // using IIFE or useMemo
+    if (!prevData || !prevData.result) return false;
+    // Compare basic fields
+    if (prevData.gender !== (targetProfile?.gender)) return false;
+    // Compare Saju
+    return SajuAnalysisService.compareSaju(prevData.saju, targetProfile?.saju);
+  })();
+
+  const isDisabled2 = !isTargetOthers && !isAnalysisDone && isLocked;
 
   // Client-side Title Update for Localization (Static Export Support)
   useEffect(() => {
@@ -68,10 +82,24 @@ export default function YearlyLuckPage() {
   });
 
   const handleStartClick = async (onstart) => {
+    // [UX FIX] 로딩 화면을 먼저 보여줌
+    onstart();
+
+    // [NEW] 이미 저장된 데이터와 현재 입력값이 같으면 잠시 대기 후 결과 페이지로 이동
+    if (isAnalysisDone) {
+      console.log('✅ 이미 분석된 데이터가 있어 결과 페이지로 이동합니다.');
+      setTimeout(() => {
+        router.push('/saju/2026luck/result');
+      }, 2000);
+      return;
+    }
+
     setAiResult('');
     try {
-      await service.analyze(AnalysisPresets.newYear({ saju, gender, language }));
-      onstart();
+      onstart(); // [NEW] 로딩화면 먼저 진입
+      await service.analyze(AnalysisPresets.newYear({ saju, gender, language }), (result) => {
+        console.log('✅ 신년운세 완료!');
+      });
     } catch (error) {
       console.error(error);
     }
@@ -118,7 +146,7 @@ export default function YearlyLuckPage() {
             onClick={() => handleStartClick(onStart)}
             disabled={isDisabled || isDisabled2}
             loading={loading}
-            isDone={isYearDone}
+            isDone={isAnalysisDone}
             label={language === 'ko' ? '2026 신년 운세 보기' : 'Check the 2026 Fortune'}
             color="red"
             cost={-1}
@@ -150,7 +178,7 @@ export default function YearlyLuckPage() {
           isDisabled={isDisabled}
           isDisabled2={isDisabled2}
           loading={loading}
-          isDone={isYearDone}
+          isDone={isAnalysisDone}
           isLocked={isLocked}
         />
 
@@ -161,7 +189,7 @@ export default function YearlyLuckPage() {
               onClick={() => handleStartClick(onStart)}
               disabled={isDisabled || isDisabled2}
               loading={loading}
-              isDone={isYearDone}
+              isDone={isAnalysisDone}
               label={language === 'ko' ? '2026 신년 운세 보기' : 'Check the 2026 Fortune'}
               color="red"
               cost={-1}
@@ -203,13 +231,20 @@ export default function YearlyLuckPage() {
     }
   }, [loading]);
 
+  // [NEW] Reactive Redirect
+  useEffect(() => {
+    if (!loading && aiResult && aiResult.length > 0) {
+      router.push('/saju/2026luck/result');
+    }
+  }, [loading, aiResult, router]);
+
   return (
     <>
       <AnalysisStepContainer
         guideContent={sajuGuide}
         loadingContent={<LoadingFourPillar saju={saju} isTimeUnknown={isTimeUnknown} />}
-        resultComponent={ReportTemplateNewYear}
-        loadingTime={0}
+        resultComponent={null}
+        loadingTime={10000000}
       />
       <div dangerouslySetInnerHTML={{ __html: reportStyleBlue }} />
     </>

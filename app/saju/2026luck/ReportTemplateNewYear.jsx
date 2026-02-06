@@ -7,22 +7,45 @@ import { useLanguage } from '@/contexts/useLanguageContext';
 import { parseAiResponse } from '@/utils/helpers';
 import AfterReport from '@/components/AfterReport';
 
+import { useRouter } from 'next/navigation';
+import { useAuthContext } from '@/contexts/useAuthContext';
+
 const ReportTemplateNewYear = ({ }) => {
   const { aiResult } = useLoading();
   const { language } = useLanguage();
+  const { userData } = useAuthContext();
+  const router = useRouter();
+
   const isEn = language !== 'ko';
   const [data, setData] = useState(null);
 
   useEffect(() => {
+    // 1. aiResult가 있으면 우선 사용 (방금 분석 완료)
     if (aiResult) {
       const parsedData = parseAiResponse(aiResult);
       if (parsedData) {
         setData(parsedData);
+        return;
       }
     }
-  }, [aiResult]);
 
-  if (!aiResult || !data) return null;
+    // 2. aiResult가 없으면 DB에서 로드 (새로고침/나중에 보기)
+    if (userData && !aiResult) {
+      const savedResult = userData?.usageHistory?.ZNewYear?.result;
+      if (savedResult) {
+        const parsed = parseAiResponse(savedResult);
+        if (parsed) {
+          setData(parsed);
+        }
+      } else {
+        // 데이터 없음 -> 리다이렉트
+        // alert(isEn ? "No result found." : "분석 결과가 없습니다.");
+        router.replace('/saju/2026luck');
+      }
+    }
+  }, [aiResult, userData, router, isEn]);
+
+  if (!data) return <div className="p-10 text-center animate-pulse">{isEn ? 'Loading...' : '결과를 불러오는 중입니다...'}</div>;
 
   return (
     <div className="sjsj-report-container w-full max-w-2xl mx-auto p-4 animate-in fade-in duration-700">

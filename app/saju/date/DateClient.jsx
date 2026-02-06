@@ -11,9 +11,9 @@ import { langPrompt, hanja } from '@/data/constants';
 import { calculateSaju } from '@/lib/sajuCalculator';
 import { ExclamationTriangleIcon } from '@heroicons/react/24/solid';
 import LoadingFourPillar from '@/components/LoadingFourPillar';
-import { SajuAnalysisService, AnalysisPresets } from '@/lib/SajuAnalysisService';
+import { SajuAnalysisService, AnalysisPresets, getPromptFromDB } from '@/lib/SajuAnalysisService';
 import CustomCalendar from '@/components/CustomCalendar';
-import ReportTemplateDate from '@/app/saju/date/ReportTemplateDate';
+import { useRouter } from 'next/navigation';
 import AnalyzeButton from '@/ui/AnalyzeButton';
 import FirstDateAppeal from '@/app/saju/date/FirstDateAppeal';
 import FirstDatePreview from '@/app/saju/date/FirstDatePreview';
@@ -86,18 +86,35 @@ const GET_FIRST_DATE_OPTIONS = (gender = 'female') => {
 };
 
 export default function FirstDatePage() {
-  const { setLoadingType, setAiResult } = useLoading();
+  const { setLoadingType, setAiResult, aiResult } = useLoading();
   const [loading, setLoading] = useState(false)
   const [selectedDate, setSelectedDate] = useState(null);
   const detailSectionRef = useRef(null);
-
   const { userData, user, selectedProfile } = useAuthContext();
+  const router = useRouter();
+  const [question, setQuestion] = useState('');
   // 컨텍스트 스위칭
   const targetProfile = selectedProfile || userData;
   const { birthDate: inputDate, isTimeUnknown, gender, saju } = targetProfile || {};
   //컨텍스트 스위칭 끝
   const { language } = useLanguage();
   const { setEditCount, MAX_EDIT_COUNT, isLocked } = useUsageLimit();
+  const [dbPrompt, setDbPrompt] = useState('');
+  useEffect(() => {
+    const loadData = async () => {
+      const content = await getPromptFromDB('daily_s_date');
+      setDbPrompt(content);
+    };
+    loadData();
+  }, [selectedDate]);
+
+  // [NEW] Strict Analysis Check (First Date uses 'dailySpecific', stored in Zfirstdate)
+  const prevData = userData?.usageHistory?.Zfirstdate;
+  const selDateString = selectedDate ? new Date(selectedDate).toLocaleDateString('en-CA') : '';
+
+
+
+
 
   // Client-side Title Update for Localization (Static Export Support)
   useEffect(() => {
@@ -106,7 +123,9 @@ export default function FirstDatePage() {
     } else {
       document.title = 'Date & Romance Luck | Tips for Perfect Meeting';
     }
-  }, [language]);
+    // [FIX] 페이지 진입 시 이전 결과 초기화
+    setAiResult('');
+  }, [language, setAiResult]);
 
   const FIRST_DATE_OPTIONS = useMemo(() => GET_FIRST_DATE_OPTIONS(gender), [gender]);
 
@@ -115,27 +134,43 @@ export default function FirstDatePage() {
       detailSectionRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
   }, [selectedDate]);
-
-  const [question, setQuestion] = useState('');
-  const [selectedDateSaju, setSelectedDateSaju] = useState(null);
-
-  const isDisabled = !user || loading || !selectedDate;
-  const isDisabled2 = isLocked;
-
   const selDate = useMemo(() => {
     if (!selectedDate) return '';
     const d = new Date(selectedDate);
-    const month = String(d.getMonth() + 1).padStart(2, '0');
-    const day = String(d.getDate()).padStart(2, '0');
-    return `${d.getFullYear()}-${month}-${day}T12:00`;
+    return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}T12:00`;
   }, [selectedDate]);
 
-  useEffect(() => {
+
+  const selectedDateSaju = useMemo(() => {
     if (selectedDate) {
       const result = calculateSaju(selDate, true);
-      setSelectedDateSaju(result.saju);
+      return result
     }
+    return null;
   }, [selectedDate, selDate]);
+
+  const isAnalysisDone = useMemo(() => {
+    if (!prevData || !prevData.result) return false;
+    if (prevData.gender !== gender) return false;
+    if (!SajuAnalysisService.compareSaju(prevData.saju, saju)) return false;
+    if (!SajuAnalysisService.compareSaju(prevData.sajuDate, selectedDateSaju)) return false;
+    if (prevData.question !== question) return false;
+
+    return true;
+  }, [prevData, gender, saju, selDateString, question, selectedDate]);
+  console.log('1', !prevData || !prevData.result)
+  console.log('2', prevData.gender !== gender)
+  console.log('3', !SajuAnalysisService.compareSaju(prevData.saju, saju))
+  console.log('4', !SajuAnalysisService.compareSaju(prevData.sajuDate, selectedDateSaju))
+  console.log('5', prevData.question !== question)
+  console.log(isAnalysisDone)
+
+
+  const isDisabled = !user || loading || !selectedDate;
+
+  const isDisabled2 = !isAnalysisDone && isLocked;
+
+
 
   const service = useMemo(
     () =>
@@ -156,7 +191,20 @@ export default function FirstDatePage() {
 
   const handleStartClick = useCallback(
     async (onstart) => {
-      setAiResult('');
+      // [UX FIX] 로딩 화면 먼저 진입
+      onstart();
+
+      // [NEW] 이미 저장된 데이터와 입력값이 같으면 잠시 대기 후 결과 페이지로 이동
+      if (isAnalysisDone) {
+        console.log('✅ 이미 분석된 데이터(옵션 일치)가 있어 결과 페이지로 이동합니다.');
+        setLoading(true); // Manually trigger loading state for UI transition
+        setTimeout(() => {
+          router.push('/saju/date/result');
+        }, 2000);
+        return;
+      }
+
+
       try {
         await service.analyze(
           AnalysisPresets.dailySpecific({
@@ -167,16 +215,17 @@ export default function FirstDatePage() {
             sajuDate: selectedDateSaju,
             question: question,
             type: 'firstdate',
-            promptAdd: '',
+            promptAdd: dbPrompt,
           }),
         );
-        onstart();
+
       } catch (error) {
         console.error(error);
       }
     },
-    [service, saju, gender, language, selectedDate, question, selectedDateSaju, setAiResult],
+    [service, saju, gender, language, selectedDate, question, selectedDateSaju, setAiResult, dbPrompt, isAnalysisDone, router],
   );
+
 
   const [selections, setSelections] = useState({ vibe: '', goal: '' });
 
@@ -191,8 +240,8 @@ export default function FirstDatePage() {
         return foundOption ? foundOption.prompt : null;
       });
 
-      const combined = (language === 'ko' ? '오늘의 만남은 ' : 'Today\'s meeting is ') + updatedPrompts.filter(Boolean).join(', ');
-      setQuestion(combined);
+      // const combined = (language === 'ko' ? '오늘의 만남은 ' : 'Today\'s meeting is ') + updatedPrompts.filter(Boolean).join(', ');
+      // setQuestion(combined);
       return newSelections;
     });
   }, [FIRST_DATE_OPTIONS, language]);
@@ -296,7 +345,7 @@ export default function FirstDatePage() {
                 onClick={() => handleStartClick(onStart)}
                 disabled={isDisabled || isDisabled2}
                 loading={loading}
-                isDone={false}
+                isDone={isAnalysisDone}
                 label={language === 'ko' ? '데이트 분석하기' : 'Analyze Date'}
                 color="rose"
                 cost={-1}
@@ -366,16 +415,24 @@ export default function FirstDatePage() {
       isLocked,
       user,
       userData,
+
     ],
   );
+
+  // [NEW] Reactive Redirect
+  useEffect(() => {
+    if (!loading && aiResult && aiResult.length > 0) {
+      router.push('/saju/date/result');
+    }
+  }, [loading, aiResult, router]);
 
   return (
     <main className="min-h-screen">
       <AnalysisStepContainer
         guideContent={sajuGuide}
         loadingContent={<LoadingFourPillar saju={saju} isTimeUnknown={isTimeUnknown} />}
-        resultComponent={ReportTemplateDate}
-        loadingTime={0}
+        resultComponent={null}
+        loadingTime={10000000}
       />
     </main>
   );

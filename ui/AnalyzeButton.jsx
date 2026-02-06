@@ -41,11 +41,11 @@ const COLOR_MAPS = {
   }
 };
 
-export default function AnalyzeButton({ 
-  onClick, 
+export default function AnalyzeButton({
+  onClick,
   disabled = false,
-  loading, 
-  isDone, 
+  loading,
+  isDone,
   label,
   cost = -1,
   color = 'red'
@@ -54,26 +54,26 @@ export default function AnalyzeButton({
   const DISABLED_STYLE = 'bg-gray-100 text-gray-400 cursor-not-allowed border border-gray-200';
   const { language } = useLanguage();
   const { user, userData, login } = useAuthContext();
-  const { isLocked } = useUsageLimit();  
+  const { isLocked } = useUsageLimit();
 
-  const lockCheck = ()=>{
-    if(isLocked){
-      if(isDone){
+  const lockCheck = () => {
+    if (isLocked) {
+      if (isDone) {
         return false
-      }else{
+      } else {
         return true
       }
-    }else{
+    } else {
       return false
     }
   }
-const buttonClicked = ()=>{
-  if(lockCheck()){
-    alert(language === 'ko' ? '크레딧을 다 사용하셨습니다.' : 'You have used all your credits.');
-    return;
+  const buttonClicked = () => {
+    if (lockCheck()) {
+      alert(language === 'ko' ? '크레딧을 다 사용하셨습니다.' : 'You have used all your credits.');
+      return;
+    }
+    onClick()
   }
-  onClick()
-}
   const theme = COLOR_MAPS[color] || COLOR_MAPS.red;
 
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
@@ -88,8 +88,8 @@ const buttonClicked = ()=>{
         >
           {/* Subtle hover background effect */}
           <div className="absolute inset-0 bg-gradient-to-br from-indigo-50/40 via-white to-white dark:from-indigo-900/20 dark:via-slate-800 dark:to-slate-800 opacity-0 group-hover:opacity-100 transition-opacity" />
-          
-        
+
+
           <GiftIcon className="w-6 h-6 text-indigo-500 relative z-10" />
           <span className="text-slate-800 dark:text-white text-lg tracking-tight relative z-10">
             {language === 'ko' ? '오늘 3회 무료로 시작하기' : 'Start with 3 Free Today'}
@@ -99,9 +99,9 @@ const buttonClicked = ()=>{
           <div className="absolute top-0 -inset-full h-full w-1/2 z-5 block transform -skew-x-12 bg-gradient-to-r from-transparent via-white/40 to-transparent group-hover:animate-shine" />
         </button>
 
-        <LoginModal 
-          isOpen={isLoginModalOpen} 
-          onClose={() => setIsLoginModalOpen(false)} 
+        <LoginModal
+          isOpen={isLoginModalOpen}
+          onClose={() => setIsLoginModalOpen(false)}
         />
       </>
     );

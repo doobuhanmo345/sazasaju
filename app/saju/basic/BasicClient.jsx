@@ -1,6 +1,7 @@
 'use client';
 
 import { useRef, useState, useEffect, useCallback, useMemo } from 'react'; // 1. useMemo 추가
+import { useRouter } from 'next/navigation';
 import AnalyzeButton from '@/ui/AnalyzeButton';
 import { useSajuCalculator } from '@/hooks/useSajuCalculator';
 import { AnalysisStepContainer } from '@/components/AnalysisStepContainer';
@@ -15,15 +16,15 @@ import { ExclamationTriangleIcon } from '@heroicons/react/24/solid';
 import { calculateSajuData } from '@/lib/sajuLogic';
 import LoadingFourPillar from '@/components/LoadingFourPillar';
 import { SajuAnalysisService, AnalysisPresets } from '@/lib/SajuAnalysisService';
-import ReportTemplateBasic from '@/app/saju/basic/ReportTemplateBasic';
 import BasicAnaAppeal from '@/app/saju/basic/BasicAnaAppeal';
 import BasicAnaPreview from '@/app/saju/basic/BasicAnaPreview';
 
 export default function BasicAnaPage() {
+  const router = useRouter();
   const [sajuData, setSajuData] = useState(null);
   const { setLoadingType, setAiResult, aiResult } = useLoading();
   const [loading, setLoading] = useState(false)
-  const { userData, user, isMainDone, selectedProfile } = useAuthContext(); // selectedProfile 추가
+  const { userData, user, selectedProfile } = useAuthContext(); // selectedProfile 추가
 
   // 컨텍스트 스위칭: 선택된 프로필이 있으면 그것을 사용, 없으면 본인 정보
   const targetProfile = selectedProfile || userData;
@@ -42,10 +43,19 @@ export default function BasicAnaPage() {
 
   const DISABLED_STYLE = 'bg-gray-100 text-gray-400 cursor-not-allowed border border-gray-200';
   const isDisabled = !user || loading;
-  // 친구 프로필일 경우(isTargetOthers)에는 isMainDone이 false라도 잠금(isLocked)을 무시하고 분석 가능하게 함
-  // 또한, 평생사주(cost=-1)는 원래 무료이므로 isLocked 체크가 불필요할 수 있으나, 기존 로직 존중하여 친구일 때만 예외 처리
-  const isTargetOthers = !!selectedProfile;
-  const isDisabled2 = !isTargetOthers && !isMainDone && isLocked;
+
+  const prevData = userData?.usageHistory?.ZApiAnalysis;
+  const isAnalysisDone = useMemo(() => {
+
+    return !!(
+      prevData &&
+      prevData.result &&
+      SajuAnalysisService.compareSaju(prevData.saju, targetProfile?.saju) &&
+      prevData.gender === targetProfile?.gender
+    );
+  }, [targetProfile]);
+  // console.log(selectedProfile, !!prevData, SajuAnalysisService.compareSaju(prevData.saju, selectedProfile?.saju), prevData.gender, selectedProfile?.gender)
+  const isDisabled2 = !isAnalysisDone && isLocked;
 
   // Client-side Title Update for Localization (Static Export Support)
   useEffect(() => {
@@ -76,6 +86,18 @@ export default function BasicAnaPage() {
   // ✅ 2. handleStartClick을 useCallback으로 고정
   const handleStartClick = useCallback(
     async (onstart) => {
+      // [UX FIX] 로딩 화면을 먼저 보여줌
+      onstart();
+
+      // [NEW] 이미 저장된 데이터와 현재 입력값이 같으면 잠시 대기 후 결과 페이지로 이동
+      if (isAnalysisDone) {
+        console.log('✅ 이미 분석된 데이터가 있어 결과 페이지로 이동합니다.');
+        setTimeout(() => {
+          router.push('/saju/basic/result');
+        }, 2000);
+        return;
+      }
+
       setAiResult('');
       try {
         const data = calculateSajuData(inputDate, gender, isTimeUnknown, language);
@@ -84,7 +106,7 @@ export default function BasicAnaPage() {
         const preset = AnalysisPresets.basic({ saju, gender, language }, data);
 
         // [CRITICAL FIX] 친구 프로필 분석 시 메인 유저의 saju 데이터 덮어쓰기 방지
-        if (selectedProfile) {
+        if (targetProfile) {
           preset.buildSaveData = async (result, p, service) => {
             const todayStr = await service.getToday();
             return {
@@ -92,10 +114,10 @@ export default function BasicAnaPage() {
               usageHistory: {
                 ZApiAnalysis: {
                   result,
-                  saju: p.saju,
+                  saju: targetProfile?.saju,
                   language: p.language,
-                  gender: p.gender,
-                  targetName: selectedProfile.displayName || 'Friend', // 누구 사주인지 기록
+                  gender: targetProfile?.gender,
+                  targetName: targetProfile.displayName || 'Friend', // 누구 사주인지 기록
                 },
               },
               // 친구 분석은 카운트 증가 안 함 (옵션) -> 일단 기록은 남기되 메인 데이터 보호
@@ -103,17 +125,16 @@ export default function BasicAnaPage() {
             };
           };
         }
-
+        onstart(); // 로딩화면 진입 (분석 시작 전)
         await service.analyze(preset, (result) => {
           console.log('✅ 평생운세 완료!');
         });
-        onstart();
       } catch (error) {
         console.error(error);
         alert(UI_TEXT.error?.[language] || 'An error occurred.');
       }
     },
-    [inputDate, gender, isTimeUnknown, language, service, saju, setAiResult, selectedProfile],
+    [inputDate, gender, isTimeUnknown, language, service, saju, setAiResult, targetProfile],
   );
 
   // ✅ 3. sajuGuide를 useCallback으로 고정
@@ -181,7 +202,7 @@ export default function BasicAnaPage() {
               onClick={() => handleStartClick(onStart)}
               disabled={isDisabled || isDisabled2}
               loading={loading}
-              isDone={isMainDone}
+              isDone={isAnalysisDone}
               label={language === 'ko' ? '평생 운세 보기' : 'Analyze Saju'}
               color="indigo"
               cost={-1}
@@ -214,7 +235,7 @@ export default function BasicAnaPage() {
             isDisabled={isDisabled}
             isDisabled2={isDisabled2}
             loading={loading}
-            isDone={isMainDone}
+            isDone={isAnalysisDone}
             isLocked={isLocked}
           />
 
@@ -225,7 +246,7 @@ export default function BasicAnaPage() {
                 onClick={() => handleStartClick(onStart)}
                 disabled={isDisabled || isDisabled2}
                 loading={loading}
-                isDone={isMainDone}
+                isDone={isAnalysisDone}
                 label={language === 'ko' ? '평생 운세 보기' : 'Analyze Saju'}
                 color="indigo"
                 cost={-1}
@@ -257,28 +278,24 @@ export default function BasicAnaPage() {
       handleStartClick,
       user,
       userData,
-      isMainDone,
       isLocked,
     ],
   );
 
-  // ✅ 4. 스크롤 로직 최적화 (aiResult가 바뀔 때만 한 번 실행)
+  // ✅ 4. 스크롤 로직 & 리다이렉트 (loading이 false가 되고 결과가 있을 때 이동)
   useEffect(() => {
-    if (aiResult && aiResult.length > 0) {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+    if (!loading && aiResult && aiResult.length > 0) {
+      router.push('/saju/basic/result');
     }
-  }, [aiResult]);
-
-  // ✅ 5. Result 컴포넌트 참조 고정
-  const resultComp = useCallback(() => <ReportTemplateBasic />, [aiResult]);
+  }, [loading, aiResult, router]);
 
   return (
     <>
       <AnalysisStepContainer
         guideContent={sajuGuide}
         loadingContent={<LoadingFourPillar saju={saju} isTimeUnknown={isTimeUnknown} />}
-        resultComponent={resultComp}
-        loadingTime={0}
+        resultComponent={null}
+        loadingTime={10000000} // Redirect handles result view
       />
     </>
   );

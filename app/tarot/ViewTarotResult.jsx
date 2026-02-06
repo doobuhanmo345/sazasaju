@@ -4,10 +4,11 @@ import { useLoading } from '@/contexts/useLoadingContext';
 import { aiSajuStyle } from '@/data/aiResultConstants';
 import { useMemo } from 'react';
 
-export default function ViewTarotResult({ cardPicked, loading }) {
+export default function ViewTarotResult({ cardPicked, loading, data }) {
   const { aiResult } = useLoading();
 
   const fortune = useMemo(() => {
+    if (data) return data; // Use provided data if available
     if (!aiResult) return null;
     try {
       const cleanedJson = aiResult.replace(/```json|```/gi, '').trim();
@@ -16,7 +17,7 @@ export default function ViewTarotResult({ cardPicked, loading }) {
       console.error('데이터 파싱 실패:', e);
       return null;
     }
-  }, [aiResult]);
+  }, [aiResult, data]);
 
   if (loading)
     return (

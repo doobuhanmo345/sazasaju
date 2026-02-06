@@ -9,12 +9,15 @@ import { useLoading } from '@/contexts/useLoadingContext';
 import { parseAiResponse } from '@/utils/helpers';
 import AfterReport from '@/components/AfterReport';
 
-const ReportTemplateInterview = ({}) => {
+const ReportTemplateInterview = ({ }) => {
   const { aiResult } = useLoading();
   const { language } = useLanguage();
-  const { userData } = useAuthContext();
+  const { userData, selectedProfile } = useAuthContext();
   const [isLoaded, setIsLoaded] = useState(false);
   const [data, setData] = useState(null);
+
+  // [NEW] Target Profile Logic
+  const targetProfile = selectedProfile || userData;
 
   useEffect(() => {
     if (aiResult) {
@@ -23,16 +26,43 @@ const ReportTemplateInterview = ({}) => {
         setData(parsedData);
       }
     }
-  }, [aiResult]);
+
+    // 2. 없으면 DB에서 로드 (persistence)
+    if (userData && !aiResult) {
+      const savedResult = userData?.usageHistory?.Zinterview?.result;
+      if (savedResult) {
+        const parsed = parseAiResponse(savedResult);
+        if (parsed) {
+          setData(parsed);
+        }
+      } else {
+        // 데이터 없으면 리다이렉트 (필요 시)
+        // alert('No result found'); router.push...
+      }
+    }
+  }, [aiResult, userData]);
 
   useEffect(() => {
     setIsLoaded(true);
   }, []);
 
-  if (!userData || !aiResult || !data) return null;
+  if (!userData) {
+    return <div className="p-10 text-center text-blue-500 animate-pulse">Loading User Info...</div>;
+  }
 
-  const { displayName, birthDate, isTimeUnknown } = userData;
-  const saju = userData.saju || {};
+  if (!data) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-[40vh] gap-4">
+        <div className="w-8 h-8 rounded-full border-4 border-blue-200 border-t-blue-500 animate-spin"></div>
+        <div className="text-center text-blue-400 font-medium animate-pulse text-sm">
+          {language === 'en' ? 'Retrieving Strategy Report...' : '면접 분석 데이터를 불러오는 중...'}
+        </div>
+      </div>
+    );
+  }
+
+  const { displayName, birthDate, isTimeUnknown } = targetProfile;
+  const saju = targetProfile.saju || {};
   const bd = toymdt(birthDate);
 
   return (
@@ -206,7 +236,7 @@ const ReportTemplateInterview = ({}) => {
           {language === 'en' ? 'Save Success Amulet' : '합격 부적 저장하기'}
         </button>
       </footer>
-      
+
       <AfterReport />
     </div>
   );
@@ -262,7 +292,7 @@ const reusableStyle = `
 
   .rt-main-content { max-width: 440px; margin: 0 auto; padding: 0 20px; }
   .rt-card {
-    background: #fff; border-radius: 32px; padding: 32px; margin-bottom: 24px;
+    background: #fff; border-radius: 32px; padding: 12px; margin-bottom: 24px;
     box-shadow: 0 10px 30px rgba(37, 99, 235, 0.04);
     border: 1px solid rgba(37, 99, 235, 0.08);
   }

@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, useMemo, useRef } from 'react';
+import { useRouter } from 'next/navigation';
 import { CalendarDaysIcon } from '@heroicons/react/24/outline';
 import { calculateSajuData, createPromptForGemini } from '@/lib/sajuLogic';
 import { reportStyleBlue, reportStyleSimple } from '@/data/aiResultConstants';
@@ -16,45 +17,51 @@ import { useLoading } from '@/contexts/useLoadingContext';
 import AfterReport from '@/components/AfterReport';
 import { parseAiResponse } from '@/utils/helpers';
 
-const ReportTemplateBasic = ({}) => {
+
+const ReportTemplateBasic = ({ }) => {
   const { aiResult } = useLoading();
   const { language } = useLanguage();
-  const { userData } = useAuthContext();
+  const { userData, selectedProfile } = useAuthContext();
   const [data, setData] = useState(null); // 파싱된 데이터를 담을 로컬 상태
   const scrollElRef = useRef(null);
 
-  if (!userData) return <div className="p-10 text-center">유저 정보를 불러오는 중입니다...</div>;
-
-  const { displayName, birthDate, isTimeUnknown, gender } = userData;
-  const bd = toymdt(birthDate);
-
-  const inputDate = birthDate && birthDate.includes('T') ? birthDate : `${birthDate}T00:00`;
-
+  const router = useRouter();
   const [sajuData, setSajuData] = useState(null);
 
- 
+  // [FIX] Determine target profile (Friend or Self)
+  const targetProfile = selectedProfile || userData;
+  const { displayName, birthDate, isTimeUnknown, gender } = targetProfile || {};
 
+  const bd = birthDate ? toymdt(birthDate) : { year: '', month: '', day: '', time: '' };
+  const inputDate = birthDate && birthDate.includes('T') ? birthDate : `${birthDate}T00:00`;
   useEffect(() => {
-    if (aiResult) {
-      const parsedData = parseAiResponse(aiResult);
+    if (!userData) return; // Wait for load
+
+    // DB에 저장된 결과가 있으면 로드
+    const savedResult = userData?.usageHistory?.ZApiAnalysis?.result;
+    if (savedResult) {
+      const parsedData = parseAiResponse(savedResult);
       if (parsedData) {
         setData(parsedData); // 파싱 성공 시 데이터 세팅
       }
+    } else {
+      // 결과가 없으면 메인으로 리다이렉트
+      alert("저장된 결과가 없습니다. 다시 분석해주세요.");
+      router.replace('/');
     }
-  }, [aiResult]); // aiResult가 업데이트될 때마다 실행
+  }, [userData, router]);
 
-  // 1. 함수 정의를 하나로 통합 (useCallback을 써도 좋지만 간단하게 외부에 정의 가능)
-
-  const isEn = language  !== 'ko';
+  const isEn = language !== 'ko';
   const t = (char) => (isEn ? ENG_MAP[char] || char : char);
 
   useEffect(() => {
-    if (inputDate) {
+    if (inputDate && gender !== undefined) {
       const data = calculateSajuData(inputDate, gender, isTimeUnknown, language);
       setSajuData(data);
     }
   }, [inputDate, gender, isTimeUnknown, language]);
 
+  if (!userData) return <div className="p-10 text-center">유저 정보를 불러오는 중입니다...</div>;
   if (!sajuData) return <div className="p-10 text-center animate-pulse">데이터 계산 중...</div>;
 
   const { saju, pillars, ohaengCount } = sajuData;
@@ -209,21 +216,21 @@ const ReportTemplateBasic = ({}) => {
         </div>
         <div className="">
           {/* 내용시작 */}
-          <div class="report-container">
+          <div className="report-container">
             <section className="my-9">
               <h2 className="rt-card__title">
                 {isEn ? 'Client Information' : <>{displayName}님의 정보</>}
               </h2>
-              <div class="rt-id-card__body">
-                <div class="rt-info-row">
-                  <span class="rt-info-row__label">BIRTH</span>
-                  <span class="rt-info-row__value">
+              <div className="rt-id-card__body">
+                <div className="rt-info-row">
+                  <span className="rt-info-row__label">BIRTH</span>
+                  <span className="rt-info-row__value">
                     {bd.year}.{bd.month}.{bd.day} {isTimeUnknown || <>/{bd.time}</>}
                   </span>
                 </div>
-                <div class="rt-info-row">
-                  <span class="rt-info-row__label">GENDER</span>
-                  <span class="rt-info-row__value">
+                <div className="rt-info-row">
+                  <span className="rt-info-row__label">GENDER</span>
+                  <span className="rt-info-row__value">
                     {' '}
                     {isEn ? (
                       <span> {gender} </span>
@@ -233,26 +240,26 @@ const ReportTemplateBasic = ({}) => {
                   </span>
                 </div>
 
-                <div class="rt-saju-grid">
+                <div className="rt-saju-grid">
                   {isTimeUnknown || (
-                    <div class="rt-saju-grid__item">
+                    <div className="rt-saju-grid__item">
                       <span>시</span>
                       {saju.sky0}
                       {saju.grd0}
                     </div>
                   )}
 
-                  <div class="rt-saju-grid__item">
+                  <div className="rt-saju-grid__item">
                     <span>일</span>
                     {saju.sky1}
                     {saju.grd1}
                   </div>
-                  <div class="rt-saju-grid__item">
+                  <div className="rt-saju-grid__item">
                     <span>월</span>
                     {saju.sky2}
                     {saju.grd2}
                   </div>
-                  <div class="rt-saju-grid__item">
+                  <div className="rt-saju-grid__item">
                     <span>년</span>
                     {saju.sky3}
                     {saju.grd3}
@@ -265,9 +272,9 @@ const ReportTemplateBasic = ({}) => {
                 {isEn ? 'Saju Identity Summary' : '사주 정체성 요약'}
               </h2>
 
-              <div class="rt-card__text text-left">{data.summary.desc}</div>
+              <div className="rt-card__text text-left">{data.summary.desc}</div>
               <div className="my-3">
-                <p class="rt-timing-grid__item">{data.summary.title}</p>
+                <p className="rt-timing-grid__item">{data.summary.title}</p>
                 <div className="gap-3 flex justify-center">
                   {data.keywords.map((keyword, idx) => (
                     <div key={idx} className="rt-id-card__label">
@@ -279,47 +286,47 @@ const ReportTemplateBasic = ({}) => {
             </section>
 
             <section className="my-9">
-              <h2 class="rt-card__title">
+              <h2 className="rt-card__title">
                 {isEn ? 'Overview of Destiny by Topic' : '주제별 개요'}
               </h2>
-              <p class="rt-card__text text-left">{data.overview.desc}</p>
+              <p className="rt-card__text text-left">{data.overview.desc}</p>
             </section>
 
             <section className="my-9">
-              <h2 class="rt-card__title">{isEn ? 'Detailed Interpretation' : '상세 해석 섹션'}</h2>
+              <h2 className="rt-card__title">{isEn ? 'Detailed Interpretation' : '상세 해석 섹션'}</h2>
 
               <div className="rt-card">
-                <div class="rt-ootd-item">
+                <div className="rt-ootd-item">
                   <h3 className="rt-ootd-item__value">{isEn ? 'Wealth & Finance' : '재물운'}</h3>
                   <p className="rt-ootd-item__label">{data.wealth.summary}</p>
                 </div>
-                <p class="rt-card__text text-left">{data.wealth.desc}</p>
+                <p className="rt-card__text text-left">{data.wealth.desc}</p>
               </div>
               <div className="rt-card">
-                <div class="rt-ootd-item">
+                <div className="rt-ootd-item">
                   <h3 className="rt-ootd-item__value">{isEn ? 'Career & Success' : '직업운'}</h3>
                   <p className="rt-ootd-item__label">{data.job.summary}</p>
                 </div>
-                <p class="rt-card__text text-left">{data.job.desc}</p>
+                <p className="rt-card__text text-left">{data.job.desc}</p>
               </div>
               <div className="rt-card">
-                <div class="rt-ootd-item">
+                <div className="rt-ootd-item">
                   <h3 className="rt-ootd-item__value">{isEn ? 'Love & Romance' : '애정운'}</h3>
                   <p className="rt-ootd-item__label">{data.love.summary}</p>
                 </div>
-                <p class="rt-card__text text-left">{data.love.desc}</p>
+                <p className="rt-card__text text-left">{data.love.desc}</p>
               </div>
               <div className="rt-card">
-                <div class="rt-ootd-item">
+                <div className="rt-ootd-item">
                   <h3 className="rt-ootd-item__value">{isEn ? 'Health & Wellness' : '건강운'}</h3>
                   <p className="rt-ootd-item__label">{data.health.summary}</p>
                 </div>
-                <p class="rt-card__text text-left">{data.health.desc}</p>
+                <p className="rt-card__text text-left">{data.health.desc}</p>
               </div>
             </section>
             <section className="my-9">
-              <h2 class="rt-card__title">{isEn ? 'Major Life Cycles' : '대운 해설'}</h2>
-              <div class="rt-analysis-list__item gap-3">
+              <h2 className="rt-card__title">{isEn ? 'Major Life Cycles' : '대운 해설'}</h2>
+              <div className="rt-analysis-list__item gap-3">
                 {data.daewoon.map((item, idx) => (
                   <div key={idx} className="rt-gap2">
                     <span className="rt-analysis-list__sub-title">{item.name}</span>
@@ -329,10 +336,10 @@ const ReportTemplateBasic = ({}) => {
               </div>
             </section>
 
-            <section class="rt-card">
-              <h2 class="rt-card__title">Final Conclusion</h2>
-              <div class="rt-tip-box">
-                <span class="rt-tip-box__label">{data.finalConclusion.title}</span>
+            <section className="rt-card">
+              <h2 className="rt-card__title">Final Conclusion</h2>
+              <div className="rt-tip-box">
+                <span className="rt-tip-box__label">{data.finalConclusion.title}</span>
                 <p className="rt-card__text text-left">{data.finalConclusion.desc}</p>
               </div>
             </section>

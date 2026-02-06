@@ -23,7 +23,7 @@ import { useRouter } from 'next/navigation';
 import ToTopButton from '@/ui/ToTopButton';
 export default function SelBirthPage() {
   const router = useRouter();
-  const { setAiResult, setLastParams } = useLoading();
+  const { aiResult, setAiResult, setLastParams } = useLoading();
   const [loading, setLoading] = useState(false)
   const { userData, user, selectedProfile } = useAuthContext();
   // 컨텍스트 스위칭
@@ -73,6 +73,43 @@ export default function SelBirthPage() {
   const [birthMethod, setBirthMethod] = useState('cesarean');
   const [babyGender, setBabyGender] = useState('unknown');
 
+  // [NEW] Strict Analysis Check (SelBirth uses 'selBirth', stored in ZSelBirth)
+  const prevData = userData?.usageHistory?.ZSelBirth;
+
+  const isAnalysisDone = useMemo(() => {
+    if (!prevData || !prevData.result) return false;
+
+    // 1. 프로필 검증 (엄마/본인)
+    if (prevData.gender !== gender) return false;
+    if (!SajuAnalysisService.compareSaju(prevData.saju, saju)) return false;
+
+    // 2. 입력값 검증
+    // Due Date
+    if (prevData.dueDate !== dueDate) return false;
+
+    // Partner Info (SajuAnalysisService.selBirth saves parameter as 'partnerBirthDate')
+    // stored as '1990-01-01T12:00'? Need to check what is saved.
+    // In buildSaveData for selBirth (not visible but inferred), it likely saves params.
+    // Assuming it saves exactly what is passed.
+    if (prevData.partnerBirthDate !== partnerBirthInfo) return false;
+    if (!prevData?.partnerSaju.grd0 !== partnerTimeUnknown) return false;
+
+    // Options
+    if (prevData.birthMethod !== birthMethod) return false;
+    if (prevData.babyGender !== babyGender) return false;
+    if (prevData.startDate && prevData.startDate !== startDate) return false;
+    if (prevData.endDate && prevData.endDate !== endDate) return false;
+
+    return true;
+  }, [prevData, gender, saju, dueDate, partnerBirthInfo, partnerTimeUnknown, birthMethod, babyGender, startDate, endDate]);
+  console.log(prevData?.dueDate !== dueDate)
+  console.log(prevData?.partnerBirthDate !== partnerBirthInfo)
+  console.log(!prevData?.partnerSaju.grd0, partnerTimeUnknown)
+  console.log(prevData?.birthMethod !== birthMethod)
+  console.log(prevData?.babyGender !== babyGender)
+  console.log(prevData?.startDate && prevData?.startDate !== startDate)
+  console.log(prevData?.endDate && prevData?.endDate !== endDate)
+  console.log(prevData)
   const isDisabled = !user || loading || !dueDate;
 
   const service = useMemo(
@@ -97,6 +134,19 @@ export default function SelBirthPage() {
     async (onStart) => {
       if (!user) {
         alert(UI_TEXT.loginReq[language]);
+        return;
+      }
+
+      // [UX FIX] 로딩 화면 먼저 진입
+      onStart();
+
+      // [NEW] 이미 저장된 데이터와 입력값이 같으면 잠시 대기 후 결과 페이지로 이동
+      if (isAnalysisDone) {
+        console.log('✅ 이미 분석된 데이터(옵션 일치)가 있어 결과 페이지로 이동합니다.');
+        setLoading(true); // Manually trigger loading state
+        setTimeout(() => {
+          router.push('/saju/selbirth/result');
+        }, 2000);
         return;
       }
 
@@ -129,13 +179,25 @@ export default function SelBirthPage() {
             babyGender,
           }),
         );
-        onStart();
+        // 콜백 제거
       } catch (error) {
         console.error(error);
       }
     },
-    [service, saju, gender, language, startDate, endDate, dueDate, partnerBirthInfo, partnerTimeUnknown, birthMethod, babyGender, setAiResult, user],
+    [service, saju, gender, language, startDate, endDate, dueDate, partnerBirthInfo, partnerTimeUnknown, birthMethod, babyGender, setAiResult, user, isAnalysisDone, router],
   );
+  console.log(prevData)
+  // [UX FIX] Reset AI Result on Mount
+  useEffect(() => {
+    setAiResult('');
+  }, [setAiResult]);
+
+  // [NEW] Reactive Redirect
+  useEffect(() => {
+    if (!loading && aiResult && aiResult.length > 0) {
+      router.push('/saju/selbirth/result');
+    }
+  }, [loading, aiResult, router]);
 
   const renderInput = (onStart) => {
     return (
@@ -265,7 +327,7 @@ export default function SelBirthPage() {
               onClick={() => handleStartAnalysis(onStart)}
               disabled={isDisabled}
               loading={false}
-              isDone={false}
+              isDone={isAnalysisDone}
               label={language === 'ko' ? '좋은 날짜 받기' : 'Find Best Dates'}
               color='emerald'
               cost={-1}
@@ -294,7 +356,7 @@ export default function SelBirthPage() {
               onClick={() => handleStartAnalysis(onStart)}
               disabled={isDisabled}
               loading={loading}
-              isDone={false}
+              isDone={isAnalysisDone}
               label={language === 'ko' ? '좋은 날짜 받기' : 'Find Best Dates'}
               color='emerald'
               cost={-1}
@@ -389,8 +451,8 @@ export default function SelBirthPage() {
       <AnalysisStepContainer
         guideContent={sajuGuide}
         loadingContent={<LoadingFourPillar saju={saju} isTimeUnknown={isTimeUnknown} />}
-        resultComponent={ReportTemplateSelBirth}
-        loadingTime={0}
+        resultComponent={null}
+        loadingTime={10000000}
       />
     </main>
   );

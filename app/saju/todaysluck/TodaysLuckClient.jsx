@@ -15,7 +15,7 @@ import { ExclamationTriangleIcon } from '@heroicons/react/24/solid';
 import { calculateSajuData } from '@/lib/sajuLogic';
 import LoadingFourPillar from '@/components/LoadingFourPillar';
 import { SajuAnalysisService, AnalysisPresets } from '@/lib/SajuAnalysisService';
-import ReportTemplateToday from '@/app/saju/todaysluck/ReportTemplateToday';
+import { useRouter } from 'next/navigation';
 import { reportStyle } from '@/data/aiResultConstants';
 import TodaysLuckPreview from '@/app/saju/todaysluck/TodaysLuckPreview';
 
@@ -23,7 +23,8 @@ export default function TodaysLuckPage() {
   const { setLoadingType, aiResult, setAiResult } = useLoading();
   const [loading, setLoading] = useState(false);
   const [sajuData, setSajuData] = useState(null);
-  const { userData, user, isDailyDone, selectedProfile } = useAuthContext(); // selectedProfile 추가
+  const { userData, user, selectedProfile } = useAuthContext(); // selectedProfile 추가
+  const router = useRouter();
 
   // 컨텍스트 스위칭
   const targetProfile = selectedProfile || userData;
@@ -34,7 +35,22 @@ export default function TodaysLuckPage() {
   const DISABLED_STYLE = 'bg-gray-100 text-gray-400 cursor-not-allowed border border-gray-200';
   const isDisabled = !user || loading;
   const isTargetOthers = !!selectedProfile;
-  const isDisabled2 = !isTargetOthers && !isDailyDone && isLocked;
+
+  // [NEW] Strict Analysis Check from User Data
+  const prevData = userData?.usageHistory?.ZLastDaily;
+  // Note: key for today's luck is ZLastDaily
+  console.log(prevData)
+  const isAnalysisDone = (() => {
+    if (!prevData || !prevData.result) return false;
+    // Compare basic fields if needed, but today's luck is date sensitive.
+    // Assuming ZLastDaily is already filtered by date in context or backend.
+    // Basic check for profile match:
+    if (prevData.gender !== (targetProfile?.gender)) return false;
+    if (prevData.date !== new Date().toISOString().split('T')[0]) return false;
+    return SajuAnalysisService.compareSaju(prevData.saju, targetProfile?.saju);
+  })();
+
+  const isDisabled2 = !isTargetOthers && !isAnalysisDone && isLocked;
 
   // Client-side Title Update for Localization (Static Export Support)
   useEffect(() => {
@@ -68,10 +84,23 @@ export default function TodaysLuckPage() {
   });
 
   const handleStartClick = async (onstart) => {
+    // [UX FIX] 로딩 화면을 먼저 보여줌
+    onstart();
+
+    // [NEW] 이미 저장된 데이터가 있으면 잠시 대기 후 리다이렉트
+    if (isAnalysisDone) {
+      console.log('✅ 이미 분석된 데이터가 있어 결과 페이지로 이동합니다.');
+      setTimeout(() => {
+        router.push('/saju/todaysluck/result');
+      }, 2000);
+      return;
+    }
+
     setAiResult('');
     try {
-      await service.analyze(AnalysisPresets.daily({ saju, gender, language }));
-      onstart();
+      await service.analyze(AnalysisPresets.daily({ saju, gender, language }), (result) => {
+        console.log('✅ 오늘의 운세 완료!');
+      });
     } catch (error) {
       console.error(error);
     }
@@ -122,7 +151,7 @@ export default function TodaysLuckPage() {
             onClick={() => handleStartClick(onStart)}
             disabled={isDisabled || isDisabled2}
             loading={loading}
-            isDone={isDailyDone}
+            isDone={isAnalysisDone}
             label={language === 'ko' ? '운세 확인하기' : 'Check my Luck'}
             color="amber"
             cost={-1}
@@ -153,7 +182,7 @@ export default function TodaysLuckPage() {
           isDisabled={isDisabled}
           isDisabled2={isDisabled2}
           loading={loading}
-          isDone={isDailyDone}
+          isDone={isAnalysisDone}
           isLocked={isLocked}
         />
         <div className="mx-w-lg mx-auto">
@@ -163,7 +192,7 @@ export default function TodaysLuckPage() {
               onClick={() => handleStartClick(onStart)}
               disabled={isDisabled || isDisabled2}
               loading={loading}
-              isDone={isDailyDone}
+              isDone={isAnalysisDone}
               label={language === 'ko' ? '운세 확인하기' : 'Check my Luck'}
               color="amber"
               cost={-1}
@@ -199,13 +228,20 @@ export default function TodaysLuckPage() {
     }
   }, [loading]);
 
+  // [NEW] Reactive Redirect
+  useEffect(() => {
+    if (!loading && aiResult && aiResult.length > 0) {
+      router.push('/saju/todaysluck/result');
+    }
+  }, [loading, aiResult, router]);
+
   return (
     <>
       <AnalysisStepContainer
         guideContent={sajuGuide}
         loadingContent={<LoadingFourPillar saju={saju} isTimeUnknown={isTimeUnknown} />}
-        resultComponent={ReportTemplateToday}
-        loadingTime={0}
+        resultComponent={null}
+        loadingTime={10000000}
       />
       <div dangerouslySetInnerHTML={{ __html: reportStyle }} />
     </>

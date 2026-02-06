@@ -10,7 +10,7 @@ import { useLanguage } from '@/contexts/useLanguageContext';
 import { langPrompt, hanja } from '@/data/constants';
 import LoadingFourPillar from '@/components/LoadingFourPillar';
 import { SajuAnalysisService, AnalysisPresets } from '@/lib/SajuAnalysisService';
-import ReportTemplateSelDate from '@/app/saju/seldate/ReportTemplateSelDate';
+import { useRouter } from 'next/navigation';
 import DateInput from '@/ui/DateInput';
 import SelDateAppeal from '@/app/saju/seldate/SelDateAppeal';
 import SelDatePreview from '@/app/saju/seldate/SelDatePreview';
@@ -30,9 +30,10 @@ const PURPOSE_OPTIONS = [
 ];
 
 export default function SelDatePage() {
-  const { setLoadingType, setAiResult } = useLoading();
+  const { setLoadingType, setAiResult, aiResult } = useLoading(); // aiResult added
   const [loading, setLoading] = useState(false);
   const { userData, user, selectedProfile } = useAuthContext();
+  const router = useRouter();
   // 컨텍스트 스위칭
   const targetProfile = selectedProfile || userData;
   const { birthDate: inputDate, isTimeUnknown, gender, saju } = targetProfile || {};
@@ -47,7 +48,9 @@ export default function SelDatePage() {
     } else {
       document.title = 'Auspicious Date Selection | Perfect Timing for Success';
     }
-  }, [language]);
+    // [FIX] 페이지 진입 시 이전 결과 초기화 (Auto Redirect 방지)
+    setAiResult('');
+  }, [language, setAiResult]);
 
   const [selectedPurpose, setSelectedPurpose] = useState('');
   const [startDate, setStartDate] = useState(() => {
@@ -61,14 +64,35 @@ export default function SelDatePage() {
     return nextMonth.toISOString().split('T')[0];
   });
 
-  const isDisabled = !user || loading || !selectedPurpose || !startDate || !endDate;
-
+  // maxDate Logic restored
   const maxDate = useMemo(() => {
     const start = new Date(startDate);
     const max = new Date(start);
     max.setDate(start.getDate() + 100);
     return max.toISOString().split('T')[0];
   }, [startDate]);
+
+  // [NEW] Strict Analysis Check (Matching SajuAnalysisService.validateCache)
+  const prevData = userData?.usageHistory?.ZSelDate;
+  const isAnalysisDone = useMemo(() => {
+    if (!prevData || !prevData.result) return false;
+
+    const purposeLabel = PURPOSE_OPTIONS.find(p => p.id === selectedPurpose);
+    const currentPurposeText = language === 'ko' ? purposeLabel?.ko : purposeLabel?.en;
+
+    // Check all fields consistent with validateCache
+    const isSame =
+      prevData.startDate === startDate &&
+      prevData.endDate === endDate &&
+      prevData.purpose === currentPurposeText && // Check Text (since service uses text)
+      prevData.language === language &&
+      prevData.gender === gender &&
+      SajuAnalysisService.compareSaju(prevData.saju, saju);
+
+    return isSame;
+  }, [prevData, startDate, endDate, selectedPurpose, language, gender, saju]);
+
+  const isDisabled = !isAnalysisDone && isLocked;
 
   const handleQuickSelect = (amount, unit = 'months') => {
     const start = new Date(startDate);
@@ -112,11 +136,23 @@ export default function SelDatePage() {
         return;
       }
 
+      const purposeLabel = PURPOSE_OPTIONS.find(p => p.id === selectedPurpose);
+      const purposeText = language === 'ko' ? purposeLabel?.ko : purposeLabel?.en;
+
+      // [UX FIX] 로딩 화면 먼저 진입
+      onStart();
+
+      // [NEW] 이미 저장된 데이터와 입력값이 같으면 잠시 대기 후 결과 페이지로 이동
+      if (isAnalysisDone) {
+        console.log('✅ 이미 분석된 데이터(옵션 일치)가 있어 결과 페이지로 이동합니다.');
+        setTimeout(() => {
+          router.push('/saju/seldate/result');
+        }, 2000);
+        return;
+      }
+
       setAiResult('');
       try {
-        const purposeLabel = PURPOSE_OPTIONS.find(p => p.id === selectedPurpose);
-        const purposeText = language === 'ko' ? purposeLabel?.ko : purposeLabel?.en;
-
         await service.analyze(
           AnalysisPresets.selDate({
             saju,
@@ -127,14 +163,14 @@ export default function SelDatePage() {
             purpose: purposeText,
           }),
         );
-        onStart();
+        // 콜백 제거 -> useEffect에서 처리
       } catch (error) {
         console.error(error);
       }
     },
-    [service, saju, gender, language, startDate, endDate, selectedPurpose, setAiResult],
+    [service, saju, gender, language, startDate, endDate, selectedPurpose, setAiResult, isAnalysisDone, router],
   );
-
+  console.log(prevData)
   const selectionSection = useCallback(() => {
     return (
       <div className="w-full mx-auto py-8">
@@ -285,8 +321,8 @@ export default function SelDatePage() {
               <AnalyzeButton
                 onClick={() => handleStartClick(onStart)}
                 disabled={isDisabled}
-                loading={false}
-                isDone={false}
+                loading={loading}
+                isDone={isAnalysisDone}
                 label={language === 'ko' ? '좋은 날짜 받기' : 'Find Best Dates'}
                 color='emerald'
               />
@@ -306,8 +342,8 @@ export default function SelDatePage() {
               <ToTopButton
                 onClick={() => handleStartClick(onStart)}
                 disabled={isDisabled}
-                loading={false}
-                isDone={false}
+                loading={loading}
+                isDone={isAnalysisDone}
                 label={language === 'ko' ? '좋은 날짜 받기' : 'Find Best Dates'}
                 color='emerald'
               />
@@ -328,16 +364,23 @@ export default function SelDatePage() {
         </div>
       );
     },
-    [loading, saju, isTimeUnknown, language, selectionSection, handleStartClick, isDisabled, isLocked, user, userData]
+    [loading, saju, isTimeUnknown, language, selectionSection, handleStartClick, isDisabled, isLocked, isAnalysisDone]
   );
+
+  // [NEW] Reactive Redirect
+  useEffect(() => {
+    if (!loading && aiResult && aiResult.length > 0) {
+      router.push('/saju/seldate/result');
+    }
+  }, [loading, aiResult, router]);
 
   return (
     <>
       <AnalysisStepContainer
         guideContent={sajuGuide}
         loadingContent={<LoadingFourPillar saju={saju} isTimeUnknown={isTimeUnknown} />}
-        resultComponent={ReportTemplateSelDate}
-        loadingTime={0}
+        resultComponent={null}
+        loadingTime={10000000}
       />
     </>
   );

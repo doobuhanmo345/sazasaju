@@ -7,21 +7,46 @@ import { useLanguage } from '@/contexts/useLanguageContext';
 import { parseAiResponse } from '@/utils/helpers';
 import AfterReport from '@/components/AfterReport';
 
+import { useRouter } from 'next/navigation';
+import { useAuthContext } from '@/contexts/useAuthContext';
+
 const ReportTemplateToday = ({ }) => {
   const { aiResult } = useLoading();
   const { language } = useLanguage();
+  const { userData, selectedProfile } = useAuthContext();
+  const router = useRouter();
+
   const isEn = language !== 'ko';
   const [gaugeScore, setGaugeScore] = useState(0);
   const [data, setData] = useState(null); // 파싱된 데이터를 담을 로컬 상태
 
   useEffect(() => {
+    // 1. aiResult가 있으면 우선 사용
     if (aiResult) {
       const parsedData = parseAiResponse(aiResult);
       if (parsedData) {
-        setData(parsedData); // 파싱 성공 시 데이터 세팅
+        setData(parsedData);
+        return;
       }
     }
-  }, [aiResult]); // aiResult가 업데이트될 때마다 실행
+
+    // 2. 없으면 DB에서 로드 (persistence)
+    if (userData && !aiResult) {
+      // NOTE: Today's Luck usually stored in ZLastDaily
+      // We should check if the saved date matches 'today' ideally, but strictly following the prompt pattern:
+      // Just load what is there. The Client side checks validity before redirecting anyway.
+      const savedResult = userData?.usageHistory?.ZLastDaily?.result;
+      if (savedResult) {
+        const parsed = parseAiResponse(savedResult);
+        if (parsed) {
+          setData(parsed);
+        }
+      } else {
+        // No Data -> Redirect
+        router.replace('/saju/todaysluck');
+      }
+    }
+  }, [aiResult, userData, router]);
   useEffect(() => {
     if (data?.today?.score) {
       // 렌더링 직후 0인 상태에서 점수값으로 변경하여 애니메이션 유도

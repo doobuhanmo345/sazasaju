@@ -281,7 +281,7 @@ export default function ProfileManagePage() {
         <div className="space-y-4">
           {/* My Profile */}
           <div
-            onClick={() => handleSelect(null)} // Null selects self
+            onClick={() => handleSelect(userData)} // Null selects self
             className={`relative p-5 rounded-2xl border transition-all cursor-pointer flex items-center gap-4 ${(userData && selectedProfile?.uid === userData.uid && !selectedProfile.id)
               ? 'bg-white dark:bg-slate-900 border-indigo-500 ring-1 ring-indigo-500 shadow-md'
               : 'bg-white dark:bg-slate-900 border-slate-100 dark:border-slate-800 hover:border-indigo-200'
@@ -303,8 +303,8 @@ export default function ProfileManagePage() {
                 {userData?.displayName || 'Me'}
                 <span className="text-xs font-normal text-indigo-500 bg-indigo-50 dark:bg-indigo-900/30 px-2 py-0.5 rounded-full">ME</span>
                 <span className={`text-[10px] px-1.5 py-0.5 rounded font-bold ${userData?.gender === 'female'
-                    ? 'bg-rose-50 text-rose-500 border border-rose-100 dark:bg-rose-900/20 dark:border-rose-800'
-                    : 'bg-blue-50 text-blue-500 border border-blue-100 dark:bg-blue-900/20 dark:border-blue-800'
+                  ? 'bg-rose-50 text-rose-500 border border-rose-100 dark:bg-rose-900/20 dark:border-rose-800'
+                  : 'bg-blue-50 text-blue-500 border border-blue-100 dark:bg-blue-900/20 dark:border-blue-800'
                   }`}>
                   {userData?.gender === 'female' ? (language === 'ko' ? '여' : 'F') : (language === 'ko' ? '남' : 'M')}
                 </span>
@@ -366,8 +366,8 @@ export default function ProfileManagePage() {
                 <h3 className="font-bold text-slate-900 dark:text-white flex items-center gap-2">
                   {profile.displayName}
                   <span className={`text-[10px] px-1.5 py-0.5 rounded font-bold ${profile.gender === 'female'
-                      ? 'bg-rose-50 text-rose-500 border border-rose-100 dark:bg-rose-900/20 dark:border-rose-800'
-                      : 'bg-blue-50 text-blue-500 border border-blue-100 dark:bg-blue-900/20 dark:border-blue-800'
+                    ? 'bg-rose-50 text-rose-500 border border-rose-100 dark:bg-rose-900/20 dark:border-rose-800'
+                    : 'bg-blue-50 text-blue-500 border border-blue-100 dark:bg-blue-900/20 dark:border-blue-800'
                     }`}>
                     {profile.gender === 'female' ? (language === 'ko' ? '여' : 'F') : (language === 'ko' ? '남' : 'M')}
                   </span>

@@ -1631,7 +1631,7 @@ export const reportStyleSimple = `
 
   .rt-main-content { max-width: 440px; margin: 0 auto; padding: 0 20px; }
   .rt-card {
-    background: #fff; border-radius: 32px; padding: 32px; margin-bottom: 24px;
+    background: #fff; border-radius: 32px; padding: 12px; margin-bottom: 24px;
     box-shadow: 0 10px 30px rgba(37, 99, 235, 0.04);
     border: 1px solid rgba(37, 99, 235, 0.08);
   }
@@ -1641,7 +1641,7 @@ export const reportStyleSimple = `
   .rt-card__text strong { color: #2563eb; font-weight: 800; }
 
   .rt-ootd-wrapper { display: flex; gap: 12px; margin-bottom: 24px; }
-  .rt-ootd-item { flex: 1; background: #f8fbff; padding: 18px; border-radius: 20px; text-align: center; border: 1px solid #eff6ff; }
+  .rt-ootd-item { flex: 1; background: #f8fbff; padding: 18px; border-radius: 20px; text-align: center; border: 1px solid #eff6ff; margin-bottom: 6px }
   .rt-ootd-item__label { font-size: 0.7rem; font-weight: 700; color: #3b82f6; display: block; margin-bottom: 6px; }
   .rt-ootd-item__value { font-size: 0.95rem; font-weight: 900; }
 /* -------------------------------------------------- */
