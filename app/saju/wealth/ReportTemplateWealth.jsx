@@ -6,24 +6,43 @@ import { useLanguage } from '@/contexts/useLanguageContext';
 import { SparklesIcon, UserGroupIcon, ArrowRightIcon, ArrowDownIcon } from '@heroicons/react/24/outline';
 import { parseAiResponse } from '@/utils/helpers';
 import LoadingBar from '@/components/LoadingBar';
-
+import { useRouter } from 'next/navigation';
+import { useLoading } from '@/contexts/useLoadingContext';
 export default function ReportTemplateWealth({ storageKey }) {
     const { userData } = useAuthContext();
     const { language } = useLanguage();
+    const router = useRouter();
+    const { aiResult } = useLoading()
     const [data, setData] = useState(null);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        if (userData?.usageHistory?.[storageKey]) {
-            const savedData = userData.usageHistory[storageKey];
-            const parsed = parseAiResponse(savedData.result);
-            if (parsed) {
-                // Enforce language consistency if needed, or just display what's saved
-                setData(parsed);
+        // 1. aiResult가 있으면 우선 사용
+        if (aiResult) {
+            const parsedData = parseAiResponse(aiResult);
+            if (parsedData) {
+                setData(parsedData);
+                return;
             }
         }
-        setLoading(false);
-    }, [userData, storageKey]);
+
+        // 2. 없으면 DB에서 로드 (persistence)
+        if (userData && !aiResult) {
+            // NOTE: Today's Luck usually stored in ZLastDaily
+            // We should check if the saved date matches 'today' ideally, but strictly following the prompt pattern:
+            // Just load what is there. The Client side checks validity before redirecting anyway.
+            const savedResult = userData?.usageHistory?.Zwealth?.result;
+            if (savedResult) {
+                const parsed = parseAiResponse(savedResult);
+                if (parsed) {
+                    setData(parsed);
+                }
+            } else {
+                // No Data -> Redirect
+                router.replace('/saju/wealth');
+            }
+        }
+    }, [aiResult, userData, router]);
 
     if (loading) return <LoadingBar loadingType="wealth" />;
     if (!data) return <div className="p-10 text-center">No Result Found</div>;

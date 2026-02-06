@@ -8,6 +8,7 @@ import { useAuthContext } from '@/contexts/useAuthContext';
 import { useLoading } from '@/contexts/useLoadingContext';
 import { parseAiResponse } from '@/utils/helpers';
 import AfterReport from '@/components/AfterReport';
+import { useRouter } from 'next/navigation';
 
 const ReportTemplateInterview = ({ }) => {
   const { aiResult } = useLoading();
@@ -15,32 +16,38 @@ const ReportTemplateInterview = ({ }) => {
   const { userData, selectedProfile } = useAuthContext();
   const [isLoaded, setIsLoaded] = useState(false);
   const [data, setData] = useState(null);
+  const router = useRouter();
 
   // [NEW] Target Profile Logic
   const targetProfile = selectedProfile || userData;
 
   useEffect(() => {
+    // 1. aiResult가 있으면 우선 사용 (방금 분석한 결과)
     if (aiResult) {
       const parsedData = parseAiResponse(aiResult);
       if (parsedData) {
         setData(parsedData);
+        return;
       }
     }
 
-    // 2. 없으면 DB에서 로드 (persistence)
+    // 2. 없으면 DB에서 로드 (persistence - 직접 URL 접근)
     if (userData && !aiResult) {
       const savedResult = userData?.usageHistory?.Zinterview?.result;
       if (savedResult) {
         const parsed = parseAiResponse(savedResult);
         if (parsed) {
           setData(parsed);
+        } else {
+          // 파싱 실패 -> 리다이렉트
+          router.push('/saju/interview');
         }
       } else {
-        // 데이터 없으면 리다이렉트 (필요 시)
-        // alert('No result found'); router.push...
+        // 데이터 없으면 리다이렉트
+        router.push('/saju/interview');
       }
     }
-  }, [aiResult, userData]);
+  }, [aiResult, userData, router]);
 
   useEffect(() => {
     setIsLoaded(true);

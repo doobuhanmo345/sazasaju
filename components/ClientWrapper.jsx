@@ -13,6 +13,7 @@ import MenuBar from '@/components/MenuBar';
 import LoginModal from '@/components/LoginModal';
 import ContactModal from '@/components/ContactModal';
 import MessageModal from '@/app/messages/MessageModal';
+import AppBanner from '@/components/AppBanner';
 import CreditModal from '@/components/CreditModal';
 import { useUsageLimit } from '@/contexts/useUsageLimit';
 import { useLanguage } from '@/contexts/useLanguageContext';
@@ -22,7 +23,7 @@ import { NativeBridge } from '@/utils/nativeBridge';
 export default function ClientWrapper({ children }) {
   const pathname = usePathname();
   const router = useRouter();
-  const { user, userData, loadingUser, isLoggingIn, cancelLogin, isLoginModalOpen, closeLoginModal, isContactModalOpen, closeContactModal } = useAuthContext();
+  const { user, userData, loadingUser, isLoggingIn, cancelLogin, isLoginModalOpen, closeLoginModal, isContactModalOpen, closeContactModal, msgModalData, closeMessageModal } = useAuthContext();
   const { editCount, MAX_EDIT_COUNT } = useUsageLimit();
   const { language } = useLanguage();
   const [showCreditModal, setShowCreditModal] = useState(true);
@@ -108,12 +109,22 @@ export default function ClientWrapper({ children }) {
       {/* Global Login Loading Overlay */}
       {isLoggingIn && <LoginLoadingOverlay onCancel={cancelLogin} />}
 
+
+
       {/* Conditional Navbar */}
       {!isSpecialPath && <Navbar />}
 
       <LoginModal
         isOpen={isLoginModalOpen}
         onClose={closeLoginModal}
+      />
+
+      <MessageModal
+        isOpen={msgModalData.isOpen}
+        onClose={closeMessageModal}
+        receiverId={msgModalData.receiverId}
+        receiverName={msgModalData.receiverName}
+        originalMessageId={msgModalData.originalId}
       />
 
       {isContactModalOpen && (

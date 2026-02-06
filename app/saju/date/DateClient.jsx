@@ -150,19 +150,19 @@ export default function FirstDatePage() {
   }, [selectedDate, selDate]);
 
   const isAnalysisDone = useMemo(() => {
-    if (!prevData || !prevData.result) return false;
-    if (prevData.gender !== gender) return false;
-    if (!SajuAnalysisService.compareSaju(prevData.saju, saju)) return false;
-    if (!SajuAnalysisService.compareSaju(prevData.sajuDate, selectedDateSaju)) return false;
-    if (prevData.question !== question) return false;
+    if (!prevData || !prevData?.result) return false;
+    if (prevData?.gender !== gender) return false;
+    if (!SajuAnalysisService.compareSaju(prevData?.saju, saju)) return false;
+    if (!SajuAnalysisService.compareSaju(prevData?.sajuDate, selectedDateSaju)) return false;
+    if (prevData?.question !== question) return false;
 
     return true;
   }, [prevData, gender, saju, selDateString, question, selectedDate]);
-  console.log('1', !prevData || !prevData.result)
-  console.log('2', prevData.gender !== gender)
-  console.log('3', !SajuAnalysisService.compareSaju(prevData.saju, saju))
-  console.log('4', !SajuAnalysisService.compareSaju(prevData.sajuDate, selectedDateSaju))
-  console.log('5', prevData.question !== question)
+  console.log('1', !prevData || !prevData?.result)
+  console.log('2', prevData?.gender !== gender)
+  console.log('3', !SajuAnalysisService.compareSaju(prevData?.saju, saju))
+  console.log('4', !SajuAnalysisService.compareSaju(prevData?.sajuDate, selectedDateSaju))
+  console.log('5', prevData?.question !== question)
   console.log(isAnalysisDone)
 
 

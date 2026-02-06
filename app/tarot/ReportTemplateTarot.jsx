@@ -5,16 +5,30 @@ import { useAuthContext } from '@/contexts/useAuthContext';
 import { useState, useEffect } from 'react';
 import { parseAiResponse } from '@/utils/helpers';
 import ViewTarotResult from '@/app/tarot/ViewTarotResult';
+import { useRouter } from 'next/navigation';
+
+// Map storageKey to parent page path
+const getParentPath = (storageKey) => {
+    const pathMap = {
+        'tarotDaily': '/tarot/tarotdaily',
+        'tarotLove': '/tarot/tarotlove',
+        'tarotMoney': '/tarot/tarotmoney',
+        'tarotCounseling': '/tarot/tarotcounseling',
+    };
+    return pathMap[storageKey] || '/tarot';
+};
 
 /**
  * Shared Report Template for Tarot.
- * @param {string} storageKey - The key in userData.usageHistory (e.g., 'ZtarotLove', 'ZtarotMoney')
+ * @param {string} storageKey - The key in userData.usageHistory (e.g., 'tarotLove', 'tarotMoney')
  */
 export default function ReportTemplateTarot({ storageKey }) {
     const { aiResult } = useLoading();
     const { userData } = useAuthContext();
     const [data, setData] = useState(null);
     const [cardInfo, setCardInfo] = useState({ id: null });
+    const [loading, setLoading] = useState(true);
+    const router = useRouter();
 
     useEffect(() => {
         // 1. Context Result (Fresh Analysis)
@@ -22,6 +36,8 @@ export default function ReportTemplateTarot({ storageKey }) {
             const parsedData = parseAiResponse(aiResult);
             if (parsedData) {
                 setData(parsedData);
+                setLoading(false);
+                return;
             }
         }
 
@@ -40,13 +56,20 @@ export default function ReportTemplateTarot({ storageKey }) {
                             name: saved.cardName
                         });
                     }
+                    setLoading(false);
+                } else {
+                    // Parsing failed -> redirect
+                    router.push(getParentPath(storageKey));
                 }
+            } else {
+                // No data -> redirect
+                router.push(getParentPath(storageKey));
             }
         }
-    }, [aiResult, userData, storageKey]);
+    }, [aiResult, userData, storageKey, router]);
 
     // Loading State
-    if (!data) {
+    if (loading || !data) {
         return (
             <div className="flex flex-col items-center justify-center min-h-[50vh] space-y-6">
                 <div className="relative w-12 h-12">
@@ -63,7 +86,7 @@ export default function ReportTemplateTarot({ storageKey }) {
     return (
         <ViewTarotResult
             data={data}
-            cardPicked={cardInfo.id ? cardInfo : {}}
+            cardPicked={cardInfo?.id ? cardInfo : {}}
             loading={false}
         />
     );

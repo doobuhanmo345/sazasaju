@@ -31,7 +31,7 @@ const ReportTemplateDate = ({ }) => {
       }
     }
 
-    // 2. 없으면 DB에서 로드 (persistence)
+    // 2. 없으면 DB에서 로드 (persistence - 직접 URL 접근)
     if (userData && !aiResult) {
       // NOTE: First Date uses 'dailySpecific' type with 'firstdate' subtype -> Zfirstdate
       const savedResult = userData?.usageHistory?.Zfirstdate?.result;
@@ -39,10 +39,13 @@ const ReportTemplateDate = ({ }) => {
         const parsed = parseAiResponse(savedResult);
         if (parsed) {
           setData(parsed);
+        } else {
+          // 파싱 실패 -> 리다이렉트
+          router.push('/saju/date');
         }
       } else {
         // No Data -> Redirect
-        router.replace('/saju/date');
+        router.push('/saju/date');
       }
     }
   }, [aiResult, userData, router]);
@@ -112,11 +115,11 @@ const ReportTemplateDate = ({ }) => {
             </div>
             <div className="rt-info-row">
               <span className="rt-info-row__label">{language === 'en' ? 'DATE' : 'DATE'}</span>
-              <span className="rt-info-row__value">{data.meetingDate}</span>
+              <span className="rt-info-row__value">{data?.meetingDate}</span>
             </div>
             <div className="rt-info-row">
               <span className="rt-info-row__label">{language === 'en' ? 'STATUS' : 'STATUS'}</span>
-              <span className="rt-info-row__value">{data.temperature}</span>
+              <span className="rt-info-row__value">{data?.temperature}</span>
             </div>
             <div className="rt-saju-grid">
               {saju.grd0 && (
@@ -152,14 +155,14 @@ const ReportTemplateDate = ({ }) => {
           <div className="rt-ootd-wrapper">
             <div className="rt-ootd-item">
               <span className="rt-ootd-item__label">MOOD</span>
-              <span className="rt-ootd-item__value">"{data.section01?.mood}"</span>
+              <span className="rt-ootd-item__value">"{data?.section01?.mood}"</span>
             </div>
             <div className="rt-ootd-item">
               <span className="rt-ootd-item__label">POINT</span>
-              <span className="rt-ootd-item__value">{data.section01?.point}</span>
+              <span className="rt-ootd-item__value">{data?.section01?.point}</span>
             </div>
           </div>
-          <p className="rt-card__text">{data.section01?.description}</p>
+          <p className="rt-card__text">{data?.section01?.description}</p>
         </section>
 
         {/* 02. 심리 분석 */}
@@ -172,19 +175,19 @@ const ReportTemplateDate = ({ }) => {
               <span className="rt-analysis-list__sub-title">
                 {language === 'en' ? "Partner's Inner Thoughts" : '상대의 속마음'}
               </span>
-              <p>{data.section02?.innerThoughts}</p>
+              <p>{data?.section02?.innerThoughts}</p>
             </div>
             <div className="rt-analysis-list__item is-warning">
               <span className="rt-analysis-list__sub-title">
                 {language === 'en' ? 'Conversation Warnings' : '대화 주의사항'}
               </span>
-              <p>{data.section02?.warning}</p>
+              <p>{data?.section02?.warning}</p>
             </div>
             <div className="rt-analysis-list__item is-success">
               <span className="rt-analysis-list__sub-title">
                 {language === 'en' ? 'Green Light Signals' : '확실한 호감 신호'}
               </span>
-              <p>{data.section02?.signal}</p>
+              <p>{data?.section02?.signal}</p>
             </div>
           </div>
         </section>
@@ -199,24 +202,24 @@ const ReportTemplateDate = ({ }) => {
               {language === 'en' ? 'Interaction Chemistry Score' : '대화 티키타카 지수'}
             </div>
             <div className="rt-score-box__val">
-              {data.section03?.chemistryScore}
+              {data?.section03?.chemistryScore}
               <span>{language === 'en' ? 'pt' : '점'}</span>
             </div>
             <div className="rt-progress">
               <div
                 className="rt-progress__fill"
-                style={{ width: isLoaded ? `${data.section03?.chemistryScore}%` : '0%' }}
+                style={{ width: isLoaded ? `${data?.section03?.chemistryScore}%` : '0%' }}
               ></div>
             </div>
           </div>
           <div className="rt-timing-grid">
             <div className="rt-timing-grid__item">
               <span>{language === 'en' ? 'Golden Time' : '골든 타임'}</span>
-              <strong>{data.section03?.goldenTime}</strong>
+              <strong>{data?.section03?.goldenTime}</strong>
             </div>
             <div className="rt-timing-grid__item">
               <span>{language === 'en' ? 'Recommended Place' : '추천 장소'}</span>
-              <strong>{data.section03?.location}</strong>
+              <strong>{data?.section03?.location}</strong>
             </div>
           </div>
         </section>
@@ -230,11 +233,11 @@ const ReportTemplateDate = ({ }) => {
             <span className="rt-tip-box__label">
               {language === 'en' ? 'Who should reach out first?' : '누가 먼저 연락할까?'}
             </span>
-            <p>{data.section04?.contactAdvice}</p>
+            <p>{data?.section04?.contactAdvice}</p>
           </div>
           <div className="rt-final-badge">
             {language === 'en' ? 'Possibility of Romance' : '연인 발전 가능성'}{' '}
-            <span>{data.section04?.possibility}</span>
+            <span>{data?.section04?.possibility}</span>
           </div>
         </section>
       </main>

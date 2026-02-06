@@ -22,7 +22,7 @@ import { useLanguage } from '@/contexts/useLanguageContext';
 import { useAuthContext } from '@/contexts/useAuthContext';
 import { useUsageLimit } from '@/contexts/useUsageLimit';
 import NotificationList from '@/components/NotificationList';
-
+import AppBanner from '@/components/AppBanner';
 
 const MAIN_MENUS = [
   { id: 'home', ko: '홈', en: 'Home', path: '/', icon: HomeIcon },
@@ -98,10 +98,11 @@ export default function NavBar() {
   const logoSrc = false
     ? (language === 'ko' ? '/assets/Logo_Kor_DarkMode.png' : '/assets/Logo_Eng_DarkMode.png')
     : (language === 'ko' ? '/assets/Logo_Kor.png' : '/assets/Logo_Eng.png');
-
+  console.log(userData?.isAnalyzing)
   return (
-    <div className='flex items-center justify-center w-full relative z-50 px-4 pt-7 sm:pt-0 sticky top-0 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md transition-all border-b border-transparent data-[scrolled=true]:border-slate-100 select-none'>
-      <div className="flex w-full items-center justify-between py-3 max-w-xl m-auto ">
+
+    <div className='w-full relative z-50 sm:pt-0 sticky top-0 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md transition-all border-b border-transparent data-[scrolled=true]:border-slate-100 select-none'>
+      <div className="flex w-full items-center p-4 justify-between py-3 max-w-xl m-auto ">
 
         {/* [Left] Logo or Back Button */}
         <div
@@ -129,6 +130,7 @@ export default function NavBar() {
 
 
         {/* [Right] Utility Buttons */}
+
         <div className="flex items-center gap-1">
           {/* Credit & Fortune Cookie Mini Bar */}
           <div className="flex items-center gap-2 px-3 py-1.5 bg-slate-100/50 dark:bg-slate-800/50 rounded-full backdrop-blur-sm border border-slate-200/50 dark:border-slate-700/50 mr-1">
@@ -250,7 +252,11 @@ export default function NavBar() {
             )}
           </div>
         </div>
-      </div></div>
+      </div>
+      <div className="w-full">
+        <AppBanner />
+      </div>
+    </div>
 
   );
 }

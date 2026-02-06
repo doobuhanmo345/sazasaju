@@ -47,7 +47,7 @@ const ReportTemplateBasic = ({ }) => {
     } else {
       // 결과가 없으면 메인으로 리다이렉트
       alert("저장된 결과가 없습니다. 다시 분석해주세요.");
-      router.replace('/');
+      router.replace('/saju/basic');
     }
   }, [userData, router]);
 
@@ -272,11 +272,11 @@ const ReportTemplateBasic = ({ }) => {
                 {isEn ? 'Saju Identity Summary' : '사주 정체성 요약'}
               </h2>
 
-              <div className="rt-card__text text-left">{data.summary.desc}</div>
+              <div className="rt-card__text text-left">{data?.summary?.desc}</div>
               <div className="my-3">
-                <p className="rt-timing-grid__item">{data.summary.title}</p>
+                <p className="rt-timing-grid__item">{data?.summary?.title}</p>
                 <div className="gap-3 flex justify-center">
-                  {data.keywords.map((keyword, idx) => (
+                  {data?.keywords.map((keyword, idx) => (
                     <div key={idx} className="rt-id-card__label">
                       #{keyword}
                     </div>
@@ -289,7 +289,7 @@ const ReportTemplateBasic = ({ }) => {
               <h2 className="rt-card__title">
                 {isEn ? 'Overview of Destiny by Topic' : '주제별 개요'}
               </h2>
-              <p className="rt-card__text text-left">{data.overview.desc}</p>
+              <p className="rt-card__text text-left">{data?.overview?.desc}</p>
             </section>
 
             <section className="my-9">
@@ -298,39 +298,39 @@ const ReportTemplateBasic = ({ }) => {
               <div className="rt-card">
                 <div className="rt-ootd-item">
                   <h3 className="rt-ootd-item__value">{isEn ? 'Wealth & Finance' : '재물운'}</h3>
-                  <p className="rt-ootd-item__label">{data.wealth.summary}</p>
+                  <p className="rt-ootd-item__label">{data?.wealth?.summary}</p>
                 </div>
-                <p className="rt-card__text text-left">{data.wealth.desc}</p>
+                <p className="rt-card__text text-left">{data?.wealth?.desc}</p>
               </div>
               <div className="rt-card">
                 <div className="rt-ootd-item">
                   <h3 className="rt-ootd-item__value">{isEn ? 'Career & Success' : '직업운'}</h3>
-                  <p className="rt-ootd-item__label">{data.job.summary}</p>
+                  <p className="rt-ootd-item__label">{data?.job?.summary}</p>
                 </div>
-                <p className="rt-card__text text-left">{data.job.desc}</p>
+                <p className="rt-card__text text-left">{data?.job?.desc}</p>
               </div>
               <div className="rt-card">
                 <div className="rt-ootd-item">
                   <h3 className="rt-ootd-item__value">{isEn ? 'Love & Romance' : '애정운'}</h3>
-                  <p className="rt-ootd-item__label">{data.love.summary}</p>
+                  <p className="rt-ootd-item__label">{data?.love?.summary}</p>
                 </div>
-                <p className="rt-card__text text-left">{data.love.desc}</p>
+                <p className="rt-card__text text-left">{data?.love?.desc}</p>
               </div>
               <div className="rt-card">
                 <div className="rt-ootd-item">
                   <h3 className="rt-ootd-item__value">{isEn ? 'Health & Wellness' : '건강운'}</h3>
-                  <p className="rt-ootd-item__label">{data.health.summary}</p>
+                  <p className="rt-ootd-item__label">{data?.health?.summary}</p>
                 </div>
-                <p className="rt-card__text text-left">{data.health.desc}</p>
+                <p className="rt-card__text text-left">{data?.health?.desc}</p>
               </div>
             </section>
             <section className="my-9">
               <h2 className="rt-card__title">{isEn ? 'Major Life Cycles' : '대운 해설'}</h2>
               <div className="rt-analysis-list__item gap-3">
-                {data.daewoon.map((item, idx) => (
+                {data?.daewoon?.map((item, idx) => (
                   <div key={idx} className="rt-gap2">
-                    <span className="rt-analysis-list__sub-title">{item.name}</span>
-                    <p className="rt-card__text text-left">{item.interpretation}</p>
+                    <span className="rt-analysis-list__sub-title">{item?.name}</span>
+                    <p className="rt-card__text text-left">{item?.interpretation}</p>
                   </div>
                 ))}
               </div>
@@ -339,8 +339,8 @@ const ReportTemplateBasic = ({ }) => {
             <section className="rt-card">
               <h2 className="rt-card__title">Final Conclusion</h2>
               <div className="rt-tip-box">
-                <span className="rt-tip-box__label">{data.finalConclusion.title}</span>
-                <p className="rt-card__text text-left">{data.finalConclusion.desc}</p>
+                <span className="rt-tip-box__label">{data?.finalConclusion.title}</span>
+                <p className="rt-card__text text-left">{data?.finalConclusion.desc}</p>
               </div>
             </section>
           </div>

@@ -1,5 +1,6 @@
 const { onCall, HttpsError } = require("firebase-functions/v2/https");
 const { onSchedule } = require("firebase-functions/v2/scheduler");
+const { onDocumentCreated } = require("firebase-functions/v2/firestore");
 const { setGlobalOptions } = require("firebase-functions/v2");
 const { defineSecret } = require('firebase-functions/params');
 const admin = require('firebase-admin');
@@ -144,3 +145,130 @@ exports.verifyKakaoToken = onCall(async (request) => {
     throw new HttpsError('internal', 'Kakao authentication failed');
   }
 });
+
+/**
+ * Analysis Queue Processor
+ * Firestore 트리거: analysis_queue 컬렉션에 새 문서 생성 시 자동 실행
+ * 스트리밍 없이 단순 처리 (성능 최적화)
+ */
+exports.processAnalysisQueue = onDocumentCreated(
+  {
+    document: "analysis_queue/{docId}",
+    secrets: [GEMINI_API_KEY],
+    timeoutSeconds: 300,
+    memory: '1024MiB',
+    region: "asia-northeast3",
+  },
+  async (event) => {
+    const snapshot = event.data;
+    if (!snapshot) {
+      console.log("No data associated with the event");
+      return;
+    }
+
+    const data = snapshot.data();
+    const docId = event.params.docId;
+    console.log(`[processAnalysisQueue] Processing document: ${docId}`);
+
+    // 이미 처리 중이거나 완료된 경우 스킵
+    if (data.status !== 'pending') {
+      console.log(`[processAnalysisQueue] Skipping document ${docId} with status: ${data.status}`);
+      return;
+    }
+
+    try {
+      // 1. 상태 업데이트: processing
+      console.log(`[processAnalysisQueue] Updating status to 'processing' for ${docId}`);
+      await snapshot.ref.update({
+        status: 'processing',
+        startedAt: admin.firestore.FieldValue.serverTimestamp()
+      });
+
+      const { prompt } = data;
+      if (!prompt) {
+        throw new Error('No prompt provided');
+      }
+
+      // 2. Gemini API 호출 (스트리밍 없이)
+      console.log(`[processAnalysisQueue] Calling Gemini API for ${docId}`);
+      const genAI = new GoogleGenerativeAI(GEMINI_API_KEY.value());
+      const model = genAI.getGenerativeModel({
+        model: 'gemini-2.5-flash',
+        generationConfig: { responseMimeType: 'application/json' },
+      });
+
+      const result = await model.generateContent(prompt);
+      const text = result.response.text();
+      console.log(`[processAnalysisQueue] Gemini API call successful for ${docId}`);
+
+      // 3. 결과 저장 및 상태 완료 처리
+      console.log(`[processAnalysisQueue] Updating status to 'completed' for ${docId}`);
+      await snapshot.ref.update({
+        status: 'completed',
+        airesult: text,
+        completedAt: admin.firestore.FieldValue.serverTimestamp(),
+      });
+
+      // 4. Release isAnalyzing lock
+      const userId = data.userId;
+      if (userId) {
+        try {
+          await admin.firestore().collection('users').doc(userId).update({
+            isAnalyzing: false
+          });
+          console.log(`[processAnalysisQueue] Released isAnalyzing lock for user ${userId}`);
+        } catch (lockError) {
+          console.error(`[processAnalysisQueue] Failed to release lock for user ${userId}:`, lockError);
+        }
+
+        // 5. Create notification
+        try {
+          await admin.firestore().collection('notifications').add({
+            userId: userId,
+            type: 'analysis',
+            message: '사주 분석이 완료되었습니다.',
+            targetPath: data.targetPath || '/saju/basic/result', // Add navigation path
+            isRead: false,
+            createdAt: admin.firestore.FieldValue.serverTimestamp(),
+          });
+          console.log(`[processAnalysisQueue] Created notification for user ${userId} with targetPath: ${data.targetPath}`);
+        } catch (notifError) {
+          console.error(`[processAnalysisQueue] Failed to create notification for user ${userId}:`, notifError);
+        }
+
+        // 6. Delete completed queue document to prevent stale UI
+        try {
+          await snapshot.ref.delete();
+          console.log(`[processAnalysisQueue] Deleted completed queue document ${docId}`);
+        } catch (deleteError) {
+          console.error(`[processAnalysisQueue] Failed to delete queue document ${docId}:`, deleteError);
+        }
+      }
+
+      console.log(`[processAnalysisQueue] Successfully processed ${docId}`);
+    } catch (error) {
+      console.error(`[processAnalysisQueue] Error processing ${docId}:`, error);
+
+      // 5. 에러 처리
+      await snapshot.ref.update({
+        status: 'failed',
+        error: error.message || 'Unknown error occurred',
+        failedAt: admin.firestore.FieldValue.serverTimestamp(),
+      });
+
+      // 6. Release isAnalyzing lock on error
+      const userId = data.userId;
+      if (userId) {
+        try {
+          await admin.firestore().collection('users').doc(userId).update({
+            isAnalyzing: false
+          });
+          console.log(`[processAnalysisQueue] Released isAnalyzing lock after error for user ${userId}`);
+        } catch (lockError) {
+          console.error(`[processAnalysisQueue] Failed to release lock after error for user ${userId}:`, lockError);
+        }
+      }
+    }
+  }
+);
+

@@ -51,7 +51,7 @@ const ReportTemplateToday = ({ }) => {
     if (data?.today?.score) {
       // 렌더링 직후 0인 상태에서 점수값으로 변경하여 애니메이션 유도
       const timer = setTimeout(() => {
-        setGaugeScore(data.today?.score);
+        setGaugeScore(data?.today?.score);
       }, 100);
       return () => clearTimeout(timer);
     }
@@ -64,7 +64,7 @@ const ReportTemplateToday = ({ }) => {
       {/* 헤더 */}
       <header className="fortune-header">
         <h1 className="fortune-main-title">{isEn ? 'Daily Fortune' : '오늘의 운세 리포트'}</h1>
-        <p className="fortune-date-text">{data.today?.date}</p>
+        <p className="fortune-date-text">{data?.today?.date}</p>
       </header>
 
       {/* 메인 총운 및 점수 바 */}
@@ -74,29 +74,29 @@ const ReportTemplateToday = ({ }) => {
           style={{ '--p': gaugeScore }} // 여기서 --p 값을 제어합니다.
         >
           <div className="score-number-wrap">
-            <span className="score-value">{data.today?.score}</span>
+            <span className="score-value">{data?.today?.score}</span>
             <span className="score-unit-text">점</span>
           </div>
         </div>
 
-        <p className="score-summary-quote">"{data.today?.summary}"</p>
+        <p className="score-summary-quote">"{data?.today?.summary}"</p>
 
         {/* 행운 요소 */}
         <div className="luck-element-list">
           <div className="luck-element-item">
             <div className="luck-item-title">{isEn ? 'Direction' : '행운의 방향'}</div>
-            <div className="luck-item-content">{data.lucky_elements.direction?.title}</div>
-            <div className="luck-item-desc">{data.lucky_elements.direction?.desc}</div>
+            <div className="luck-item-content">{data?.lucky_elements.direction?.title}</div>
+            <div className="luck-item-desc">{data?.lucky_elements.direction?.desc}</div>
           </div>
           <div className="luck-element-item">
             <div className="luck-item-title">{isEn ? 'Lucky Color' : '행운의 컬러'}</div>
-            <div className="luck-item-content">{data.lucky_elements.color?.title}</div>
-            <div className="luck-item-desc">{data.lucky_elements.color?.desc}</div>
+            <div className="luck-item-content">{data?.lucky_elements.color?.title}</div>
+            <div className="luck-item-desc">{data?.lucky_elements.color?.desc}</div>
           </div>
           <div className="luck-element-item">
             <div className="luck-item-title">{isEn ? 'Keywords' : '키워드'}</div>
-            <div className="luck-item-content">{data.lucky_elements.keywords?.tags.join(', ')}</div>
-            <div className="luck-item-desc">{data.lucky_elements.keywords?.desc}</div>
+            <div className="luck-item-content">{data?.lucky_elements.keywords?.tags.join(', ')}</div>
+            <div className="luck-item-desc">{data?.lucky_elements.keywords?.desc}</div>
           </div>
         </div>
       </section>
@@ -105,10 +105,10 @@ const ReportTemplateToday = ({ }) => {
       <div className="detail-list-wrap">
         <div className="detail-item-box">
           <div className="detail-title">{isEn ? 'Total Analysis' : '오늘의 총운'}</div>
-          <div className="detail-body">{data.today.analysis}</div>
+          <div className="detail-body">{data?.today.analysis}</div>
         </div>
 
-        {Object.keys(data.categories).map((key) => (
+        {Object.keys(data?.categories).map((key) => (
           <div key={key} className="detail-item-box">
             <div className="detail-title category-title">
               {key === 'love' && (isEn ? 'Love' : '연애운')}
@@ -118,8 +118,8 @@ const ReportTemplateToday = ({ }) => {
               {key === 'study' && (isEn ? 'Study' : '학업운')}
             </div>
             <div className="detail-body">
-              <strong>[{data.categories[key].summary}]</strong>
-              <p>{data.categories[key].analysis}</p>
+              <strong>[{data?.categories[key].summary}]</strong>
+              <p>{data?.categories[key].analysis}</p>
             </div>
           </div>
         ))}
@@ -127,10 +127,10 @@ const ReportTemplateToday = ({ }) => {
         {/* 내일의 운세 */}
         <div className="detail-item-box tomorrow-box">
           <div className="detail-title">{isEn ? "Tomorrow's Luck" : '내일의 운세'}</div>
-          <div className="fortune-date-text">{data.tomorrow.date}</div>
+          <div className="fortune-date-text">{data?.tomorrow.date}</div>
           <div className="detail-body">
-            <strong>{data.tomorrow.summary}</strong>
-            <p>{data.tomorrow.analysis}</p>
+            <strong>{data?.tomorrow.summary}</strong>
+            <p>{data?.tomorrow.analysis}</p>
           </div>
         </div>
       </div>

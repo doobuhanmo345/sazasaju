@@ -40,7 +40,7 @@ export default function ViewTarotResult({ cardPicked, loading, data }) {
       {!!cardPicked.id && (
         <div className="fixed inset-0 flex items-center justify-center pointer-events-none z-[10]">
           <div
-            key={cardPicked.id}
+            key={cardPicked?.id}
             className="relative pointer-events-auto"
             style={{ animation: 'flyToCenterAndBack 2s cubic-bezier(0.19, 1, 0.22, 1) forwards' }}
           >
@@ -52,8 +52,8 @@ export default function ViewTarotResult({ cardPicked, loading, data }) {
               }
             `}</style>
             <img
-              src={`/images/tarot/${cardPicked.id}.jpg`}
-              alt={cardPicked.kor}
+              src={`/images/tarot/${cardPicked?.id}.jpg`}
+              alt={cardPicked?.kor}
               className="w-48 md:w-64 rounded-3xl shadow-[0_30px_60px_-12px_rgba(88,28,135,0.25)] object-cover ring-1 ring-white/50"
             />
           </div>
@@ -68,12 +68,12 @@ export default function ViewTarotResult({ cardPicked, loading, data }) {
             Tarot Report
           </div>
           <h2 className="section-title-h2 text-[2.2rem] font-extrabold text-stone-900 leading-tight">
-            {fortune.title}
+            {fortune?.title}
           </h2>
           <div className="flex items-center justify-center space-x-2">
             <span className="h-[1px] w-8 bg-stone-200"></span>
             <p className="report-text text-stone-500 italic font-medium px-2">
-              "{fortune.subTitle}"
+              "{fortune?.subTitle}"
             </p>
             <span className="h-[1px] w-8 bg-stone-200"></span>
           </div>
@@ -90,11 +90,11 @@ export default function ViewTarotResult({ cardPicked, loading, data }) {
               <span className="w-10 h-10 flex items-center justify-center bg-purple-50 rounded-2xl shadow-inner text-2xl">
                 🔮
               </span>
-              <span className="tracking-tight">{fortune.cardName}</span>
+              <span className="tracking-tight">{fortune?.cardName}</span>
             </h3>
 
             <div className="report-keyword flex flex-wrap gap-2 mb-8">
-              {fortune.tags?.map((tag, i) => (
+              {fortune?.tags?.map((tag, i) => (
                 <span
                   key={i}
                   className="px-3 py-1.5 bg-purple-50/50 text-purple-500 rounded-xl font-bold text-[11px] border border-purple-100/50 tracking-wider shadow-sm"
@@ -105,7 +105,7 @@ export default function ViewTarotResult({ cardPicked, loading, data }) {
             </div>
 
             <p className="report-text leading-[1.8] text-stone-600 text-[16px] whitespace-pre-wrap font-medium">
-              {fortune.description}
+              {fortune?.description}
             </p>
           </div>
         </section>
@@ -117,12 +117,12 @@ export default function ViewTarotResult({ cardPicked, loading, data }) {
               <span className="w-10 h-10 flex items-center justify-center bg-stone-50 rounded-2xl text-2xl">
                 📍
               </span>
-              <span className="tracking-tight">{fortune.analysisTitle}</span>
+              <span className="tracking-tight">{fortune?.analysisTitle}</span>
             </h3>
           </div>
 
           <div className="space-y-5">
-            {fortune.analysisList?.map((text, i) => (
+            {fortune?.analysisList?.map((text, i) => (
               <div
                 key={i}
                 className="report-text p-6 bg-gradient-to-r from-stone-50/80 to-transparent rounded-[1.5rem] text-stone-700 leading-relaxed shadow-sm border border-stone-100/50 flex gap-4 transition-transform hover:translate-x-1 duration-300"
@@ -144,11 +144,11 @@ export default function ViewTarotResult({ cardPicked, loading, data }) {
             <span className="w-10 h-10 flex items-center justify-center bg-white/10 backdrop-blur-md rounded-2xl text-2xl ring-1 ring-white/20">
               🌿
             </span>
-            <span className="tracking-tight">{fortune.adviceTitle}</span>
+            <span className="tracking-tight">{fortune?.adviceTitle}</span>
           </h3>
 
           <ul className="info-list space-y-7 mb-12 relative z-10">
-            {fortune.adviceList?.map((action, i) => (
+            {fortune?.adviceList?.map((action, i) => (
               <li key={i} className="flex items-start gap-5 group">
                 <span className="flex-shrink-0 w-6 h-6 rounded-full bg-purple-500/30 flex items-center justify-center text-purple-300 ring-1 ring-purple-400/40 group-hover:bg-purple-500 group-hover:text-white transition-all duration-300 mt-1 shadow-[0_0_15px_rgba(168,85,247,0.4)]">
                   <span className="text-[10px]">✦</span>
@@ -162,7 +162,7 @@ export default function ViewTarotResult({ cardPicked, loading, data }) {
 
           {/* 글래스모피즘 태그 */}
           <div className="keyword-list flex flex-wrap gap-2.5 pt-8 border-t border-white/10 relative z-10">
-            {fortune.footerTags?.map((tag, i) => (
+            {fortune?.footerTags?.map((tag, i) => (
               <span
                 key={i}
                 className="keyword-tag backdrop-blur-md bg-white/5 border border-white/10 px-4 py-2 rounded-2xl text-[11px] text-purple-100 font-bold tracking-wider hover:bg-white/10 transition-all cursor-default shadow-sm ring-1 ring-white/5"

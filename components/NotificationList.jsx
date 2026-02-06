@@ -10,10 +10,10 @@ import { useLanguage } from '@/contexts/useLanguageContext';
 import MessageModal from '@/app/messages/MessageModal';
 
 export default function NotificationList() {
-  const { user, userData } = useAuthContext();
+  const { user, userData, openMessageModal } = useAuthContext();
   const [notifications, setNotifications] = useState([]);
   const [isOpen, setIsOpen] = useState(false);
-  const [isMessageModalOpen, setIsMessageModalOpen] = useState(false);
+  // const [isMessageModalOpen, setIsMessageModalOpen] = useState(false); // Removed local state
   const [selectedUserForReply, setSelectedUserForReply] = useState(null);
   const [selectedMsgId, setSelectedMsgId] = useState(null);
   const dropdownRef = useRef(null);
@@ -148,9 +148,7 @@ export default function NotificationList() {
                       {(userData?.role === 'admin' || userData?.role === 'super_admin') && note.type === 'message' && (
                         <button
                           onClick={() => {
-                            setSelectedUserForReply({ uid: note.senderId, displayName: note.senderName });
-                            setSelectedMsgId(note.sourceMessageId);
-                            setIsMessageModalOpen(true);
+                            openMessageModal(note.senderId, note.senderName, note.sourceMessageId);
                           }}
                           className="mt-2 px-3 py-1 bg-purple-600 text-white rounded-lg text-[8px] font-black uppercase tracking-widest hover:bg-purple-700 transition-all active:scale-95"
                         >
@@ -182,7 +180,7 @@ export default function NotificationList() {
           <div className="p-3 bg-gray-50/50 dark:bg-slate-800/50 border-t border-gray-100 dark:border-slate-800">
             <button
               onClick={() => {
-                setIsMessageModalOpen(true);
+                openMessageModal();
                 setIsOpen(false);
               }}
               className="w-full py-2.5 bg-white dark:bg-slate-900 text-purple-600 dark:text-purple-400 rounded-xl text-[10px] font-black uppercase tracking-widest border border-purple-100 dark:border-purple-900/30 flex items-center justify-center gap-2 hover:bg-purple-50 transition-all shadow-sm active:scale-95"
@@ -203,13 +201,7 @@ export default function NotificationList() {
         </div>
       )}
 
-      <MessageModal
-        isOpen={isMessageModalOpen}
-        onClose={() => setIsMessageModalOpen(false)}
-        receiverId={selectedUserForReply?.uid || 'admin'}
-        receiverName={selectedUserForReply?.displayName || 'Admin'}
-        originalMessageId={selectedMsgId}
-      />
+      {/* Local MessageModal Removed */}
     </div>
   );
 }
