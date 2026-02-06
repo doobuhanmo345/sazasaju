@@ -21,7 +21,8 @@ import BasicAnaPreview from '@/app/saju/basic/BasicAnaPreview';
 
 export default function BasicAnaPage() {
   const [sajuData, setSajuData] = useState(null);
-  const { loading, setLoading, setAiResult, aiResult } = useLoading();
+  const { setLoadingType, setAiResult, aiResult } = useLoading();
+  const [loading, setLoading] = useState(false)
   const { userData, user, isMainDone, selectedProfile } = useAuthContext(); // selectedProfile 추가
 
   // 컨텍스트 스위칭: 선택된 프로필이 있으면 그것을 사용, 없으면 본인 정보

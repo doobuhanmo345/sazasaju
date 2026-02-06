@@ -449,7 +449,7 @@ export default function MenuBar() {
                                       {isKo ? '연락처' : 'Contact'}
                                     </span>
                                     <span className="font-semibold text-slate-700 dark:text-white/90">
-                                      {(selectedProfile || userData).phoneNumber}
+                                      {(selectedProfile || userData)?.phoneNumber}
                                     </span>
                                   </div>
                                 )}

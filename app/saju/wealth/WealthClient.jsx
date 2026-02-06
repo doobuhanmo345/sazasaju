@@ -1,11 +1,11 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { 
-  CircleStackIcon, 
-  CalendarDaysIcon, 
-  PresentationChartLineIcon, 
-  BriefcaseIcon, 
+import {
+  CircleStackIcon,
+  CalendarDaysIcon,
+  PresentationChartLineIcon,
+  BriefcaseIcon,
   SparklesIcon,
   UserGroupIcon,
   CheckCircleIcon,
@@ -32,14 +32,14 @@ import { SajuAnalysisService, AnalysisPresets } from '@/lib/SajuAnalysisService'
 import { parseAiResponse } from '@/utils/helpers';
 import { UI_TEXT, langPrompt, hanja } from '@/data/constants';
 
-export default function Wealth({}) {
+export default function Wealth({ }) {
   const { language } = useLanguage();
-  const { user, userData,selectedProfile } = useAuthContext();
+  const { user, userData, selectedProfile } = useAuthContext();
   const { MAX_EDIT_COUNT, isLocked, setEditCount, editCount } = useUsageLimit();
   // 컨텍스트 스위칭
   const targetProfile = selectedProfile || userData;
   const { birthDate: inputDate, isTimeUnknown, gender, saju } = targetProfile || {};
-//컨텍스트 스위칭 끝
+  //컨텍스트 스위칭 끝
   // Client-side Title Update for Localization (Static Export Support)
   useEffect(() => {
     if (language === 'ko') {
@@ -242,7 +242,7 @@ export default function Wealth({}) {
 
   const service = new SajuAnalysisService({
     user,
-    userData: targetProfile, 
+    userData: targetProfile,
     language,
     maxEditCount: MAX_EDIT_COUNT,
     setEditCount,

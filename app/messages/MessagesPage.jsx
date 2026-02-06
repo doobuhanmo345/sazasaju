@@ -19,7 +19,7 @@ export default function MessagesPage() {
   useEffect(() => {
     if (!user) return;
     setCurrentPage(1); // 유저가 바뀌면 페이지 초기화
-    
+
     // 인덱스 생성 오류를 방지하기 위해 쿼리에서 orderBy를 제거하고 메모리에서 정렬합니다.
     const q_sent = query(collection(db, 'direct_messages'), where('senderId', '==', user.uid));
     const q_received = query(collection(db, 'direct_messages'), where('receiverId', '==', user.uid));
@@ -58,7 +58,7 @@ export default function MessagesPage() {
   const updateMessages = (newMsgs, type) => {
     setAllMsgs(prev => {
       const updated = { ...prev, [type]: newMsgs };
-      const merged = [...updated.sent, ...updated.received].sort((a, b) => 
+      const merged = [...updated.sent, ...updated.received].sort((a, b) =>
         (b.createdAt?.seconds || 0) - (a.createdAt?.seconds || 0)
       );
       setMessages(merged);
@@ -99,7 +99,7 @@ export default function MessagesPage() {
         <div className="divide-y divide-slate-50 dark:divide-slate-800/50">
           {currentItems.length > 0 ? (
             currentItems.map((msg) => (
-              <div 
+              <div
                 key={msg.id}
                 className="group px-6 py-4 hover:bg-slate-50/50 dark:hover:bg-slate-800/30 transition-colors"
               >
@@ -145,7 +145,7 @@ export default function MessagesPage() {
         {/* 페이지네이션 컨트롤 */}
         {totalPages > 1 && (
           <div className="p-4 bg-slate-50/50 dark:bg-slate-800/20 border-t border-slate-50 dark:border-slate-800 flex justify-center items-center gap-2">
-            <button 
+            <button
               onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
               disabled={currentPage === 1}
               className="px-3 py-1 text-[10px] font-black text-slate-400 hover:text-purple-600 disabled:opacity-30 uppercase tracking-widest transition-all"
@@ -157,17 +157,16 @@ export default function MessagesPage() {
                 <button
                   key={i}
                   onClick={() => setCurrentPage(i + 1)}
-                  className={`w-6 h-6 rounded-lg text-[10px] font-black transition-all ${
-                    currentPage === i + 1 
-                    ? 'bg-purple-600 text-white shadow-md shadow-purple-500/30' 
+                  className={`w-6 h-6 rounded-lg text-[10px] font-black transition-all ${currentPage === i + 1
+                    ? 'bg-purple-600 text-white shadow-md shadow-purple-500/30'
                     : 'text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800'
-                  }`}
+                    }`}
                 >
                   {i + 1}
                 </button>
               ))}
             </div>
-            <button 
+            <button
               onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
               disabled={currentPage === totalPages}
               className="px-3 py-1 text-[10px] font-black text-slate-400 hover:text-purple-600 disabled:opacity-30 uppercase tracking-widest transition-all"
@@ -178,7 +177,7 @@ export default function MessagesPage() {
         )}
       </div>
 
-      <MessageModal 
+      <MessageModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
       />

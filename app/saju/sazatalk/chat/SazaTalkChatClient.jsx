@@ -616,6 +616,7 @@ function ChatClientContent() {
                 <ViewSazaResult
                     userQuestion={userQuestion}
                     onReset={p.onReset}
+                    loading={loading}
                 />
             )}
             loadingTime={0}

@@ -5,12 +5,13 @@ import { db } from '@/lib/firebase';
 import { collection, addDoc, serverTimestamp, doc, updateDoc } from 'firebase/firestore';
 import { useAuthContext } from '@/contexts/useAuthContext';
 import { XMarkIcon, PaperAirplaneIcon } from '@heroicons/react/24/outline';
+import { useLanguage } from '@/contexts/useLanguageContext';
 
 export default function MessageModal({ isOpen, onClose, receiverId = 'admin', receiverName = 'Admin', originalMessageId = null }) {
   const { user, userData } = useAuthContext();
   const [text, setText] = useState('');
   const [isSending, setIsSending] = useState(false);
-
+  const { language } = useLanguage();
   if (!isOpen) return null;
 
   const handleSend = async () => {
@@ -84,54 +85,69 @@ export default function MessageModal({ isOpen, onClose, receiverId = 'admin', re
   };
 
   return (
-    <div className="fixed inset-0 z-[200] flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm animate-in fade-in duration-300">
-      <div className="w-full max-w-md bg-white dark:bg-slate-900 rounded-[2.5rem] shadow-2xl border border-white/20 overflow-hidden transform animate-in zoom-in-95 duration-300">
-        
+    <div className="fixed inset-0 z-[210] flex items-center justify-center p-6">
+      {/* Backdrop */}
+      <div
+        className="absolute inset-0 bg-slate-900/60 backdrop-blur-sm animate-in fade-in duration-300"
+        onClick={onClose}
+      />
+
+      {/* Modal Container */}
+      <div className="relative w-full max-w-sm bg-white dark:bg-slate-900 rounded-[2.5rem] shadow-2xl border border-white/20 overflow-hidden transform animate-in zoom-in-95 duration-300">
+
+        {/* Decorative Background */}
+        <div className="absolute top-0 inset-x-0 h-40 bg-gradient-to-b from-blue-500/10 to-transparent pointer-events-none" />
+
         {/* Header */}
-        <div className="p-6 flex justify-between items-center bg-slate-50 dark:bg-slate-800/50">
+        <div className="relative p-6 pt-8 flex justify-between items-center bg-slate-50/50 dark:bg-slate-800/30 border-b border-slate-100 dark:border-slate-800">
           <div>
-            <h3 className="text-lg font-black text-slate-900 dark:text-white uppercase tracking-tighter">
-              Send Message
+            <h3 className="text-xl font-black text-slate-900 dark:text-white uppercase tracking-tighter">
+              {language === 'ko' ? '문의하기' : 'Send Message'}
             </h3>
-            <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">
-              To: <span className="text-blue-600">{receiverName}</span>
+            <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-0.5">
+              {language === 'ko' ? '수신자: ' : 'To: '} <span className="text-blue-600 font-black">{receiverName}</span>
             </p>
           </div>
-          <button 
+          <button
             onClick={onClose}
-            className="p-2 hover:bg-white dark:hover:bg-slate-700 rounded-full transition-colors"
+            className="p-2 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-full transition-colors text-slate-400"
           >
-            <XMarkIcon className="w-6 h-6 text-slate-400" />
+            <XMarkIcon className="w-6 h-6" />
           </button>
         </div>
 
         {/* Content */}
-        <div className="p-6 space-y-4">
+        <div className="relative p-8 space-y-6">
           <textarea
             value={text}
             onChange={(e) => setText(e.target.value)}
-            placeholder="Type your inquiry or message here..."
-            className="w-full h-40 p-4 bg-slate-50 dark:bg-slate-800 text-slate-800 dark:text-slate-200 rounded-3xl border border-slate-100 dark:border-slate-800 outline-none focus:ring-2 focus:ring-blue-500/50 transition-all resize-none text-sm leading-relaxed"
+            placeholder={language === 'ko' ? '문의하시려는 내용을 입력해주세요...' : 'Type your inquiry or message here...'}
+            className="w-full h-48 p-5 bg-slate-50 dark:bg-slate-800/50 text-slate-800 dark:text-slate-200 rounded-3xl border border-slate-100 dark:border-slate-800 outline-none focus:ring-2 focus:ring-blue-500/50 transition-all resize-none text-sm leading-relaxed"
           />
 
           <button
             onClick={handleSend}
             disabled={!text.trim() || isSending}
-            className={`w-full py-4 rounded-2xl font-black text-sm uppercase tracking-widest flex items-center justify-center gap-2 transition-all active:scale-95 ${
-              isSending || !text.trim()
-              ? 'bg-slate-100 text-slate-400 cursor-not-allowed'
-              : 'bg-blue-600 text-white shadow-lg shadow-blue-500/30 hover:bg-blue-700'
-            }`}
+            className={`w-full py-5 rounded-[1.5rem] font-black text-xs uppercase tracking-[0.2em] flex items-center justify-center gap-3 transition-all active:scale-95 shadow-xl ${isSending || !text.trim()
+              ? 'bg-slate-100 text-slate-400 cursor-not-allowed shadow-none'
+              : 'bg-blue-600 text-white shadow-blue-500/30 hover:bg-blue-700'
+              }`}
           >
             {isSending ? (
-              <span className="animate-pulse">Sending...</span>
+              <span className="animate-pulse">{language === 'ko' ? '전송 중...' : 'Sending...'}</span>
             ) : (
               <>
-                Confirm & Send
+                {language === 'ko' ? '메시지 전송하기' : 'Confirm & Send'}
                 <PaperAirplaneIcon className="w-4 h-4" />
               </>
             )}
           </button>
+
+          <p className="text-center text-[10px] text-slate-400 font-bold uppercase tracking-widest">
+            {language === 'ko'
+              ? '관리자 확인 후 답변해 드립니다'
+              : 'Admin will reply after review'}
+          </p>
         </div>
       </div>
     </div>

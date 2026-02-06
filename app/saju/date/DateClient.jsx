@@ -86,7 +86,8 @@ const GET_FIRST_DATE_OPTIONS = (gender = 'female') => {
 };
 
 export default function FirstDatePage() {
-  const { loading, setLoading, setAiResult, aiResult } = useLoading();
+  const { setLoadingType, setAiResult } = useLoading();
+  const [loading, setLoading] = useState(false)
   const [selectedDate, setSelectedDate] = useState(null);
   const detailSectionRef = useRef(null);
 

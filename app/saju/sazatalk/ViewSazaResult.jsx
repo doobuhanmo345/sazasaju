@@ -8,8 +8,15 @@ import { useLanguage } from '@/contexts/useLanguageContext';
 import { parseAiResponse } from '@/utils/helpers';
 import html2canvas from 'html2canvas';
 
-export default function ViewSazaResult({ userQuestion, onReset, aiResultOverride, hideButtons = false }) {
-  const { loading, aiResult: contextAiResult } = useLoading();
+export default function ViewSazaResult({
+  userQuestion,
+  onReset,
+  aiResultOverride,
+  hideButtons = false,
+  loading: propLoading
+}) {
+  const { loading: contextLoading, aiResult: contextAiResult } = useLoading();
+  const loading = propLoading !== undefined ? propLoading : contextLoading;
   const aiResult = aiResultOverride || contextAiResult;
   const scrollElRef = useRef(null);
   const { language } = useLanguage();

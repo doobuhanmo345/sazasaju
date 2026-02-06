@@ -51,7 +51,6 @@ export default function NavBar() {
 
   const router = useRouter();
   const pathname = usePathname();
-  const { setLoading, setLoadingType } = useLoading();
 
   const menuRef = useRef(null);
 

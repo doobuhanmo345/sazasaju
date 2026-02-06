@@ -4,8 +4,8 @@ import { useLoading } from '@/contexts/useLoadingContext';
 import { aiSajuStyle } from '@/data/aiResultConstants';
 import { useMemo } from 'react';
 
-export default function ViewTarotResult({ cardPicked }) {
-  const { loading, aiResult } = useLoading();
+export default function ViewTarotResult({ cardPicked, loading }) {
+  const { aiResult } = useLoading();
 
   const fortune = useMemo(() => {
     if (!aiResult) return null;

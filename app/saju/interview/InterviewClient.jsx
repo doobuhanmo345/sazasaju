@@ -106,7 +106,8 @@ const INTERVIEW_GROUPS = [
 
 export default function InterviewPage() {
   const activeTheme = { text: 'text-blue-500' };
-  const { loading, setLoading, setAiResult, aiResult } = useLoading();
+  const { setLoadingType, setAiResult } = useLoading();
+  const [loading, setLoading] = useState(false)
   const [selectedDate, setSelectedDate] = useState(null);
   const detailSectionRef = useRef(null);
   const [dbPrompt, setDbPrompt] = useState('');

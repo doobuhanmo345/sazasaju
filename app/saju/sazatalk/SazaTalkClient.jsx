@@ -269,12 +269,13 @@ function SazaTalkContent() {
 
         {/* Progress bar and text area */}
         <div className="w-full max-w-xs px-6 flex flex-col items-center">
-          <div className="w-full bg-slate-100 dark:bg-slate-800 h-2 rounded-full overflow-hidden mb-3 shadow-inner border border-slate-200/50 dark:border-slate-700/50">
+          <div className="w-full bg-slate-100 dark:bg-slate-800 h-2 rounded-full overflow-hidden mb-3 shadow-inner border border-slate-200/50 dark:border-slate-700/50 relative">
             <div
-              className="h-full bg-gradient-to-r from-violet-500 via-indigo-500 to-purple-500 transition-all duration-700 ease-out rounded-full relative"
-              style={{ width: `${progress}%` }}
+              className="absolute inset-y-0 left-0 bg-gradient-to-r from-violet-500 via-indigo-500 to-purple-500 transition-transform duration-700 ease-out rounded-full w-full origin-left"
+              style={{ transform: `scaleX(${progress / 100})` }}
             >
-              <div className="absolute inset-0 bg-[linear-gradient(45deg,rgba(255,255,255,0.2)_25%,transparent_25%,transparent_50%,rgba(255,255,255,0.2)_50%,rgba(255,255,255,0.2)_75%,transparent_75%,transparent)] bg-[length:20px_20px] animate-[shimmer_2s_linear_infinite]"></div>
+              {/* Shimmer overlay using transform instead of background-position */}
+              <div className="absolute inset-0 w-[200%] h-full bg-[linear-gradient(90deg,transparent_25%,rgba(255,255,255,0.3)_50%,transparent_75%)] animate-[shimmer_2s_infinite] will-change-transform"></div>
             </div>
           </div>
           <p className="text-[10px] font-black text-indigo-500 dark:text-indigo-400 mb-6 tracking-[0.2em] uppercase">
@@ -306,8 +307,8 @@ function SazaTalkContent() {
         {/* Custom animation injection */}
         <style>{`
           @keyframes shimmer {
-            0% { background-position: 0 0; }
-            100% { background-position: 40px 0; }
+            0% { transform: translateX(-50%); }
+            100% { transform: translateX(0%); }
           }
         `}</style>
       </div>
@@ -636,6 +637,7 @@ function SazaTalkContent() {
         <ViewSazaResult
           userQuestion={userQuestion}
           onReset={p.onReset}
+          loading={loading}
         />
       )}
       loadingTime={0}

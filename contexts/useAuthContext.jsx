@@ -316,11 +316,18 @@ export function AuthContextProvider({ children }) {
   const [isLoggingIn, setIsLoggingIn] = useState(false);
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
   const [isContactModalOpen, setIsContactModalOpen] = useState(false);
+  const [msgModalData, setMsgModalData] = useState({ isOpen: false, receiverId: 'admin', receiverName: 'Admin', originalId: null });
 
   const openLoginModal = () => setIsLoginModalOpen(true);
   const closeLoginModal = () => setIsLoginModalOpen(false);
   const openContactModal = () => setIsContactModalOpen(true);
   const closeContactModal = () => setIsContactModalOpen(false);
+  const openMessageModal = (receiverId = 'admin', receiverName = 'Admin', originalId = null) => {
+    setMsgModalData({ isOpen: true, receiverId, receiverName, originalId });
+  };
+  const closeMessageModal = () => {
+    setMsgModalData(prev => ({ ...prev, isOpen: false }));
+  };
 
   const handleLogin = async (provider = 'google') => {
     setIsLoggingIn(true);
@@ -369,6 +376,10 @@ export function AuthContextProvider({ children }) {
         isContactModalOpen,
         openContactModal,
         closeContactModal,
+        isMessageModalOpen: msgModalData.isOpen,
+        msgModalData,
+        openMessageModal,
+        closeMessageModal,
         cancelLogin,
         logout,
         updateProfileData,

@@ -20,7 +20,8 @@ import { reportStyle } from '@/data/aiResultConstants';
 import TodaysLuckPreview from '@/app/saju/todaysluck/TodaysLuckPreview';
 
 export default function TodaysLuckPage() {
-  const { loading, setLoading, setLoadingType, aiResult, setAiResult } = useLoading();
+  const { setLoadingType, aiResult, setAiResult } = useLoading();
+  const [loading, setLoading] = useState(false);
   const [sajuData, setSajuData] = useState(null);
   const { userData, user, isDailyDone, selectedProfile } = useAuthContext(); // selectedProfile 추가
 

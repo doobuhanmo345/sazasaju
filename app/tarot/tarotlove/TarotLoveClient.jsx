@@ -24,7 +24,8 @@ import { DateService } from '@/utils/dateService';
 import StartButton from '@/ui/StartButton';
 
 export default function TarotLovePage() {
-  const { loading, setLoading, setLoadingType, setAiResult } = useLoading();
+  const { setLoadingType, setAiResult } = useLoading();
+  const [loading, setLoading] = useState(false)
   const { userData, user } = useAuthContext();
   const { language } = useLanguage();
   const { setEditCount, MAX_EDIT_COUNT } = useUsageLimit();
@@ -154,7 +155,7 @@ export default function TarotLovePage() {
     if (loading) window.scrollTo({ top: 0, behavior: 'smooth' });
   }, [loading]);
 
-  const ResultComponent = useCallback(() => <ViewTarotResult cardPicked={cardPicked} />, [cardPicked]);
+  const ResultComponent = useCallback(() => <ViewTarotResult cardPicked={cardPicked} loading={loading} />, [cardPicked, loading]);
 
   return (
     <AnalysisStepContainer

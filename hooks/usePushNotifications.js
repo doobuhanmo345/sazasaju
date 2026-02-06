@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { PushNotifications } from '@capacitor/push-notifications';
 import { App } from '@capacitor/app';
 import { Capacitor } from '@capacitor/core';
@@ -8,24 +8,31 @@ import { useAuthContext } from '@/contexts/useAuthContext';
 
 export const usePushNotifications = (onNavigate) => {
   const { user } = useAuthContext();
+  const navigateRef = useRef(onNavigate);
+
+  // Keep navigation callback reference stable
+  useEffect(() => {
+    navigateRef.current = onNavigate;
+  }, [onNavigate]);
 
   useEffect(() => {
     if (!Capacitor.isNativePlatform()) {
       return;
     }
 
-    // 1. App Url Open (Deep Link / Universal Link)
+    // 1. App Url Open (Deep Link)
     App.addListener('appUrlOpen', (data) => {
       console.log('App opened with URL:', data.url);
-      // Example: sazasaju://path -> /path
       const slug = data.url.split('.com').pop() || data.url.split('://').pop();
-      if (slug && onNavigate) {
-        onNavigate(slug);
+      if (slug && navigateRef.current) {
+        navigateRef.current(slug);
       }
     });
 
     if (!user) {
-      return;
+      return () => {
+        App.removeAllListeners();
+      };
     }
 
     // 2. Push Registration
@@ -45,11 +52,11 @@ export const usePushNotifications = (onNavigate) => {
     };
 
     PushNotifications.addListener('registration', async (token) => {
-      console.log('Push registration success, token: ' + token.value);
+      console.log('Push registration success');
       try {
         await setDoc(
           doc(db, 'users', user.uid),
-          { 
+          {
             fcmTokens: arrayUnion(token.value),
             lastTokenUpdate: new Date().toISOString()
           },
@@ -61,15 +68,15 @@ export const usePushNotifications = (onNavigate) => {
     });
 
     PushNotifications.addListener('registrationError', (error) => {
-      console.error('Push registration error: ' + JSON.stringify(error));
+      console.error('Push registration error');
     });
 
     // 3. Push Actions (Notification Click)
     PushNotifications.addListener('pushNotificationActionPerformed', (notification) => {
-      console.log('Push action performed:', notification.notification);
+      console.log('Push action performed');
       const data = notification.notification.data;
-      if (data && data.url && onNavigate) {
-        onNavigate(data.url);
+      if (data && data.url && navigateRef.current) {
+        navigateRef.current(data.url);
       }
     });
 
@@ -79,5 +86,5 @@ export const usePushNotifications = (onNavigate) => {
       PushNotifications.removeAllListeners();
       App.removeAllListeners();
     };
-  }, [user, onNavigate]);
+  }, [user?.uid]); // Stability: Only re-run if user identity changes
 };

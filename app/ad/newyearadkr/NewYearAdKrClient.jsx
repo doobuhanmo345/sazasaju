@@ -394,11 +394,10 @@ const NewYearAdKr = () => {
                 : 'Saza and 27 Saju masters are analyzing together'}
             </p>
 
-            {/* 로딩 바 섹션 */}
-            <div className="w-full max-w-xs bg-slate-200 rounded-full h-2.5 mb-1 overflow-hidden">
+            <div className="w-full max-w-xs bg-slate-200 rounded-full h-2.5 mb-1 overflow-hidden relative">
               <div
-                className="bg-indigo-600 h-2.5 rounded-full transition-all duration-100 ease-linear"
-                style={{ width: `${progress}%` }}
+                className="bg-indigo-600 h-2.5 rounded-full transition-transform duration-100 ease-linear w-full origin-left will-change-transform"
+                style={{ transform: `scaleX(${progress / 100})` }}
               ></div>
             </div>
             <p className="text-sm text-indigo-500 font-bold mb-4">{Math.round(progress)}%</p>

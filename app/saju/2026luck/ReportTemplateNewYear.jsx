@@ -7,7 +7,7 @@ import { useLanguage } from '@/contexts/useLanguageContext';
 import { parseAiResponse } from '@/utils/helpers';
 import AfterReport from '@/components/AfterReport';
 
-const ReportTemplateNewYear = ({}) => {
+const ReportTemplateNewYear = ({ }) => {
   const { aiResult } = useLoading();
   const { language } = useLanguage();
   const isEn = language !== 'ko';

@@ -16,9 +16,9 @@ import ReportTemplateToday from '@/app/saju/dayluck/ReportTemplateToday';
 
 
 export default function DayLuckPage() {
-  const { loading, setLoading, setLoadingType, aiResult, setAiResult } = useLoading();
+  const { setLoadingType, aiResult, setAiResult } = useLoading();
   const [selectedDate, setSelectedDate] = useState(null);
-
+  const [loading, setLoading] = useState(false);
   const [question, setQuestion] = useState('');
   const [selectedDateSaju, setSelectedDateSaju] = useState(null);
   const { userData, user, isDailyDone } = useAuthContext();
@@ -79,7 +79,7 @@ export default function DayLuckPage() {
           question: question,
           sajuDate: selectedDateSaju,
           promptAdd: '',
-           type: 'dayluck',
+          type: 'dayluck',
         }),
       );
       onstart();

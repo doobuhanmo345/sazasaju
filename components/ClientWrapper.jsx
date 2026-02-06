@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import Script from 'next/script';
 import { usePathname, useRouter } from 'next/navigation';
 import { useAuthContext } from '@/contexts/useAuthContext';
@@ -12,6 +12,7 @@ import Footer from '@/components/Footer';
 import MenuBar from '@/components/MenuBar';
 import LoginModal from '@/components/LoginModal';
 import ContactModal from '@/components/ContactModal';
+import MessageModal from '@/app/messages/MessageModal';
 import CreditModal from '@/components/CreditModal';
 import { useUsageLimit } from '@/contexts/useUsageLimit';
 import { useLanguage } from '@/contexts/useLanguageContext';
@@ -29,9 +30,11 @@ export default function ClientWrapper({ children }) {
   const isOutOfCredit = MAX_EDIT_COUNT - editCount === 0;
 
   // Call Push Notification Hook
-  usePushNotifications((path) => {
+  const onNavigate = useCallback((path) => {
     router.push(path);
-  });
+  }, [router]);
+
+  usePushNotifications(onNavigate);
 
   // Initialize Native Bridge elements
   useEffect(() => {
@@ -163,3 +166,4 @@ export default function ClientWrapper({ children }) {
     </>
   );
 }
+

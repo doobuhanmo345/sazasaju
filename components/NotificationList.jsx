@@ -36,7 +36,7 @@ export default function NotificationList() {
 
   useEffect(() => {
     if (!user) return;
-    
+
     // 1. 개인 알림 감시
     const q_personal = query(collection(db, 'notifications'), where('userId', '==', user.uid));
     const unsub_personal = onSnapshot(q_personal, (snap) => {
@@ -44,7 +44,7 @@ export default function NotificationList() {
     }, err => console.error('Personal notif error:', err));
 
     // 2. 관리자용 역할 알림 감시 (관리자/슈퍼관리자만)
-    let unsub_role = () => {};
+    let unsub_role = () => { };
     if (userData?.role === 'admin' || userData?.role === 'super_admin') {
       const q_role = query(collection(db, 'notifications'), where('targetRole', '==', 'admin'));
       unsub_role = onSnapshot(q_role, (snap) => {
@@ -113,7 +113,7 @@ export default function NotificationList() {
               <XMarkIcon className="w-4 h-4 text-gray-400 hover:text-gray-600" />
             </button>
           </div>
-          
+
 
           <div className="max-h-80 overflow-y-auto p-3 space-y-2">
             {notifications.filter(n => !n.isRead).length > 0 ? (
@@ -188,7 +188,7 @@ export default function NotificationList() {
         </div>
       )}
 
-      <MessageModal 
+      <MessageModal
         isOpen={isMessageModalOpen}
         onClose={() => setIsMessageModalOpen(false)}
         receiverId={selectedUserForReply?.uid || 'admin'}

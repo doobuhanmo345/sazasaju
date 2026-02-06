@@ -70,7 +70,7 @@ export default function NoBirthdayPage() {
 
       const finishTimer = setTimeout(() => {
         setIsIntro(false);
-      }, 3000);
+      }, 500);
 
       return () => {
         timers.forEach(clearTimeout);
@@ -141,7 +141,6 @@ export default function NoBirthdayPage() {
       // Run animation and save in parallel
       // Ensures we wait AT LEAST 3 seconds, but also don't redirect until save finishes
       await Promise.all([
-        new Promise(resolve => setTimeout(resolve, 3000)),
         updateProfileData(updateData)
       ]);
 

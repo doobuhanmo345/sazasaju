@@ -23,7 +23,8 @@ import { useRouter } from 'next/navigation';
 import ToTopButton from '@/ui/ToTopButton';
 export default function SelBirthPage() {
   const router = useRouter();
-  const { loading, setLoading, setAiResult, setLastParams } = useLoading();
+  const { setAiResult, setLastParams } = useLoading();
+  const [loading, setLoading] = useState(false)
   const { userData, user, selectedProfile } = useAuthContext();
   // 컨텍스트 스위칭
   const targetProfile = selectedProfile || userData;

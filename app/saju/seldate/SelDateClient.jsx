@@ -30,7 +30,8 @@ const PURPOSE_OPTIONS = [
 ];
 
 export default function SelDatePage() {
-  const { loading, setLoading, setAiResult, aiResult } = useLoading();
+  const { setLoadingType, setAiResult } = useLoading();
+  const [loading, setLoading] = useState(false);
   const { userData, user, selectedProfile } = useAuthContext();
   // 컨텍스트 스위칭
   const targetProfile = selectedProfile || userData;

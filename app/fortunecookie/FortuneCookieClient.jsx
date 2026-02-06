@@ -74,7 +74,7 @@ export default function FortuneCookieClient() {
     setLoading(true);
 
     try {
-      const data = userData.usageHistory || {};
+      const data = userData?.usageHistory || {};
       const currentCount = editCount;
       const { today: lastToday } = data.ZCookie || {};
 
@@ -151,7 +151,7 @@ export default function FortuneCookieClient() {
             }
           }
         `}</style>
-        
+
         <div className="text-center mb-6 mt-2 animate-in fade-in slide-in-from-top-4 duration-700">
           <p className="text-xs font-bold text-indigo-400 dark:text-indigo-400 tracking-[0.2em] uppercase mb-2">
             get Extra Credit
@@ -205,7 +205,7 @@ export default function FortuneCookieClient() {
                     “
                   </span>
                   <p className="relative z-10 text-gray-700 dark:text-gray-200 text-lg font-medium leading-relaxed break-keep">
-                    {userData.usageHistory.ZCookie.msg}
+                    {userData?.usageHistory?.ZCookie?.msg}
                   </p>
                   <span className="absolute bottom-2 right-4 text-4xl text-amber-200 dark:text-amber-900/50 font-serif leading-none select-none">
                     ”

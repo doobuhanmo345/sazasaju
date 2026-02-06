@@ -121,25 +121,25 @@ const RELATION_TYPES = [
 
 export default function MatchPage() {
   const { language } = useLanguage();
-  const { user, userData, selectedProfile,savedProfiles } = useAuthContext();
+  const { user, userData, selectedProfile, savedProfiles } = useAuthContext();
   // 컨텍스트 스위칭
   const targetProfile = selectedProfile || userData;
   const { birthDate: inputDate, isTimeUnknown, gender, saju } = targetProfile || {};
-//컨텍스트 스위칭 끝
+  //컨텍스트 스위칭 끝
   const { MAX_EDIT_COUNT, isLocked, setEditCount, editCount } = useUsageLimit();
 
   const [mounted, setMounted] = useState(false);
 
-const onSelect = (id) => {
-  console.log(id)
-  const selectedProfile = savedProfiles.find((profile) => profile.id === id)
-  console.log(selectedProfile)
-  setSaju2(selectedProfile.saju)
-  // const bd = getOriginalDate(selectedProfile.birthDate)
-  setInputDate2(selectedProfile.birthDate+'T'+selectedProfile.birthTime )
-  setIsTimeUnknown2(selectedProfile.isTimeUnknown)
-  setGender2(selectedProfile.gender)
-}
+  const onSelect = (id) => {
+    console.log(id)
+    const selectedProfile = savedProfiles.find((profile) => profile.id === id)
+    console.log(selectedProfile)
+    setSaju2(selectedProfile.saju)
+    // const bd = getOriginalDate(selectedProfile.birthDate)
+    setInputDate2(selectedProfile.birthDate + 'T' + selectedProfile.birthTime)
+    setIsTimeUnknown2(selectedProfile.isTimeUnknown)
+    setGender2(selectedProfile.gender)
+  }
   // Client-side Title Update for Localization (Static Export Support)
   useEffect(() => {
     if (language === 'ko') {
@@ -174,15 +174,15 @@ const onSelect = (id) => {
       return '2024-01-01T00:00';
     }
   });
-     const { saju: saju2Init } = useSajuCalculator(inputDate2, isTimeUnknown2);
-const [saju2, setSaju2] = useState(saju2Init);
+  const { saju: saju2Init } = useSajuCalculator(inputDate2, isTimeUnknown2);
+  const [saju2, setSaju2] = useState(saju2Init);
 
-// saju2Init(계산 결과)이 바뀔 때마다 saju2 상태를 업데이트
-useEffect(() => {
-  if (saju2Init) {
-    setSaju2(saju2Init);
-  }
-}, [saju2Init]); // 의존성 배열에 saju2Init을 넣습니다.
+  // saju2Init(계산 결과)이 바뀔 때마다 saju2 상태를 업데이트
+  useEffect(() => {
+    if (saju2Init) {
+      setSaju2(saju2Init);
+    }
+  }, [saju2Init]); // 의존성 배열에 saju2Init을 넣습니다.
   const t = (char) => (language === 'en' ? getEng(char) : char);
 
   const compaEnergy = useConsumeEnergy();
@@ -372,7 +372,7 @@ useEffect(() => {
           </div>
         )}
 
-       {step === 2 && (
+        {step === 2 && (
           <div className="w-full max-w-5xl mx-auto px-1 animate-fadeIn">
             <div className="flex flex-col md:flex-row items-stretch gap-4 md:gap-6">
               <div className="flex-1 bg-white dark:bg-slate-800 rounded-2xl border border-indigo-100 dark:border-indigo-900 shadow-sm overflow-hidden flex flex-col transition-all hover:shadow-md">
@@ -388,9 +388,9 @@ useEffect(() => {
                   <div className="flex items-center justify-center gap-2 bg-slate-50 dark:bg-slate-700/30 py-3 rounded-xl mb-6 text-sm font-medium text-slate-500 dark:text-slate-400 border border-slate-100 dark:border-slate-700">
                     <CalendarDaysIcon className="w-4 h-4 text-indigo-400" />
                     <span className="font-mono tracking-wide text-slate-700 dark:text-slate-300">
-                      {inputDate 
+                      {inputDate
                         ? (isTimeUnknown ? inputDate.split('T')[0] : inputDate.replace('T', ' '))
-                        : (language ==='en' ? 'Please register your info' : '정보를 먼저 등록해주세요')}
+                        : (language === 'en' ? 'Please register your info' : '정보를 먼저 등록해주세요')}
                     </span>
                     {inputDate && <span className="text-lg ml-1">{gender === 'male' ? '👨' : '👩'}</span>}
                     {inputDate && isTimeUnknown && (
@@ -471,9 +471,9 @@ useEffect(() => {
                         <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2 ml-1">
                           {language === 'ko' ? '불러오기' : 'Load Profile'}
                         </label>
-                        <SelectPerson 
-                          list={savedProfiles} 
-                          onSelect={onSelect} 
+                        <SelectPerson
+                          list={savedProfiles}
+                          onSelect={onSelect}
                         />
                       </div>
                     )}
@@ -495,238 +495,238 @@ useEffect(() => {
           </div>
         )}
 
-      {step === 3 && (
-        <div className="w-full max-w-4xl mx-auto px-1 animate-fadeIn">
-          <div className="text-center mb-8">
-            <h2 className="text-xl sm:text-2xl font-bold text-slate-800 dark:text-slate-100 mb-2">
-              {language === 'en' ? 'Is the information correct?' : '정보가 맞나요?'}
-            </h2>
-            <p className="text-slate-500 dark:text-slate-400 text-sm">
-              {language === 'en' ? (
-                <>Precise analysis will begin based on this information. <br />Please go back if you need to make changes.</>
-              ) : (
-                <>입력하신 정보를 바탕으로 정밀 분석을 시작합니다. <br />수정이 필요하면 이전 단계로 돌아가주세요.</>
-              )}
-            </p>
-          </div>
-          <div className="flex justify-center mb-8">
-            {(() => {
-              const relData = RELATION_TYPES.find((r) => r.id === selectedRel);
-              const RelIcon = relData?.icon || UserGroupIcon;
-              const relLabel = relData ? (language === 'en' ? relData.sub : relData.label) : (language === 'en' ? 'Not Selected' : '선택 안함');
-              return (
-                <div className={`flex items-center gap-3 px-6 py-3 rounded-2xl border-2 shadow-sm ${relData?.bg || 'bg-slate-50'} ${relData?.border || 'border-slate-200'} dark:bg-slate-800 dark:border-slate-700`}>
-                  <div className={`p-2 rounded-full bg-white dark:bg-slate-900 shadow-sm ${relData?.color || 'text-slate-400'}`}>
-                    <RelIcon className="w-6 h-6" />
-                  </div>
-                  <div className="flex flex-col text-left">
-                    <span className="text-[10px] uppercase font-bold text-slate-400 tracking-wider">RELATIONSHIP</span>
-                    <span className="text-lg font-bold text-slate-700 dark:text-slate-200">{relLabel}</span>
-                  </div>
-                </div>
-              );
-            })()}
-          </div>
-          <div className="flex flex-col sm:flex-row gap-4 items-stretch justify-center relative">
-            <div className="flex-1 bg-white dark:bg-slate-800 p-5 rounded-2xl border border-indigo-100 dark:border-indigo-900 shadow-sm flex flex-col items-center relative overflow-hidden">
-              <div className="absolute top-0 left-0 w-full h-1.5 bg-indigo-500"></div>
-              <span className="mb-4 px-2.5 py-1 rounded-full text-[10px] font-bold bg-indigo-50 dark:bg-indigo-900/50 text-indigo-600 dark:text-indigo-300 uppercase tracking-widest">ME</span>
-              <div className="text-center mb-4">
-                <div className="text-lg font-bold text-slate-700 dark:text-slate-200 font-mono">{inputDate.split('T')[0]}</div>
-                <div className="text-sm text-slate-500 dark:text-slate-400 mt-1 flex items-center justify-center gap-2">
-                  <span>{gender === 'male' ? (language === 'en' ? 'Male 👨' : '남성 👨') : (language === 'en' ? 'Female 👩' : '여성 👩')}</span>
-                  <span className="w-1 h-1 rounded-full bg-slate-300"></span>
-                  <span>{isTimeUnknown ? (language === 'en' ? 'Time Unknown' : '시간 모름') : inputDate.split('T')[1]}</span>
-                </div>
-              </div>
-              <div className="flex gap-3 opacity-80">
-                <div className="flex flex-col items-center p-2 bg-slate-50 dark:bg-slate-700/50 rounded-lg">
-                  <span className="text-xs text-slate-400 mb-1">{language === 'en' ? 'Day Pillar' : '일주'}</span>
-                  <span className="font-bold text-indigo-600 dark:text-indigo-300">{t(saju.sky1)}{t(saju.grd1)}</span>
-                </div>
-              </div>
+        {step === 3 && (
+          <div className="w-full max-w-4xl mx-auto px-1 animate-fadeIn">
+            <div className="text-center mb-8">
+              <h2 className="text-xl sm:text-2xl font-bold text-slate-800 dark:text-slate-100 mb-2">
+                {language === 'en' ? 'Is the information correct?' : '정보가 맞나요?'}
+              </h2>
+              <p className="text-slate-500 dark:text-slate-400 text-sm">
+                {language === 'en' ? (
+                  <>Precise analysis will begin based on this information. <br />Please go back if you need to make changes.</>
+                ) : (
+                  <>입력하신 정보를 바탕으로 정밀 분석을 시작합니다. <br />수정이 필요하면 이전 단계로 돌아가주세요.</>
+                )}
+              </p>
             </div>
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-10 md:static md:translate-x-0 md:translate-y-0 md:flex md:items-center">
-              <div className="bg-white dark:bg-slate-700 p-2 rounded-full shadow-md border border-slate-100 dark:border-slate-600">
-                <span className="font-black text-slate-300 text-xs">VS</span>
-              </div>
-            </div>
-            <div className="flex-1 bg-white dark:bg-slate-800 p-5 rounded-2xl border border-emerald-100 dark:border-emerald-900 shadow-sm flex flex-col items-center relative overflow-hidden">
-              <div className="absolute top-0 left-0 w-full h-1.5 bg-emerald-500"></div>
-              <span className="mb-4 px-2.5 py-1 rounded-full text-[10px] font-bold bg-emerald-50 dark:bg-emerald-900/50 text-emerald-600 dark:text-emerald-300 uppercase tracking-widest">TARGET</span>
-              <div className="text-center mb-4">
-                <div className="text-lg font-bold text-slate-700 dark:text-slate-200 font-mono">{inputDate2.split('T')[0]}</div>
-                <div className="text-sm text-slate-500 dark:text-slate-400 mt-1 flex items-center justify-center gap-2">
-                  <span>{gender2 === 'male' ? (language === 'en' ? 'Male 👨' : '남성 👨') : (language === 'en' ? 'Female 👩' : '여성 👩')}</span>
-                  <span className="w-1 h-1 rounded-full bg-slate-300"></span>
-                  <span>{isTimeUnknown2 ? (language === 'en' ? 'Time Unknown' : '시간 모름') : inputDate2.split('T')[1]}</span>
-                </div>
-              </div>
-              <div className="flex gap-3 opacity-80">
-                <div className="flex flex-col items-center p-2 bg-slate-50 dark:bg-slate-700/50 rounded-lg">
-                  <span className="text-xs text-slate-400 mb-1">{language === 'en' ? 'Day Pillar' : '일주'}</span>
-                  <span className="font-bold text-emerald-600 dark:text-emerald-300">{saju2?.sky1 ? `${t(saju2.sky1)}${t(saju2.grd1)}` : '-'}</span>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div className="my-5 flex justify-center">
-            {loading && <LoadingBar progress={progress} loadingType={'compati'} isCachedLoading={isCachedLoading} />}
-          </div>
-          <div className="flex justify-center">
-            <button
-              onClick={() => compaEnergy.triggerConsume(handleMatch)}
-              disabled={isDisabled || isDisabled2}
-              className={classNames(
-                'w-full sm:w-auto px-10 py-4 font-bold rounded-xl shadow-lg dark:shadow-none transform transition-all flex items-center justify-center gap-2',
-                isDisabled ? DISABLED_STYLE : 'bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-500 hover:to-violet-500 text-white shadow-indigo-200 hover:-translate-y-1',
-              )}
-            >
-              <SparklesIcon className="w-5 h-5 animate-pulse" />
-              <span>{language === 'en' ? 'Start Chemistry Analysis' : '궁합 분석 시작하기'}</span>
-              {!!isAnalysisDone ? (
-                <div className="flex items-center gap-1 backdrop-blur-md bg-white/20 px-2 py-0.5 rounded-full border border-white/30">
-                  <span className="text-[9px] font-bold text-white uppercase">Free</span>
-                  <TicketIcon className="w-3 h-3 text-white" />
-                </div>
-              ) : isLocked ? (
-                <div className="mt-1 flex items-center gap-1 backdrop-blur-sm px-2 py-0.5 rounded-full border shadow-sm relative z-10 border-gray-500/50 bg-gray-400/40">
-                  <LockClosedIcon className="w-4 h-4 text-amber-500" />
-                </div>
-              ) : user && (
-                <div className="relative scale-90">
-                  <EnergyBadge active={userData?.birthDate} consuming={loading} cost={-1} />
-                </div>
-              )}
-            </button>
-          </div>
-          {isLocked ? (
-            <p className="text-center mt-4 text-rose-600 font-black text-sm flex items-center justify-center gap-1 animate-pulse">
-              <ExclamationTriangleIcon className="w-4 h-4" /> {language === 'ko' ? '크레딧이 부족합니다..' : 'not Enough credit'}
-            </p>
-          ) : (
-            <p className="text-center mt-4 text-[11px] text-slate-400">
-              {language === 'ko' ? '이미 분석된 운세는 크래딧을 재소모하지 않습니다.' : 'Fortunes that have already been analyzed do not use credits.'}
-            </p>
-          )}
-        </div>
-      )}
-
-      {step === 4 && (
-        <div className="w-full max-w-4xl mx-auto px-1 animate-fadeIn">
-          <div className="bg-white dark:bg-slate-800 rounded-2xl border border-slate-100 dark:border-slate-700 shadow-sm p-4 mb-4 relative overflow-hidden">
-            <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-indigo-500 via-purple-500 to-emerald-500"></div>
-            <div className="flex justify-between items-start mb-3">
-              <span className="text-[10px] font-black tracking-tighter text-slate-400 uppercase">MATCH ANALYSIS</span>
-              <div className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-md bg-slate-50 dark:bg-slate-700/50 border border-slate-100 dark:border-slate-600">
-                <span className="text-[9px] font-bold text-slate-400 uppercase tracking-tight">RELATION</span>
-                <span className="text-xs font-bold text-indigo-600 dark:text-indigo-400">
-                  {(() => {
-                    const r = RELATION_TYPES.find((t) => t.id === selectedRel);
-                    return r ? (language === 'en' ? r.sub : r.label) : selectedRel;
-                  })()}
-                </span>
-              </div>
-            </div>
-            <div className="grid grid-cols-[1fr_auto_1fr] items-center">
-              <div className="flex flex-col items-center text-center">
-                <span className="text-[9px] font-black text-indigo-500 bg-indigo-50 dark:bg-indigo-900/30 px-1.5 py-0.5 rounded mb-1">ME</span>
-                <div className="flex flex-col sm:flex-row items-center gap-1">
-                  <span className="text-base font-bold text-slate-700 dark:text-slate-200">{inputDate.split('T')[0].slice(2)}</span>
-                  <span className="text-xs text-slate-400">{gender === 'male' ? 'M 👨' : 'F 👩'}</span>
-                </div>
-              </div>
-              <div className="px-3 flex flex-col items-center justify-center">
-                <div className="w-8 h-8 rounded-full border border-slate-100 dark:border-slate-700 flex items-center justify-center bg-slate-50 dark:bg-slate-900/50 shadow-inner">
-                  <span className="text-[10px] font-black text-slate-300">VS</span>
-                </div>
-              </div>
-              <div className="flex flex-col items-center text-center">
-                <span className="text-[9px] font-black text-emerald-500 bg-emerald-50 dark:bg-emerald-900/30 px-1.5 py-0.5 rounded mb-1">TARGET</span>
-                <div className="flex flex-col sm:flex-row items-center gap-1">
-                  <span className="text-base font-bold text-slate-700 dark:text-slate-200">{inputDate2.split('T')[0].slice(2)}</span>
-                  <span className="text-xs text-slate-400">{gender2 === 'male' ? 'M 👨' : 'F 👩'}</span>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div className="bg-indigo-50/30 dark:bg-slate-800/50 rounded-2xl border border-indigo-100/50 dark:border-slate-700 p-5 sm:p-6 shadow-sm">
-            {!!data && (
-              <div className="flex flex-col gap-8 py-2 animate-up">
-                <section className="text-center">
-                  <span className="font-xs font-bold tracking-[0.2em] text-slate-400 uppercase mb-2 block">Match Identity</span>
-                  <h2 className="text-xl font-black text-slate-800 dark:text-white mb-1">{data.matchIdentity}</h2>
-                  <p className="text-sm text-indigo-500 font-semibold">{data.title}</p>
-                  <div className="mt-6 max-w-[240px] mx-auto">
-                    <div className="flex justify-between items-end mb-1.5 px-0.5">
-                      <span className="font-xs font-bold text-slate-400 uppercase">Compatibility</span>
-                      <span className="text-xl font-black text-slate-800 dark:text-white leading-none">{data.score}%</span>
+            <div className="flex justify-center mb-8">
+              {(() => {
+                const relData = RELATION_TYPES.find((r) => r.id === selectedRel);
+                const RelIcon = relData?.icon || UserGroupIcon;
+                const relLabel = relData ? (language === 'en' ? relData.sub : relData.label) : (language === 'en' ? 'Not Selected' : '선택 안함');
+                return (
+                  <div className={`flex items-center gap-3 px-6 py-3 rounded-2xl border-2 shadow-sm ${relData?.bg || 'bg-slate-50'} ${relData?.border || 'border-slate-200'} dark:bg-slate-800 dark:border-slate-700`}>
+                    <div className={`p-2 rounded-full bg-white dark:bg-slate-900 shadow-sm ${relData?.color || 'text-slate-400'}`}>
+                      <RelIcon className="w-6 h-6" />
                     </div>
-                    <div className="h-1 w-full bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
-                      <div className="h-full bg-indigo-500 transition-all duration-1000" style={{ width: `${data.score}%` }} />
+                    <div className="flex flex-col text-left">
+                      <span className="text-[10px] uppercase font-bold text-slate-400 tracking-wider">RELATIONSHIP</span>
+                      <span className="text-lg font-bold text-slate-700 dark:text-slate-200">{relLabel}</span>
                     </div>
                   </div>
-                </section>
-                <section className="border-t border-slate-100 dark:border-slate-800 pt-6 text-center">
-                  <p className="text-[14px] leading-relaxed text-slate-600 dark:text-slate-400 italic mb-4">"{data.vibe}"</p>
-                  <div className="flex flex-wrap justify-center gap-2">
-                    {data.keywords.map((word, i) => <span key={i} className="text-[10px] font-medium text-slate-400">#{word}</span>)}
+                );
+              })()}
+            </div>
+            <div className="flex flex-col sm:flex-row gap-4 items-stretch justify-center relative">
+              <div className="flex-1 bg-white dark:bg-slate-800 p-5 rounded-2xl border border-indigo-100 dark:border-indigo-900 shadow-sm flex flex-col items-center relative overflow-hidden">
+                <div className="absolute top-0 left-0 w-full h-1.5 bg-indigo-500"></div>
+                <span className="mb-4 px-2.5 py-1 rounded-full text-[10px] font-bold bg-indigo-50 dark:bg-indigo-900/50 text-indigo-600 dark:text-indigo-300 uppercase tracking-widest">ME</span>
+                <div className="text-center mb-4">
+                  <div className="text-lg font-bold text-slate-700 dark:text-slate-200 font-mono">{inputDate.split('T')[0]}</div>
+                  <div className="text-sm text-slate-500 dark:text-slate-400 mt-1 flex items-center justify-center gap-2">
+                    <span>{gender === 'male' ? (language === 'en' ? 'Male 👨' : '남성 👨') : (language === 'en' ? 'Female 👩' : '여성 👩')}</span>
+                    <span className="w-1 h-1 rounded-full bg-slate-300"></span>
+                    <span>{isTimeUnknown ? (language === 'en' ? 'Time Unknown' : '시간 모름') : inputDate.split('T')[1]}</span>
                   </div>
-                </section>
-                <section className="grid grid-cols-1 sm:grid-cols-2 gap-x-10 gap-y-6 border-t border-slate-100 dark:border-slate-800 pt-6">
-                  <div>
-                    <h4 className="font-xs font-black text-indigo-500 uppercase tracking-widest mb-2">Analysis: Me</h4>
-                    <p className="text-[13px] leading-relaxed text-slate-500 dark:text-slate-400">{data.insights.me}</p>
+                </div>
+                <div className="flex gap-3 opacity-80">
+                  <div className="flex flex-col items-center p-2 bg-slate-50 dark:bg-slate-700/50 rounded-lg">
+                    <span className="text-xs text-slate-400 mb-1">{language === 'en' ? 'Day Pillar' : '일주'}</span>
+                    <span className="font-bold text-indigo-600 dark:text-indigo-300">{t(saju.sky1)}{t(saju.grd1)}</span>
                   </div>
-                  <div>
-                    <h4 className="font-xs font-black text-indigo-500 uppercase tracking-widest mb-2">Analysis: Target</h4>
-                    <p className="text-[13px] leading-relaxed text-slate-500 dark:text-slate-400">{data.insights.target}</p>
-                  </div>
-                </section>
-                <section className="space-y-6 border-t border-slate-100 dark:border-slate-800 pt-6">
-                  <div>
-                    <h4 className="font-xs font-black text-slate-800 uppercase tracking-widest mb-2">{language ==='en' ? 'Synergy' : '관계 시너지'}</h4>
-                    <p className="text-[13px] leading-relaxed text-slate-500 dark:text-slate-400">{data.insights.synergyPros}</p>
-                  </div>
-                  <div>
-                    <h4 className="font-xs font-black text-slate-800 uppercase tracking-widest mb-2">{language ==='en' ? 'Points of Friction' : '주의할 지점'}</h4>
-                    <p className="text-[13px] leading-relaxed text-slate-500 dark:text-slate-400">{data.insights.synergyCons}</p>
-                  </div>
-                </section>
-                <section className="grid grid-cols-1 sm:grid-cols-2 gap-6 border-t border-slate-100 dark:border-slate-800 pt-6">
-                  <div>
-                    <h4 className="font-xs font-black text-slate-400 uppercase tracking-widest mb-3">Strengths</h4>
-                    <ul className="space-y-1.5">
-                      {data.pros.map((item, i) => <li key={i} className="text-[13px] text-slate-500 flex gap-2"><span className="text-indigo-300">·</span> {item}</li>)}
-                    </ul>
-                  </div>
-                  <div>
-                    <h4 className="font-xs font-black text-slate-400 uppercase tracking-widest mb-3">Cautions</h4>
-                    <ul className="space-y-1.5">
-                      {data.cons.map((item, i) => <li key={i} className="text-[13px] text-slate-500 flex gap-2"><span className="text-indigo-300">·</span> {item}</li>)}
-                    </ul>
-                  </div>
-                </section>
-                <section className="border-t border-slate-100 dark:border-slate-800 pt-6 pb-4">
-                  <h4 className="font-xs font-black text-indigo-500 uppercase tracking-widest mb-3 text-center">Master's Conclusion</h4>
-                  <p className="text-[14px] font-medium text-slate-700 dark:text-slate-200 leading-relaxed text-center max-w-md mx-auto mb-4">{data.advice}</p>
-                  <p className="text-[13px] leading-relaxed text-slate-500 dark:text-slate-400 text-center">{data.insights.solution}</p>
-                  <div className="mt-8 pt-6 border-t border-slate-50 dark:border-slate-900 text-center">
-                    <span className="text-xs text-slate-800 font-bold italic">{data.insights.ctaChat}</span>
-                  </div>
-                </section>
+                </div>
               </div>
+              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-10 md:static md:translate-x-0 md:translate-y-0 md:flex md:items-center">
+                <div className="bg-white dark:bg-slate-700 p-2 rounded-full shadow-md border border-slate-100 dark:border-slate-600">
+                  <span className="font-black text-slate-300 text-xs">VS</span>
+                </div>
+              </div>
+              <div className="flex-1 bg-white dark:bg-slate-800 p-5 rounded-2xl border border-emerald-100 dark:border-emerald-900 shadow-sm flex flex-col items-center relative overflow-hidden">
+                <div className="absolute top-0 left-0 w-full h-1.5 bg-emerald-500"></div>
+                <span className="mb-4 px-2.5 py-1 rounded-full text-[10px] font-bold bg-emerald-50 dark:bg-emerald-900/50 text-emerald-600 dark:text-emerald-300 uppercase tracking-widest">TARGET</span>
+                <div className="text-center mb-4">
+                  <div className="text-lg font-bold text-slate-700 dark:text-slate-200 font-mono">{inputDate2.split('T')[0]}</div>
+                  <div className="text-sm text-slate-500 dark:text-slate-400 mt-1 flex items-center justify-center gap-2">
+                    <span>{gender2 === 'male' ? (language === 'en' ? 'Male 👨' : '남성 👨') : (language === 'en' ? 'Female 👩' : '여성 👩')}</span>
+                    <span className="w-1 h-1 rounded-full bg-slate-300"></span>
+                    <span>{isTimeUnknown2 ? (language === 'en' ? 'Time Unknown' : '시간 모름') : inputDate2.split('T')[1]}</span>
+                  </div>
+                </div>
+                <div className="flex gap-3 opacity-80">
+                  <div className="flex flex-col items-center p-2 bg-slate-50 dark:bg-slate-700/50 rounded-lg">
+                    <span className="text-xs text-slate-400 mb-1">{language === 'en' ? 'Day Pillar' : '일주'}</span>
+                    <span className="font-bold text-emerald-600 dark:text-emerald-300">{saju2?.sky1 ? `${t(saju2.sky1)}${t(saju2.grd1)}` : '-'}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="my-5 flex justify-center">
+              {loading && <LoadingBar progress={progress} loadingType={'compati'} isCachedLoading={isCachedLoading} />}
+            </div>
+            <div className="flex justify-center">
+              <button
+                onClick={() => compaEnergy.triggerConsume(handleMatch)}
+                disabled={isDisabled || isDisabled2}
+                className={classNames(
+                  'w-full sm:w-auto px-10 py-4 font-bold rounded-xl shadow-lg dark:shadow-none transform transition-all flex items-center justify-center gap-2',
+                  isDisabled ? DISABLED_STYLE : 'bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-500 hover:to-violet-500 text-white shadow-indigo-200 hover:-translate-y-1',
+                )}
+              >
+                <SparklesIcon className="w-5 h-5 animate-pulse" />
+                <span>{language === 'en' ? 'Start Chemistry Analysis' : '궁합 분석 시작하기'}</span>
+                {!!isAnalysisDone ? (
+                  <div className="flex items-center gap-1 backdrop-blur-md bg-white/20 px-2 py-0.5 rounded-full border border-white/30">
+                    <span className="text-[9px] font-bold text-white uppercase">Free</span>
+                    <TicketIcon className="w-3 h-3 text-white" />
+                  </div>
+                ) : isLocked ? (
+                  <div className="mt-1 flex items-center gap-1 backdrop-blur-sm px-2 py-0.5 rounded-full border shadow-sm relative z-10 border-gray-500/50 bg-gray-400/40">
+                    <LockClosedIcon className="w-4 h-4 text-amber-500" />
+                  </div>
+                ) : user && (
+                  <div className="relative scale-90">
+                    <EnergyBadge active={userData?.birthDate} consuming={loading} cost={-1} />
+                  </div>
+                )}
+              </button>
+            </div>
+            {isLocked ? (
+              <p className="text-center mt-4 text-rose-600 font-black text-sm flex items-center justify-center gap-1 animate-pulse">
+                <ExclamationTriangleIcon className="w-4 h-4" /> {language === 'ko' ? '크레딧이 부족합니다..' : 'not Enough credit'}
+              </p>
+            ) : (
+              <p className="text-center mt-4 text-[11px] text-slate-400">
+                {language === 'ko' ? '이미 분석된 운세는 크래딧을 재소모하지 않습니다.' : 'Fortunes that have already been analyzed do not use credits.'}
+              </p>
             )}
           </div>
-          <div className="mt-8 text-center">
-            <button onClick={() => setStep(1)} className="text-sm text-slate-400 hover:text-indigo-500 underline underline-offset-4 transition-all">
-              {language === 'en' ? 'Check Another Match' : '다른 궁합 보러가기'}
-            </button>
+        )}
+
+        {step === 4 && (
+          <div className="w-full max-w-4xl mx-auto px-1 animate-fadeIn">
+            <div className="bg-white dark:bg-slate-800 rounded-2xl border border-slate-100 dark:border-slate-700 shadow-sm p-4 mb-4 relative overflow-hidden">
+              <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-indigo-500 via-purple-500 to-emerald-500"></div>
+              <div className="flex justify-between items-start mb-3">
+                <span className="text-[10px] font-black tracking-tighter text-slate-400 uppercase">MATCH ANALYSIS</span>
+                <div className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-md bg-slate-50 dark:bg-slate-700/50 border border-slate-100 dark:border-slate-600">
+                  <span className="text-[9px] font-bold text-slate-400 uppercase tracking-tight">RELATION</span>
+                  <span className="text-xs font-bold text-indigo-600 dark:text-indigo-400">
+                    {(() => {
+                      const r = RELATION_TYPES.find((t) => t.id === selectedRel);
+                      return r ? (language === 'en' ? r.sub : r.label) : selectedRel;
+                    })()}
+                  </span>
+                </div>
+              </div>
+              <div className="grid grid-cols-[1fr_auto_1fr] items-center">
+                <div className="flex flex-col items-center text-center">
+                  <span className="text-[9px] font-black text-indigo-500 bg-indigo-50 dark:bg-indigo-900/30 px-1.5 py-0.5 rounded mb-1">ME</span>
+                  <div className="flex flex-col sm:flex-row items-center gap-1">
+                    <span className="text-base font-bold text-slate-700 dark:text-slate-200">{inputDate?.split('T')[0]?.slice(2)}</span>
+                    <span className="text-xs text-slate-400">{gender === 'male' ? 'M 👨' : 'F 👩'}</span>
+                  </div>
+                </div>
+                <div className="px-3 flex flex-col items-center justify-center">
+                  <div className="w-8 h-8 rounded-full border border-slate-100 dark:border-slate-700 flex items-center justify-center bg-slate-50 dark:bg-slate-900/50 shadow-inner">
+                    <span className="text-[10px] font-black text-slate-300">VS</span>
+                  </div>
+                </div>
+                <div className="flex flex-col items-center text-center">
+                  <span className="text-[9px] font-black text-emerald-500 bg-emerald-50 dark:bg-emerald-900/30 px-1.5 py-0.5 rounded mb-1">TARGET</span>
+                  <div className="flex flex-col sm:flex-row items-center gap-1">
+                    <span className="text-base font-bold text-slate-700 dark:text-slate-200">{inputDate2?.split('T')[0]?.slice(2)}</span>
+                    <span className="text-xs text-slate-400">{gender2 === 'male' ? 'M 👨' : 'F 👩'}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="bg-indigo-50/30 dark:bg-slate-800/50 rounded-2xl border border-indigo-100/50 dark:border-slate-700 p-5 sm:p-6 shadow-sm">
+              {!!data && (
+                <div className="flex flex-col gap-8 py-2 animate-up">
+                  <section className="text-center">
+                    <span className="font-xs font-bold tracking-[0.2em] text-slate-400 uppercase mb-2 block">Match Identity</span>
+                    <h2 className="text-xl font-black text-slate-800 dark:text-white mb-1">{data.matchIdentity}</h2>
+                    <p className="text-sm text-indigo-500 font-semibold">{data.title}</p>
+                    <div className="mt-6 max-w-[240px] mx-auto">
+                      <div className="flex justify-between items-end mb-1.5 px-0.5">
+                        <span className="font-xs font-bold text-slate-400 uppercase">Compatibility</span>
+                        <span className="text-xl font-black text-slate-800 dark:text-white leading-none">{data.score}%</span>
+                      </div>
+                      <div className="h-1 w-full bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
+                        <div className="h-full bg-indigo-500 transition-all duration-1000" style={{ width: `${data.score}%` }} />
+                      </div>
+                    </div>
+                  </section>
+                  <section className="border-t border-slate-100 dark:border-slate-800 pt-6 text-center">
+                    <p className="text-[14px] leading-relaxed text-slate-600 dark:text-slate-400 italic mb-4">"{data.vibe}"</p>
+                    <div className="flex flex-wrap justify-center gap-2">
+                      {data.keywords.map((word, i) => <span key={i} className="text-[10px] font-medium text-slate-400">#{word}</span>)}
+                    </div>
+                  </section>
+                  <section className="grid grid-cols-1 sm:grid-cols-2 gap-x-10 gap-y-6 border-t border-slate-100 dark:border-slate-800 pt-6">
+                    <div>
+                      <h4 className="font-xs font-black text-indigo-500 uppercase tracking-widest mb-2">Analysis: Me</h4>
+                      <p className="text-[13px] leading-relaxed text-slate-500 dark:text-slate-400">{data.insights.me}</p>
+                    </div>
+                    <div>
+                      <h4 className="font-xs font-black text-indigo-500 uppercase tracking-widest mb-2">Analysis: Target</h4>
+                      <p className="text-[13px] leading-relaxed text-slate-500 dark:text-slate-400">{data.insights.target}</p>
+                    </div>
+                  </section>
+                  <section className="space-y-6 border-t border-slate-100 dark:border-slate-800 pt-6">
+                    <div>
+                      <h4 className="font-xs font-black text-slate-800 uppercase tracking-widest mb-2">{language === 'en' ? 'Synergy' : '관계 시너지'}</h4>
+                      <p className="text-[13px] leading-relaxed text-slate-500 dark:text-slate-400">{data.insights.synergyPros}</p>
+                    </div>
+                    <div>
+                      <h4 className="font-xs font-black text-slate-800 uppercase tracking-widest mb-2">{language === 'en' ? 'Points of Friction' : '주의할 지점'}</h4>
+                      <p className="text-[13px] leading-relaxed text-slate-500 dark:text-slate-400">{data.insights.synergyCons}</p>
+                    </div>
+                  </section>
+                  <section className="grid grid-cols-1 sm:grid-cols-2 gap-6 border-t border-slate-100 dark:border-slate-800 pt-6">
+                    <div>
+                      <h4 className="font-xs font-black text-slate-400 uppercase tracking-widest mb-3">Strengths</h4>
+                      <ul className="space-y-1.5">
+                        {data.pros.map((item, i) => <li key={i} className="text-[13px] text-slate-500 flex gap-2"><span className="text-indigo-300">·</span> {item}</li>)}
+                      </ul>
+                    </div>
+                    <div>
+                      <h4 className="font-xs font-black text-slate-400 uppercase tracking-widest mb-3">Cautions</h4>
+                      <ul className="space-y-1.5">
+                        {data.cons.map((item, i) => <li key={i} className="text-[13px] text-slate-500 flex gap-2"><span className="text-indigo-300">·</span> {item}</li>)}
+                      </ul>
+                    </div>
+                  </section>
+                  <section className="border-t border-slate-100 dark:border-slate-800 pt-6 pb-4">
+                    <h4 className="font-xs font-black text-indigo-500 uppercase tracking-widest mb-3 text-center">Master's Conclusion</h4>
+                    <p className="text-[14px] font-medium text-slate-700 dark:text-slate-200 leading-relaxed text-center max-w-md mx-auto mb-4">{data.advice}</p>
+                    <p className="text-[13px] leading-relaxed text-slate-500 dark:text-slate-400 text-center">{data.insights.solution}</p>
+                    <div className="mt-8 pt-6 border-t border-slate-50 dark:border-slate-900 text-center">
+                      <span className="text-xs text-slate-800 font-bold italic">{data.insights.ctaChat}</span>
+                    </div>
+                  </section>
+                </div>
+              )}
+            </div>
+            <div className="mt-8 text-center">
+              <button onClick={() => setStep(1)} className="text-sm text-slate-400 hover:text-indigo-500 underline underline-offset-4 transition-all">
+                {language === 'en' ? 'Check Another Match' : '다른 궁합 보러가기'}
+              </button>
+            </div>
           </div>
-        </div>
-      )}
-    </div>
-  </main>
+        )}
+      </div>
+    </main>
   );
 }
