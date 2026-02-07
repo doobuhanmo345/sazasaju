@@ -16,6 +16,7 @@ import ImageBanner from '@/components/banner/ImageBanner';
 import BasicAnaBanner from '@/components/banner/BasicAnaBanner';
 import IconWrapper from '@/components/menuicons/IconWrapper';
 import SazaTalkInputBanner from '@/components/banner/SazatalkInputBanner';
+import LoveIcons from '../components/menuicons/LoveIcons';
 
 
 export default function HomeClient() {
@@ -110,6 +111,24 @@ export default function HomeClient() {
         title={
           <>
             {language === 'ko'
+              ? '애정운'
+              : 'Love Luck'}
+          </>
+        }
+        subTitle={
+          <>
+            {language === 'ko'
+              ? '나의 애정운은?'
+              : 'My love luck'}
+          </>
+        }
+      >
+        <LoveIcons />
+      </IconWrapper>
+      <IconWrapper
+        title={
+          <>
+            {language === 'ko'
               ? '재물운'
               : 'Wealth Luck'}
           </>
@@ -124,7 +143,6 @@ export default function HomeClient() {
       >
         <WealthIcons />
       </IconWrapper>
-      {/* New Selection Icons Section */}
       <IconWrapper
         title={
           <>

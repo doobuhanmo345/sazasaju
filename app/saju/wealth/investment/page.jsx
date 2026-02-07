@@ -9,7 +9,7 @@ import { useUsageLimit } from '@/contexts/useUsageLimit';
 import { useConsumeEnergy } from '@/hooks/useConsumingEnergy';
 import { useLoading } from '@/contexts/useLoadingContext';
 import EnergyBadge from '@/ui/EnergyBadge';
-import LoadingBar from '@/components/LoadingBar';
+import LoadingFourPillar from '@/components/LoadingFourPillar';
 import { SajuAnalysisService, AnalysisPresets } from '@/lib/SajuAnalysisService';
 
 export default function InvestmentPage() {
@@ -19,14 +19,11 @@ export default function InvestmentPage() {
     const { MAX_EDIT_COUNT, isLocked, setEditCount } = useUsageLimit();
     const { loading, setLoading, setAiResult } = useLoading();
     const targetProfile = selectedProfile || userData;
-    const { gender, saju } = targetProfile || {};
+    const { gender, saju, isTimeUnknown } = targetProfile || {};
     const wealthEnergy = useConsumeEnergy();
 
     const [selectedSubQ, setSelectedSubQ] = useState(null);
-    const [step, setStep] = useState(0);
     const [isButtonClicked, setIsButtonClicked] = useState(false);
-    const [isCachedLoading, setIsCachedLoading] = useState(false);
-    const [progress, setProgress] = useState(0);
 
     useEffect(() => {
         if (language === 'ko') {
@@ -36,21 +33,7 @@ export default function InvestmentPage() {
         }
     }, [language]);
 
-    useEffect(() => {
-        let interval;
-        if (loading) {
-            setProgress(0);
-            interval = setInterval(() => {
-                setProgress((prev) => {
-                    if (prev >= 99) return 99;
-                    return prev + (isCachedLoading ? 25 : 1);
-                });
-            }, isCachedLoading ? 50 : 232);
-        } else {
-            setProgress(100);
-        }
-        return () => clearInterval(interval);
-    }, [loading, isCachedLoading]);
+
 
     const SUB_Q_TYPES = [
         {
@@ -133,119 +116,143 @@ export default function InvestmentPage() {
     const isDisabled = (loading && !wealthEnergy.isConsuming) || !user || loading;
     const isDisabled2 = !isAnalysisDone && isLocked;
 
+    // Full-screen loading display
+    if (loading && saju) {
+        return <LoadingFourPillar saju={saju} isTimeUnknown={isTimeUnknown} />;
+    }
+
     return (
-        <div className="w-full max-w-3xl mx-auto px-4 py-8 animate-in fade-in duration-500">
-            {step === 0 && (
-                <>
-                    <div className="text-center mb-8">
-                        <div className="flex justify-center mb-4">
-                            <div className="p-4 rounded-2xl bg-rose-50 dark:bg-rose-900/20 border-2 border-rose-200 dark:border-rose-800">
-                                <PresentationChartLineIcon className="w-12 h-12 text-rose-500" />
-                            </div>
-                        </div>
-                        <h2 className="text-2xl font-black text-slate-800 dark:text-white mb-2">
-                            {language === 'ko' ? '투자 / 재테크' : 'Investment'}
-                        </h2>
-                        <p className="text-sm text-slate-500 dark:text-slate-400">
-                            {language === 'ko' ? '주식, 코인, 부동산 등 투기 적합성' : 'Suitability for stocks, crypto, and real estate'}
-                        </p>
+        <div className="w-full animate-in fade-in duration-500">
+            {/* Hero Section */}
+            <div className="relative bg-gradient-to-br from-rose-50 via-pink-50 to-red-50 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900 border-b border-rose-100 dark:border-slate-700">
+                <div className="max-w-4xl mx-auto px-4 py-16 text-center">
+                    <div className="inline-flex items-center justify-center w-20 h-20 rounded-3xl bg-gradient-to-br from-rose-500 to-pink-600 mb-6 shadow-2xl shadow-rose-300 dark:shadow-rose-900/50">
+                        <PresentationChartLineIcon className="w-11 h-11 text-white" />
                     </div>
+                    <h1 className="text-4xl sm:text-5xl font-black text-slate-900 dark:text-white mb-4 leading-tight">
+                        {language === 'ko' ? '투자 / 재테크 분석' : 'Investment Analysis'}
+                    </h1>
+                    <p className="text-lg text-slate-600 dark:text-slate-300 max-w-2xl mx-auto">
+                        {language === 'ko'
+                            ? '주식, 코인, 부동산 등 당신에게 맞는 투자 방향을 사주로 분석합니다'
+                            : 'Analyze your suitability for stocks, crypto, real estate and more'}
+                    </p>
+                </div>
+            </div>
 
-                    <div className="mb-8">
-                        <h3 className="text-lg font-bold text-slate-800 dark:text-slate-100 mb-4 text-center">
-                            {language === 'ko' ? '구체적으로 무엇이 궁금한가요?' : 'What specific details do you need?'}
-                        </h3>
-                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                            {SUB_Q_TYPES.map((sub) => {
-                                const isSelected = selectedSubQ === sub.id;
-                                const labelText = language === 'en' ? sub.labelEn : sub.label;
-                                const descText = language === 'en' ? sub.descEn : sub.desc;
+            {/* Main Content */}
+            <div className="max-w-4xl mx-auto px-4 py-12">
+                {/* Question Selection */}
+                <div className="mb-8">
+                    <h2 className="text-2xl font-black text-slate-800 dark:text-slate-100 mb-8 text-center">
+                        {language === 'ko' ? '어떤 투자가 궁금하신가요?' : 'What investment are you curious about?'}
+                    </h2>
+                    <div className="grid grid-cols-1 gap-4">
+                        {SUB_Q_TYPES.map((sub) => {
+                            const isSelected = selectedSubQ === sub.id;
+                            const labelText = language === 'en' ? sub.labelEn : sub.label;
+                            const descText = language === 'en' ? sub.descEn : sub.desc;
 
-                                return (
-                                    <button
-                                        key={sub.id}
-                                        onClick={() => {
-                                            setSelectedSubQ(sub.id);
-                                            setStep(1);
-                                        }}
-                                        className={`relative flex flex-col items-start p-5 rounded-2xl border-2 transition-all duration-200 text-left group h-full ${isSelected
-                                                ? 'border-rose-500 bg-rose-50 ring-4 ring-rose-500 ring-opacity-20'
-                                                : 'border-slate-100 dark:border-slate-700 bg-white dark:bg-slate-800 hover:border-rose-200 hover:shadow-md'
-                                            }`}
-                                    >
-                                        <span className={`text-base font-bold block mb-1 ${isSelected ? 'text-rose-900' : 'text-slate-800 dark:text-slate-100'}`}>
+                            return (
+                                <button
+                                    key={sub.id}
+                                    onClick={() => setSelectedSubQ(sub.id)}
+                                    className={`relative flex items-center gap-4 p-6 rounded-2xl border-2 transition-all duration-200 text-left group ${isSelected
+                                            ? 'border-rose-500 bg-rose-50 dark:bg-rose-900/20 shadow-lg shadow-rose-100 dark:shadow-rose-900/20 scale-[1.02]'
+                                            : 'border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 hover:border-rose-300 hover:shadow-md'
+                                        }`}
+                                >
+                                    <div className={`flex-shrink-0 w-14 h-14 rounded-xl flex items-center justify-center transition-all ${isSelected
+                                            ? 'bg-rose-500 text-white shadow-lg'
+                                            : 'bg-slate-100 dark:bg-slate-700 text-slate-400 group-hover:bg-rose-100 group-hover:text-rose-500'
+                                        }`}>
+                                        <PresentationChartLineIcon className="w-7 h-7" />
+                                    </div>
+                                    <div className="flex-1">
+                                        <h3 className={`text-lg font-bold mb-1 ${isSelected ? 'text-rose-900 dark:text-rose-100' : 'text-slate-800 dark:text-slate-100'
+                                            }`}>
                                             {labelText}
-                                        </span>
-                                        <p className={`text-sm ${isSelected ? 'text-rose-700' : 'text-slate-500 dark:text-slate-400'}`}>
+                                        </h3>
+                                        <p className={`text-sm ${isSelected ? 'text-rose-700 dark:text-rose-300' : 'text-slate-500 dark:text-slate-400'
+                                            }`}>
                                             {descText}
                                         </p>
-                                    </button>
-                                );
-                            })}
-                        </div>
+                                    </div>
+                                    {isSelected && (
+                                        <div className="flex-shrink-0">
+                                            <div className="w-6 h-6 rounded-full bg-rose-500 flex items-center justify-center">
+                                                <svg className="w-4 h-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
+                                                </svg>
+                                            </div>
+                                        </div>
+                                    )}
+                                </button>
+                            );
+                        })}
                     </div>
-                </>
-            )}
+                </div>
 
-            {step === 1 && (
-                <>
-                    <div className="text-center mb-6">
-                        <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-rose-50 dark:bg-rose-900/20 border border-rose-200 dark:border-rose-800 mb-4">
-                            <PresentationChartLineIcon className="w-5 h-5 text-rose-500" />
-                            <span className="text-sm font-bold text-rose-900 dark:text-rose-100">
-                                {language === 'en' ? SUB_Q_TYPES.find((s) => s.id === selectedSubQ)?.labelEn : SUB_Q_TYPES.find((s) => s.id === selectedSubQ)?.label}
-                            </span>
-                        </div>
-                        <button
-                            onClick={() => setStep(0)}
-                            className="text-sm text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200"
-                        >
-                            {language === 'ko' ? '← 다른 질문 선택' : '← Choose different question'}
-                        </button>
-                    </div>
+                {selectedSubQ && (
+                    <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
 
-                    {loading && <LoadingBar progress={progress} loadingType="wealth" isCachedLoading={isCachedLoading} />}
+                        {/* Analysis Button */}
+                        <div className="flex flex-col items-center gap-4 py-8">
+                            <button
+                                onClick={() => wealthEnergy.triggerConsume(handleAnalysis)}
+                                disabled={isDisabled || isDisabled2}
+                                className={`w-full sm:w-auto px-16 py-6 font-bold text-xl rounded-2xl shadow-2xl transform transition-all flex items-center justify-center gap-3 ${isDisabled || isDisabled2
+                                        ? 'bg-slate-100 text-slate-400 cursor-not-allowed border-2 border-slate-200'
+                                        : 'bg-gradient-to-r from-rose-600 to-pink-600 hover:from-rose-500 hover:to-pink-500 text-white shadow-rose-400 dark:shadow-rose-900/50 hover:-translate-y-1 hover:shadow-rose-500'
+                                    }`}
+                            >
+                                <SparklesIcon className="w-7 h-7 animate-pulse" />
+                                <span>{language === 'en' ? 'Start Analysis' : '분석 시작하기'}</span>
+                                {isAnalysisDone ? (
+                                    <div className="flex items-center gap-1 backdrop-blur-md bg-white/20 px-3 py-1 rounded-full border border-white/30">
+                                        <span className="text-xs font-bold text-white uppercase">Free</span>
+                                        <TicketIcon className="w-4 h-4 text-white" />
+                                    </div>
+                                ) : isLocked ? (
+                                    <div className="flex items-center gap-1 backdrop-blur-sm px-3 py-1 rounded-full border shadow-sm border-gray-500/50 bg-gray-400/40">
+                                        <LockClosedIcon className="w-5 h-5 text-rose-500" />
+                                    </div>
+                                ) : user && (
+                                    <div className="relative">
+                                        <EnergyBadge active={!!userData?.birthDate} consuming={loading} cost={-1} />
+                                    </div>
+                                )}
+                            </button>
 
-                    <div className="flex justify-center mt-8">
-                        <button
-                            onClick={() => wealthEnergy.triggerConsume(handleAnalysis)}
-                            disabled={isDisabled || isDisabled2}
-                            className={`w-full sm:w-auto px-10 py-4 font-bold rounded-xl shadow-lg transform transition-all flex items-center justify-center gap-2 ${isDisabled || isDisabled2
-                                    ? 'bg-gray-100 text-gray-400 cursor-not-allowed border border-gray-200'
-                                    : 'bg-gradient-to-r from-rose-600 to-pink-600 hover:from-rose-500 hover:to-pink-500 text-white shadow-rose-200 hover:-translate-y-1'
-                                }`}
-                        >
-                            <SparklesIcon className="w-5 h-5 animate-pulse" />
-                            <span>{language === 'en' ? 'Start Analysis' : '분석 시작하기'}</span>
-                            {isAnalysisDone ? (
-                                <div className="flex items-center gap-1 backdrop-blur-md bg-white/20 px-2 py-0.5 rounded-full border border-white/30">
-                                    <span className="text-[9px] font-bold text-white uppercase">Free</span>
-                                    <TicketIcon className="w-3 h-3 text-white" />
-                                </div>
-                            ) : isLocked ? (
-                                <div className="mt-1 flex items-center gap-1 backdrop-blur-sm px-2 py-0.5 rounded-full border shadow-sm border-gray-500/50 bg-gray-400/40">
-                                    <LockClosedIcon className="w-4 h-4 text-rose-500" />
-                                </div>
-                            ) : user && (
-                                <div className="relative scale-90">
-                                    <EnergyBadge active={!!userData?.birthDate} consuming={loading} cost={-1} />
-                                </div>
+                            {/* Info Text */}
+                            {isLocked ? (
+                                <p className="text-rose-600 font-bold text-sm flex items-center gap-2 animate-pulse">
+                                    <ExclamationTriangleIcon className="w-5 h-5" />
+                                    {language === 'ko' ? '크레딧이 부족합니다' : 'Not Enough Credit'}
+                                </p>
+                            ) : (
+                                <p className="text-xs text-slate-400">
+                                    {language === 'ko' ? '이미 분석된 운세는 크래딧을 재소모하지 않습니다.' : 'Already analyzed fortunes do not consume credits.'}
+                                </p>
                             )}
-                        </button>
+                        </div>
                     </div>
+                )}
 
-                    {isLocked ? (
-                        <p className="text-center mt-4 text-rose-600 font-black text-sm flex items-center justify-center gap-1 animate-pulse">
-                            <ExclamationTriangleIcon className="w-4 h-4" />
-                            {language === 'ko' ? '크레딧이 부족합니다..' : 'not Enough credit'}
+                {/* Empty State - Shows when no question selected */}
+                {!selectedSubQ && (
+                    <div className="text-center py-12">
+                        <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-slate-100 dark:bg-slate-800 mb-4">
+                            <svg className="w-8 h-8 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 11l5-5m0 0l5 5m-5-5v12" />
+                            </svg>
+                        </div>
+                        <p className="text-slate-400 text-sm">
+                            {language === 'ko' ? '위에서 투자 유형을 선택해주세요' : 'Please select an investment type above'}
                         </p>
-                    ) : (
-                        <p className="text-center mt-4 text-[11px] text-slate-400">
-                            {language === 'ko' ? '이미 분석된 운세는 크래딧을 재소모하지 않습니다.' : 'Fortunes that have already been analyzed do not use credits.'}
-                        </p>
-                    )}
-                </>
-            )}
+                    </div>
+                )}
+            </div>
         </div>
     );
 }

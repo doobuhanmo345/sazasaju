@@ -13,6 +13,7 @@ import {
   daily_s_var,
   seldate_var,
   selbirth_var,
+  love_var
 } from '@/data/promptVar';
 
 const EditPrompt = () => {
@@ -146,6 +147,7 @@ const EditPrompt = () => {
     daily_s_basic: daily_s_var,
     seldate_basic: seldate_var,
     selbirth_basic: selbirth_var,
+    love_basic: love_var,
   };
 
   // 필터링 및 그룹화 로직
@@ -277,11 +279,10 @@ const EditPrompt = () => {
                   setTargetPath('default_instruction');
                   setIsNavOpen(false);
                 }}
-                className={`w-full text-left px-4 py-4 rounded-2xl text-xs font-black uppercase tracking-widest transition-all ${
-                  targetPath === 'default_instruction'
-                    ? 'bg-amber-500 text-white shadow-lg shadow-amber-500/30 scale-[1.02]'
-                    : 'bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-400 border border-amber-100 dark:border-amber-900/20 hover:border-amber-400'
-                }`}
+                className={`w-full text-left px-4 py-4 rounded-2xl text-xs font-black uppercase tracking-widest transition-all ${targetPath === 'default_instruction'
+                  ? 'bg-amber-500 text-white shadow-lg shadow-amber-500/30 scale-[1.02]'
+                  : 'bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-400 border border-amber-100 dark:border-amber-900/20 hover:border-amber-400'
+                  }`}
               >
                 default_instruction
               </button>
@@ -332,11 +333,10 @@ const EditPrompt = () => {
                             setTargetPath(path);
                             setIsNavOpen(false);
                           }}
-                          className={`w-full text-left px-3 py-2.5 rounded-xl text-xs font-bold transition-all relative overflow-hidden group/item ${
-                            targetPath === path
-                              ? 'bg-blue-300 text-white shadow-lg'
-                              : 'text-slate-500 dark:text-slate-400 hover:bg-white dark:hover:bg-slate-800'
-                          }`}
+                          className={`w-full text-left px-3 py-2.5 rounded-xl text-xs font-bold transition-all relative overflow-hidden group/item ${targetPath === path
+                            ? 'bg-blue-300 text-white shadow-lg'
+                            : 'text-slate-500 dark:text-slate-400 hover:bg-white dark:hover:bg-slate-800'
+                            }`}
                         >
                           <div className="flex items-center justify-between relative z-10">
                             <span
@@ -350,11 +350,10 @@ const EditPrompt = () => {
                             </span>
                             {isBasic && (
                               <span
-                                className={`px-1.5 py-0.5 rounded-md text-[8px] font-black tracking-tighter shadow-sm ${
-                                  targetPath === path
-                                    ? 'bg-white text-blue-600'
-                                    : 'bg-blue-100 text-blue-600 dark:bg-blue-900/40 dark:text-blue-400'
-                                }`}
+                                className={`px-1.5 py-0.5 rounded-md text-[8px] font-black tracking-tighter shadow-sm ${targetPath === path
+                                  ? 'bg-white text-blue-600'
+                                  : 'bg-blue-100 text-blue-600 dark:bg-blue-900/40 dark:text-blue-400'
+                                  }`}
                               >
                                 CORE
                               </span>
@@ -507,11 +506,10 @@ const EditPrompt = () => {
           <button
             onClick={handleSave}
             disabled={isLoading}
-            className={`w-full py-6 rounded-3xl font-black text-sm uppercase tracking-[0.4em] text-white shadow-2xl transition-all transform active:scale-[0.98] ${
-              isLoading
-                ? 'bg-slate-300 dark:bg-slate-800 text-slate-500 cursor-not-allowed'
-                : 'bg-slate-900 dark:bg-white dark:text-slate-900 hover:opacity-90 shadow-slate-300/50 dark:shadow-none'
-            }`}
+            className={`w-full py-6 rounded-3xl font-black text-sm uppercase tracking-[0.4em] text-white shadow-2xl transition-all transform active:scale-[0.98] ${isLoading
+              ? 'bg-slate-300 dark:bg-slate-800 text-slate-500 cursor-not-allowed'
+              : 'bg-slate-900 dark:bg-white dark:text-slate-900 hover:opacity-90 shadow-slate-300/50 dark:shadow-none'
+              }`}
           >
             {isLoading ? 'Processing Signal...' : `Publish ${targetPath} Changes`}
           </button>

@@ -69,14 +69,33 @@ export const wealth_var = [
   { key: '{{todayStr}}', label: '오늘 정보' },
   { key: '{{mySajuStr}}', label: '사용자 사주' },
   { key: '{{displayName}}', label: '사용자 이름' },
-  { key: '{{langPrompt}}', label: '언어' }, 
+  { key: '{{langPrompt}}', label: '언어' },
   { key: '{{qPrompt}}', label: '질문에 대한 프롬프트' },
   { key: '{{thisYear}}', label: '올해' },
   { key: '{{thisMonth}}', label: '이달' },
   { key: '{{nextMonth}}', label: '다음달' },
 ];
 
+export const love_var = [
+  { key: '{{BASIC_PROMPT}}', label: '(DB)default_instruction' },
+  { key: '{{STRICT_PROMPT}}', label: '(DB)Love_strict' },
+  { key: '{{qLabel}}', label: 'qLabel (main question)' },
+  { key: '{{subQuestion}}', label: 'subQuestion (detailed question)' },
+  { key: '{{gender}}', label: '성별' },
+  { key: '{{todayStr}}', label: '오늘 정보' },
+  { key: '{{mySajuStr}}', label: '사용자 사주' },
+  { key: '{{displayName}}', label: '사용자 이름' },
+  { key: '{{langPrompt}}', label: '언어' },
+  { key: '{{qPrompt}}', label: '질문에 대한 프롬프트' },
+  { key: '{{thisYear}}', label: '올해' },
+  { key: '{{thisMonth}}', label: '이달' },
+  { key: '{{nextMonth}}', label: '다음달' },
+  { key: '{{partnerSajuStr}}', label: '상대방 사주 (optional)' },
+  { key: '{{partnerGender}}', label: '상대방 성별 (optional)' },
+];
+
 export const match_var = [
+
   { key: '{{STRICT_PROMPT}}', label: '(DB)match_strict' },
   { key: '{{SPECIFIC_PROMPT}}', label: '(DB)match_specifit' },
   { key: '{{relationLabel}}', label: 'relationshipLabel, selected Rel' },
