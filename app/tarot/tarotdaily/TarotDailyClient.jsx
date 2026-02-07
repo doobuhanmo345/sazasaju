@@ -20,8 +20,7 @@ import { useRouter } from 'next/navigation';
 
 export default function TarotDailyPage() {
   const router = useRouter();
-  const { setLoadingType, setAiResult, aiResult } = useLoading();
-  const [loading, setLoading] = useState(false);
+  const { loading, setLoading, setLoadingType, setAiResult, aiResult } = useLoading();
   const { userData, user } = useAuthContext();
   const { language } = useLanguage();
   const { setEditCount, MAX_EDIT_COUNT } = useUsageLimit();

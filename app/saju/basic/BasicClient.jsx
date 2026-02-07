@@ -22,8 +22,7 @@ import BasicAnaPreview from '@/app/saju/basic/BasicAnaPreview';
 export default function BasicAnaPage() {
   const router = useRouter();
   const [sajuData, setSajuData] = useState(null);
-  const { setLoadingType, setAiResult, aiResult } = useLoading();
-  const [loading, setLoading] = useState(false)
+  const { loading, setLoading, setLoadingType, setAiResult, aiResult } = useLoading();
   const { userData, user, selectedProfile } = useAuthContext(); // selectedProfile 추가
 
   // 컨텍스트 스위칭: 선택된 프로필이 있으면 그것을 사용, 없으면 본인 정보
@@ -284,7 +283,7 @@ export default function BasicAnaPage() {
 
   // ✅ 4. 스크롤 로직 & 리다이렉트 (loading이 false가 되고 결과가 있을 때 이동)
   useEffect(() => {
-    if (isButtonClicked && !loading && prevData?.result && prevData?.result?.length > 0) {
+    if (isButtonClicked && !loading && isAnalysisDone && prevData?.result && prevData?.result?.length > 0) {
       router.push('/saju/basic/result');
     }
   }, [loading, aiResult, router]);

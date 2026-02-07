@@ -20,9 +20,7 @@ import YearlyLuckAppeal from '@/app/saju/2026luck/YearlyLuckAppeal';
 import YearlyLuckPreview from '@/app/saju/2026luck/YearlyLuckPreview';
 
 export default function YearlyLuckPage() {
-  const { setLoadingType, aiResult, setAiResult } = useLoading();
-
-  const [loading, setLoading] = useState(false);
+  const { loading, setLoading, setLoadingType, aiResult, setAiResult } = useLoading();
   const [sajuData, setSajuData] = useState(null);
   const { userData, user, selectedProfile } = useAuthContext(); // selectedProfile 추가
   const router = useRouter();
@@ -233,7 +231,7 @@ export default function YearlyLuckPage() {
 
   // [NEW] Reactive Redirect
   useEffect(() => {
-    if (isButtonClicked && !loading && prevData?.result && prevData?.result?.length > 0) {
+    if (isButtonClicked && !loading && isAnalysisDone && prevData?.result && prevData?.result?.length > 0) {
       router.push('/saju/2026luck/result');
     }
   }, [loading, prevData, router]);

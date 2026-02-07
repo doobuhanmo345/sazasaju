@@ -36,7 +36,26 @@ export const NativeBridge = {
     }
   },
 
-  // 2. Adjust Status Bar
+  // 2. Share URL (native sheet)
+  shareUrl: async (url, title = 'Saza Saju', text = '') => {
+    if (!Capacitor.isNativePlatform()) {
+      // For web, we usually just copy to clipboard which is handled in components
+      return;
+    }
+
+    try {
+      await Share.share({
+        title: title,
+        text: text,
+        url: url,
+        dialogTitle: 'Share with friends',
+      });
+    } catch (err) {
+      console.error('Error sharing URL:', err);
+    }
+  },
+
+  // 3. Adjust Status Bar
   setStatusBarOptions: async (isDark = false) => {
     if (!Capacitor.isNativePlatform()) return;
 

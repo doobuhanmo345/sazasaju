@@ -29,7 +29,7 @@ function SazaTalkContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const initialQuery = searchParams.get('q');
-  const { setAiResult } = useLoading();
+  const { loading, setLoading, setAiResult } = useLoading();
   const { userData, user, selectedProfile } = useAuthContext(); // selectedProfile 추가
 
   // 컨텍스트 스위칭
@@ -50,7 +50,6 @@ function SazaTalkContent() {
   }, [language]);
 
   const [userQuestion, setUserQuestion] = useState(initialQuery || '');
-  const [loading, setLoading] = useState(false);
   const [latestSazaTalk, setLatestSazaTalk] = useState(null);
   const [isHistoryOpen, setIsHistoryOpen] = useState(false);
   const historyContentRef = useRef(null);

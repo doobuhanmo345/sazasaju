@@ -29,7 +29,7 @@ function ChatClientContent() {
     const searchParams = useSearchParams();
     const initialQuery = searchParams.get('q');
 
-    const { setAiResult } = useLoading();
+    const { loading, setLoading, setAiResult } = useLoading();
     const { userData, user, selectedProfile } = useAuthContext();
 
     const targetProfile = selectedProfile || userData;
@@ -48,7 +48,6 @@ function ChatClientContent() {
     }, [language]);
 
     const [userQuestion, setUserQuestion] = useState(initialQuery || '');
-    const [loading, setLoading] = useState(false);
     const [latestSazaTalk, setLatestSazaTalk] = useState(null);
     const [isHistoryOpen, setIsHistoryOpen] = useState(false);
     const historyContentRef = useRef(null);

@@ -15,7 +15,7 @@ export default function ViewSazaResult({
   hideButtons = false,
   loading: propLoading
 }) {
-  const { loading: contextLoading, aiResult: contextAiResult } = useLoading();
+  const { aiResult: contextAiResult } = useLoading();
   const loading = propLoading !== undefined ? propLoading : contextLoading;
   const aiResult = aiResultOverride || contextAiResult;
   const scrollElRef = useRef(null);

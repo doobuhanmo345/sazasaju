@@ -23,8 +23,8 @@ import { useRouter } from 'next/navigation';
 import ToTopButton from '@/ui/ToTopButton';
 export default function SelBirthPage() {
   const router = useRouter();
-  const { aiResult, setAiResult, setLastParams } = useLoading();
-  const [loading, setLoading] = useState(false)
+  const { loading, setLoading, aiResult, setAiResult, setLastParams } = useLoading();
+
   const { userData, user, selectedProfile } = useAuthContext();
   // 컨텍스트 스위칭
   const targetProfile = selectedProfile || userData;
@@ -187,7 +187,7 @@ export default function SelBirthPage() {
 
   // [NEW] Reactive Redirect
   useEffect(() => {
-    if (isButtonClicked && prevData?.result && prevData?.result?.length > 0) {
+    if (isButtonClicked && !loading && isAnalysisDone && prevData?.result && prevData?.result?.length > 0) {
       router.push('/saju/selbirth/result');
     }
   }, [isButtonClicked, prevData, router]);

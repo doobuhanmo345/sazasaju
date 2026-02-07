@@ -92,9 +92,23 @@ function MessagesContent() {
   const updateMessages = (newMsgs, type) => {
     setAllMsgs(prev => {
       const updated = { ...prev, [type]: newMsgs };
-      const merged = [...updated.sent, ...updated.received, ...updated.sazatalk].sort((a, b) =>
+
+      // Use a Map to deduplicate messages by ID. 
+      // If the same message exists in both 'sent' and 'received' arrays (e.g., user sent a message to themselves),
+      // filtering by ID ensures unique keys for React.
+      const map = new Map();
+      [...updated.sent, ...updated.received, ...updated.sazatalk].forEach(msg => {
+        // If message is already present, we keep the one already in the map.
+        // Usually 'received' messages are fetched after 'sent' in the logic, or vice versa.
+        if (!map.has(msg.id)) {
+          map.set(msg.id, msg);
+        }
+      });
+
+      const merged = Array.from(map.values()).sort((a, b) =>
         (b.createdAt?.seconds || 0) - (a.createdAt?.seconds || 0)
       );
+
       setMessages(merged);
       return updated;
     });

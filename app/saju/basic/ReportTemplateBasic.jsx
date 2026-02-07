@@ -18,7 +18,7 @@ import AfterReport from '@/components/AfterReport';
 import { parseAiResponse } from '@/utils/helpers';
 
 
-const ReportTemplateBasic = ({ }) => {
+const ReportTemplateBasic = ({ shareData }) => {
   const { aiResult } = useLoading();
   const { language } = useLanguage();
   const { userData, selectedProfile } = useAuthContext();
@@ -29,12 +29,21 @@ const ReportTemplateBasic = ({ }) => {
   const [sajuData, setSajuData] = useState(null);
 
   // [FIX] Determine target profile (Friend or Self)
-  const targetProfile = selectedProfile || userData;
+  const targetProfile = shareData || selectedProfile || userData;
   const { displayName, birthDate, isTimeUnknown, gender } = targetProfile || {};
 
   const bd = birthDate ? toymdt(birthDate) : { year: '', month: '', day: '', time: '' };
   const inputDate = birthDate && birthDate.includes('T') ? birthDate : `${birthDate}T00:00`;
   useEffect(() => {
+    if (shareData) {
+      // If we have shared data, we use it directly
+      const parsedData = parseAiResponse(shareData.aiResult);
+      if (parsedData) {
+        setData(parsedData);
+      }
+      return;
+    }
+
     if (!userData) return; // Wait for load
 
     // DB에 저장된 결과가 있으면 로드
@@ -49,7 +58,7 @@ const ReportTemplateBasic = ({ }) => {
       alert("저장된 결과가 없습니다. 다시 분석해주세요.");
       router.replace('/saju/basic');
     }
-  }, [userData, router]);
+  }, [userData, router, shareData]);
 
   const isEn = language !== 'ko';
   const t = (char) => (isEn ? ENG_MAP[char] || char : char);
@@ -61,7 +70,7 @@ const ReportTemplateBasic = ({ }) => {
     }
   }, [inputDate, gender, isTimeUnknown, language]);
 
-  if (!userData) return <div className="p-10 text-center">유저 정보를 불러오는 중입니다...</div>;
+  if (!shareData && !userData) return <div className="p-10 text-center">유저 정보를 불러오는 중입니다...</div>;
   if (!sajuData) return <div className="p-10 text-center animate-pulse">데이터 계산 중...</div>;
 
   const { saju, pillars, ohaengCount } = sajuData;
@@ -121,6 +130,7 @@ const ReportTemplateBasic = ({ }) => {
 
   return (
     <div
+      id="rt-container"
       className="max-w-2xl rt-container mx-auto flex flex-col items-center transition-colors p-4"
       ref={scrollElRef}
     >
@@ -212,6 +222,11 @@ const ReportTemplateBasic = ({ }) => {
           <h1 className="text-2xl font-extrabold text-slate-800 dark:text-white mt-1">
             {iljuTitle}
           </h1>
+          {shareData && (
+            <div className="mt-2 inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-indigo-100 text-indigo-800 dark:bg-indigo-900/40 dark:text-indigo-300">
+              {language === 'ko' ? '공유된 결과' : 'Shared Result'}
+            </div>
+          )}
           <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">{iljuDescText}</p>
         </div>
         <div className="">

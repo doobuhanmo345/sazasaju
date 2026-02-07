@@ -20,8 +20,8 @@ import { reportStyle } from '@/data/aiResultConstants';
 import TodaysLuckPreview from '@/app/saju/todaysluck/TodaysLuckPreview';
 
 export default function TodaysLuckPage() {
-  const { setLoadingType, aiResult, setAiResult } = useLoading();
-  const [loading, setLoading] = useState(false);
+  const { loading, setLoading, setLoadingType, aiResult, setAiResult } = useLoading();
+
   const [sajuData, setSajuData] = useState(null);
   const { userData, user, selectedProfile } = useAuthContext(); // selectedProfile 추가
   const router = useRouter();
@@ -230,7 +230,7 @@ export default function TodaysLuckPage() {
 
   // [NEW] Reactive Redirect
   useEffect(() => {
-    if (isButtonClicked && !loading && prevData?.result && prevData?.result?.length > 0) {
+    if (isButtonClicked && !loading && isAnalysisDone && prevData?.result && prevData?.result?.length > 0) {
       router.push('/saju/todaysluck/result');
     }
   }, [loading, prevData, router]);

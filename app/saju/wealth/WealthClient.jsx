@@ -277,7 +277,7 @@ export default function Wealth({ }) {
   };
 
   useEffect(() => {
-    if (isButtonClicked && !loading && prevData?.result && prevData?.result?.length > 0) {
+    if (isButtonClicked && !loading && isAnalysisDone && prevData?.result && prevData?.result?.length > 0) {
       // [NEW] Reactive Redirect
       router.push('/saju/wealth/result');
     }

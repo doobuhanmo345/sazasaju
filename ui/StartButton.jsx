@@ -1,6 +1,6 @@
 'use client';
 
-import React,{useState} from 'react';
+import React, { useState } from 'react';
 import { TicketIcon, LockClosedIcon } from '@heroicons/react/24/outline';
 import { classNames } from '@/utils/helpers';
 import { useLanguage } from '@/contexts/useLanguageContext';
@@ -54,9 +54,10 @@ const COLOR_MAPS = {
   }
 };
 
-export default function StartButton({ 
-  onClick, 
-  isDone, 
+export default function StartButton({
+  onClick,
+  disabled,
+  isDone,
   label,
   color = 'red'
 }) {
@@ -64,16 +65,16 @@ export default function StartButton({
   const DISABLED_STYLE = 'bg-gray-100 text-gray-400 cursor-not-allowed border border-gray-200';
   const { language } = useLanguage();
   const { user, userData, login } = useAuthContext();
-  const { isLocked } = useUsageLimit();  
+  const { isLocked } = useUsageLimit();
 
   const theme = COLOR_MAPS[color] || COLOR_MAPS.red;
-  const disabled = isLocked;
+  const disabledButton = isLocked || disabled;
 
   // 1. Guest View: User is not logged in
   if (!user) {
     return (
       <>
-        <button 
+        <button
           onClick={() => setIsLoginModalOpen(true)}
           className="w-full relative group px-10 py-5 font-bold rounded-[2rem] shadow-2xl shadow-indigo-100/50 dark:shadow-none transform transition-all flex items-center justify-center gap-3 bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 hover:-translate-y-1 active:scale-[0.98] overflow-hidden"
         >
@@ -83,13 +84,13 @@ export default function StartButton({
           <span className="text-slate-800 dark:text-white text-lg tracking-tight relative z-10">
             {language === 'ko' ? '오늘 3회 무료로 시작하기' : 'Start with 3 Free Today'}
           </span>
-  
+
           {/* Shine effect */}
           <div className="absolute top-0 -inset-full h-full w-1/2 z-5 block transform -skew-x-12 bg-gradient-to-r from-transparent via-white/40 to-transparent group-hover:animate-shine" />
         </button>
-        <LoginModal 
-          isOpen={isLoginModalOpen} 
-          onClose={() => setIsLoginModalOpen(false)} 
+        <LoginModal
+          isOpen={isLoginModalOpen}
+          onClose={() => setIsLoginModalOpen(false)}
         />
       </>
     );
@@ -99,7 +100,7 @@ export default function StartButton({
   return (
     <button
       onClick={onClick}
-      disabled={disabled}
+      disabled={disabledButton}
       className={classNames(
         'w-full px-10 py-4 font-bold rounded-xl shadow-lg dark:shadow-none transform transition-all flex items-center justify-center gap-2',
         disabled
@@ -121,7 +122,7 @@ export default function StartButton({
           </span>
         </div>
       ) : (
-       <></>
+        <></>
       )}
     </button>
   );

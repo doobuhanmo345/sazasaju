@@ -30,8 +30,8 @@ const PURPOSE_OPTIONS = [
 ];
 
 export default function SelDatePage() {
-  const { setLoadingType, setAiResult, aiResult } = useLoading(); // aiResult added
-  const [loading, setLoading] = useState(false);
+  const { loading, setLoading, setLoadingType, setAiResult, aiResult } = useLoading(); // aiResult added
+
   const { userData, user, selectedProfile } = useAuthContext();
   const router = useRouter();
   // 컨텍스트 스위칭
@@ -370,7 +370,7 @@ export default function SelDatePage() {
 
   // [NEW] Reactive Redirect
   useEffect(() => {
-    if (isButtonClicked && prevData?.result && prevData?.result?.length > 0) {
+    if (isButtonClicked && !loading && isAnalysisDone && prevData?.result && prevData?.result?.length > 0) {
       router.push('/saju/seldate/result');
     }
   }, [loading, aiResult, router]);

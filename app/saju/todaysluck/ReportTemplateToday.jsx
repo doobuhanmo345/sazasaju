@@ -91,12 +91,12 @@ const ReportTemplateToday = ({ }) => {
           <div className="luck-element-item">
             <div className="luck-item-title">{isEn ? 'Lucky Color' : '행운의 컬러'}</div>
             <div className="luck-item-content">{data?.lucky_elements?.color?.title}</div>
-            <div className="luck-item-desc">{data?.lucky_elements.color?.desc}</div>
+            <div className="luck-item-desc">{data?.lucky_elements?.color?.desc}</div>
           </div>
           <div className="luck-element-item">
             <div className="luck-item-title">{isEn ? 'Keywords' : '키워드'}</div>
-            <div className="luck-item-content">{data?.lucky_elements.keywords?.tags.join(', ')}</div>
-            <div className="luck-item-desc">{data?.lucky_elements.keywords?.desc}</div>
+            <div className="luck-item-content">{data?.lucky_elements?.keywords?.tags.join(', ')}</div>
+            <div className="luck-item-desc">{data?.lucky_elements?.keywords?.desc}</div>
           </div>
         </div>
       </section>
@@ -118,7 +118,7 @@ const ReportTemplateToday = ({ }) => {
               {key === 'study' && (isEn ? 'Study' : '학업운')}
             </div>
             <div className="detail-body">
-              <strong>[{data?.categories[key].summary}]</strong>
+              <strong>[{data?.categories[key]?.summary}]</strong>
               <p>{data?.categories[key].analysis}</p>
             </div>
           </div>
@@ -129,8 +129,8 @@ const ReportTemplateToday = ({ }) => {
           <div className="detail-title">{isEn ? "Tomorrow's Luck" : '내일의 운세'}</div>
           <div className="fortune-date-text">{data?.tomorrow?.date}</div>
           <div className="detail-body">
-            <strong>{data?.tomorrow.summary}</strong>
-            <p>{data?.tomorrow.analysis}</p>
+            <strong>{data?.tomorrow?.summary}</strong>
+            <p>{data?.tomorrow?.analysis}</p>
           </div>
         </div>
       </div>

@@ -2,12 +2,14 @@
 
 import { useState, useEffect } from 'react';
 import { useAuthContext } from '@/contexts/useAuthContext';
+import { useLoading } from '@/contexts/useLoadingContext';
 import { db } from '@/lib/firebase';
 import { collection, query, where, orderBy, limit, onSnapshot, doc, updateDoc, deleteDoc } from 'firebase/firestore';
 import { XMarkIcon } from '@heroicons/react/24/outline';
 
 export default function AppBanner() {
     const { user, userData } = useAuthContext();
+    const { loading } = useLoading();
     const [queueDoc, setQueueDoc] = useState(null);
     const [statusText, setStatusText] = useState(''); // [FIX] Initialize empty to avoid flicker
 
@@ -95,8 +97,9 @@ export default function AppBanner() {
 
     // Show banner if:
     // 1. Queue document exists (background analysis), OR
-    // 2. isAnalyzing flag is true (direct analysis)
-    const shouldShow = queueDoc || userData?.isAnalyzing;
+    // 2. isAnalyzing flag is true (direct analysis), OR
+    // 3. loading state is true (immediate feedback)
+    const shouldShow = queueDoc || userData?.isAnalyzing || loading;
 
     if (!shouldShow) return null;
 
@@ -108,7 +111,7 @@ export default function AppBanner() {
                     <div className="animate-spin h-3 w-3 border-2 border-white border-t-transparent rounded-full"></div>
 
                     <div>
-                        <p className="font-bold text-sm">🔮 AI 분석 진행 중 <span className="text-xs opacity-90">{statusText}</span></p>
+                        <p className="font-bold text-sm">🔮 분석 진행 중 <span className="text-xs opacity-90">{statusText}</span></p>
 
                     </div>
                 </div>

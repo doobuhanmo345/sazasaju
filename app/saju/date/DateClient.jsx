@@ -86,8 +86,7 @@ const GET_FIRST_DATE_OPTIONS = (gender = 'female') => {
 };
 
 export default function FirstDatePage() {
-  const { setLoadingType, setAiResult, aiResult } = useLoading();
-  const [loading, setLoading] = useState(false)
+  const { loading, setLoading, setLoadingType, setAiResult, aiResult } = useLoading();
   const [selectedDate, setSelectedDate] = useState(null);
   const detailSectionRef = useRef(null);
   const { userData, user, selectedProfile } = useAuthContext();
@@ -416,7 +415,7 @@ export default function FirstDatePage() {
 
   // [NEW] Reactive Redirect
   useEffect(() => {
-    if (isButtonClicked && prevData?.result && prevData?.result?.length > 0) {
+    if (isButtonClicked && !loading && isAnalysisDone && prevData?.result && prevData?.result?.length > 0) {
       router.push('/saju/date/result');
     }
   }, [isButtonClicked, prevData, router]);

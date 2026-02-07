@@ -106,8 +106,7 @@ const INTERVIEW_GROUPS = [
 
 export default function InterviewPage() {
   const activeTheme = { text: 'text-blue-500' };
-  const { aiResult, setAiResult } = useLoading();
-  const [loading, setLoading] = useState(false)
+  const { loading, setLoading, aiResult, setAiResult } = useLoading();
   const [selectedDate, setSelectedDate] = useState(null);
   const selDate = useMemo(() => {
     if (!selectedDate) return '';
@@ -449,7 +448,7 @@ export default function InterviewPage() {
 
   // [NEW] Reactive Redirect
   useEffect(() => {
-    if (isButtonClicked && prevData?.result && prevData?.result?.length > 0) {
+    if (isButtonClicked && !loading && isAnalysisDone && prevData?.result && prevData?.result?.length > 0) {
       router.push('/saju/interview/result');
     }
   }, [isButtonClicked, prevData, router]);
