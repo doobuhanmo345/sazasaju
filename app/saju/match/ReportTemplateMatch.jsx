@@ -7,6 +7,7 @@ import { HeartIcon, SparklesIcon, CheckCircleIcon, ExclamationCircleIcon, LightB
 import { parseAiResponse } from '@/utils/helpers';
 import { useRouter } from 'next/navigation';
 import { useLoading } from '@/contexts/useLoadingContext';
+import AfterReport from '@/components/AfterReport';
 
 export default function ReportTemplateMatch({ storageKey }) {
     const { userData } = useAuthContext();
@@ -228,6 +229,9 @@ export default function ReportTemplateMatch({ storageKey }) {
                     {language === 'ko' ? '다른 궁합 보기' : 'Check Another Match'}
                 </button>
             </div>
+
+
+            <AfterReport fortuneType="match" />
         </div>
     );
 }

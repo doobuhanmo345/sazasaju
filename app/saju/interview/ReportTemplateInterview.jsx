@@ -9,6 +9,7 @@ import { useLoading } from '@/contexts/useLoadingContext';
 import { parseAiResponse } from '@/utils/helpers';
 import AfterReport from '@/components/AfterReport';
 import { useRouter } from 'next/navigation';
+import ShareLinkButton from '@/components/ShareLinkButton';
 
 const ReportTemplateInterview = ({ }) => {
   const { aiResult } = useLoading();
@@ -238,13 +239,10 @@ const ReportTemplateInterview = ({ }) => {
         </section>
       </main>
 
-      <footer className="rt-footer animate-up">
-        <button className="rt-btn-primary">
-          {language === 'en' ? 'Save Success Amulet' : '합격 부적 저장하기'}
-        </button>
-      </footer>
 
-      <AfterReport />
+
+
+      <AfterReport fortuneType="interview" />
     </div>
   );
 };

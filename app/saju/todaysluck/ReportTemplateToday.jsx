@@ -105,7 +105,7 @@ const ReportTemplateToday = ({ }) => {
       <div className="detail-list-wrap">
         <div className="detail-item-box">
           <div className="detail-title">{isEn ? 'Total Analysis' : '오늘의 총운'}</div>
-          <div className="detail-body">{data?.today.analysis}</div>
+          <div className="detail-body">{data?.today?.analysis}</div>
         </div>
 
         {Object.keys(data?.categories).map((key) => (
@@ -119,7 +119,7 @@ const ReportTemplateToday = ({ }) => {
             </div>
             <div className="detail-body">
               <strong>[{data?.categories[key]?.summary}]</strong>
-              <p>{data?.categories[key].analysis}</p>
+              <p>{data?.categories[key]?.analysis}</p>
             </div>
           </div>
         ))}
@@ -135,7 +135,7 @@ const ReportTemplateToday = ({ }) => {
         </div>
       </div>
 
-      <AfterReport />
+      <AfterReport fortuneType="todaysluck" />
       <style>{`/* --- 2030 Minimal Line Design System --- */
 
 .fortune-container {

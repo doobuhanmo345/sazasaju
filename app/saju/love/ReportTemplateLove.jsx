@@ -7,6 +7,7 @@ import { HeartIcon } from '@heroicons/react/24/outline';
 import { parseAiResponse } from '@/utils/helpers';
 import { useRouter } from 'next/navigation';
 import { useLoading } from '@/contexts/useLoadingContext';
+import ShareLinkButton from '@/components/ShareLinkButton';
 
 export default function ReportTemplateLove({ storageKey }) {
     const { userData } = useAuthContext();
@@ -145,8 +146,9 @@ export default function ReportTemplateLove({ storageKey }) {
                 )}
             </div>
 
-            {/* Back Button */}
-            <div className="mt-16 text-center">
+            {/* Share & Back Button */}
+            <div className="mt-16 text-center flex flex-col items-center gap-4">
+                <ShareLinkButton fortuneType="love" storageKey={storageKey} />
                 <button
                     onClick={() => window.location.href = '/saju/love'}
                     className="inline-flex items-center gap-2 px-6 py-3 text-sm font-semibold text-slate-600 dark:text-slate-300 hover:text-pink-600 dark:hover:text-pink-400 transition-colors rounded-xl border border-slate-200 dark:border-slate-700 hover:border-pink-300 dark:hover:border-pink-600"

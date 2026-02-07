@@ -9,6 +9,7 @@ import { useLoading } from '@/contexts/useLoadingContext';
 import { parseAiResponse } from '@/utils/helpers';
 import AfterReport from '@/components/AfterReport';
 import { useRouter } from 'next/navigation';
+import ShareLinkButton from '@/components/ShareLinkButton';
 
 const ReportTemplateDate = ({ }) => {
   const { aiResult } = useLoading();
@@ -248,7 +249,8 @@ const ReportTemplateDate = ({ }) => {
         </button>
       </footer>
 
-      <AfterReport />
+
+      <AfterReport fortuneType="date" />
     </div>
   );
 };

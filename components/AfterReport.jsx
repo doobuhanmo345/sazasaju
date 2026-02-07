@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation';
 import ShareButton from './ShareButton';
 import ShareLinkButton from './ShareLinkButton';
 
-export default function AfterReport() {
+export default function AfterReport({ fortuneType = 'basic' }) {
   const { language } = useLanguage();
   const navigate = useRouter();
 
@@ -61,7 +61,7 @@ export default function AfterReport() {
 
             {/* Share and CTA Buttons */}
             <div className="flex flex-col items-center justify-center gap-4 mb-8">
-              <ShareLinkButton />
+              <ShareLinkButton fortuneType={fortuneType} />
               <div className="mt-2">
                 <ShareButton targetId="share-card" fileName="saza-report.png" />
               </div>

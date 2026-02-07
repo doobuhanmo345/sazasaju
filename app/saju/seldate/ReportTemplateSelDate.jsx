@@ -9,6 +9,7 @@ import { useLoading } from '@/contexts/useLoadingContext';
 import AfterReport from '@/components/AfterReport';
 
 import { useRouter } from 'next/navigation';
+import ShareLinkButton from '@/components/ShareLinkButton';
 
 export default function ReportTemplateSelDate() {
   const { aiResult } = useLoading();
@@ -155,7 +156,8 @@ export default function ReportTemplateSelDate() {
           </section>
         )}
 
-        <AfterReport />
+
+        <AfterReport fortuneType="seldate" />
       </main>
     </div>
   );

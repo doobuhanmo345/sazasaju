@@ -3,6 +3,7 @@
 import React, { useEffect, useState, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import YearlyShareTemplate from './YearlyShareTemplate';
+import LZString from 'lz-string';
 
 function ShareContent() {
     const searchParams = useSearchParams();
@@ -10,13 +11,12 @@ function ShareContent() {
     const [error, setError] = useState(null);
 
     useEffect(() => {
-        const dataParam = searchParams.get('data');
-        if (dataParam) {
+        const compressedData = searchParams.get('data');
+        if (compressedData) {
             try {
-                const decodedDataStr = decodeURIComponent(atob(dataParam).split('').map(c =>
-                    '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2)
-                ).join(''));
-                const parsedData = JSON.parse(decodedDataStr);
+                const decompressed = LZString.decompressFromEncodedURIComponent(compressedData);
+                if (!decompressed) throw new Error('Decompression failed');
+                const parsedData = JSON.parse(decompressed);
                 setShareData(parsedData);
             } catch (err) {
                 console.error('Failed to decode share data:', err);
@@ -39,6 +39,7 @@ function ShareContent() {
             </div>
         );
     }
+    console.log(shareData)
 
     if (!shareData) {
         return (

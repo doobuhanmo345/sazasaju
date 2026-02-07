@@ -173,6 +173,7 @@ export default function SelBirthPage() {
           }),
         );
         // 콜백 제거
+
       } catch (error) {
         console.error(error);
       }
@@ -181,9 +182,6 @@ export default function SelBirthPage() {
   );
   console.log(prevData)
   // [UX FIX] Reset AI Result on Mount
-  useEffect(() => {
-    setAiResult('');
-  }, [setAiResult]);
 
   // [NEW] Reactive Redirect
   useEffect(() => {

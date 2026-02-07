@@ -39,19 +39,19 @@ export default function TodaysLuckPage() {
   // [NEW] Strict Analysis Check from User Data
   const prevData = userData?.usageHistory?.ZLastDaily;
   // Note: key for today's luck is ZLastDaily
-
+  const selectedDate = new Date().toISOString().split('T')[0];
   const isAnalysisDone = (() => {
     if (!prevData || !prevData.result) return false;
     // Compare basic fields if needed, but today's luck is date sensitive.
     // Assuming ZLastDaily is already filtered by date in context or backend.
     // Basic check for profile match:
     if (prevData.gender !== (targetProfile?.gender)) return false;
-    if (prevData.date !== new Date().toISOString().split('T')[0]) return false;
+    if (prevData.selectedDate !== new Date().toISOString().split('T')[0]) return false;
     return SajuAnalysisService.compareSaju(prevData.saju, targetProfile?.saju);
   })();
+
   const [isButtonClicked, setIsButtonClicked] = useState(false);
   const isDisabled2 = !isTargetOthers && !isAnalysisDone && isLocked;
-
   // Client-side Title Update for Localization (Static Export Support)
   useEffect(() => {
     if (language === 'ko') {
@@ -87,19 +87,22 @@ export default function TodaysLuckPage() {
     // [UX FIX] 로딩 화면을 먼저 보여줌
     onstart();
     setIsButtonClicked(true);
-    // [NEW] 이미 저장된 데이터가 있으면 잠시 대기 후 리다이렉트
+    setLoading(true);
     if (isAnalysisDone) {
       console.log('✅ 이미 분석된 데이터가 있어 결과 페이지로 이동합니다.');
       setTimeout(() => {
         router.push('/saju/todaysluck/result');
+        setLoading(false);
       }, 2000);
       return;
     }
 
     setAiResult('');
     try {
-      await service.analyze(AnalysisPresets.daily({ saju, gender, language }), (result) => {
+      await service.analyze(AnalysisPresets.daily({ saju, gender, language, selectedDate }), (result) => {
         console.log('✅ 오늘의 운세 완료!');
+        setLoading(false);
+        setAiResult(result);
       });
     } catch (error) {
       console.error(error);

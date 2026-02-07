@@ -5,8 +5,9 @@ import { PaperAirplaneIcon, CheckIcon } from '@heroicons/react/24/outline';
 import { useLanguage } from '@/contexts/useLanguageContext';
 import { useAuthContext } from '@/contexts/useAuthContext';
 import { NativeBridge } from '@/utils/nativeBridge';
+import LZString from 'lz-string';
 
-export default function ShareLinkButton({ fortuneType = 'basic' }) {
+export default function ShareLinkButton({ fortuneType = 'basic', storageKey }) {
     const { language } = useLanguage();
     const { userData, selectedProfile } = useAuthContext();
     const [isCopied, setIsCopied] = useState(false);
@@ -16,7 +17,35 @@ export default function ShareLinkButton({ fortuneType = 'basic' }) {
             const targetProfile = selectedProfile || userData;
             if (!targetProfile) return;
 
-            const aiResult = targetProfile?.usageHistory?.ZApiAnalysis?.result;
+            // Determine storage key
+            let targetStorageKey = storageKey;
+            if (!targetStorageKey) {
+                const typeToKeyMap = {
+                    basic: 'ZApiAnalysis',
+                    todaysluck: 'ZLastDaily',
+                    yearly: 'ZNewYear',
+                    wealthCapacity: 'ZWealthCapacity',
+                    wealthBusiness: 'ZWealthBusiness',
+                    wealthInvestment: 'ZWealthInvestment',
+                    wealthTiming: 'ZWealthTiming',
+                    loveAvoid: "ZLoveAvoid",
+                    loveCompatible: "ZLoveCompatible",
+                    loveFeelings: "ZLoveFeelings",
+                    loveLifetime: "ZLoveLifetime",
+                    loveMonthly: "ZLoveMonthly",
+                    loveReunion: "ZLoveReunion",
+                    loveTiming: "ZLoveTiming",
+                    date: 'Zfirstdate',
+                    selbirth: 'ZSelBirth',
+                    seldate: 'ZSelDate',
+                    interview: 'Zinterview',
+                    match: 'ZMatchAnalysis',
+                    // wealth & love should usually be provided via storageKey prop
+                };
+                targetStorageKey = typeToKeyMap[fortuneType];
+            }
+
+            const aiResult = targetProfile?.usageHistory?.[targetStorageKey]?.result;
             if (!aiResult) {
                 alert(language === 'ko' ? '공유할 분석 결과가 없습니다.' : 'No analysis result to share.');
                 return;
@@ -30,14 +59,12 @@ export default function ShareLinkButton({ fortuneType = 'basic' }) {
                 aiResult: aiResult,
             };
 
-            // Base64 encode for URL (UTF-8 safe)
+            // Compress data using lz-string
             const jsonStr = JSON.stringify(shareData);
-            const encodedData = btoa(encodeURIComponent(jsonStr).replace(/%([0-9A-F]{2})/g, (match, p1) =>
-                String.fromCharCode(parseInt(p1, 16))
-            ));
+            const compressed = LZString.compressToEncodedURIComponent(jsonStr);
 
             // Generate share URL based on fortune type
-            const shareUrl = `${window.location.origin}/saju/share/${fortuneType}?data=${encodeURIComponent(encodedData)}`;
+            const shareUrl = `${window.location.origin}/saju/share/${fortuneType}?data=${compressed}`;
 
             // Use NativeBridge for better mobile experience
             const fortuneTypeLabels = {

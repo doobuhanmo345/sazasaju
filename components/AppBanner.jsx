@@ -9,7 +9,7 @@ import { XMarkIcon } from '@heroicons/react/24/outline';
 
 export default function AppBanner() {
     const { user, userData } = useAuthContext();
-    const { loading } = useLoading();
+    const { loading, setLoading } = useLoading();
     const [queueDoc, setQueueDoc] = useState(null);
     const [statusText, setStatusText] = useState(''); // [FIX] Initialize empty to avoid flicker
 
@@ -88,6 +88,7 @@ export default function AppBanner() {
 
             setQueueDoc(null);
             setStatusText('');
+            setLoading(false);
             alert('분석이 취소되었습니다.');
         } catch (error) {
             console.error('Failed to cancel analysis:', error);

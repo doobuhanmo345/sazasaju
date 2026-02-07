@@ -210,7 +210,6 @@ export default function MatchClient() {
       { id: 'general', label: 'General wealth flow', icon: '💰' },
     ];
 
-  console.log(inputDate2, gender2, isTimeUnknown2)
   const service = useMemo(() => new SajuAnalysisService({
     user,
     userData,
@@ -266,7 +265,7 @@ export default function MatchClient() {
             return {
               // saju 필드 생략 (메인 유저 데이터 오염 방지)
               usageHistory: {
-                ZMatch: {
+                ZMatchAnalysis: {
                   result,
                   saju: targetProfile?.saju,
                   saju2: saju2,
@@ -552,7 +551,7 @@ export default function MatchClient() {
       router.push('/saju/match/result');
     }
   }, [isButtonClicked, prevData, router, isAnalysisDone, loading]);
-
+  console.log(isButtonClicked, loading, prevData?.result, prevData?.result?.length)
 
   return (
     <div className="min-h-screen">
