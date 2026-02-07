@@ -171,7 +171,7 @@ export default function SelDatePage() {
     },
     [service, saju, gender, language, startDate, endDate, selectedPurpose, setAiResult, isAnalysisDone, router],
   );
-  console.log(prevData)
+
   const selectionSection = useCallback(() => {
     return (
       <div className="w-full mx-auto py-8">
@@ -373,7 +373,7 @@ export default function SelDatePage() {
     if (isButtonClicked && !loading && isAnalysisDone && prevData?.result && prevData?.result?.length > 0) {
       router.push('/saju/seldate/result');
     }
-  }, [loading, aiResult, router]);
+  }, [isButtonClicked, prevData, router, isAnalysisDone, loading]);
 
   return (
     <>

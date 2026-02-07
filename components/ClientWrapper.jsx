@@ -154,7 +154,6 @@ export default function ClientWrapper({ children }) {
           try {
             if (window.Kakao && !window.Kakao.isInitialized()) {
               window.Kakao.init('344188f5340e9fb502efb20389316a7f');
-              console.log('Kakao SDK v1 Initialized successfully');
             }
           } catch (e) {
             console.error('Kakao SDK Init Error:', e);

@@ -451,7 +451,7 @@ export default function InterviewPage() {
     if (isButtonClicked && !loading && isAnalysisDone && prevData?.result && prevData?.result?.length > 0) {
       router.push('/saju/interview/result');
     }
-  }, [isButtonClicked, prevData, router]);
+  }, [isButtonClicked, prevData, router, isAnalysisDone, loading]);
 
   return (
     <>

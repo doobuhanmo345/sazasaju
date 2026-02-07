@@ -36,7 +36,7 @@ export default function ReportTemplateWealth({ storageKey }) {
             }
         }
     }, [userData, router]);
-    console.log(data, aiResult)
+
     if (!data) return <div className="p-10 text-center">No Result Found</div>;
 
     // We need to reconstruct the "Topic" and "Detail" labels from the saved data if possible.

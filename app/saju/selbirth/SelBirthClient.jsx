@@ -190,7 +190,7 @@ export default function SelBirthPage() {
     if (isButtonClicked && !loading && isAnalysisDone && prevData?.result && prevData?.result?.length > 0) {
       router.push('/saju/selbirth/result');
     }
-  }, [isButtonClicked, prevData, router]);
+  }, [isButtonClicked, prevData, router, isAnalysisDone, loading]);
 
   const renderInput = (onStart) => {
     return (

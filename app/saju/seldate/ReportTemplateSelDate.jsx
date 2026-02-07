@@ -47,7 +47,7 @@ export default function ReportTemplateSelDate() {
   useEffect(() => {
     setIsLoaded(true);
   }, []);
-  console.log(data)
+
   if (!userData) return <div className="p-10 text-center text-slate-400 animate-pulse">Loading User Data...</div>;
 
   if (!data) {

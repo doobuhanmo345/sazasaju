@@ -551,7 +551,7 @@ export default function MatchClient() {
     if (isButtonClicked && !loading && prevData?.result && prevData?.result?.length > 0) {
       router.push('/saju/match/result');
     }
-  }, [loading, prevData, router, isButtonClicked]);
+  }, [isButtonClicked, prevData, router, isAnalysisDone, loading]);
 
 
   return (

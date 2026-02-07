@@ -286,7 +286,7 @@ export default function BasicAnaPage() {
     if (isButtonClicked && !loading && isAnalysisDone && prevData?.result && prevData?.result?.length > 0) {
       router.push('/saju/basic/result');
     }
-  }, [loading, aiResult, router]);
+  }, [isButtonClicked, prevData, router, isAnalysisDone, loading]);
 
   return (
     <>

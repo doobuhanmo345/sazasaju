@@ -418,7 +418,7 @@ export default function FirstDatePage() {
     if (isButtonClicked && !loading && isAnalysisDone && prevData?.result && prevData?.result?.length > 0) {
       router.push('/saju/date/result');
     }
-  }, [isButtonClicked, prevData, router]);
+  }, [isButtonClicked, prevData, router, isAnalysisDone, loading]);
 
   return (
     <main className="min-h-screen">

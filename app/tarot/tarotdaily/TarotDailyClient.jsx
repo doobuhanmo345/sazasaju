@@ -26,7 +26,7 @@ export default function TarotDailyPage() {
   const { setEditCount, MAX_EDIT_COUNT } = useUsageLimit();
   const [isButtonClicked, setIsButtonClicked] = useState(false);
   const [isCardPicked, setIsCardPicked] = useState(false);
-  console.log(isButtonClicked, isCardPicked, !loading)
+
   const prevDate = userData?.usageHistory?.tarotDaily?.result;
 
   // [UX FIX] Reset AI Result on Mount

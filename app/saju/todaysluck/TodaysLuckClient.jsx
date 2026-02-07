@@ -39,7 +39,7 @@ export default function TodaysLuckPage() {
   // [NEW] Strict Analysis Check from User Data
   const prevData = userData?.usageHistory?.ZLastDaily;
   // Note: key for today's luck is ZLastDaily
-  console.log(prevData)
+
   const isAnalysisDone = (() => {
     if (!prevData || !prevData.result) return false;
     // Compare basic fields if needed, but today's luck is date sensitive.
@@ -233,7 +233,7 @@ export default function TodaysLuckPage() {
     if (isButtonClicked && !loading && isAnalysisDone && prevData?.result && prevData?.result?.length > 0) {
       router.push('/saju/todaysluck/result');
     }
-  }, [loading, prevData, router]);
+  }, [isButtonClicked, prevData, router, isAnalysisDone, loading]);
 
   return (
     <>

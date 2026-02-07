@@ -98,7 +98,7 @@ export default function NavBar() {
   const logoSrc = false
     ? (language === 'ko' ? '/assets/Logo_Kor_DarkMode.png' : '/assets/Logo_Eng_DarkMode.png')
     : (language === 'ko' ? '/assets/Logo_Kor.png' : '/assets/Logo_Eng.png');
-  console.log(userData?.isAnalyzing)
+
   return (
 
     <div className='w-full relative z-50 sm:pt-0 sticky top-0 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md transition-all border-b border-transparent data-[scrolled=true]:border-slate-100 select-none'>

@@ -59,7 +59,7 @@ export default function Wealth({ }) {
   const [isCachedLoading, setIsCachedLoading] = useState(false);
   const [progress, setProgress] = useState(0);
   const [data, setData] = useState(null);
-
+  const [isButtonClicked, setIsButtonClicked] = useState(false);
   const wealthEnergy = useConsumeEnergy();
 
   const totalStep = 4;
@@ -276,12 +276,6 @@ export default function Wealth({ }) {
     }
   };
 
-  useEffect(() => {
-    if (isButtonClicked && !loading && isAnalysisDone && prevData?.result && prevData?.result?.length > 0) {
-      // [NEW] Reactive Redirect
-      router.push('/saju/wealth/result');
-    }
-  }, [aiResult, router]);
 
 
   const handleStartClick = () => setStep(1);
@@ -306,7 +300,13 @@ export default function Wealth({ }) {
 
   const isDisabled = (loading && !wealthEnergy.isConsuming) || !user || loading;
   const isDisabled2 = !isAnalysisDone && isLocked;
-  const [isButtonClicked, setIsButtonClicked] = useState(false);
+  useEffect(() => {
+    if (isButtonClicked && !loading && isAnalysisDone && prevData?.result && prevData?.result?.length > 0) {
+      // [NEW] Reactive Redirect
+      router.push('/saju/wealth/result');
+    }
+  }, [isButtonClicked, prevData, router, isAnalysisDone, loading]);
+
   return (
     <div className="w-full">
       {step > 0 && step < 4 && (

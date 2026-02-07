@@ -8,6 +8,7 @@ import { useUsageLimit } from '@/contexts/useUsageLimit';
 import MainIcons from '@/components/menuicons/MainIcons';
 import SubIcons from '@/components/menuicons/SubIcons';
 import SelIcons from '@/components/menuicons/SelIcons';
+import WealthIcons from '@/components/menuicons/WealthIcons';
 import SazaTalkBanner from '@/components/banner/SazaTalkBanner';
 import NewYearBanner from '@/components/banner/NewYearBanner';
 import MyInfoBar from '@/components/MyInfoBar';
@@ -105,7 +106,24 @@ export default function HomeClient() {
       >
         <MainIcons />
       </IconWrapper>
-
+      <IconWrapper
+        title={
+          <>
+            {language === 'ko'
+              ? '재물운'
+              : 'Wealth Luck'}
+          </>
+        }
+        subTitle={
+          <>
+            {language === 'ko'
+              ? '나의 부와 금전의 흐름'
+              : 'My wealth and cash flow'}
+          </>
+        }
+      >
+        <WealthIcons />
+      </IconWrapper>
       {/* New Selection Icons Section */}
       <IconWrapper
         title={
