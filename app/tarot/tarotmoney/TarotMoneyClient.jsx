@@ -25,6 +25,12 @@ export default function TarotMoneyPage() {
   const { userData, user } = useAuthContext();
   const { language } = useLanguage();
   const { setEditCount, MAX_EDIT_COUNT } = useUsageLimit();
+  const [cardPicked, setCardPicked] = useState();
+  const [flippedIdx, setFlippedIdx] = useState(null);
+  const [step, setStep] = useState('intro');
+  const [selectedCategory, setSelectedCategory] = useState('');
+  const [isButtonClicked, setIsButtonClicked] = useState(false);
+  const [isCardPicked, setIsCardPicked] = useState(false);
 
 
 
@@ -35,10 +41,10 @@ export default function TarotMoneyPage() {
 
   // [NEW] Reactive Redirect
   useEffect(() => {
-    if (!loading && aiResult && aiResult.length > 0) {
-      router.push('/saju/tarot/tarotmoney/result');
+    if (isButtonClicked && !loading && isCardPicked) {
+      router.push('/tarot/tarotmoney/result');
     }
-  }, [loading, aiResult, router]);
+  }, [isButtonClicked, loading, isCardPicked, router]);
 
   // Client-side Title Update for Localization (Static Export Support)
   useEffect(() => {
@@ -49,10 +55,6 @@ export default function TarotMoneyPage() {
     }
   }, [language]);
 
-  const [cardPicked, setCardPicked] = useState();
-  const [flippedIdx, setFlippedIdx] = useState(null);
-  const [step, setStep] = useState('intro');
-  const [selectedCategory, setSelectedCategory] = useState('');
 
   const moneyCategories = language === 'ko'
     ? [
@@ -82,6 +84,7 @@ export default function TarotMoneyPage() {
     const categoryLabel = moneyCategories.find((c) => c.id === selectedCategory)?.label;
     setCardPicked(pickedCard);
     setFlippedIdx(index);
+    setIsButtonClicked(true);
 
     setTimeout(async () => {
       setFlippedIdx(null);
@@ -103,6 +106,7 @@ export default function TarotMoneyPage() {
 
       try {
         await service.analyze(TarotPresets.money({ pickedCard, categoryLabel }));
+        setIsCardPicked(true);
       } catch (e) {
         // Error handling
       }

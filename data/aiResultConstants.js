@@ -822,7 +822,7 @@ export const reportStyle = `
 .sjsj-report-container {
   /* 1. 배경: 종이가 돋보이도록 아주 연한 블루그레이 바탕 */
   background-color: #f8fafc;
-  min-height: 100vh;
+
 
 
   /* 2. 폰트 및 기본 컬러: 가독성 높은 다크 블루그레이 */
@@ -1233,7 +1233,7 @@ export const reportStyleBlue = `
 /* 1. 기본 컨테이너 - 배경 제거 및 폰트 설정 */
 .sjsj-report-container {
   background-color: transparent; 
-  min-height: 100vh;
+
   font-family: 'Pretendard', -apple-system, sans-serif;
   color: #334155;
   line-height: 1.7;
@@ -1595,7 +1595,6 @@ export const reportStyleSimple = `
  }
   .rt-container {
     background: #f8fbff;
-    min-height: 100vh;
     padding-bottom: 60px;
     font-family: 'Pretendard', -apple-system, sans-serif;
     color: #1e293b;

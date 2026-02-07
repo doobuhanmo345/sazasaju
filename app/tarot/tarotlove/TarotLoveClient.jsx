@@ -31,19 +31,22 @@ export default function TarotLovePage() {
   const { userData, user } = useAuthContext();
   const { language } = useLanguage();
   const { setEditCount, MAX_EDIT_COUNT } = useUsageLimit();
+  const [isButtonClicked, setIsButtonClicked] = useState(false);
+  const [isCardPicked, setIsCardPicked] = useState(false);
 
+  const prevData = userData?.usageHistory?.tarotLove?.result;
   // [UX FIX] Reset AI Result on Mount
   useEffect(() => {
     setAiResult('');
   }, [setAiResult]);
 
-  // [NEW] Reactive Redirect (Only for NEW analysis)
   useEffect(() => {
-    if (!loading && aiResult && aiResult.length > 0) {
-      router.push('/saju/tarot/tarotlove/result');
-    }
-  }, [loading, aiResult, router]);
+    if (isButtonClicked && !loading && isCardPicked) {
 
+      router.push('/tarot/tarotlove/result');
+    }
+
+  }, [isButtonClicked, prevData, router, isCardPicked]);
   // Client-side Title Update for Localization (Static Export Support)
   useEffect(() => {
     if (language === 'ko') {
@@ -73,9 +76,10 @@ export default function TarotLovePage() {
   const handleCardPick = async (onStart, index) => {
     const pickedCard = TARO_CARDS[Math.floor(Math.random() * TARO_CARDS.length)];
     const typeLabel = loveTypes.find((t) => t.id === loveType)?.label;
-
+    setIsButtonClicked(true);
     setCardPicked(pickedCard);
     setFlippedIdx(index);
+
 
     setTimeout(async () => {
       setFlippedIdx(null);
@@ -106,6 +110,7 @@ export default function TarotLovePage() {
 
       try {
         await service.analyze(TarotPresets.love({ pickedCard, typeLabel }));
+        setIsCardPicked(true);
       } catch (e) {
         // Error is alerted in the service
       }

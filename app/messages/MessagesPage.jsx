@@ -2,11 +2,13 @@
 
 import React, { useState, useEffect } from 'react';
 import { db } from '@/lib/firebase';
-import { collection, query, where, onSnapshot, orderBy, doc, updateDoc, writeBatch } from 'firebase/firestore';
+import { collection, query, where, onSnapshot, orderBy, doc, updateDoc, writeBatch, deleteDoc } from 'firebase/firestore';
 import { useAuthContext } from '@/contexts/useAuthContext';
 import { useLanguage } from '@/contexts/useLanguageContext';
 import { InboxStackIcon, ChatBubbleLeftRightIcon, UserCircleIcon } from '@heroicons/react/24/outline';
 import MessageModal from '@/app/messages/MessageModal';
+import SazaTalkResultModal from '@/components/SazaTalkResultModal';
+import SazaTalkMessageItem from '@/components/SazaTalkMessageItem';
 
 export default function MessagesPage() {
   const { user } = useAuthContext();
@@ -15,6 +17,8 @@ export default function MessagesPage() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 8;
+  const [sazaTalkModalOpen, setSazaTalkModalOpen] = useState(false);
+  const [selectedSazaTalk, setSelectedSazaTalk] = useState(null);
 
   useEffect(() => {
     if (!user) return;
@@ -23,16 +27,17 @@ export default function MessagesPage() {
     // 인덱스 생성 오류를 방지하기 위해 쿼리에서 orderBy를 제거하고 메모리에서 정렬합니다.
     const q_sent = query(collection(db, 'direct_messages'), where('senderId', '==', user.uid));
     const q_received = query(collection(db, 'direct_messages'), where('receiverId', '==', user.uid));
+    const q_sazatalk = query(collection(db, 'sazatalk_messages'), where('userId', '==', user.uid));
 
     const unsubscribeSent = onSnapshot(q_sent, (snap) => {
-      const sent = snap.docs.map(doc => ({ id: doc.id, type: 'sent', ...doc.data() }));
+      const sent = snap.docs.map(doc => ({ id: doc.id, type: 'sent', messageType: 'direct', ...doc.data() }));
       updateMessages(sent, 'sent');
     }, (error) => {
       console.error('Error fetching sent messages:', error);
     });
 
     const unsubscribeReceived = onSnapshot(q_received, (snap) => {
-      const received = snap.docs.map(doc => ({ id: doc.id, type: 'received', ...doc.data() }));
+      const received = snap.docs.map(doc => ({ id: doc.id, type: 'received', messageType: 'direct', ...doc.data() }));
       updateMessages(received, 'received');
 
       // 읽지 않은 메시지 자동 읽음 처리
@@ -48,22 +53,70 @@ export default function MessagesPage() {
       console.error('Error fetching received messages:', error);
     });
 
+    const unsubscribeSazaTalk = onSnapshot(q_sazatalk, (snap) => {
+      const sazaTalkMsgs = snap.docs.map(doc => ({ id: doc.id, type: 'sazatalk', messageType: 'sazatalk', ...doc.data() }));
+      updateMessages(sazaTalkMsgs, 'sazatalk');
+
+      // 읽지 않은 사자톡 메시지 자동 읽음 처리
+      const unread = sazaTalkMsgs.filter(m => !m.isRead);
+      if (unread.length > 0) {
+        const batch = writeBatch(db);
+        unread.forEach(m => {
+          batch.update(doc(db, 'sazatalk_messages', m.id), { isRead: true });
+        });
+        batch.commit().catch(err => console.error('Error marking SazaTalk as read:', err));
+      }
+    }, (error) => {
+      console.error('Error fetching SazaTalk messages:', error);
+    });
+
     return () => {
       unsubscribeSent();
       unsubscribeReceived();
+      unsubscribeSazaTalk();
     };
   }, [user?.uid]);
 
-  const [allMsgs, setAllMsgs] = useState({ sent: [], received: [] });
+  const [allMsgs, setAllMsgs] = useState({ sent: [], received: [], sazatalk: [] });
   const updateMessages = (newMsgs, type) => {
     setAllMsgs(prev => {
       const updated = { ...prev, [type]: newMsgs };
-      const merged = [...updated.sent, ...updated.received].sort((a, b) =>
+      const merged = [...updated.sent, ...updated.received, ...updated.sazatalk].sort((a, b) =>
         (b.createdAt?.seconds || 0) - (a.createdAt?.seconds || 0)
       );
       setMessages(merged);
       return updated;
     });
+  };
+
+  // SazaTalk message handlers
+  const handleSazaTalkClick = (message) => {
+    setSelectedSazaTalk(message);
+    setSazaTalkModalOpen(true);
+  };
+
+  const handleSazaTalkSave = async (messageId) => {
+    try {
+      await updateDoc(doc(db, 'sazatalk_messages', messageId), { isSaved: true });
+      alert(language === 'ko' ? '저장되었습니다!' : 'Saved!');
+    } catch (error) {
+      console.error('Failed to save SazaTalk message:', error);
+      alert(language === 'ko' ? '저장 실패' : 'Failed to save');
+    }
+  };
+
+  const handleSazaTalkDelete = async (messageId) => {
+    if (!confirm(language === 'ko' ? '정말 삭제하시겠습니까?' : 'Are you sure you want to delete?')) {
+      return;
+    }
+    try {
+      await deleteDoc(doc(db, 'sazatalk_messages', messageId));
+      alert(language === 'ko' ? '삭제되었습니다.' : 'Deleted.');
+      setSazaTalkModalOpen(false);
+    } catch (error) {
+      console.error('Failed to delete SazaTalk message:', error);
+      alert(language === 'ko' ? '삭제 실패' : 'Failed to delete');
+    }
   };
 
   // 페이지네이션 계산
@@ -99,39 +152,49 @@ export default function MessagesPage() {
         <div className="divide-y divide-slate-50 dark:divide-slate-800/50">
           {currentItems.length > 0 ? (
             currentItems.map((msg) => (
-              <div
-                key={msg.id}
-                className="group px-6 py-4 hover:bg-slate-50/50 dark:hover:bg-slate-800/30 transition-colors"
-              >
-                <div className="flex items-center justify-between gap-4">
-                  <div className="flex items-center gap-3 min-w-0">
-                    <div className={`p-1.5 rounded-lg shrink-0 ${msg.type === 'sent' ? 'bg-slate-100 dark:bg-slate-800' : 'bg-purple-100 dark:bg-purple-900/30'}`}>
-                      <UserCircleIcon className={`w-4 h-4 ${msg.type === 'sent' ? 'text-slate-500' : 'text-purple-600 dark:text-purple-400'}`} />
-                    </div>
-                    <div className="min-w-0">
-                      <div className="flex items-center gap-2 mb-0.5">
-                        <span className={`px-1.5 py-0.5 rounded text-[8px] font-black uppercase tracking-widest ${msg.type === 'sent' ? 'bg-slate-100 text-slate-500' : 'bg-purple-100 text-purple-600'}`}>
-                          {msg.type === 'sent' ? 'Sent' : 'Received'}
-                        </span>
-                        <span className="text-[10px] font-black text-slate-900 dark:text-white truncate">
-                          {msg.type === 'sent' ? msg.receiverName : msg.senderName}
-                        </span>
-                        {msg.type === 'received' && !msg.isRead && (
-                          <span className="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse"></span>
-                        )}
+              msg.messageType === 'sazatalk' ? (
+                <SazaTalkMessageItem
+                  key={msg.id}
+                  message={msg}
+                  onClick={() => handleSazaTalkClick(msg)}
+                  onSave={handleSazaTalkSave}
+                  onDelete={handleSazaTalkDelete}
+                />
+              ) : (
+                <div
+                  key={msg.id}
+                  className="group px-6 py-4 hover:bg-slate-50/50 dark:hover:bg-slate-800/30 transition-colors"
+                >
+                  <div className="flex items-center justify-between gap-4">
+                    <div className="flex items-center gap-3 min-w-0">
+                      <div className={`p-1.5 rounded-lg shrink-0 ${msg.type === 'sent' ? 'bg-slate-100 dark:bg-slate-800' : 'bg-purple-100 dark:bg-purple-900/30'}`}>
+                        <UserCircleIcon className={`w-4 h-4 ${msg.type === 'sent' ? 'text-slate-500' : 'text-purple-600 dark:text-purple-400'}`} />
                       </div>
-                      <p className="text-xs font-medium text-slate-600 dark:text-slate-400 truncate group-hover:whitespace-normal">
-                        {msg.text}
-                      </p>
+                      <div className="min-w-0">
+                        <div className="flex items-center gap-2 mb-0.5">
+                          <span className={`px-1.5 py-0.5 rounded text-[8px] font-black uppercase tracking-widest ${msg.type === 'sent' ? 'bg-slate-100 text-slate-500' : 'bg-purple-100 text-purple-600'}`}>
+                            {msg.type === 'sent' ? 'Sent' : 'Received'}
+                          </span>
+                          <span className="text-[10px] font-black text-slate-900 dark:text-white truncate">
+                            {msg.type === 'sent' ? msg.receiverName : msg.senderName}
+                          </span>
+                          {msg.type === 'received' && !msg.isRead && (
+                            <span className="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse"></span>
+                          )}
+                        </div>
+                        <p className="text-xs font-medium text-slate-600 dark:text-slate-400 truncate group-hover:whitespace-normal">
+                          {msg.text}
+                        </p>
+                      </div>
                     </div>
-                  </div>
-                  <div className="shrink-0 text-right">
-                    <span className="text-[9px] font-bold text-slate-400 uppercase">
-                      {msg.createdAt ? msg.createdAt.toDate().toLocaleDateString() : '...'}
-                    </span>
+                    <div className="shrink-0 text-right">
+                      <span className="text-[9px] font-bold text-slate-400 uppercase">
+                        {msg.createdAt ? msg.createdAt.toDate().toLocaleDateString() : '...'}
+                      </span>
+                    </div>
                   </div>
                 </div>
-              </div>
+              )
             ))
           ) : (
             <div className="py-20 flex flex-col items-center justify-center text-center">
@@ -181,6 +244,18 @@ export default function MessagesPage() {
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
       />
+
+      {sazaTalkModalOpen && selectedSazaTalk && (
+        <SazaTalkResultModal
+          question={selectedSazaTalk.question}
+          answer={selectedSazaTalk.answer}
+          onClose={() => setSazaTalkModalOpen(false)}
+          messageId={selectedSazaTalk.id}
+          isSaved={selectedSazaTalk.isSaved}
+          onSave={handleSazaTalkSave}
+          onDelete={handleSazaTalkDelete}
+        />
+      )}
     </div>
   );
 }

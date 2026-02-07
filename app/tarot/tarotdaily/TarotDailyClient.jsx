@@ -25,8 +25,10 @@ export default function TarotDailyPage() {
   const { userData, user } = useAuthContext();
   const { language } = useLanguage();
   const { setEditCount, MAX_EDIT_COUNT } = useUsageLimit();
-
-
+  const [isButtonClicked, setIsButtonClicked] = useState(false);
+  const [isCardPicked, setIsCardPicked] = useState(false);
+  console.log(isButtonClicked, isCardPicked, !loading)
+  const prevDate = userData?.usageHistory?.tarotDaily?.result;
 
   // [UX FIX] Reset AI Result on Mount
   useEffect(() => {
@@ -35,10 +37,14 @@ export default function TarotDailyPage() {
 
   // [NEW] Reactive Redirect
   useEffect(() => {
-    if (!loading && aiResult && aiResult.length > 0) {
-      router.push('/saju/tarot/tarotdaily/result');
+    if (isButtonClicked && !loading && isCardPicked) {
+
+      router.push('tarotdaily/result');
     }
-  }, [loading, aiResult, router]);
+    // if (isButtonClicked) {
+    //   router.push('tarotdaily/result');
+    // }
+  }, [isButtonClicked, prevDate, router, isCardPicked]);
 
   // Client-side Title Update for Localization (Static Export Support)
   useEffect(() => {
@@ -58,8 +64,9 @@ export default function TarotDailyPage() {
     const pickedCard = majorOnly[Math.floor(Math.random() * majorOnly.length)];
     setCardPicked(pickedCard);
     setFlippedIdx(index);
-
+    setIsButtonClicked(true);
     setTimeout(async () => {
+
       setFlippedIdx(null);
       onStart(); // Trigger loading
 
@@ -78,6 +85,7 @@ export default function TarotDailyPage() {
 
       try {
         await service.analyze(TarotPresets.daily({ pickedCard }));
+        setIsCardPicked(true);
       } catch (e) {
         // error
       }

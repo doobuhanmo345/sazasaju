@@ -158,12 +158,7 @@ export default function FirstDatePage() {
 
     return true;
   }, [prevData, gender, saju, selDateString, question, selectedDate]);
-  console.log('1', !prevData || !prevData?.result)
-  console.log('2', prevData?.gender !== gender)
-  console.log('3', !SajuAnalysisService.compareSaju(prevData?.saju, saju))
-  console.log('4', !SajuAnalysisService.compareSaju(prevData?.sajuDate, selectedDateSaju))
-  console.log('5', prevData?.question !== question)
-  console.log(isAnalysisDone)
+  const [isButtonClicked, setIsButtonClicked] = useState(false);
 
 
   const isDisabled = !user || loading || !selectedDate;
@@ -193,7 +188,7 @@ export default function FirstDatePage() {
     async (onstart) => {
       // [UX FIX] 로딩 화면 먼저 진입
       onstart();
-
+      setIsButtonClicked(true)
       // [NEW] 이미 저장된 데이터와 입력값이 같으면 잠시 대기 후 결과 페이지로 이동
       if (isAnalysisDone) {
         console.log('✅ 이미 분석된 데이터(옵션 일치)가 있어 결과 페이지로 이동합니다.');
@@ -421,10 +416,10 @@ export default function FirstDatePage() {
 
   // [NEW] Reactive Redirect
   useEffect(() => {
-    if (!loading && aiResult && aiResult.length > 0) {
+    if (isButtonClicked && prevData?.result && prevData?.result?.length > 0) {
       router.push('/saju/date/result');
     }
-  }, [loading, aiResult, router]);
+  }, [isButtonClicked, prevData, router]);
 
   return (
     <main className="min-h-screen">

@@ -263,7 +263,6 @@ const reusableStyle = `
 
   .rt-container {
     background: #f8fbff;
-    min-height: 100vh;
     padding-bottom: 60px;
     font-family: 'Pretendard', -apple-system, sans-serif;
     color: #1e293b;

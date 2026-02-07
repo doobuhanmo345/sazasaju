@@ -254,6 +254,7 @@ export default function Wealth({ }) {
 
   const handleWealthAnalysis = async () => {
     setAiResult('');
+    setIsButtonClicked(true);
     const q1 = Q_TYPES.find((i) => i.id === selectedQ)?.desc;
     const q2 = SUB_Q_TYPES?.[selectedQ]?.find((i) => i.id === selectedSubQ)?.desc;
     const qprompt = SUB_Q_TYPES?.[selectedQ]?.find((i) => i.id === selectedSubQ)?.prompt;
@@ -276,7 +277,7 @@ export default function Wealth({ }) {
   };
 
   useEffect(() => {
-    if (aiResult) {
+    if (isButtonClicked && !loading && prevData?.result && prevData?.result?.length > 0) {
       // [NEW] Reactive Redirect
       router.push('/saju/wealth/result');
     }
@@ -292,20 +293,20 @@ export default function Wealth({ }) {
     }
   };
   const toConfirm = () => setStep(3);
+  const prevData = userData?.usageHistory?.ZWealth;
+  const isAnalysisDone = (() => { // using IIFE or useMemo
+    if (!prevData || !prevData.result) return false;
+    if (prevData?.language !== language) return false;
+    if (prevData?.gender !== (targetProfile?.gender)) return false;
+    if (prevData?.ques !== Q_TYPES.find((i) => i.id === selectedQ)?.desc) return false;
+    if (prevData?.ques2 !== SUB_Q_TYPES?.[selectedQ]?.find((i) => i.id === selectedSubQ)?.desc) return false;
 
-  // [REMOVED] Auto-redirect logic based on isAnalysisDone. 
-  // We only check it to show the "Free" badge.
-  const isAnalysisDone =
-    userData?.usageHistory?.ZWealthAnalysis &&
-    userData.usageHistory.ZWealthAnalysis.language === language &&
-    userData.usageHistory.ZWealthAnalysis.gender === gender &&
-    userData.usageHistory.ZWealthAnalysis.ques === Q_TYPES.find((i) => i.id === selectedQ)?.desc &&
-    userData.usageHistory.ZWealthAnalysis.ques2 === SUB_Q_TYPES?.[selectedQ]?.find((i) => i.id === selectedSubQ)?.desc &&
-    SajuAnalysisService.compareSaju(userData.usageHistory.ZWealthAnalysis.saju, saju);
+    return SajuAnalysisService.compareSaju(prevData.saju, targetProfile?.saju);
+  })();
 
   const isDisabled = (loading && !wealthEnergy.isConsuming) || !user || loading;
   const isDisabled2 = !isAnalysisDone && isLocked;
-
+  const [isButtonClicked, setIsButtonClicked] = useState(false);
   return (
     <div className="w-full">
       {step > 0 && step < 4 && (

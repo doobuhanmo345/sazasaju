@@ -28,8 +28,8 @@ export default function TarotCounselingPage() {
   const { userData, user } = useAuthContext();
   const { language } = useLanguage();
   const { setEditCount, MAX_EDIT_COUNT } = useUsageLimit();
-
-
+  const [isButtonClicked, setIsButtonClicked] = useState(false);
+  const [isCardPicked, setIsCardPicked] = useState(false);
 
   // [UX FIX] Reset AI Result on Mount
   useEffect(() => {
@@ -38,10 +38,10 @@ export default function TarotCounselingPage() {
 
   // [NEW] Reactive Redirect
   useEffect(() => {
-    if (!loading && aiResult && aiResult.length > 0) {
-      router.push('/saju/tarot/tarotcounseling/result');
+    if (isButtonClicked && !loading && isCardPicked) {
+      router.push('/tarot/tarotcounseling/result');
     }
-  }, [loading, aiResult, router]);
+  }, [isButtonClicked, loading, isCardPicked, router]);
 
   // Client-side Title Update for Localization (Static Export Support)
   useEffect(() => {
@@ -68,7 +68,7 @@ export default function TarotCounselingPage() {
     setTimeout(async () => {
       setFlippedIdx(null);
       onStart(); // Trigger loading
-
+      setIsButtonClicked(true);
       const service = new TarotAnalysisService({
         user,
         userData,
@@ -84,6 +84,7 @@ export default function TarotCounselingPage() {
 
       try {
         await service.analyze(TarotPresets.counseling({ pickedCard, userQuestion }));
+        setIsCardPicked(true);
       } catch (e) {
         // error
       }

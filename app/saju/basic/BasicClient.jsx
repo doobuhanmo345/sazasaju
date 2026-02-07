@@ -56,7 +56,7 @@ export default function BasicAnaPage() {
   }, [targetProfile]);
   // console.log(selectedProfile, !!prevData, SajuAnalysisService.compareSaju(prevData.saju, selectedProfile?.saju), prevData.gender, selectedProfile?.gender)
   const isDisabled2 = !isAnalysisDone && isLocked;
-
+  const [isButtonClicked, setIsButtonClicked] = useState(false);
   // Client-side Title Update for Localization (Static Export Support)
   useEffect(() => {
     if (language === 'ko') {
@@ -88,7 +88,7 @@ export default function BasicAnaPage() {
     async (onstart) => {
       // [UX FIX] 로딩 화면을 먼저 보여줌
       onstart();
-
+      setIsButtonClicked(true);
       // [NEW] 이미 저장된 데이터와 현재 입력값이 같으면 잠시 대기 후 결과 페이지로 이동
       if (isAnalysisDone) {
         console.log('✅ 이미 분석된 데이터가 있어 결과 페이지로 이동합니다.');
@@ -284,7 +284,7 @@ export default function BasicAnaPage() {
 
   // ✅ 4. 스크롤 로직 & 리다이렉트 (loading이 false가 되고 결과가 있을 때 이동)
   useEffect(() => {
-    if (!loading && aiResult && aiResult.length > 0) {
+    if (isButtonClicked && !loading && prevData?.result && prevData?.result?.length > 0) {
       router.push('/saju/basic/result');
     }
   }, [loading, aiResult, router]);

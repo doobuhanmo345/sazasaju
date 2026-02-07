@@ -172,7 +172,7 @@ export default function InterviewPage() {
     return true;
   }, [prevData, gender, saju, selectedDate, question]);
 
-
+  const [isButtonClicked, setIsButtonClicked] = useState(false);
   // Client-side Title Update for Localization (Static Export Support)
   useEffect(() => {
     if (language === 'ko') {
@@ -213,7 +213,7 @@ export default function InterviewPage() {
     async (onstart) => {
       // [UX FIX] 로딩 화면 먼저 진입
       onstart();
-
+      setIsButtonClicked(true)
       // [NEW] 이미 저장된 데이터와 입력값이 같으면 잠시 대기 후 결과 페이지로 이동
       if (isAnalysisDone) {
         console.log('✅ 이미 분석된 데이터(옵션 일치)가 있어 결과 페이지로 이동합니다.');
@@ -449,10 +449,10 @@ export default function InterviewPage() {
 
   // [NEW] Reactive Redirect
   useEffect(() => {
-    if (!loading && aiResult && aiResult.length > 0) {
+    if (isButtonClicked && prevData?.result && prevData?.result?.length > 0) {
       router.push('/saju/interview/result');
     }
-  }, [loading, aiResult, router]);
+  }, [isButtonClicked, prevData, router]);
 
   return (
     <>

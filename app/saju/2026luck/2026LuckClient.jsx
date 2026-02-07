@@ -49,7 +49,7 @@ export default function YearlyLuckPage() {
   })();
 
   const isDisabled2 = !isTargetOthers && !isAnalysisDone && isLocked;
-
+  const [isButtonClicked, setIsButtonClicked] = useState(false);
   // Client-side Title Update for Localization (Static Export Support)
   useEffect(() => {
     if (language === 'ko') {
@@ -84,7 +84,7 @@ export default function YearlyLuckPage() {
   const handleStartClick = async (onstart) => {
     // [UX FIX] 로딩 화면을 먼저 보여줌
     onstart();
-
+    setIsButtonClicked(true);
     // [NEW] 이미 저장된 데이터와 현재 입력값이 같으면 잠시 대기 후 결과 페이지로 이동
     if (isAnalysisDone) {
       console.log('✅ 이미 분석된 데이터가 있어 결과 페이지로 이동합니다.');
@@ -233,10 +233,10 @@ export default function YearlyLuckPage() {
 
   // [NEW] Reactive Redirect
   useEffect(() => {
-    if (!loading && aiResult && aiResult.length > 0) {
+    if (isButtonClicked && !loading && prevData?.result && prevData?.result?.length > 0) {
       router.push('/saju/2026luck/result');
     }
-  }, [loading, aiResult, router]);
+  }, [loading, prevData, router]);
 
   return (
     <>

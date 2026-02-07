@@ -49,7 +49,7 @@ export default function TodaysLuckPage() {
     if (prevData.date !== new Date().toISOString().split('T')[0]) return false;
     return SajuAnalysisService.compareSaju(prevData.saju, targetProfile?.saju);
   })();
-
+  const [isButtonClicked, setIsButtonClicked] = useState(false);
   const isDisabled2 = !isTargetOthers && !isAnalysisDone && isLocked;
 
   // Client-side Title Update for Localization (Static Export Support)
@@ -86,7 +86,7 @@ export default function TodaysLuckPage() {
   const handleStartClick = async (onstart) => {
     // [UX FIX] 로딩 화면을 먼저 보여줌
     onstart();
-
+    setIsButtonClicked(true);
     // [NEW] 이미 저장된 데이터가 있으면 잠시 대기 후 리다이렉트
     if (isAnalysisDone) {
       console.log('✅ 이미 분석된 데이터가 있어 결과 페이지로 이동합니다.');
@@ -230,10 +230,10 @@ export default function TodaysLuckPage() {
 
   // [NEW] Reactive Redirect
   useEffect(() => {
-    if (!loading && aiResult && aiResult.length > 0) {
+    if (isButtonClicked && !loading && prevData?.result && prevData?.result?.length > 0) {
       router.push('/saju/todaysluck/result');
     }
-  }, [loading, aiResult, router]);
+  }, [loading, prevData, router]);
 
   return (
     <>

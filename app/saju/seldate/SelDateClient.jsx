@@ -91,7 +91,7 @@ export default function SelDatePage() {
 
     return isSame;
   }, [prevData, startDate, endDate, selectedPurpose, language, gender, saju]);
-
+  const [isButtonClicked, setIsButtonClicked] = useState(false);
   const isDisabled = !isAnalysisDone && isLocked;
 
   const handleQuickSelect = (amount, unit = 'months') => {
@@ -141,6 +141,7 @@ export default function SelDatePage() {
 
       // [UX FIX] 로딩 화면 먼저 진입
       onStart();
+      setIsButtonClicked(true)
 
       // [NEW] 이미 저장된 데이터와 입력값이 같으면 잠시 대기 후 결과 페이지로 이동
       if (isAnalysisDone) {
@@ -369,7 +370,7 @@ export default function SelDatePage() {
 
   // [NEW] Reactive Redirect
   useEffect(() => {
-    if (!loading && aiResult && aiResult.length > 0) {
+    if (isButtonClicked && prevData?.result && prevData?.result?.length > 0) {
       router.push('/saju/seldate/result');
     }
   }, [loading, aiResult, router]);

@@ -67,6 +67,15 @@ service cloud.firestore {
       allow update, delete: if true;
     }
     
+    // [신규] 사자톡 메시지 컬렉션 규칙
+    match /sazatalk_messages/{messageId} {
+      allow read: if request.auth != null && resource.data.userId == request.auth.uid;
+      allow create: if request.auth != null && request.resource.data.userId == request.auth.uid;
+      allow update: if request.auth != null && 
+        resource.data.userId == request.auth.uid &&
+        request.resource.data.diff(resource.data).affectedKeys().hasOnly(['isSaved', 'isRead']);
+      allow delete: if request.auth != null && resource.data.userId == request.auth.uid;
+    }
 
     // [신규] 메시지 컬렉션 규칙
     match /direct_messages/{messageId} {

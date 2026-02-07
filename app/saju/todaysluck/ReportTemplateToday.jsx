@@ -85,12 +85,12 @@ const ReportTemplateToday = ({ }) => {
         <div className="luck-element-list">
           <div className="luck-element-item">
             <div className="luck-item-title">{isEn ? 'Direction' : '행운의 방향'}</div>
-            <div className="luck-item-content">{data?.lucky_elements.direction?.title}</div>
-            <div className="luck-item-desc">{data?.lucky_elements.direction?.desc}</div>
+            <div className="luck-item-content">{data?.lucky_elements?.direction?.title}</div>
+            <div className="luck-item-desc">{data?.lucky_elements?.direction?.desc}</div>
           </div>
           <div className="luck-element-item">
             <div className="luck-item-title">{isEn ? 'Lucky Color' : '행운의 컬러'}</div>
-            <div className="luck-item-content">{data?.lucky_elements.color?.title}</div>
+            <div className="luck-item-content">{data?.lucky_elements?.color?.title}</div>
             <div className="luck-item-desc">{data?.lucky_elements.color?.desc}</div>
           </div>
           <div className="luck-element-item">
@@ -127,7 +127,7 @@ const ReportTemplateToday = ({ }) => {
         {/* 내일의 운세 */}
         <div className="detail-item-box tomorrow-box">
           <div className="detail-title">{isEn ? "Tomorrow's Luck" : '내일의 운세'}</div>
-          <div className="fortune-date-text">{data?.tomorrow.date}</div>
+          <div className="fortune-date-text">{data?.tomorrow?.date}</div>
           <div className="detail-body">
             <strong>{data?.tomorrow.summary}</strong>
             <p>{data?.tomorrow.analysis}</p>
