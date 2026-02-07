@@ -9,8 +9,7 @@ import { XMarkIcon } from '@heroicons/react/24/outline';
 export default function AppBanner() {
     const { user, userData } = useAuthContext();
     const [queueDoc, setQueueDoc] = useState(null);
-    const [statusText, setStatusText] = useState('분석 중...');
-
+    const [statusText, setStatusText] = useState(''); // [FIX] Initialize empty to avoid flicker
 
     // Listen to queue documents
     useEffect(() => {
@@ -29,6 +28,21 @@ export default function AppBanner() {
         const unsubscribe = onSnapshot(q, (snapshot) => {
             if (snapshot.empty) {
                 setQueueDoc(null);
+                // If isAnalyzing is true but no queue doc, it's either direct analysis 
+                // or a stale flag from a previous crash/refresh.
+                if (userData?.isAnalyzing) {
+                    // [NEW] Stale flag detection: check if updatedAt is older than 5 mins
+                    const updatedAt = userData.updatedAt ? new Date(userData.updatedAt) : null;
+                    const fiveMinsAgo = new Date(Date.now() - 5 * 60 * 1000);
+
+                    if (updatedAt && updatedAt < fiveMinsAgo) {
+                        console.log('[AppBanner] Stale analysis flag detected, clearing...');
+                        // Auto-clear stale flag
+                        updateDoc(doc(db, 'users', user.uid), { isAnalyzing: false }).catch(console.error);
+                    } else {
+                        setStatusText('분석 준비 중...');
+                    }
+                }
                 return;
             }
 
@@ -53,7 +67,7 @@ export default function AppBanner() {
         });
 
         return () => unsubscribe();
-    }, [user?.uid]);
+    }, [user?.uid, userData?.isAnalyzing, userData?.updatedAt]); // [MOD] Added dependencies
 
     const handleCancel = async () => {
         const confirmCancel = confirm('분석을 취소하시겠습니까?');

@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">sazasaju</string>
-    <string name="title_activity_main">sazasaju</string>
-    <string name="package_name">com.your.package.name</string>
-    <string name="custom_url_scheme">com.your.package.name</string>
+    <string name="app_name">Saza Saju</string>
+    <string name="title_activity_main">Saza Saju</string>
+    <string name="package_name">com.sazasaju.app</string>
+    <string name="custom_url_scheme">com.sazasaju.app</string>
+    <string name="server_client_id">680410565024-o2s75du508jtpuqpbh235bdljmbi9m5e.apps.googleusercontent.com</string>
     <string name="kakao_app_key">a3881d152093a032f1236a0ca8aa1134</string>
     <string name="kakao_scheme">kakaoa3881d152093a032f1236a0ca8aa1134</string>
     <string name="kakaolink_host">kakaolink</string>

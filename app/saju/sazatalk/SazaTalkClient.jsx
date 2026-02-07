@@ -21,6 +21,7 @@ import ViewSazaResult from '@/app/saju/sazatalk/ViewSazaResult';
 import { parseAiResponse } from '@/utils/helpers';
 import { aiSajuStyle } from '@/data/aiResultConstants';
 import SazaTalkAppeal from '@/app/saju/sazatalk/SazaTalkAppeal';
+import SazaTalkResultModal from '@/components/SazaTalkResultModal';
 
 const DISABLED_STYLE = 'bg-gray-200 dark:bg-gray-700 text-gray-400 cursor-not-allowed';
 
@@ -54,7 +55,7 @@ function SazaTalkContent() {
   const [isHistoryOpen, setIsHistoryOpen] = useState(false);
   const historyContentRef = useRef(null);
   const [autoStarted, setAutoStarted] = useState(false);
-
+  const [isButtonClicked, setIsButtonClicked] = useState(false);
   const handleHistoryCopy = async () => {
     if (!latestSazaTalk?.result) return;
     try {
@@ -164,11 +165,12 @@ function SazaTalkContent() {
       return;
     }
 
-    if (latestSazaTalk) {
-      if (!window.confirm(UI_TEXT.overwriteConfirm?.[language] || (language === 'ko' ? "새로운 질문을 하시면 이전 답변은 사라집니다. 계속하시겠습니까?" : "Asking a new question will delete the previous answer. Do you want to continue?"))) {
-        return;
-      }
-    }
+    // if (latestSazaTalk) {
+    //   if (!window.confirm(UI_TEXT.overwriteConfirm?.[language] || (language === 'ko' ? "새로운 질문을 하시면 이전 답변은 사라집니다. 계속하시겠습니까?" : "Asking a new question will delete the previous answer. Do you want to continue?"))) {
+    //     return;
+    //   }
+    // }
+    setIsButtonClicked(true);
 
     setAiResult('');
     try {
@@ -616,7 +618,13 @@ function SazaTalkContent() {
                     </p>
                   </div>
                 </div>
+                <SazaTalkResultModal
+                  question={latestSazaTalk.question}
+                  answer={latestSazaTalk.result}
+                  onClose={() => setIsHistoryOpen(false)}
+                />
               </div>
+
             )}
           </div>
         )}

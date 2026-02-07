@@ -1,6 +1,7 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Suspense } from 'react';
+import { useSearchParams } from 'next/navigation';
 import { db } from '@/lib/firebase';
 import { collection, query, where, onSnapshot, orderBy, doc, updateDoc, writeBatch, deleteDoc } from 'firebase/firestore';
 import { useAuthContext } from '@/contexts/useAuthContext';
@@ -11,8 +12,18 @@ import SazaTalkResultModal from '@/components/SazaTalkResultModal';
 import SazaTalkMessageItem from '@/components/SazaTalkMessageItem';
 
 export default function MessagesPage() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <MessagesContent />
+    </Suspense>
+  );
+}
+
+function MessagesContent() {
   const { user } = useAuthContext();
   const { language } = useLanguage();
+  const searchParams = useSearchParams();
+  const view = searchParams.get('view');
   const [messages, setMessages] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
@@ -88,6 +99,18 @@ export default function MessagesPage() {
       return updated;
     });
   };
+
+  useEffect(() => {
+    if (view === 'latest_saza' && messages.length > 0) {
+      const latestSaza = messages.find(m => m.messageType === 'sazatalk');
+      if (latestSaza) {
+        setSelectedSazaTalk(latestSaza);
+        setSazaTalkModalOpen(true);
+        // URL 클린업
+        window.history.replaceState({}, '', window.location.pathname);
+      }
+    }
+  }, [view, messages]);
 
   // SazaTalk message handlers
   const handleSazaTalkClick = (message) => {

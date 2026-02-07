@@ -21,15 +21,15 @@ export default function BasicAnaBanner({ inputDate, isTimeUnknown, gender }) {
 
 
   const isKo = language === 'ko';
-  const currentTitle = (selSaju && selSaju.sky1 && selSaju.grd1)
+  const currentTitle = (selSaju && selSaju?.sky1 && selSaju?.grd1)
     ? (isKo
-      ? ILJU_DATA?.[selSaju.sky1 + selSaju.grd1]?.title[selGender]?.title
-      : ILJU_DATA_EN?.[selSaju.sky1 + selSaju.grd1]?.title[selGender]?.title)
+      ? ILJU_DATA?.[selSaju?.sky1 + selSaju?.grd1]?.title[selGender]?.title
+      : ILJU_DATA_EN?.[selSaju?.sky1 + selSaju?.grd1]?.title[selGender]?.title)
     : '';
-  const currentDesc = (selSaju && selSaju.sky1 && selSaju.grd1)
+  const currentDesc = (selSaju && selSaju?.sky1 && selSaju?.grd1)
     ? (isKo
-      ? ILJU_DATA?.[selSaju.sky1 + selSaju.grd1]?.title[selGender]?.desc
-      : ILJU_DATA_EN?.[selSaju.sky1 + selSaju.grd1]?.title[selGender]?.desc)
+      ? ILJU_DATA?.[selSaju?.sky1 + selSaju?.grd1]?.title[selGender]?.desc
+      : ILJU_DATA_EN?.[selSaju?.sky1 + selSaju?.grd1]?.title[selGender]?.desc)
     : '';
 
   const handleShareImg = async (id) => {
@@ -155,11 +155,11 @@ export default function BasicAnaBanner({ inputDate, isTimeUnknown, gender }) {
         <div className="absolute left-[30%] top-[10%] text-[90px] font-black opacity-[0.05] italic select-none pointer-events-none text-gray-900 whitespace-nowrap">
           {!hasData ? '??' : (language === 'en' ? (
             <>
-              {ENG_MAP[targetProfile.saju.sky1]?.toUpperCase()}
-              {ENG_MAP[targetProfile.saju.grd1]?.toUpperCase()}
+              {ENG_MAP[targetProfile?.saju?.sky1]?.toUpperCase()}
+              {ENG_MAP[targetProfile?.saju?.grd1]?.toUpperCase()}
             </>
           ) : (
-            <> {targetProfile.saju.sky1 + targetProfile.saju.grd1}</>
+            <> {targetProfile?.saju?.sky1 + targetProfile?.saju?.grd1}</>
           ))}
         </div>
 

@@ -91,16 +91,16 @@ const BasicAna = ({ inputDate, saju, inputGender, isTimeUnknown, handleSetViewMo
       const solar = Solar.fromYmdHms(year, month, day, hour, min, 0);
       const lunar = solar.getLunar();
       const eightChar = lunar.getEightChar();
-      
+
       const allChars = [
-        saju.sky3,
-        saju.grd3,
-        saju.sky2,
-        saju.grd2,
-        saju.sky1,
-        saju.grd1,
-        saju.sky0,
-        saju.grd0,
+        saju?.sky3,
+        saju?.grd3,
+        saju?.sky2,
+        saju?.grd2,
+        saju?.sky1,
+        saju?.grd1,
+        saju?.sky0,
+        saju?.grd0,
       ];
 
       const ohaengCount = { wood: 0, fire: 0, earth: 0, metal: 0, water: 0 };
@@ -143,8 +143,8 @@ const BasicAna = ({ inputDate, saju, inputGender, isTimeUnknown, handleSetViewMo
         day: allChars[4] + allChars[5],
         time: allChars[6] + allChars[7],
       };
-      
-      const isEn = language  !== 'ko';
+
+      const isEn = language !== 'ko';
       const ilju = pillars.day;
 
       const calculateShinsal = (pillars, branches, dayMaster) => {
@@ -236,8 +236,8 @@ const BasicAna = ({ inputDate, saju, inputGender, isTimeUnknown, handleSetViewMo
               name: language === 'en' ? 'noble gold star' : '천을귀인',
               type: language === 'en' ? 'Great Auspicious Star' : '대길신',
               desc: language === 'en'
-                  ? `Located in '${ENG_MAP[branch]}' of your ${posName}. This is the ultimate auspicious star that turns bad luck into good and brings help from noble people at decisive moments.`
-                  : `사주의 ${posName}인 '${branch}'에 위치하고 있습니다. 이는 흉을 길로 바꾸고 결정적인 순간에 귀인의 도움을 받는 최고의 길신입니다`,
+                ? `Located in '${ENG_MAP[branch]}' of your ${posName}. This is the ultimate auspicious star that turns bad luck into good and brings help from noble people at decisive moments.`
+                : `사주의 ${posName}인 '${branch}'에 위치하고 있습니다. 이는 흉을 길로 바꾸고 결정적인 순간에 귀인의 도움을 받는 최고의 길신입니다`,
             });
           }
         });
@@ -258,8 +258,8 @@ const BasicAna = ({ inputDate, saju, inputGender, isTimeUnknown, handleSetViewMo
             name: language === 'en' ? 'gongmang' : '공망',
             type: language === 'en' ? 'emptiness' : '공허',
             desc: language === 'en'
-                ? `${posName} contains the character '${ENG_MAP[branch]}', which is in Gongmang (Emptiness). During this period, you will find more peace by pursuing spiritual or philosophical values rather than material greed.`
-                : `${posName}에 해당하는 '${branch}' 글자가 비어있는 공망입니다. 해당 시기에는 현실적 욕심보다 정신적, 철학적 가치를 추구할 때 마음이 편안해집니다`,
+              ? `${posName} contains the character '${ENG_MAP[branch]}', which is in Gongmang (Emptiness). During this period, you will find more peace by pursuing spiritual or philosophical values rather than material greed.`
+              : `${posName}에 해당하는 '${branch}' 글자가 비어있는 공망입니다. 해당 시기에는 현실적 욕심보다 정신적, 철학적 가치를 추구할 때 마음이 편안해집니다`,
           });
         }
       });
@@ -376,10 +376,10 @@ const BasicAna = ({ inputDate, saju, inputGender, isTimeUnknown, handleSetViewMo
 
   const getDaewoonStory = (dae, currentAge, pillars) => {
     if (!dae || !pillars?.day) return '';
-    const isEn = language  !== 'ko';
+    const isEn = language !== 'ko';
     const userGan = pillars.day.charAt(0);
     const dGanKor = dae.ganKor;
-    
+
     // 이 부분은 나중에 saju_data.js로 옮기는 것이 좋음
     const shipSungTable = {
       갑: { 갑: '비견', 을: '겁재', 병: '식신', 정: '상관', 무: '편재', 기: '정재', 경: '편관', 신: '정관', 임: '편인', 계: '정인' },
@@ -558,18 +558,17 @@ const BasicAna = ({ inputDate, saju, inputGender, isTimeUnknown, handleSetViewMo
                   {language === 'en' ? `Age ${currentAge}` : `현재 ${currentAge}세`}
                 </span>
               </div>
-              
+
               <div className="bg-slate-50 dark:bg-slate-800/50 rounded-2xl p-4 overflow-x-auto border border-slate-100 dark:border-slate-800">
                 <div className="flex gap-3 min-w-max">
                   {daewoonList.map((dae, i) => (
                     <div
                       key={i}
                       onClick={() => handleDaeClick(dae)}
-                      className={`flex flex-col items-center justify-center w-16 h-20 rounded-xl border transition-all cursor-pointer ${
-                        (selectedDae && selectedDae.startAge === dae.startAge)
+                      className={`flex flex-col items-center justify-center w-16 h-20 rounded-xl border transition-all cursor-pointer ${(selectedDae && selectedDae.startAge === dae.startAge)
                           ? 'bg-blue-600 border-blue-600 text-white shadow-lg transform scale-110'
                           : 'bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-400 hover:border-blue-400'
-                      }`}
+                        }`}
                     >
                       <span className="text-[10px] opacity-80 mb-1">{dae.startAge}세</span>
                       <span className="font-bold text-sm">

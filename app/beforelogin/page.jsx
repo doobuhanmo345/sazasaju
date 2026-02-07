@@ -214,7 +214,7 @@ export default function BeforeLoginPage() {
     if (!data || !data.saju) return {};
     const isKo = lang === 'ko';
 
-    const coreSky = data.saju.sky1;
+    const coreSky = data?.saju?.sky1;
     const coreKey = skyToKey[coreSky] || 'wood';
     const coreInfo = sajuTranslations.elements[coreKey];
     const coreText = isKo ? `당신은 ${coreInfo.ko}의 기질을 타고난 사람입니다.` : `You are naturally gifted with the spirit of ${coreInfo.en}.`;
@@ -224,7 +224,7 @@ export default function BeforeLoginPage() {
     const maxInfo = sajuTranslations.elements[maxOhaengKey];
     const dominantText = isKo ? `${maxInfo.emoji}${maxInfo.ko} 에너지가 압도적입니다 (강도: ${maxValue}/8).` : `Your ${maxInfo.emoji}${maxInfo.en} energy is overwhelming (Intensity: ${maxValue}/8).`;
 
-    const talentText = data.myShinsal && data.myShinsal.length > 0
+    const talentText = data?.myShinsal && data.myShinsal.length > 0
       ? data.myShinsal.map((s) => {
         const t = sajuTranslations.shinsal[s.name];
         if (t) return isKo ? `[${t.ko}: ${t.desc_ko}]` : `[${t.en}: ${t.desc_en}]`;
