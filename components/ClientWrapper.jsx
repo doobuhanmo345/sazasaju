@@ -134,7 +134,7 @@ export default function ClientWrapper({ children }) {
         />
       )}
 
-      <main className={!isSpecialPath ? "min-h-screen" : "min-h-screen"}>
+      <main className={!isSpecialPath ? "min-h-screen pt-[calc(64px+env(safe-area-inset-top))]" : "min-h-screen"}>
         {children}
       </main>
 

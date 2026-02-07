@@ -101,7 +101,8 @@ export default function NavBar() {
 
   return (
 
-    <div className='w-full relative z-50 sm:pt-0 sticky top-0 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md transition-all border-b border-transparent data-[scrolled=true]:border-slate-100 select-none'>
+    <div className='w-full fixed top-0 left-0 right-0 z-50 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md transition-all border-b border-transparent data-[scrolled=true]:border-slate-100 select-none'>
+      <div style={{ paddingTop: 'env(safe-area-inset-top)' }} />
       <div className="flex w-full items-center p-4 justify-between py-3 max-w-xl m-auto ">
 
         {/* [Left] Logo or Back Button */}

@@ -547,7 +547,7 @@ export default function MenuBar() {
           )}
       </div>
 
-      <nav className="fixed bottom-0 left-0 right-0 z-[70] px-6 pb-8 pt-4 bg-white/90 dark:bg-slate-900/95 backdrop-blur-xl border-t border-slate-100 dark:border-slate-800">
+      <nav className="fixed bottom-0 left-0 right-0 z-[70] px-6 pt-4 bg-white/90 dark:bg-slate-900/95 backdrop-blur-xl border-t border-slate-100 dark:border-slate-800 pb-[calc(2rem+env(safe-area-inset-bottom))]">
         <div className="max-w-md mx-auto flex justify-between items-center">
           <button
             onClick={() => {
