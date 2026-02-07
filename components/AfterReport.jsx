@@ -1,6 +1,8 @@
+
+
 'use client';
 import React from 'react';
-import { MessageCircle, Sparkles, Heart, Star } from 'lucide-react';
+import { MessageCircle, Sparkles, Heart, Star, Share2 } from 'lucide-react';
 import { useLanguage } from '@/contexts/useLanguageContext';
 import { useRouter } from 'next/navigation';
 import ShareButton from './ShareButton';
@@ -11,123 +13,90 @@ export default function AfterReport({ fortuneType = 'basic' }) {
   const navigate = useRouter();
 
   return (
-    <div className="w-full py-16 px-6 bg-gray-50">
-      <div className="max-w-2xl mx-auto">
-        {/* Decorative top element - Blue theme */}
-        <div className="flex justify-center mb-8">
-          <div className="flex items-center gap-2">
-            <div className="h-[1px] w-12 bg-gradient-to-r from-transparent to-blue-200"></div>
-            <Sparkles size={16} className="text-blue-400" />
-            <div className="h-[1px] w-12 bg-gradient-to-l from-transparent to-blue-200"></div>
-          </div>
-        </div>
-
-        {/* Main card - Pinterest style: Clean white, subtle shadow, blue accents */}
-        <div className="bg-white rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.06)] border border-blue-50 p-8 sm:p-10 relative overflow-hidden">
-          {/* Content */}
-          <div className="relative z-10">
-            {/* Icon with floating animation - Blue gradient */}
-            <div className="flex justify-center mb-6">
-              <div className="relative">
-                <div className="absolute inset-0 bg-gradient-to-br from-blue-400 to-blue-600 rounded-full blur-xl opacity-20 animate-pulse"></div>
-                <div className="relative w-16 h-16 bg-gradient-to-br from-blue-500 to-blue-600 rounded-full flex items-center justify-center shadow-lg shadow-blue-500/30">
-                  <MessageCircle size={28} className="text-white" strokeWidth={2} />
-                </div>
-              </div>
+    <div className="w-full py-20 px-6 bg-gradient-to-b from-white via-blue-50/30 to-white">
+      <div className="max-w-xl mx-auto text-center space-y-12">
+        {/* Share Section - Prominent & Unboxed */}
+        <div className="bg-white/60 backdrop-blur-sm rounded-2xl p-6 border border-blue-100/50">
+          <div className="flex flex-col items-center gap-4">
+            <div className="flex items-center gap-2 text-blue-600 font-bold text-sm uppercase tracking-wide">
+              <Share2 size={16} />
+              <span>{language === 'en' ? 'Share with Friends' : '친구에게 공유하기'}</span>
             </div>
-
-            {/* Title - Darker text for clean look */}
-            <h3
-              className="text-2xl sm:text-3xl font-bold text-center text-gray-800 mb-4"
-              style={{ fontFamily: language === 'en' ? 'Georgia, serif' : 'inherit' }}
-            >
-              {language === 'en' ? 'Have More Questions?' : '궁금한 점이 더 남으셨나요?'}
-            </h3>
-
-            {/* Subtitle - Neutral gray */}
-            <p className="text-center text-gray-600 text-base sm:text-lg font-light leading-relaxed mb-8">
-              {language === 'en' ? (
-                <>
-                  Your journey doesn't end here. <br className="hidden sm:block" />
-                  Let our guide illuminate your path further.
-                </>
-              ) : (
-                <>
-                  추가적으로 궁금한 것은 <br className="hidden sm:block" />
-                  사자(SAZA)가 더 명확하게 알려드릴게요.
-                </>
-              )}
-            </p>
-
-            {/* Share and CTA Buttons */}
-            <div className="flex flex-col items-center justify-center gap-4 mb-8">
-              <ShareLinkButton fortuneType={fortuneType} />
-              <div className="mt-2">
-                <ShareButton targetId="share-card" fileName="saza-report.png" />
+            <div className="flex items-center justify-center gap-4">
+              <div className="transform transition-transform hover:scale-110 duration-200">
+                <ShareLinkButton fortuneType={fortuneType} />
               </div>
-            </div>
-
-            <div className="w-full flex items-center gap-4 my-2 px-10">
-              <div className="h-[1px] flex-1 bg-gray-100"></div>
-              <span className="text-[10px] text-gray-300 font-bold uppercase tracking-widest whitespace-nowrap">
-                {language === 'en' ? 'or' : '또는'}
-              </span>
-              <div className="h-[1px] flex-1 bg-gray-100"></div>
-            </div>
-
-            <button
-              onClick={() => navigate('/sazatalk')}
-              className="group relative px-8 py-4 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-full font-semibold text-lg shadow-lg shadow-blue-500/30 hover:shadow-xl hover:shadow-blue-500/40 transition-all duration-300 active:scale-95 flex items-center gap-3"
-            >
-              <span style={{ fontFamily: language === 'en' ? 'Georgia, serif' : 'inherit' }}>
-                {language === 'en' ? 'Ask Saza' : '사자에게 물어보기'}
-              </span>
-              <MessageCircle
-                size={20}
-                className="group-hover:rotate-12 transition-transform duration-300"
-              />
-            </button>
-          </div>
-
-          {/* Feature list - Light blue background icons */}
-          <div className="mt-10 grid grid-cols-1 sm:grid-cols-3 gap-4">
-            <div className="flex flex-col items-center text-center p-4 rounded-2xl hover:bg-blue-50/50 transition-colors">
-              <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center mb-3">
-                <Heart size={18} className="text-blue-500" />
+              <div className="transform transition-transform hover:scale-110 duration-200">
+                <ShareButton />
               </div>
-              <p className="text-sm font-medium text-gray-700">
-                {language === 'en' ? 'Personalized Insights' : '사주별 최적화'}
-              </p>
-            </div>
-
-            <div className="flex flex-col items-center text-center p-4 rounded-2xl hover:bg-blue-50/50 transition-colors">
-              <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center mb-3">
-                <Sparkles size={18} className="text-blue-500" />
-              </div>
-              <p className="text-sm font-medium text-gray-700">
-                {language === 'en' ? 'AI-Powered Wisdom' : 'AI 최적화'}
-              </p>
-            </div>
-
-            <div className="flex flex-col items-center text-center p-4 rounded-2xl hover:bg-blue-50/50 transition-colors">
-              <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center mb-3">
-                <Star size={18} className="text-blue-500" />
-              </div>
-              <p className="text-sm font-medium text-gray-700">
-                {language === 'en' ? 'Instant Guidance' : '실시간 운세 상담'}
-              </p>
             </div>
           </div>
         </div>
-      </div>
+        {/* Divider with Text */}
+        <div className="relative py-2">
+          <div className="absolute inset-0 flex items-center">
+            <div className="w-full border-t border-slate-200"></div>
+          </div>
+          <div className="relative flex justify-center text-sm">
+            <span className="px-4 bg-gradient-to-b from-white via-blue-50/30 to-white text-slate-400 font-medium">
+              {language === 'en' ? 'Or Ask Saza' : '또는 사자에게 질문하기'}
+            </span>
+          </div>
+        </div>
+        {/* Header Section without Box */}
+        <div className="space-y-4">
+          <div className="inline-flex items-center justify-center p-3 bg-blue-100/50 rounded-full mb-2 animate-bounce-slow">
+            <MessageCircle size={24} className="text-blue-600" />
+          </div>
+          <h3 className="text-2xl sm:text-3xl font-black text-slate-800 tracking-tight">
+            {language === 'en' ? 'Curious for More?' : '더 궁금한 점이 있으신가요?'}
+          </h3>
+          <p className="text-slate-600 text-lg leading-relaxed max-w-md mx-auto">
+            {language === 'en' ? 'Saza can provide detailed answers to your specific questions.' : '사자(SAZA)가 당신의 질문에 대해\n더 자세하고 명확한 답변을 드릴 수 있어요.'}
+          </p>
+        </div>
 
-      {/* Bottom decorative text - Subtle gray */}
-      <div className="mt-8 text-center">
-        <p className="text-sm text-gray-400 font-light italic">
-          {language === 'en'
-            ? '✨ Your questions deserve clear answers ✨'
-            : '✨ 궁금한 것을 물어보세요 ✨'}
-        </p>
+        {/* Action Buttons Group */}
+        <div className="space-y-8">
+
+
+
+          {/* Primary CTA */}
+          <button
+            onClick={() => navigate('/sazatalk')}
+            className="w-full sm:w-auto px-10 py-5 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-2xl font-bold text-xl shadow-xl shadow-blue-500/25 hover:shadow-2xl hover:shadow-blue-500/40 hover:-translate-y-1 transition-all duration-300 flex items-center justify-center gap-3 mx-auto group"
+          >
+            <span>{language === 'en' ? 'Start Chat with Saza' : '사자와 채팅 시작하기'}</span>
+            <MessageCircle size={22} className="group-hover:rotate-12 transition-transform" />
+          </button>
+
+
+
+
+        </div>
+
+        {/* Features - Clean Icons */}
+        <div className="grid grid-cols-3 gap-6 pt-6">
+          <div className="flex flex-col items-center gap-3 group cursor-default">
+            <div className="w-12 h-12 bg-rose-50 rounded-2xl flex items-center justify-center group-hover:bg-rose-100 transition-colors">
+              <Heart size={20} className="text-rose-500" />
+            </div>
+            <span className="text-xs font-bold text-slate-500">{language === 'en' ? 'Love' : '연애운'}</span>
+          </div>
+          <div className="flex flex-col items-center gap-3 group cursor-default">
+            <div className="w-12 h-12 bg-amber-50 rounded-2xl flex items-center justify-center group-hover:bg-amber-100 transition-colors">
+              <Sparkles size={20} className="text-amber-500" />
+            </div>
+            <span className="text-xs font-bold text-slate-500">{language === 'en' ? 'Success' : '성공운'}</span>
+          </div>
+          <div className="flex flex-col items-center gap-3 group cursor-default">
+            <div className="w-12 h-12 bg-indigo-50 rounded-2xl flex items-center justify-center group-hover:bg-indigo-100 transition-colors">
+              <Star size={20} className="text-indigo-500" />
+            </div>
+            <span className="text-xs font-bold text-slate-500">{language === 'en' ? 'Future' : '미래운'}</span>
+          </div>
+        </div>
+
       </div>
     </div>
   );

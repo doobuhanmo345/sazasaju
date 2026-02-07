@@ -111,7 +111,7 @@ export default function ShareLinkButton({ fortuneType = 'basic', storageKey }) {
             ) : (
                 <>
                     <PaperAirplaneIcon className="w-5 h-5 rotate-[-20deg]" />
-                    <span>{language === 'ko' ? '카톡/링크로 보내기' : 'Send to Friend'}</span>
+                    <span>{language === 'ko' ? '결과 공유하기' : 'Send to Friend'}</span>
                 </>
             )}
         </button>
