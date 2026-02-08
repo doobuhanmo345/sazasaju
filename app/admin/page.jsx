@@ -17,11 +17,11 @@ import {
   deleteDoc,
   addDoc,
 } from 'firebase/firestore';
-import { 
-  UsersIcon, 
-  CurrencyDollarIcon, 
-  DocumentTextIcon, 
-  EnvelopeIcon, 
+import {
+  UsersIcon,
+  CurrencyDollarIcon,
+  DocumentTextIcon,
+  EnvelopeIcon,
   AdjustmentsHorizontalIcon,
   MagnifyingGlassIcon,
   TrashIcon,
@@ -86,6 +86,7 @@ export default function AdminPage() {
         type: 'reject',
         isRead: false,
         createdAt: serverTimestamp(),
+        targetPath: '/consultant/apply', // 신청 페이지로 유도 또는 홈으로
       });
 
       const appRef = doc(db, 'consultant_applications', selectedApp.id);
@@ -129,7 +130,7 @@ export default function AdminPage() {
 
     const q = query(collection(db, 'direct_messages'), where('receiverId', '==', 'admin'));
     const unsubscribe = onSnapshot(q, (snap) => {
-      setMessages(snap.docs.map(doc => ({ id: doc.id, ...doc.data() })).sort((a,b) => (b.createdAt?.seconds || 0) - (a.createdAt?.seconds || 0)));
+      setMessages(snap.docs.map(doc => ({ id: doc.id, ...doc.data() })).sort((a, b) => (b.createdAt?.seconds || 0) - (a.createdAt?.seconds || 0)));
     }, (error) => {
       console.error('Error loading admin inquiries:', error);
     });
@@ -140,7 +141,7 @@ export default function AdminPage() {
   const handleMarkProcessed = async (msgId, status = true) => {
     try {
       await updateDoc(doc(db, 'direct_messages', msgId), { isProcessed: status });
-      
+
       // 처리 완료 시, 해당 메시지와 관련된 모든 관리자용 알림을 삭제하여 '사라지게' 함
       if (status) {
         const q_notif = query(collection(db, 'notifications'), where('sourceMessageId', '==', msgId));
@@ -284,11 +285,10 @@ export default function AdminPage() {
                 return (
                   <div
                     key={item.key}
-                    className={`flex items-center justify-between p-4 rounded-2xl border transition-all duration-300 ${
-                      hasData
+                    className={`flex items-center justify-between p-4 rounded-2xl border transition-all duration-300 ${hasData
                         ? 'bg-white dark:bg-slate-800 border-gray-200 dark:border-slate-700'
                         : 'bg-gray-50 dark:bg-slate-900/50 border-gray-100 dark:border-slate-800 opacity-60'
-                    }`}
+                      }`}
                   >
                     <div className="flex items-center gap-3">
                       {/* 데이터 상태 표시 램프 */}
@@ -319,11 +319,10 @@ export default function AdminPage() {
                     <button
                       onClick={() => handleRemoveField(item.key, item.label)}
                       disabled={!hasData}
-                      className={`p-3 rounded-xl transition-all ${
-                        hasData
+                      className={`p-3 rounded-xl transition-all ${hasData
                           ? 'bg-red-50 dark:bg-red-900/20 text-red-500 hover:bg-red-100 dark:hover:bg-red-900/40 shadow-sm'
                           : 'bg-gray-100 dark:bg-slate-800 text-gray-300 cursor-not-allowed'
-                      }`}
+                        }`}
                     >
                       <TrashIcon className={`w-5 h-5 ${hasData ? 'animate-pulse-slow' : ''}`} />
                     </button>
@@ -425,7 +424,7 @@ export default function AdminPage() {
               )}
             </div>
           </section>
- 
+
           {/* 4. 유저 문의 관리 섹션 (미니 게시판 형태) */}
           <section className="bg-white dark:bg-gray-900 rounded-[2rem] shadow-sm border border-gray-100 dark:border-gray-800 overflow-hidden">
             <div className="p-6 border-b border-gray-100 dark:border-gray-800 flex items-center justify-between bg-slate-50/50 dark:bg-slate-800/20">
@@ -435,7 +434,7 @@ export default function AdminPage() {
               </h3>
               <div className="flex items-center gap-3">
                 <span className="text-[9px] font-black text-slate-400 uppercase tracking-widest">{showProcessed ? 'Viewing All' : 'Active Only'}</span>
-                <button 
+                <button
                   onClick={() => setShowProcessed(!showProcessed)}
                   className={`relative w-9 h-5 rounded-full transition-all duration-300 ${showProcessed ? 'bg-blue-600' : 'bg-slate-200 dark:bg-slate-700'}`}
                 >
@@ -463,11 +462,10 @@ export default function AdminPage() {
                     {currentItems.map((msg) => (
                       <div
                         key={msg.id}
-                        className={`group px-6 py-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4 transition-colors ${
-                          msg.isProcessed 
-                          ? 'bg-slate-50/30 dark:bg-slate-900/10' 
-                          : 'hover:bg-blue-50/30 dark:hover:bg-blue-900/5'
-                        }`}
+                        className={`group px-6 py-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4 transition-colors ${msg.isProcessed
+                            ? 'bg-slate-50/30 dark:bg-slate-900/10'
+                            : 'hover:bg-blue-50/30 dark:hover:bg-blue-900/5'
+                          }`}
                       >
                         <div className="flex-grow min-w-0">
                           <div className="flex items-center gap-2 mb-1">
@@ -516,7 +514,7 @@ export default function AdminPage() {
                     {/* Admin Board Pagination UI */}
                     {totalPages > 1 && (
                       <div className="p-4 bg-slate-50/50 dark:bg-slate-800/20 flex justify-center items-center gap-2">
-                        <button 
+                        <button
                           onClick={() => setAdminPage(p => Math.max(1, p - 1))}
                           disabled={adminPage === 1}
                           className="px-3 py-1 text-[10px] font-black text-slate-400 hover:text-blue-600 disabled:opacity-30 uppercase tracking-widest"
@@ -528,17 +526,16 @@ export default function AdminPage() {
                             <button
                               key={i}
                               onClick={() => setAdminPage(i + 1)}
-                              className={`w-6 h-6 rounded-lg text-[10px] font-black transition-all ${
-                                adminPage === i + 1 
-                                ? 'bg-blue-600 text-white shadow-md shadow-blue-500/30' 
-                                : 'text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800'
-                              }`}
+                              className={`w-6 h-6 rounded-lg text-[10px] font-black transition-all ${adminPage === i + 1
+                                  ? 'bg-blue-600 text-white shadow-md shadow-blue-500/30'
+                                  : 'text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800'
+                                }`}
                             >
                               {i + 1}
                             </button>
                           ))}
                         </div>
-                        <button 
+                        <button
                           onClick={() => setAdminPage(p => Math.min(totalPages, p + 1))}
                           disabled={adminPage === totalPages}
                           className="px-3 py-1 text-[10px] font-black text-slate-400 hover:text-blue-600 disabled:opacity-30 uppercase tracking-widest"
@@ -597,7 +594,7 @@ export default function AdminPage() {
           )}
 
           {/* 답변하기용 MessageModal */}
-          <MessageModal 
+          <MessageModal
             isOpen={isReplyModalOpen}
             onClose={() => setIsReplyModalOpen(false)}
             receiverId={selectedUserForReply?.uid}

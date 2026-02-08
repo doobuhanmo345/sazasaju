@@ -2,7 +2,7 @@
 
 import { parseAiResponse } from '@/utils/helpers';
 import { aiSajuStyle } from '@/data/aiResultConstants';
-import { XMarkIcon, ClipboardDocumentIcon, CameraIcon } from '@heroicons/react/24/outline';
+import { XMarkIcon, ClipboardDocumentIcon, CameraIcon, TrashIcon } from '@heroicons/react/24/outline';
 import { useLanguage } from '@/contexts/useLanguageContext';
 import { useRef } from 'react';
 import html2canvas from 'html2canvas';
@@ -177,20 +177,23 @@ export default function SazaTalkResultModal({ question, answer, onClose, message
 
                     {messageId && (
                         <div className="flex gap-2">
-                            {!isSaved && onSave && (
+                            {onSave && (
                                 <button
                                     onClick={() => onSave(messageId)}
-                                    className="px-3 py-1.5 bg-violet-500 hover:bg-violet-600 text-white text-xs font-bold rounded-lg transition-colors"
+                                    className={`px-4 py-2 text-[10px] font-black uppercase tracking-widest rounded-xl transition-all shadow-sm ${isSaved
+                                        ? 'bg-amber-100 text-amber-600 border border-amber-200'
+                                        : 'bg-violet-600 text-white hover:bg-violet-700'
+                                        }`}
                                 >
-                                    💾 {language === 'ko' ? '저장하기' : 'Save'}
+                                    {isSaved ? (language === 'ko' ? '저장됨' : 'Saved') : (language === 'ko' ? '저장하기' : 'Save')}
                                 </button>
                             )}
-                            {isSaved && onDelete && (
+                            {onDelete && (
                                 <button
                                     onClick={() => onDelete(messageId)}
-                                    className="px-3 py-1.5 bg-red-500 hover:bg-red-600 text-white text-xs font-bold rounded-lg transition-colors"
+                                    className="px-4 py-2 bg-red-50 text-red-500 hover:bg-red-100 text-[10px] font-black uppercase tracking-widest rounded-xl transition-all border border-red-100"
                                 >
-                                    🗑️ {language === 'ko' ? '삭제' : 'Delete'}
+                                    {language === 'ko' ? '삭제' : 'Delete'}
                                 </button>
                             )}
                         </div>

@@ -83,6 +83,10 @@ export default function MonthlyLovePage() {
     const handleAnalysis = async () => {
         setAiResult('');
         setIsButtonClicked(true);
+        if (isAnalysisDone) {
+            router.push('/saju/love/monthly/result');
+            return;
+        }
         const q1 = '이번 달 애정운';
         const q2 = SUB_Q_TYPES.find((i) => i.id === selectedSubQ)?.desc;
         const qprompt = SUB_Q_TYPES.find((i) => i.id === selectedSubQ)?.prompt;
@@ -151,13 +155,13 @@ export default function MonthlyLovePage() {
                                     key={sub.id}
                                     onClick={() => setSelectedSubQ(sub.id)}
                                     className={`relative flex items-center gap-4 p-6 rounded-2xl border-2 transition-all duration-200 text-left group ${isSelected
-                                            ? 'border-pink-500 bg-pink-50 dark:bg-pink-900/20 shadow-lg shadow-pink-100 dark:shadow-pink-900/20 scale-[1.02]'
-                                            : 'border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 hover:border-pink-300 hover:shadow-md'
+                                        ? 'border-pink-500 bg-pink-50 dark:bg-pink-900/20 shadow-lg shadow-pink-100 dark:shadow-pink-900/20 scale-[1.02]'
+                                        : 'border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 hover:border-pink-300 hover:shadow-md'
                                         }`}
                                 >
                                     <div className={`flex-shrink-0 w-14 h-14 rounded-xl flex items-center justify-center transition-all ${isSelected
-                                            ? 'bg-pink-500 text-white shadow-lg'
-                                            : 'bg-slate-100 dark:bg-slate-700 text-slate-400 group-hover:bg-pink-100 group-hover:text-pink-500'
+                                        ? 'bg-pink-500 text-white shadow-lg'
+                                        : 'bg-slate-100 dark:bg-slate-700 text-slate-400 group-hover:bg-pink-100 group-hover:text-pink-500'
                                         }`}>
                                         <CalendarDaysIcon className="w-7 h-7" />
                                     </div>
@@ -193,8 +197,8 @@ export default function MonthlyLovePage() {
                                 onClick={() => loveEnergy.triggerConsume(handleAnalysis)}
                                 disabled={isDisabled || isDisabled2}
                                 className={`w-full sm:w-auto px-16 py-6 font-bold text-xl rounded-2xl shadow-2xl transform transition-all flex items-center justify-center gap-3 ${isDisabled || isDisabled2
-                                        ? 'bg-slate-100 text-slate-400 cursor-not-allowed border-2 border-slate-200'
-                                        : 'bg-gradient-to-r from-pink-600 to-fuchsia-600 hover:from-pink-500 hover:to-fuchsia-500 text-white shadow-pink-400 dark:shadow-pink-900/50 hover:-translate-y-1 hover:shadow-pink-500'
+                                    ? 'bg-slate-100 text-slate-400 cursor-not-allowed border-2 border-slate-200'
+                                    : 'bg-gradient-to-r from-pink-600 to-fuchsia-600 hover:from-pink-500 hover:to-fuchsia-500 text-white shadow-pink-400 dark:shadow-pink-900/50 hover:-translate-y-1 hover:shadow-pink-500'
                                     }`}
                             >
                                 <SparklesIcon className="w-7 h-7 animate-pulse" />

@@ -47,6 +47,7 @@ export default function MessageModal({ isOpen, onClose, receiverId = 'admin', re
             sourceMessageId: messageId,
             isRead: false,
             createdAt: serverTimestamp(),
+            targetPath: '/admin', // 관리자는 어드민 페이지로
           });
         } else {
           await addDoc(collection(db, 'notifications'), {
@@ -57,6 +58,7 @@ export default function MessageModal({ isOpen, onClose, receiverId = 'admin', re
             sourceMessageId: messageId,
             isRead: false,
             createdAt: serverTimestamp(),
+            targetPath: '/messages', // 유저는 메시지함으로
           });
         }
       } catch (notifError) {

@@ -1,6 +1,7 @@
 'use client';
 
 import { useLanguage } from '@/contexts/useLanguageContext';
+import { TrashIcon } from '@heroicons/react/24/outline';
 
 /**
  * Message item component for SazaTalk messages in inbox
@@ -59,21 +60,25 @@ export default function SazaTalkMessageItem({ message, onClick, onSave, onDelete
                 </div>
 
                 {/* Action Buttons */}
-                <div className="flex gap-1" onClick={(e) => e.stopPropagation()}>
-                    {!message.isSaved && onSave && (
+                <div className="flex items-center gap-2" onClick={(e) => e.stopPropagation()}>
+                    {onSave && (
                         <button
                             onClick={() => onSave(message.id)}
-                            className="px-2 py-1 text-[10px] font-bold text-violet-600 dark:text-violet-400 hover:bg-violet-50 dark:hover:bg-violet-900/20 rounded-lg transition-colors"
+                            className={`px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-widest transition-all border ${message.isSaved
+                                ? 'bg-amber-100 border-amber-200 text-amber-600 shadow-sm'
+                                : 'bg-white border-slate-200 text-slate-400 hover:border-violet-300 hover:text-violet-500'
+                                }`}
                         >
-                            💾
+                            {message.isSaved ? (language === 'ko' ? '저장됨' : 'Saved') : (language === 'ko' ? '저장' : 'Save')}
                         </button>
                     )}
-                    {message.isSaved && onDelete && (
+                    {onDelete && (
                         <button
                             onClick={() => onDelete(message.id)}
-                            className="px-2 py-1 text-[10px] font-bold text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors"
+                            className="p-1 px-1.5 text-slate-300 hover:text-red-500 transition-colors"
+                            title={language === 'ko' ? '삭제' : 'Delete'}
                         >
-                            🗑️
+                            <TrashIcon className="w-3.5 h-3.5" />
                         </button>
                     )}
                 </div>

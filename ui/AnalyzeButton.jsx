@@ -38,6 +38,10 @@ const COLOR_MAPS = {
   purple: {
     classes: 'bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 shadow-purple-200',
     text: 'text-purple-500'
+  },
+  cyan: {
+    classes: 'bg-gradient-to-r from-cyan-600 to-teal-600 hover:from-cyan-500 hover:to-teal-500 shadow-cyan-200',
+    text: 'text-cyan-500'
   }
 };
 

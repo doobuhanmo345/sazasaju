@@ -133,7 +133,7 @@ export default function LoadingFourPillar({ isTimeUnknown, saju }) {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center py-5 select-none px-2 relative">
+    <div className="flex flex-col items-center justify-center py-9 select-none px-2 relative">
       {/* 100% 시 은은한 배경 광원 */}
       {isDeepAnalyzing && (
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(14,165,233,0.08)_0%,transparent_70%)] animate-pulse pointer-events-none" />

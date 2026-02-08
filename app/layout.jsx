@@ -1,10 +1,6 @@
 import './globals.css';
 import { AppProvider } from '@/contexts/AppProvider';
 import { LoadingProvider } from '@/contexts/useLoadingContext';
-
-import Navbar from '@/components/Navbar';
-import Footer from '@/components/Footer';
-import MenuBar from '@/components/MenuBar';
 import ClientWrapper from '@/components/ClientWrapper';
 
 export const metadata = {

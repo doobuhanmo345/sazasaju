@@ -44,15 +44,15 @@ export default function LoveClient() {
                     </h2>
                     <p className="text-slate-600 dark:text-slate-400">
                         {language === 'ko'
-                            ? '7가지 애정운 분석 중 원하는 항목을 선택하세요'
-                            : 'Choose from 7 different love fortune analyses'}
+                            ? '8가지 애정운 분석 중 원하는 항목을 선택하세요'
+                            : 'Choose from 8 different love fortune analyses'}
                     </p>
                 </div>
 
                 <LoveIcons />
 
                 {/* Info Section */}
-                <div className="mt-16 p-8 bg-white dark:bg-slate-800 rounded-2xl border border-pink-100 dark:border-slate-700 shadow-lg">
+                {/* <div className="mt-16 p-8 bg-white dark:bg-slate-800 rounded-2xl border border-pink-100 dark:border-slate-700 shadow-lg">
                     <h3 className="text-2xl font-bold text-slate-800 dark:text-slate-100 mb-4">
                         {language === 'ko' ? '💝 애정운 분석 안내' : '💝 Love Fortune Guide'}
                     </h3>
@@ -73,7 +73,7 @@ export default function LoveClient() {
                                 : '• Previously analyzed fortunes do not consume credits again'}
                         </p>
                     </div>
-                </div>
+                </div> */}
             </div>
         </div>
     );

@@ -11,22 +11,37 @@ import { useLoading } from '@/contexts/useLoadingContext';
 import { useSajuCalculator } from '@/hooks/useSajuCalculator';
 import EnergyBadge from '@/ui/EnergyBadge';
 import LoadingFourPillar from '@/components/LoadingFourPillar';
-import { SajuAnalysisService, AnalysisPresets } from '@/lib/SajuAnalysisService';
+import { SajuAnalysisService, AnalysisPresets, getPromptFromDB } from '@/lib/SajuAnalysisService';
 import SelBd from '@/app/saju/match/SelBd';
+import SelectPerson from '@/ui/SelectPerson';
+import AnalyzeButton from '@/ui/AnalyzeButton';
 
 export default function ReunionPage() {
     const { language } = useLanguage();
     const router = useRouter();
-    const { user, userData, selectedProfile } = useAuthContext();
+    const { user, userData, selectedProfile, savedProfiles } = useAuthContext();
     const { MAX_EDIT_COUNT, isLocked, setEditCount } = useUsageLimit();
     const { loading, setLoading, setAiResult } = useLoading();
     const targetProfile = selectedProfile || userData;
     const { gender, saju, isTimeUnknown } = targetProfile || {};
     const loveEnergy = useConsumeEnergy();
 
-    const [selectedSubQ, setSelectedSubQ] = useState(null);
     const [isButtonClicked, setIsButtonClicked] = useState(false);
     const [showPartnerInput, setShowPartnerInput] = useState(false);
+
+    const [promptQ1, setPromptQ1] = useState('재회 가능성.');
+    const [promptQ2, setPromptQ2] = useState('다시 만날 운명이 있을지');
+    const [loadingPrompts, setLoadingPrompts] = useState(true);
+
+    const onSelectPartner = (id) => {
+        const profile = savedProfiles.find((p) => p.id === id);
+        if (profile) {
+            const dateStr = profile.birthTime ? `${profile.birthDate}T${profile.birthTime}` : profile.birthDate;
+            setPartnerDate(dateStr);
+            setPartnerGender(profile.gender);
+            setPartnerTimeUnknown(profile.isTimeUnknown);
+        }
+    };
 
     // Partner saju state
     const [partnerDate, setPartnerDate] = useState('2000-01-01T12:00');
@@ -40,34 +55,23 @@ export default function ReunionPage() {
         } else {
             document.title = 'Reunion Fortune | Getting Back Together';
         }
+
+        const fetchPrompts = async () => {
+            try {
+                const q1 = '재회 가능성.';
+                const q2 = await getPromptFromDB('love_reunion');
+                if (q1) setPromptQ1(q1);
+                if (q2) setPromptQ2(q2);
+            } catch (error) {
+                console.error('Failed to fetch prompts:', error);
+            } finally {
+                setLoadingPrompts(false);
+            }
+        };
+        fetchPrompts();
     }, [language]);
 
-    const SUB_Q_TYPES = [
-        {
-            id: 'general',
-            label: '재회 가능성',
-            labelEn: 'Reunion Possibility',
-            desc: '헤어진 사람과 다시 만날 가능성',
-            descEn: 'Possibility of getting back together',
-            prompt: 'Analyze the general possibility of reunion based on the user\'s saju.',
-        },
-        {
-            id: 'timing',
-            label: '재회 시기',
-            labelEn: 'Reunion Timing',
-            desc: '재회하기 좋은 시기',
-            descEn: 'Best timing for reunion',
-            prompt: 'Analyze the best timing for potential reunion.',
-        },
-        {
-            id: 'advice',
-            label: '재회 조언',
-            labelEn: 'Reunion Advice',
-            desc: '재회를 위한 조언',
-            descEn: 'Advice for reunion',
-            prompt: 'Provide advice and guidance for potential reunion.',
-        },
-    ];
+    // [REMOVED] SUB_Q_TYPES
 
     const service = new SajuAnalysisService({
         user,
@@ -84,10 +88,10 @@ export default function ReunionPage() {
         if (!prevData || !prevData.result) return false;
         if (prevData?.language !== language) return false;
         if (prevData?.gender !== targetProfile?.gender) return false;
-        if (prevData?.ques !== '재회운') return false;
-        if (prevData?.ques2 !== SUB_Q_TYPES.find((i) => i.id === selectedSubQ)?.desc) return false;
-
         // Check partner saju if provided
+        if (!showPartnerInput && !prevData.partnerSaju) {
+            return false;
+        }
         if (showPartnerInput && partnerSaju) {
             if (!prevData.partnerSaju) return false;
             if (!SajuAnalysisService.compareSaju(prevData.partnerSaju, partnerSaju)) return false;
@@ -99,9 +103,13 @@ export default function ReunionPage() {
     const handleAnalysis = async () => {
         setAiResult('');
         setIsButtonClicked(true);
-        const q1 = '재회운';
-        const q2 = SUB_Q_TYPES.find((i) => i.id === selectedSubQ)?.desc;
-        const qprompt = SUB_Q_TYPES.find((i) => i.id === selectedSubQ)?.prompt;
+        if (isAnalysisDone) {
+            router.push('/saju/love/reunion/result');
+            return;
+        }
+        const q1 = promptQ1;
+        const q2 = promptQ2;
+        const qprompt = '';
 
         try {
             const preset = AnalysisPresets.love({
@@ -128,7 +136,7 @@ export default function ReunionPage() {
         }
     }, [isButtonClicked, prevData, router, isAnalysisDone, loading]);
 
-    const isDisabled = (loading && !loveEnergy.isConsuming) || !user || loading;
+    const isDisabled = (loading && !loveEnergy.isConsuming) || !user || loading || loadingPrompts;
     const isDisabled2 = !isAnalysisDone && isLocked;
 
     if (loading && saju) {
@@ -177,7 +185,18 @@ export default function ReunionPage() {
                     </p>
 
                     {showPartnerInput && (
-                        <div className="mt-6">
+                        <div className="mt-6 space-y-6">
+                            {savedProfiles && savedProfiles.length > 0 && (
+                                <div className="max-w-xs">
+                                    <label className="block text-xs font-black text-purple-600/70 dark:text-purple-400/70 uppercase tracking-wider mb-2">
+                                        {language === 'ko' ? '저장된 프로필 선택' : 'Select Saved Profile'}
+                                    </label>
+                                    <SelectPerson
+                                        list={savedProfiles}
+                                        onSelect={onSelectPartner}
+                                    />
+                                </div>
+                            )}
                             <SelBd
                                 inputDate={partnerDate}
                                 setInputDate={setPartnerDate}
@@ -185,6 +204,8 @@ export default function ReunionPage() {
                                 setIsTimeUnknown={setPartnerTimeUnknown}
                                 gender={partnerGender}
                                 setGender={setPartnerGender}
+                                handleSaveMyInfo={() => { }}
+                                color="purple"
                             />
                         </div>
                     )}
@@ -192,110 +213,34 @@ export default function ReunionPage() {
 
                 {/* Question Selection */}
                 <div className="mb-8">
-                    <h2 className="text-2xl font-black text-slate-800 dark:text-slate-100 mb-8 text-center">
-                        {language === 'ko' ? '무엇이 궁금하신가요?' : 'What are you curious about?'}
-                    </h2>
-                    <div className="grid grid-cols-1 gap-4">
-                        {SUB_Q_TYPES.map((sub) => {
-                            const isSelected = selectedSubQ === sub.id;
-                            const labelText = language === 'en' ? sub.labelEn : sub.label;
-                            const descText = language === 'en' ? sub.descEn : sub.desc;
-
-                            return (
-                                <button
-                                    key={sub.id}
-                                    onClick={() => setSelectedSubQ(sub.id)}
-                                    className={`relative flex items-center gap-4 p-6 rounded-2xl border-2 transition-all duration-200 text-left group ${isSelected
-                                        ? 'border-purple-500 bg-purple-50 dark:bg-purple-900/20 shadow-lg shadow-purple-100 dark:shadow-purple-900/20 scale-[1.02]'
-                                        : 'border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 hover:border-purple-300 hover:shadow-md'
-                                        }`}
-                                >
-                                    <div className={`flex-shrink-0 w-14 h-14 rounded-xl flex items-center justify-center transition-all ${isSelected
-                                        ? 'bg-purple-500 text-white shadow-lg'
-                                        : 'bg-slate-100 dark:bg-slate-700 text-slate-400 group-hover:bg-purple-100 group-hover:text-purple-500'
-                                        }`}>
-                                        <ArrowPathIcon className="w-7 h-7" />
-                                    </div>
-                                    <div className="flex-1">
-                                        <h3 className={`text-lg font-bold mb-1 ${isSelected ? 'text-purple-900 dark:text-purple-100' : 'text-slate-800 dark:text-slate-100'
-                                            }`}>
-                                            {labelText}
-                                        </h3>
-                                        <p className={`text-sm ${isSelected ? 'text-purple-700 dark:text-purple-300' : 'text-slate-500 dark:text-slate-400'
-                                            }`}>
-                                            {descText}
-                                        </p>
-                                    </div>
-                                    {isSelected && (
-                                        <div className="flex-shrink-0">
-                                            <div className="w-6 h-6 rounded-full bg-purple-500 flex items-center justify-center">
-                                                <svg className="w-4 h-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
-                                                </svg>
-                                            </div>
-                                        </div>
-                                    )}
-                                </button>
-                            );
-                        })}
+                    <div className="p-8 bg-white dark:bg-slate-800 rounded-3xl border border-slate-200 dark:border-slate-700 shadow-sm text-center">
+                        <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-purple-100 dark:bg-purple-900/30 text-purple-500 mb-4">
+                            <SparklesIcon className="w-6 h-6" />
+                        </div>
+                        <h2 className="text-xl font-bold text-slate-800 dark:text-white mb-2">
+                            {promptQ1}
+                        </h2>
+                        <p className="text-slate-600 dark:text-slate-400">
+                            {language === 'ko' ?
+                                '헤어진 연인과의 재회 가능성과 시기를 사주로 분석해드립니다. 상대방의 속마음과 두 사람의 인연 끈이 아직 이어져 있는지 확인해보세요.' :
+                                'Analyze the possibility and timing of reuniting with your ex-partner using Saju. Discover their true feelings and find out if the thread of destiny still connects you two.'}
+                        </p>
                     </div>
                 </div>
 
-                {selectedSubQ && (
-                    <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
-                        <div className="flex flex-col items-center gap-4 py-8">
-                            <button
-                                onClick={() => loveEnergy.triggerConsume(handleAnalysis)}
-                                disabled={isDisabled || isDisabled2}
-                                className={`w-full sm:w-auto px-16 py-6 font-bold text-xl rounded-2xl shadow-2xl transform transition-all flex items-center justify-center gap-3 ${isDisabled || isDisabled2
-                                    ? 'bg-slate-100 text-slate-400 cursor-not-allowed border-2 border-slate-200'
-                                    : 'bg-gradient-to-r from-purple-600 to-violet-600 hover:from-purple-500 hover:to-violet-500 text-white shadow-purple-400 dark:shadow-purple-900/50 hover:-translate-y-1 hover:shadow-purple-500'
-                                    }`}
-                            >
-                                <SparklesIcon className="w-7 h-7 animate-pulse" />
-                                <span>{language === 'en' ? 'Start Analysis' : '분석 시작하기'}</span>
-                                {isAnalysisDone ? (
-                                    <div className="flex items-center gap-1 backdrop-blur-md bg-white/20 px-3 py-1 rounded-full border border-white/30">
-                                        <span className="text-xs font-bold text-white uppercase">Free</span>
-                                        <TicketIcon className="w-4 h-4 text-white" />
-                                    </div>
-                                ) : isLocked ? (
-                                    <div className="flex items-center gap-1 backdrop-blur-sm px-3 py-1 rounded-full border shadow-sm border-gray-500/50 bg-gray-400/40">
-                                        <LockClosedIcon className="w-5 h-5 text-purple-500" />
-                                    </div>
-                                ) : user && (
-                                    <div className="relative">
-                                        <EnergyBadge active={!!userData?.birthDate} consuming={loading} cost={-1} />
-                                    </div>
-                                )}
-                            </button>
-
-                            {isLocked ? (
-                                <p className="text-purple-600 font-bold text-sm flex items-center gap-2 animate-pulse">
-                                    <ExclamationTriangleIcon className="w-5 h-5" />
-                                    {language === 'ko' ? '크레딧이 부족합니다' : 'Not Enough Credit'}
-                                </p>
-                            ) : (
-                                <p className="text-xs text-slate-400">
-                                    {language === 'ko' ? '이미 분석된 운세는 크래딧을 재소모하지 않습니다.' : 'Already analyzed fortunes do not consume credits.'}
-                                </p>
-                            )}
-                        </div>
+                <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
+                    <div className="flex flex-col items-center gap-4 py-8">
+                        <AnalyzeButton
+                            onClick={() => loveEnergy.triggerConsume(handleAnalysis)}
+                            disabled={isDisabled || isDisabled2}
+                            loading={loading}
+                            isDone={isAnalysisDone}
+                            label={language === 'ko' ? '재회 가능성 확인하기' : 'Check Reunion Destiny'}
+                            color="indigo"
+                            cost={-1}
+                        />
                     </div>
-                )}
-
-                {!selectedSubQ && (
-                    <div className="text-center py-12">
-                        <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-slate-100 dark:bg-slate-800 mb-4">
-                            <svg className="w-8 h-8 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 11l5-5m0 0l5 5m-5-5v12" />
-                            </svg>
-                        </div>
-                        <p className="text-slate-400 text-sm">
-                            {language === 'ko' ? '위에서 질문을 선택해주세요' : 'Please select a question above'}
-                        </p>
-                    </div>
-                )}
+                </div>
             </div>
         </div>
     );

@@ -47,11 +47,11 @@ export default function ReportTemplateLove({ storageKey }) {
                         {topicLabel}
                     </span>
                 </div>
-                {detailLabel && (
+                {/* {detailLabel && (
                     <p className="text-sm text-slate-500 dark:text-slate-400 font-medium">
                         {detailLabel}
                     </p>
-                )}
+                )} */}
             </div>
 
             {/* Main Content */}

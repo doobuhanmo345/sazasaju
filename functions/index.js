@@ -272,3 +272,117 @@ exports.processAnalysisQueue = onDocumentCreated(
   }
 );
 
+/**
+ * Firestore 트리거: notifications 컬렉션에 새 문서 생성 시 FCM 발송
+ */
+exports.onNotificationCreated = onDocumentCreated(
+  {
+    document: "notifications/{docId}",
+    region: "asia-northeast3",
+  },
+  async (event) => {
+    const snapshot = event.data;
+    if (!snapshot) return;
+
+    const data = snapshot.data();
+    const { userId, targetRole, message, targetPath, title } = data;
+
+    if (!userId && targetRole !== 'admin') {
+      console.log('No userId or targetRole=admin found in notification document');
+      return;
+    }
+
+    try {
+      let tokens = [];
+
+      // 1. 발송 대상 토큰 모으기
+      if (userId) {
+        // 특정 유저에게 발송
+        const userDoc = await admin.firestore().collection('users').doc(userId).get();
+        if (userDoc.exists) {
+          tokens = userDoc.data().fcmTokens || [];
+        }
+      } else if (targetRole === 'admin') {
+        // 모든 관리자에게 발송
+        const adminDocs = await admin.firestore().collection('users')
+          .where('role', 'in', ['admin', 'super_admin'])
+          .get();
+
+        adminDocs.forEach(doc => {
+          const t = doc.data().fcmTokens || [];
+          tokens = [...tokens, ...t];
+        });
+        // 중복 제거
+        tokens = [...new Set(tokens)];
+      }
+
+      if (tokens.length === 0) {
+        console.log(`No FCM tokens found for the target`);
+        return;
+      }
+
+      // 2. FCM 메시지 구성
+      const payload = {
+        notification: {
+          title: title || '사자사주 알림',
+          body: message || '새로운 알림이 도착했습니다.',
+        },
+        data: {
+          url: targetPath || '/',
+          click_action: 'FLUTTER_NOTIFICATION_CLICK', // For some older native integrations
+        },
+      };
+
+      // 3. 각 토큰으로 발송 (Multicast)
+      const response = await admin.messaging().sendEachForMulticast({
+        tokens: tokens,
+        notification: payload.notification,
+        data: payload.data,
+        android: {
+          notification: {
+            sound: 'default',
+            clickAction: 'TOP_STORY_ACTIVITY',
+          },
+        },
+        apns: {
+          payload: {
+            aps: {
+              sound: 'default',
+            },
+          },
+        },
+        webpush: {
+          fcmOptions: {
+            link: targetPath || '/',
+          },
+        },
+      });
+
+      console.log(`Successfully sent ${response.successCount} messages; ${response.failureCount} messages failed.`);
+
+      // 4. 실패한 토큰 정리 (만료된 토큰 등)
+      if (response.failureCount > 0) {
+        const failedTokens = [];
+        response.responses.forEach((resp, idx) => {
+          if (!resp.success) {
+            const error = resp.error;
+            if (error.code === 'messaging/invalid-registration-token' ||
+              error.code === 'messaging/registration-token-not-registered') {
+              failedTokens.push(tokens[idx]);
+            }
+          }
+        });
+
+        if (failedTokens.length > 0) {
+          await admin.firestore().collection('users').doc(userId).update({
+            fcmTokens: admin.firestore.FieldValue.arrayRemove(...failedTokens)
+          });
+          console.log(`Cleaned up ${failedTokens.length} expired tokens for user ${userId}`);
+        }
+      }
+    } catch (error) {
+      console.error('Error sending push notification:', error);
+    }
+  }
+);
+
