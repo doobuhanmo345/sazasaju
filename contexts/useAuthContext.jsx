@@ -229,211 +229,211 @@ export function AuthContextProvider({ children }) {
     const isSpecialPage = specialPaths.some((path) => pathname === path || pathname.startsWith(path + '/'));
     const isInApp = /kakaotalk|instagram|naver/.test(userAgent);
 
-    if (!isSpecialPage && !!isInApp) {
-      const currentUrl = window.location.href;
-      if (/android/.test(userAgent)) {
-        window.location.href = `intent://${currentUrl.replace(/https?:\/\//i, '')}#Intent;scheme=https;package=com.android.chrome;end`;
-        return;
-      } else if (/iphone|ipad|ipod/.test(userAgent) && !currentUrl.includes('/open-in-browser')) {
-        window.location.href = '/open-in-browser';
-        return;
-      }
-    }
-  }, [pathname]);
+    //   if (!isSpecialPage && !!isInApp) {
+    //     const currentUrl = window.location.href;
+    //     if (/android/.test(userAgent)) {
+    //       window.location.href = `intent://${currentUrl.replace(/https?:\/\//i, '')}#Intent;scheme=https;package=com.android.chrome;end`;
+    //       return;
+    //     } else if (/iphone|ipad|ipod/.test(userAgent) && !currentUrl.includes('/open-in-browser')) {
+    //       window.location.href = '/open-in-browser';
+    //       return;
+    //     }
+    //   }
+    // }, [pathname]);
 
-  // 4️⃣ 로그인 감시 (최초 1회만 실행)
-  useEffect(() => {
-    const unsubscribe = onUserStateChange((firebaseUser) => {
-      if (firebaseUser) {
-        setLoadingUser(true); // Ensure loading state while fetching Cloud Firestore data
-        setUser(firebaseUser);
-      } else {
-        setUser(null);
-        setUserData(null); // Clear stale data
-        setSelectedProfile(null);
-        setLoadingUser(false);
-      }
-    });
-
-    // Handle mobile redirect result
-    getRedirectResult(auth).then((result) => {
-      if (result) {
-        console.log('Mobile redirect login success:', result.user.email);
-      }
-    }).catch((error) => {
-      console.error('Redirect result error:', error);
-    });
-
-    return () => unsubscribe?.();
-  }, []);
-
-  // 4️⃣ 데이터 실시간 동기화 및 로그인 날짜/신규유저 업데이트
-  useEffect(() => {
-    if (!user) return;
-
-    const userDocRef = doc(db, 'users', user.uid);
-    const todayStr = new Date().toLocaleDateString('en-CA');
-
-    // [A] 실시간 데이터 감시 (순수하게 읽기만 수행하여 무한루프 방지)
-    const unsubscribeSnapshot = onSnapshot(
-      userDocRef,
-      (docSnap) => {
-        if (docSnap.exists()) {
-          setUserData(docSnap.data());
-        }
-        setLoadingUser(false);
-      },
-      (error) => {
-        console.error('Firestore Snapshot Error:', error);
-        setLoadingUser(false);
-      },
-    );
-
-    // [B] 로그인 날짜 업데이트 및 초기 데이터 생성 (비동기로 1회 실행)
-    const initializeUserData = async () => {
-      try {
-        const docSnap = await getDoc(userDocRef);
-
-        if (docSnap.exists()) {
-          const data = docSnap.data();
-          // 날짜가 다를 때만 업데이트 (깜빡임 최소화)
-          if (data.lastLoginDate !== todayStr) {
-            await updateDoc(userDocRef, {
-              lastLoginDate: todayStr,
-              editCount: 0,
-              updatedAt: new Date().toISOString(),
-            });
-          }
+    // 4️⃣ 로그인 감시 (최초 1회만 실행)
+    useEffect(() => {
+      const unsubscribe = onUserStateChange((firebaseUser) => {
+        if (firebaseUser) {
+          setLoadingUser(true); // Ensure loading state while fetching Cloud Firestore data
+          setUser(firebaseUser);
         } else {
-          // 신규 유저 초기 생성
-          let providerId = user.providerData?.[0]?.providerId;
+          setUser(null);
+          setUserData(null); // Clear stale data
+          setSelectedProfile(null);
+          setLoadingUser(false);
+        }
+      });
 
-          if (!providerId) {
-            // 커스텀 토큰(카카오/네이버)의 경우 providerData가 비어있을 수 있으므로 UID 접두사로 확인
-            if (user.uid.startsWith('kakao:')) providerId = 'kakao.com';
-            else if (user.uid.startsWith('naver:')) providerId = 'naver.com';
-            else providerId = 'firebase'; // 그 외 커스텀/익명 등
+      // Handle mobile redirect result
+      getRedirectResult(auth).then((result) => {
+        if (result) {
+          console.log('Mobile redirect login success:', result.user.email);
+        }
+      }).catch((error) => {
+        console.error('Redirect result error:', error);
+      });
+
+      return () => unsubscribe?.();
+    }, []);
+
+    // 4️⃣ 데이터 실시간 동기화 및 로그인 날짜/신규유저 업데이트
+    useEffect(() => {
+      if (!user) return;
+
+      const userDocRef = doc(db, 'users', user.uid);
+      const todayStr = new Date().toLocaleDateString('en-CA');
+
+      // [A] 실시간 데이터 감시 (순수하게 읽기만 수행하여 무한루프 방지)
+      const unsubscribeSnapshot = onSnapshot(
+        userDocRef,
+        (docSnap) => {
+          if (docSnap.exists()) {
+            setUserData(docSnap.data());
           }
-          const initialData = {
-            uid: user.uid,
-            email: user.email,
-            displayName: user.displayName || '사용자',
-            photoURL: user.photoURL || '',
-            provider: providerId, // 로그인 제공자 저장 (google.com, kakao.com 등)
-            phoneNumber: user.phoneNumber || '', // 이미 있으면 저장
-            role: 'user',
-            status: 'active',
-            editCount: 0,
-            lastLoginDate: todayStr,
-            gender: 'female',
-            birthDate: '',
-            birthCity: '',
-            isTimeUnknown: false,
-            saju: null,
-            createdAt: new Date().toISOString(),
-            updatedAt: new Date().toISOString(),
-            usageHistory: {
-              ZNewYear: null,
-              ZLastDaily: null,
-              ZCookie: null,
-              ZApiAnalysis: null,
-            },
-            question_history: [],
-            dailyUsage: {},
-          };
-          await setDoc(userDocRef, initialData);
+          setLoadingUser(false);
+        },
+        (error) => {
+          console.error('Firestore Snapshot Error:', error);
+          setLoadingUser(false);
+        },
+      );
+
+      // [B] 로그인 날짜 업데이트 및 초기 데이터 생성 (비동기로 1회 실행)
+      const initializeUserData = async () => {
+        try {
+          const docSnap = await getDoc(userDocRef);
+
+          if (docSnap.exists()) {
+            const data = docSnap.data();
+            // 날짜가 다를 때만 업데이트 (깜빡임 최소화)
+            if (data.lastLoginDate !== todayStr) {
+              await updateDoc(userDocRef, {
+                lastLoginDate: todayStr,
+                editCount: 0,
+                updatedAt: new Date().toISOString(),
+              });
+            }
+          } else {
+            // 신규 유저 초기 생성
+            let providerId = user.providerData?.[0]?.providerId;
+
+            if (!providerId) {
+              // 커스텀 토큰(카카오/네이버)의 경우 providerData가 비어있을 수 있으므로 UID 접두사로 확인
+              if (user.uid.startsWith('kakao:')) providerId = 'kakao.com';
+              else if (user.uid.startsWith('naver:')) providerId = 'naver.com';
+              else providerId = 'firebase'; // 그 외 커스텀/익명 등
+            }
+            const initialData = {
+              uid: user.uid,
+              email: user.email,
+              displayName: user.displayName || '사용자',
+              photoURL: user.photoURL || '',
+              provider: providerId, // 로그인 제공자 저장 (google.com, kakao.com 등)
+              phoneNumber: user.phoneNumber || '', // 이미 있으면 저장
+              role: 'user',
+              status: 'active',
+              editCount: 0,
+              lastLoginDate: todayStr,
+              gender: 'female',
+              birthDate: '',
+              birthCity: '',
+              isTimeUnknown: false,
+              saju: null,
+              createdAt: new Date().toISOString(),
+              updatedAt: new Date().toISOString(),
+              usageHistory: {
+                ZNewYear: null,
+                ZLastDaily: null,
+                ZCookie: null,
+                ZApiAnalysis: null,
+              },
+              question_history: [],
+              dailyUsage: {},
+            };
+            await setDoc(userDocRef, initialData);
+          }
+        } catch (error) {
+          console.error('User Initialization Error:', error);
+        }
+      };
+
+      initializeUserData();
+
+      return () => unsubscribeSnapshot?.();
+    }, [user]);
+
+    const [isLoggingIn, setIsLoggingIn] = useState(false);
+    const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
+    const [isContactModalOpen, setIsContactModalOpen] = useState(false);
+    const [msgModalData, setMsgModalData] = useState({ isOpen: false, receiverId: 'admin', receiverName: 'Admin', originalId: null });
+
+    const openLoginModal = () => setIsLoginModalOpen(true);
+    const closeLoginModal = () => setIsLoginModalOpen(false);
+    const openContactModal = () => setIsContactModalOpen(true);
+    const closeContactModal = () => setIsContactModalOpen(false);
+    const openMessageModal = (receiverId = 'admin', receiverName = 'Admin', originalId = null) => {
+      setMsgModalData({ isOpen: true, receiverId, receiverName, originalId });
+    };
+    const closeMessageModal = () => {
+      setMsgModalData(prev => ({ ...prev, isOpen: false }));
+    };
+
+    const handleLogin = async (provider = 'google') => {
+      setIsLoggingIn(true);
+      try {
+        if (provider === 'kakao') {
+          await loginWithKakao();
+        } else if (provider === 'naver') {
+          await loginWithNaver();
+        } else {
+          await login();
         }
       } catch (error) {
-        console.error('User Initialization Error:', error);
+        if (error.code === 'auth/popup-closed-by-user') {
+          return;
+        }
+        console.error('Login Error:', error);
+      } finally {
+        setIsLoggingIn(false);
       }
     };
 
-    initializeUserData();
-
-    return () => unsubscribeSnapshot?.();
-  }, [user]);
-
-  const [isLoggingIn, setIsLoggingIn] = useState(false);
-  const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
-  const [isContactModalOpen, setIsContactModalOpen] = useState(false);
-  const [msgModalData, setMsgModalData] = useState({ isOpen: false, receiverId: 'admin', receiverName: 'Admin', originalId: null });
-
-  const openLoginModal = () => setIsLoginModalOpen(true);
-  const closeLoginModal = () => setIsLoginModalOpen(false);
-  const openContactModal = () => setIsContactModalOpen(true);
-  const closeContactModal = () => setIsContactModalOpen(false);
-  const openMessageModal = (receiverId = 'admin', receiverName = 'Admin', originalId = null) => {
-    setMsgModalData({ isOpen: true, receiverId, receiverName, originalId });
-  };
-  const closeMessageModal = () => {
-    setMsgModalData(prev => ({ ...prev, isOpen: false }));
-  };
-
-  const handleLogin = async (provider = 'google') => {
-    setIsLoggingIn(true);
-    try {
-      if (provider === 'kakao') {
-        await loginWithKakao();
-      } else if (provider === 'naver') {
-        await loginWithNaver();
-      } else {
-        await login();
-      }
-    } catch (error) {
-      if (error.code === 'auth/popup-closed-by-user') {
-        return;
-      }
-      console.error('Login Error:', error);
-    } finally {
+    const cancelLogin = () => {
       setIsLoggingIn(false);
-    }
-  };
+    };
 
-  const cancelLogin = () => {
-    setIsLoggingIn(false);
-  };
+    const updateProfileData = async (newData) => {
+      if (!user) return;
+      const userDocRef = doc(db, 'users', user.uid);
+      await updateDoc(userDocRef, { ...newData, updatedAt: new Date().toISOString() });
+    };
 
-  const updateProfileData = async (newData) => {
-    if (!user) return;
-    const userDocRef = doc(db, 'users', user.uid);
-    await updateDoc(userDocRef, { ...newData, updatedAt: new Date().toISOString() });
-  };
-
-  return (
-    <AuthContext.Provider
-      value={{
-        user,
-        userData, // 본인 원본 데이터
-        selectedProfile, // 현재 선택된 프로필 (친구 포함)
-        savedProfiles, // 저장된 친구 목록
-        loadingUser,
-        isLoggingIn,
-        iljuImagePath, // selectedProfile 기준
-        login: handleLogin,
-        isLoginModalOpen,
-        openLoginModal,
-        closeLoginModal,
-        isContactModalOpen,
-        openContactModal,
-        closeContactModal,
-        isMessageModalOpen: msgModalData.isOpen,
-        msgModalData,
-        openMessageModal,
-        closeMessageModal,
-        cancelLogin,
-        logout,
-        updateProfileData,
-        selectProfile, // 프로필 변경 함수
-        addProfile, // 프로필 추가 함수
-        removeProfile, // 프로필 삭제 함수
-        updateSavedProfile, // 프로필 수정 함수
-        ...status, // selectedProfile 기준 상태
-      }}
-    >
-      {children}
-    </AuthContext.Provider>
-  );
-}
+    return (
+      <AuthContext.Provider
+        value={{
+          user,
+          userData, // 본인 원본 데이터
+          selectedProfile, // 현재 선택된 프로필 (친구 포함)
+          savedProfiles, // 저장된 친구 목록
+          loadingUser,
+          isLoggingIn,
+          iljuImagePath, // selectedProfile 기준
+          login: handleLogin,
+          isLoginModalOpen,
+          openLoginModal,
+          closeLoginModal,
+          isContactModalOpen,
+          openContactModal,
+          closeContactModal,
+          isMessageModalOpen: msgModalData.isOpen,
+          msgModalData,
+          openMessageModal,
+          closeMessageModal,
+          cancelLogin,
+          logout,
+          updateProfileData,
+          selectProfile, // 프로필 변경 함수
+          addProfile, // 프로필 추가 함수
+          removeProfile, // 프로필 삭제 함수
+          updateSavedProfile, // 프로필 수정 함수
+          ...status, // selectedProfile 기준 상태
+        }}
+      >
+        {children}
+      </AuthContext.Provider>
+    );
+  }
 export function useAuthContext() {
-  return useContext(AuthContext);
-}
+    return useContext(AuthContext);
+  }
