@@ -8,7 +8,6 @@ Disallow: /ad/
 Disallow: /editprofile/
 Disallow: /test/
 Disallow: /test2/
-Disallow: /open-in-browser/
 Disallow: /api/
 Disallow: /nobirthday
 Disallow: /beforelogin

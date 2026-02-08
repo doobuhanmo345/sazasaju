@@ -222,24 +222,7 @@ export function AuthContextProvider({ children }) {
   }, [selectedProfile, userData, language]);
 
   // 3️⃣ 인앱 브라우저 체크
-  // useEffect(() => {
-  //   if (typeof window === 'undefined') return;
 
-  //   const userAgent = navigator.userAgent.toLowerCase();
-  //   const isSpecialPage = specialPaths.some((path) => pathname === path || pathname.startsWith(path + '/'));
-  //   const isInApp = /kakaotalk|instagram|naver/.test(userAgent);
-
-  //   if (!isSpecialPage && !!isInApp) {
-  //     const currentUrl = window.location.href;
-  //     if (/android/.test(userAgent)) {
-  //       window.location.href = `intent://${currentUrl.replace(/https?:\/\//i, '')}#Intent;scheme=https;package=com.android.chrome;end`;
-  //       return;
-  //     } else if (/iphone|ipad|ipod/.test(userAgent) && !currentUrl.includes('/open-in-browser')) {
-  //       window.location.href = '/open-in-browser';
-  //       return;
-  //     }
-  //   }
-  // }, [pathname]);
 
   // 4️⃣ 로그인 감시 (최초 1회만 실행)
   useEffect(() => {
