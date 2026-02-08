@@ -35,6 +35,7 @@ import { useAuthContext } from '@/contexts/useAuthContext';
 export default function AdminPage() {
   const { user, userData } = useAuthContext();
   const [newCount, setNewCount] = useState(0);
+  const [newCredit, setNewCredit] = useState(0); // Added: Credit state
   const [adminCurrentPage, setAdminCurrentPage] = useState('dashboard');
 
   // 추가된 상태: 명리학자 신청 목록 및 모달 제어
@@ -104,13 +105,18 @@ export default function AdminPage() {
     }
   };
 
-  // 1. 기존 editCount 초기값 설정 (로직 유지)
+  // 1. 기존 editCount 및 Credit 초기값 설정
   useEffect(() => {
     if (userData?.editCount !== undefined) {
       const maxCount = ['admin', 'super_admin'].includes(userData?.role) ? 10 : 3;
       setNewCount(maxCount - userData.editCount);
     }
+    if (userData?.credits !== undefined) {
+      setNewCredit(userData.credits);
+    }
   }, [userData]);
+
+
 
   // 2. 추가된 Effect: 명리학자 신청 대기 목록 실시간 로드 (로직 유지)
   useEffect(() => {
@@ -205,6 +211,16 @@ export default function AdminPage() {
     }
   };
 
+  const handleUpdateCredit = async () => {
+    try {
+      await updateDoc(docRef, { credits: Number(newCredit) });
+      alert(`성공! 이제 ${newCredit} 크레딧 보유중입니다.`);
+    } catch (error) {
+      console.error('크레딧 수정 실패:', error);
+      alert('크레딧 수정에 실패했습니다.');
+    }
+  };
+
   // --- 명리학자 승인 로직 (유지) ---
   const handleApprove = async (app) => {
     if (!confirm(`${app.displayName} 님을 명리학자로 승인하시겠습니까?`)) return;
@@ -266,6 +282,37 @@ export default function AdminPage() {
             </div>
           </div>
         </section>
+        {/* 3. 크레딧 수정 (추가됨) */}
+        <section className="bg-white dark:bg-gray-900 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800 p-8">
+          <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-4 flex items-center gap-2">
+            <span className="w-1 h-5 bg-green-500 rounded-full shadow-[0_0_8px_rgba(34,197,94,0.5)]"></span>
+            크레딧 수정
+          </h3>
+          <div className="space-y-4">
+            <div className="flex gap-2">
+              <input
+                type="number"
+                value={newCredit}
+                onChange={(e) => setNewCredit(e.target.value)}
+                className="w-full px-3 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg text-sm text-gray-900 dark:text-gray-100 outline-none focus:border-green-500 transition-all font-bold"
+              />
+              <button
+                onClick={handleUpdateCredit}
+                className="shrink-0 px-4 py-2 bg-green-600 hover:bg-green-700 text-white text-sm font-medium rounded-lg transition-all active:scale-95"
+              >
+                저장
+              </button>
+            </div>
+            <div className="flex items-center justify-between px-1">
+              <span className="text-[10px] text-gray-500 uppercase font-bold tracking-wider">
+                Current Credits
+              </span>
+              <span className="text-sm font-bold text-green-600 bg-green-50 dark:bg-green-900/30 px-3 py-1 rounded-full">
+                {userData?.credits || 0} 회
+              </span>
+            </div>
+          </div>
+        </section>
         {/* 2. 데이터 관리 섹션 (수정됨) */}
         <div className="grid grid-cols-1  gap-8">
           <section className="bg-white dark:bg-gray-900 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800 p-8">
@@ -286,8 +333,8 @@ export default function AdminPage() {
                   <div
                     key={item.key}
                     className={`flex items-center justify-between p-4 rounded-2xl border transition-all duration-300 ${hasData
-                        ? 'bg-white dark:bg-slate-800 border-gray-200 dark:border-slate-700'
-                        : 'bg-gray-50 dark:bg-slate-900/50 border-gray-100 dark:border-slate-800 opacity-60'
+                      ? 'bg-white dark:bg-slate-800 border-gray-200 dark:border-slate-700'
+                      : 'bg-gray-50 dark:bg-slate-900/50 border-gray-100 dark:border-slate-800 opacity-60'
                       }`}
                   >
                     <div className="flex items-center gap-3">
@@ -320,8 +367,8 @@ export default function AdminPage() {
                       onClick={() => handleRemoveField(item.key, item.label)}
                       disabled={!hasData}
                       className={`p-3 rounded-xl transition-all ${hasData
-                          ? 'bg-red-50 dark:bg-red-900/20 text-red-500 hover:bg-red-100 dark:hover:bg-red-900/40 shadow-sm'
-                          : 'bg-gray-100 dark:bg-slate-800 text-gray-300 cursor-not-allowed'
+                        ? 'bg-red-50 dark:bg-red-900/20 text-red-500 hover:bg-red-100 dark:hover:bg-red-900/40 shadow-sm'
+                        : 'bg-gray-100 dark:bg-slate-800 text-gray-300 cursor-not-allowed'
                         }`}
                     >
                       <TrashIcon className={`w-5 h-5 ${hasData ? 'animate-pulse-slow' : ''}`} />
@@ -463,8 +510,8 @@ export default function AdminPage() {
                       <div
                         key={msg.id}
                         className={`group px-6 py-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4 transition-colors ${msg.isProcessed
-                            ? 'bg-slate-50/30 dark:bg-slate-900/10'
-                            : 'hover:bg-blue-50/30 dark:hover:bg-blue-900/5'
+                          ? 'bg-slate-50/30 dark:bg-slate-900/10'
+                          : 'hover:bg-blue-50/30 dark:hover:bg-blue-900/5'
                           }`}
                       >
                         <div className="flex-grow min-w-0">
@@ -527,8 +574,8 @@ export default function AdminPage() {
                               key={i}
                               onClick={() => setAdminPage(i + 1)}
                               className={`w-6 h-6 rounded-lg text-[10px] font-black transition-all ${adminPage === i + 1
-                                  ? 'bg-blue-600 text-white shadow-md shadow-blue-500/30'
-                                  : 'text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800'
+                                ? 'bg-blue-600 text-white shadow-md shadow-blue-500/30'
+                                : 'text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800'
                                 }`}
                             >
                               {i + 1}

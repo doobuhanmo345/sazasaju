@@ -12,13 +12,13 @@ export const useUsageLimit = () => {
   const [editCount, setEditCount] = useState(0);
   const { user, userData } = useAuthContext();
   const { language } = useLanguage();
-  
+
   const MAX_EDIT_COUNT = useMemo(() => {
     if (['admin', 'super_admin'].includes(userData?.role)) return 10;
     else return 3;
   }, [user?.uid, userData]);
 
-  const isLocked = editCount >= MAX_EDIT_COUNT;
+  const isLocked = editCount >= MAX_EDIT_COUNT && (userData?.credits || 0) <= 0;
 
   // 초기 데이터 동기화
   useEffect(() => {

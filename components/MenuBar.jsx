@@ -274,9 +274,9 @@ export default function MenuBar() {
           },
           {
             name: isKo ? '크레딧 상점' : 'Credit Shop',
-            desc: isKo ? '준비 중입니다' : 'Coming Soon',
+            desc: isKo ? '준비중입니다.' : 'Buy Credits',
             icon: <CreditCardIcon className="w-6 h-6" />,
-            path: null,
+            path: '/credit',
           },
         ],
       },

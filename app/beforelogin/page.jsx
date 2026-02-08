@@ -136,6 +136,7 @@ export default function BeforeLoginPage() {
           await setDoc(
             userRef,
             {
+              uid: user.uid,
               saju: saju,
               birthDate: birthDate,
               birthCity: birthCity,

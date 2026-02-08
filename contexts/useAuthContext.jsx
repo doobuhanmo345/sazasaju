@@ -293,8 +293,8 @@ export function AuthContextProvider({ children }) {
 
           if (!providerId) {
             // 커스텀 토큰(카카오/네이버)의 경우 providerData가 비어있을 수 있으므로 UID 접두사로 확인
-            if (user.uid.startsWith('kakao:')) providerId = 'kakao.com';
-            else if (user.uid.startsWith('naver:')) providerId = 'naver.com';
+            if (user.uid.startsWith('kakao')) providerId = 'kakao';
+            else if (user.uid.startsWith('naver')) providerId = 'naver';
             else providerId = 'firebase'; // 그 외 커스텀/익명 등
           }
           const initialData = {
@@ -382,6 +382,19 @@ export function AuthContextProvider({ children }) {
     await updateDoc(userDocRef, { ...newData, updatedAt: new Date().toISOString() });
   };
 
+  const refreshUserData = async () => {
+    if (!user) return;
+    try {
+      const userDocRef = doc(db, 'users', user.uid);
+      const docSnap = await getDoc(userDocRef);
+      if (docSnap.exists()) {
+        setUserData(docSnap.data());
+      }
+    } catch (error) {
+      console.error("Failed to refresh user data:", error);
+    }
+  };
+
   return (
     <AuthContext.Provider
       value={{
@@ -406,6 +419,7 @@ export function AuthContextProvider({ children }) {
         cancelLogin,
         logout,
         updateProfileData,
+        refreshUserData,
         selectProfile, // 프로필 변경 함수
         addProfile, // 프로필 추가 함수
         removeProfile, // 프로필 삭제 함수

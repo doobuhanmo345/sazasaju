@@ -16,8 +16,8 @@ import {
   GlobeAltIcon,
   ArrowLeftIcon,
 } from '@heroicons/react/24/outline';
+import Credit from '@/components/Credit';
 
-import { useLoading } from '@/contexts/useLoadingContext';
 import { useLanguage } from '@/contexts/useLanguageContext';
 import { useAuthContext } from '@/contexts/useAuthContext';
 import { useUsageLimit } from '@/contexts/useUsageLimit';
@@ -90,7 +90,6 @@ export default function NavBar() {
   };
 
 
-
   // Hydration fix for client-side only rendering of sensitive parts if needed, 
   // but for Navbar, most parts should be fine. 
   // We use standard Next.js Image for logos.
@@ -134,29 +133,7 @@ export default function NavBar() {
 
         <div className="flex items-center gap-1">
           {/* Credit & Fortune Cookie Mini Bar */}
-          <div className="flex items-center gap-2 px-3 py-1.5 bg-slate-100/50 dark:bg-slate-800/50 rounded-full backdrop-blur-sm border border-slate-200/50 dark:border-slate-700/50 mr-1">
-            <div className="flex items-center gap-1 border-r border-slate-300 dark:border-slate-600 pr-2">
-              <BoltIcon
-                className={`w-4 h-4 ${MAX_EDIT_COUNT - editCount === 0 ? 'text-red-500' : 'text-amber-500'} fill-current`}
-              />
-              <span
-                className={`text-[11px] font-black font-mono ${MAX_EDIT_COUNT - editCount === 0 ? 'text-red-500' : 'text-slate-700 dark:text-slate-200'}`}
-              >
-                {MAX_EDIT_COUNT - editCount}
-              </span>
-            </div>
-
-            <button
-              onClick={() => router.push('/fortunecookie')}
-              disabled={isCookieDone}
-              className={`relative flex text-sm items-center justify-center transition-transform active:scale-90 ${isCookieDone ? 'opacity-40 grayscale' : 'animate-bounce cursor-pointer'}`}
-            >
-              <span className="text-sm">🥠</span>
-              {!isCookieDone && (
-                <span className="absolute -top-1 -right-1 w-1.5 h-1.5 bg-red-500 rounded-full animate-ping" />
-              )}
-            </button>
-          </div>
+          <Credit />
 
           {/* Notification List */}
           <NotificationList />
