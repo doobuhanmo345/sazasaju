@@ -19,7 +19,6 @@ export default function NoBirthdayPage() {
   const router = useRouter();
   const { user, userData, updateProfileData, logout } = useAuthContext();
   const { language } = useLanguage();
-
   const [formData, setFormData] = useState({
     displayName: userData?.displayName || user?.displayName || '',
     birthDate: '',
@@ -111,11 +110,8 @@ export default function NoBirthdayPage() {
         router.push('/');
       }, 2000);
       return () => clearTimeout(finishTimer);
-    } else if (userData?.birthDate && !isIntro) {
-      // 이미 정보가 있다면 즉시 메인으로 리다이렉트
-      router.push('/');
     }
-  }, [isWelcome, userData?.birthDate, isIntro, router]);
+  }, [isWelcome, router]);
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!formData.birthDate || !formData.gender) {

@@ -86,7 +86,7 @@ export default function ShareTemplate({
                             </p>
                         </div>
                         <a
-                            href="https://sazasaju.com"
+                            href="https://sazasaju.vercel.app"
                             className="flex-shrink-0 inline-flex items-center gap-2 px-6 py-3 bg-white text-indigo-600 font-bold rounded-full hover:shadow-xl transition-all active:scale-95"
                         >
                             <span className={`text-sm font-bold bg-gradient-to-r ${gradientColors} bg-clip-text text-transparent`}>

@@ -49,33 +49,13 @@ export default function ClientWrapper({ children }) {
     (path) => pathname === path || pathname.startsWith(path + '/')
   );
 
-  // 1. In-App Browser Detection & Redirection
-  useEffect(() => {
-    const userAgent = navigator.userAgent.toLowerCase();
-    const urlParams = new URLSearchParams(window.location.search);
-    const isTestMode = urlParams.get('test_inapp') === 'true';
-
-    const isInApp =
-      isTestMode ||
-      userAgent.includes('kakaotalk') ||
-      userAgent.includes('instagram') ||
-      userAgent.includes('naver') ||
-      userAgent.includes('fb') || // Facebook
-      userAgent.includes('line');
-
-    const isAlreadyOnGuide = pathname.startsWith('/open-in-browser');
-
-    if (isInApp && !isAlreadyOnGuide) {
-      router.push('/open-in-browser');
-    }
-  }, [pathname, router]);
 
   // 2. Redirection logic for missing birthDate
   useEffect(() => {
     if (loadingUser) return;
 
     // List of paths that are exempt from the birthDate redirection
-    const exemptPaths = [...specialPaths, '/nobirthday', '/beforelogin', '/login', '/open-in-browser'];
+    const exemptPaths = [...specialPaths, '/nobirthday', '/beforelogin', '/login'];
     const isExempt = exemptPaths.some(
       (path) => pathname === path || pathname.startsWith(path + '/')
     );
@@ -93,7 +73,7 @@ export default function ClientWrapper({ children }) {
   }, [user, userData, loadingUser, pathname, router]);
 
   // Determine if we need to redirect (to show Splash instead of content)
-  const exemptPaths = [...specialPaths, '/nobirthday', '/beforelogin', '/login', '/open-in-browser'];
+  const exemptPaths = [...specialPaths, '/nobirthday', '/beforelogin', '/login'];
   const isExempt = exemptPaths.some(
     (path) => pathname === path || pathname.startsWith(path + '/')
   );
