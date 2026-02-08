@@ -17,8 +17,8 @@ export const useUsageLimit = () => {
     if (['admin', 'super_admin'].includes(userData?.role)) return 10;
     else return 3;
   }, [user?.uid, userData]);
-
-  const isLocked = editCount >= MAX_EDIT_COUNT;
+  const editCountDone = editCount >= MAX_EDIT_COUNT;
+  const isLocked = editCountDone && userData?.Credits === 0;
 
   // 초기 데이터 동기화
   useEffect(() => {

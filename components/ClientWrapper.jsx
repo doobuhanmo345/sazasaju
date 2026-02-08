@@ -24,11 +24,11 @@ export default function ClientWrapper({ children }) {
   const pathname = usePathname();
   const router = useRouter();
   const { user, userData, loadingUser, isLoggingIn, cancelLogin, isLoginModalOpen, closeLoginModal, isContactModalOpen, closeContactModal, msgModalData, closeMessageModal } = useAuthContext();
-  const { editCount, MAX_EDIT_COUNT } = useUsageLimit();
+  const { editCount, MAX_EDIT_COUNT, isLocked } = useUsageLimit();
   const { language } = useLanguage();
   const [showCreditModal, setShowCreditModal] = useState(true);
 
-  const isOutOfCredit = MAX_EDIT_COUNT - editCount === 0;
+  const isOutOfCredit = isLocked;
 
   // Call Push Notification Hook
   const onNavigate = useCallback((path) => {
