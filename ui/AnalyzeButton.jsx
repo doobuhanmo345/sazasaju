@@ -3,7 +3,6 @@
 import { useState } from 'react';
 import LoginModal from '@/components/LoginModal';
 import { TicketIcon, LockClosedIcon, GiftIcon } from '@heroicons/react/24/outline';
-import { FcGoogle } from 'react-icons/fc';
 import EnergyBadge from '@/ui/EnergyBadge';
 import { classNames } from '@/utils/helpers';
 import { useLanguage } from '@/contexts/useLanguageContext';

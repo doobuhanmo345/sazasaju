@@ -5,12 +5,16 @@ import LZString from 'lz-string';
 import { useLanguage } from '@/contexts/useLanguageContext';
 import { reportStyleSimple } from '@/data/aiResultConstants';
 
-export default function DateShareTemplate() {
+export default function DateShareTemplate({ shareData: propShareData }) {
     const searchParams = useSearchParams();
-    const [shareData, setShareData] = useState(null);
+    const [shareData, setShareData] = useState(propShareData || null);
     const { language } = useLanguage();
 
     useEffect(() => {
+        if (propShareData) {
+            setShareData(propShareData);
+            return;
+        }
         const compressedData = searchParams.get('data');
         if (compressedData) {
             try {

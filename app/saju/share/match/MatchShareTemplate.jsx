@@ -8,6 +8,7 @@ import { HeartIcon, SparklesIcon, CheckCircleIcon, ExclamationCircleIcon, LightB
  * MatchShareTemplate - 궁합 분석 결과 공유 템플릿
  * Matches design of ReportTemplateMatch.jsx
  */
+// shareData passed from Server Component OR via props
 export default function MatchShareTemplate({ shareData, language = 'ko' }) {
     if (!shareData) return <div className="p-10 text-center text-slate-400">Loading...</div>;
 

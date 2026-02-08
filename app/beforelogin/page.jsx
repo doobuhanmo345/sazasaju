@@ -155,7 +155,7 @@ export default function BeforeLoginPage() {
                 ZNewYear: null,
                 ZApiAnalysis: null,
                 ZWealth: null,
-                ZMatch: null,
+                ZMatchAnalysis: null,
                 ZCookie: null,
               },
               question_history: userData?.question_history || [],

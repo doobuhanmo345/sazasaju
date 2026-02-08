@@ -59,12 +59,31 @@ export default function ShareLinkButton({ fortuneType = 'basic', storageKey }) {
                 aiResult: aiResult,
             };
 
-            // Compress data using lz-string
+            // Compress using LZString for client-side legacy support
             const jsonStr = JSON.stringify(shareData);
-            const compressed = LZString.compressToEncodedURIComponent(jsonStr);
+            let shareUrl = '';
 
-            // Generate share URL based on fortune type
-            const shareUrl = `${window.location.origin}/saju/share/${fortuneType}?data=${compressed}`;
+            // Hybrid Strategy:
+            // If data is small (< 1000 chars), create direct client-side link (no expiration)
+            // If data is large, use Vercel KV (7-day expiration)
+            if (jsonStr.length < 1000) {
+                const compressed = LZString.compressToEncodedURIComponent(jsonStr);
+                // Direct link: /saju/share/[type]?data=...
+                shareUrl = `${window.location.origin}/saju/share/${fortuneType}?data=${compressed}`;
+            } else {
+                // Server-side link: /saju/share/[type]/[id]
+                const response = await fetch('/api/saju/share', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: jsonStr, // Send raw JSON string
+                });
+
+                if (!response.ok) throw new Error('Failed to generate short link');
+
+                const result = await response.json();
+                // Construct URL based on directory structure: /saju/share/[type]/[id]
+                shareUrl = `${window.location.origin}/saju/share/${fortuneType}/${result.id}`;
+            }
 
             // Use NativeBridge for better mobile experience
             const fortuneTypeLabels = {

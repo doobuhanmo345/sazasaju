@@ -46,9 +46,11 @@ export default function TodaysLuckPage() {
     // Assuming ZLastDaily is already filtered by date in context or backend.
     // Basic check for profile match:
     if (prevData.gender !== (targetProfile?.gender)) return false;
-    if (prevData.selectedDate !== new Date().toISOString().split('T')[0]) return false;
+    const adate = prevData.selectedDate === new Date().toISOString().split('T')[0];
+    if (!adate) return false;
     return SajuAnalysisService.compareSaju(prevData.saju, targetProfile?.saju);
   })();
+  // console.log(prevData?.selectedDate, new Date().toISOString().split('T')[0], selectedDate)
 
   const [isButtonClicked, setIsButtonClicked] = useState(false);
   const isDisabled2 = !isTargetOthers && !isAnalysisDone && isLocked;
