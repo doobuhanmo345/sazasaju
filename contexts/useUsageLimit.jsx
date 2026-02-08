@@ -18,7 +18,7 @@ export const useUsageLimit = () => {
     else return 3;
   }, [user?.uid, userData]);
 
-  const isLocked = editCount >= MAX_EDIT_COUNT && (userData?.credits || 0) <= 0;
+  const isLocked = editCount >= MAX_EDIT_COUNT;
 
   // 초기 데이터 동기화
   useEffect(() => {

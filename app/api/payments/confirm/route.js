@@ -42,13 +42,14 @@ export async function POST(req) {
             );
         }
 
-        // 2. Payment Successful - Update User Credits & Log Transaction
+        let updatedCredits = 0; // capture new credits
+
         if (adminDb) {
             console.log('Updating Firestore...');
             const userRef = adminDb.collection('users').doc(userId);
             const paymentRef = adminDb.collection('payments').doc(orderId);
 
-            await adminDb.runTransaction(async (t) => {
+            updatedCredits = await adminDb.runTransaction(async (t) => {
                 const userDoc = await t.get(userRef);
 
                 let currentCredits = 0;
@@ -74,9 +75,11 @@ export async function POST(req) {
                     paymentData: paymentResult,
                     createdAt: admin.firestore.FieldValue.serverTimestamp(),
                 });
+
+                return newCredits; // Return newCredits from transaction
             });
 
-            console.log(`Successfully added ${creditsToAdd} credits to user ${userId}`);  // ← 이 줄 수정!
+            console.log(`Successfully added ${creditsToAdd} credits to user ${userId}. Total: ${updatedCredits}`);
         } else {
             console.warn('Firebase Admin not initialized - skipping DB update');
         }
@@ -84,6 +87,7 @@ export async function POST(req) {
         return NextResponse.json({
             success: true,
             message: 'Payment confirmed and credits updated',
+            totalCredits: updatedCredits, // Include in response
             data: paymentResult
         });
 

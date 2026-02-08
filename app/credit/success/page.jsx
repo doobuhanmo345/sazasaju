@@ -15,6 +15,7 @@ export default function SuccessPage() {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [addedCredits, setAddedCredits] = useState(0);
+    const [totalCredits, setTotalCredits] = useState(null); // Re-add this state
     const hasConfirmed = useRef(false);
 
     useEffect(() => {
@@ -60,21 +61,27 @@ export default function SuccessPage() {
 
                 setAddedCredits(creditsToAdd);
 
-                // Firestore에서 최신 사용자 데이터 가져오기
-                if (user) {
-                    const userDocRef = doc(db, 'users', userId);
-                    const userDoc = await getDoc(userDocRef);
-
-                    if (userDoc.exists()) {
-                        const userData = userDoc.data();
-                        console.log('업데이트된 크레딧:', userData.credits);
-
-                        // AuthContext에 refreshUserData 함수가 있다면 호출
-                        if (refreshUserData) {
-                            await refreshUserData();
+                // Use the returned totalCredits directly to avoid race condition
+                if (result.totalCredits !== undefined) {
+                    setTotalCredits(result.totalCredits);
+                } else {
+                    // Fallback to fetch if API didn't return it (though it should now)
+                    if (user) {
+                        const userDocRef = doc(db, 'users', userId);
+                        const userDoc = await getDoc(userDocRef);
+                        if (userDoc.exists()) {
+                            const userData = userDoc.data();
+                            console.log('업데이트된 크레딧 (Fallback):', userData.credits);
+                            setTotalCredits(userData.credits);
                         }
                     }
                 }
+
+                // Still refresh context for other components
+                if (refreshUserData) {
+                    await refreshUserData();
+                }
+
 
                 setLoading(false);
 

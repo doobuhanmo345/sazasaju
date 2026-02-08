@@ -16,7 +16,6 @@ const CreditModal = ({ isOpen, onClose, onWatchAd, language = 'ko' }) => {
       body: '오늘의 무료 크레딧을 모두 사용하셨네요.\n매일 밤 12시, 새로운 기운이 3개씩 충전됩니다.',
       btnConfirm: '내일 다시 올게요',
       fortunecookie: '포춘쿠키 열고 크레딧 충전하기',
-      chargeCredit: '크레딧 충전하러 가기',
       refillText: '충전까지 남은 시간',
     },
     en: {
@@ -24,7 +23,6 @@ const CreditModal = ({ isOpen, onClose, onWatchAd, language = 'ko' }) => {
       body: "You've used all your free credits for today.\n3 new credits will be recharged at midnight.",
       btnConfirm: 'See you tomorrow',
       fortunecookie: 'Open a Fortune Cookie for credits',
-      chargeCredit: 'Go to Credit Store',
       refillText: 'Refill in',
     },
   };
@@ -56,8 +54,7 @@ const CreditModal = ({ isOpen, onClose, onWatchAd, language = 'ko' }) => {
     return () => clearInterval(timer);
   }, [isOpen]);
 
-  if (!isOpen) return null; // Original check
-  if ((credits || 0) > 0) return null; // Added safety check: Don't show if user has credits
+  if (!isOpen) return null;
 
   return (
     <div className="fixed inset-0 w-full h-full z-[99999] flex flex-col items-center justify-end sm:justify-center bg-black/60 backdrop-blur-md px-0 sm:px-4">
@@ -100,7 +97,7 @@ const CreditModal = ({ isOpen, onClose, onWatchAd, language = 'ko' }) => {
               {t.btnConfirm}
             </button>
 
-            <button
+            {/* <button
               onClick={() => {
                 router.push('/credit/store');
                 onClose();
@@ -109,7 +106,7 @@ const CreditModal = ({ isOpen, onClose, onWatchAd, language = 'ko' }) => {
             >
               <span className="text-lg">💎</span>
               {t.chargeCredit}
-            </button>
+            </button> */}
 
             {!isCookieDone && (
               <button
