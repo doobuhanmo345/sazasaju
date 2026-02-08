@@ -1,3 +1,5 @@
+'use client';
+
 import ShareTemplate from '../ShareTemplate';
 import { useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
