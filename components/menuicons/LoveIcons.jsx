@@ -106,7 +106,7 @@ const LoveIcons = () => {
                     {/* 아이콘 */}
                     <div className="relative flex h-12 w-12 shrink-0 items-center justify-center text-slate-400 transition-colors group-hover:text-rose-500">
                         {item.isAi && (
-                            <span className="absolute -right-2 -top-1 flex items-center gap-1 bg-gradient-to-r from-blue-600 via-blue-500 to-cyan-400 px-2 py-0.5 text-[8px] font-black tracking-widest text-white ring-2 ring-white dark:ring-slate-900 rounded-full animate-pulse z-10 shadow-[0_0_10px_rgba(59,130,246,0.5)]">
+                            <span className="absolute -right-2 -top-1 flex items-center gap-1 bg-gradient-to-r from-blue-600 via-blue-500 to-cyan-400 px-2 py-0.5 text-sm font-black tracking-widest text-white ring-2 ring-white dark:ring-slate-900 rounded-full animate-pulse z-10 shadow-[0_0_10px_rgba(59,130,246,0.5)]">
                                 <span className="w-1.5 h-1.5 bg-white rounded-full"></span>
                                 AI
                             </span>
@@ -119,7 +119,7 @@ const LoveIcons = () => {
                         )}
 
                         {item.plusCredit && item.isReady && (
-                            <span className="absolute -right-2 -top-1 flex items-center justify-center bg-amber-600 px-1.5 py-0.5 text-[8px] font-black italic tracking-tighter text-white ring-2 ring-white rounded-full z-10">
+                            <span className="absolute -right-2 -top-1 flex items-center justify-center bg-amber-600 px-1.5 py-0.5 text-sm font-black italic tracking-tighter text-white ring-2 ring-white rounded-full z-10">
                                 + CREDIT
                             </span>
                         )}
@@ -138,7 +138,7 @@ const LoveIcons = () => {
 
                     {/* 텍스트 영역 */}
                     <div className="flex flex-col items-start sm:items-center text-left sm:text-center overflow-hidden">
-                        <span className="text-[15px] sm:text-[11px] font-bold text-slate-800 transition-colors group-hover:text-rose-600">
+                        <span className="text-sm sm:text-xs font-bold text-slate-800 transition-colors group-hover:text-rose-600">
                             {item.label}
                         </span>
                         <span className="sm:hidden text-[12px] text-slate-400 font-medium truncate w-full">

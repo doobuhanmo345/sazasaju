@@ -89,7 +89,8 @@ export default function SazaTalkAdKrPage() {
   const isDayDone = birthData.day.length >= 1;
   const isHourDone = birthData.hour.length >= 1;
   const isMinuteDone = birthData.minute.length >= 1;
-
+  const [isAnalyzing, setIsAnalyzing] = useState(false);
+  const [loadingText, setLoadingText] = useState('');
   // Mock Data for dev/testing when no real result exists
   const mockData = {
     contents: [
@@ -110,7 +111,26 @@ export default function SazaTalkAdKrPage() {
       if (parsedData) setData(parsedData);
     }
   }, [aiResult]);
-
+  const guideMessages = {
+    ko: {
+      putGender: '성별을 선택해주세요',
+      putYear: '태어난 연도를 입력해주세요',
+      putMonth: '태어난 달을 입력해주세요',
+      putDay: '태어난 날짜를 입력해주세요',
+      putHour: '태어난 시간을 입력해주세요 (모르면 체크)',
+      putMin: '태어난 분을 입력해주세요 (모르면 체크)',
+      ready: '다음 단계로 넘어갈 준비가 되었어요!',
+    },
+    en: {
+      putGender: 'Please select your gender',
+      putYear: 'Please enter your birth year',
+      putMonth: 'Please enter your birth month',
+      putDay: 'Please enter your birth day',
+      putHour: 'Please enter birth hour (or check unknown)',
+      putMin: 'Please enter birth minute (or check unknown)',
+      ready: 'Ready to move to the next step!',
+    },
+  };
   const getProgress = () => {
     let score = 0;
     if (gender) score += 20;
@@ -225,7 +245,27 @@ export default function SazaTalkAdKrPage() {
     if (!m || m < 1 || m > 12) return alert('월을 1~12월 사이로 입력해주세요.');
     const lastDay = new Date(y, m, 0).getDate();
     if (!d || d < 1 || d > lastDay) return alert(`${m}월은 ${lastDay}일까지 있습니다.`);
-    handleAskSaza();
+
+
+
+    if (!timeUnknown) {
+      // 4. 시간 체크 (0-23)
+      if (isNaN(h) || h < 0 || h > 23) {
+        alert(
+          '시간을 0~23시 사이로 입력해주세요.'
+        );
+        return;
+      }
+
+      // 5. 분 체크 (0-59)
+      if (isNaN(min) || min < 0 || min > 59) {
+        alert(
+          '분을 0~59분 사이로 입력해주세요.'
+        );
+        return;
+      }
+    }
+    userQuestion.trim() && handleAskSaza();
   };
 
   const Loading = () => {
@@ -311,6 +351,58 @@ export default function SazaTalkAdKrPage() {
               {isDayDone && (
                 <label className="flex items-center gap-2 cursor-pointer w-fit mx-auto py-2 group"><input type="checkbox" checked={timeUnknown} onChange={(e) => setTimeUnknown(e.target.checked)} className="w-5 h-5 accent-indigo-600" /><span className="text-md font-bold text-slate-400 group-hover:text-indigo-600">시간을 몰라요</span></label>
               )}
+              {/* 시간(시) */}
+              <div
+                className={`grid transition-all duration-500 ease-in-out ${isDayDone && !timeUnknown ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'}`}
+              >
+                <div className="overflow-hidden px-0.5">
+                  <input
+                    type="number"
+                    placeholder="태어난 시 (HH)"
+                    className="w-full p-5 bg-white rounded-2xl border-2 border-transparent focus:border-[#F47521] outline-none font-bold text-center shadow-sm placeholder-[#C4B5A9]"
+                    onChange={(e) =>
+                      setBirthData({ ...birthData, hour: e.target.value.slice(0, 2) })
+                    }
+                  />
+                </div>
+              </div>
+
+              {/* 시간(분) */}
+              <div
+                className={`grid transition-all duration-500 ease-in-out ${isHourDone && !timeUnknown ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'}`}
+              >
+                <div className="overflow-hidden px-0.5">
+                  <input
+                    type="number"
+                    placeholder="태어난 분 (mm)"
+                    className="w-full p-5 bg-white rounded-2xl border-2 border-transparent focus:border-[#F47521] outline-none font-bold text-center shadow-sm placeholder-[#C4B5A9]"
+                    onChange={(e) =>
+                      setBirthData({ ...birthData, minute: e.target.value.slice(0, 2) })
+                    }
+                  />
+                </div>
+              </div>
+            </div>
+
+            <div className="mt-8 mb-4">
+              <div className="flex items-center justify-center gap-2 animate-pulse">
+                <div className="w-2 h-2 bg-indigo-300 rounded-full" />
+                <span className="text-[16px] font-bold text-indigo-600">
+                  {!gender
+                    ? guideMessages.ko.putGender
+                    : !isYearDone
+                      ? guideMessages.ko.putYear
+                      : !isMonthDone
+                        ? guideMessages.ko.putMonth
+                        : !isDayDone
+                          ? guideMessages.ko.putDay
+                          : !timeUnknown && !isHourDone
+                            ? guideMessages.ko.putHour
+                            : !timeUnknown && !isMinuteDone
+                              ? guideMessages.ko.putMin
+                              : guideMessages.ko.ready}
+                </span>
+              </div>
             </div>
             <div className="w-full h-2.5 bg-white rounded-full overflow-hidden shadow-sm border border-indigo-200 mt-4"><div className="h-full bg-indigo-600 transition-all duration-700" style={{ width: `${getProgress()}%` }} /></div>
             {isFormValid && <button onClick={handleNextStep} className="w-full py-5 bg-indigo-600 text-white rounded-full font-bold text-lg shadow-lg mt-8">나의 사주 오행 분석하기</button>}

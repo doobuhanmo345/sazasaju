@@ -132,7 +132,7 @@ const SubIcons = () => {
 
           {/* 텍스트 영역 */}
           <div className="flex flex-col items-start sm:items-center text-left sm:text-center overflow-hidden">
-            <span className="text-[15px] sm:text-[11px] font-bold text-slate-800 transition-colors group-hover:text-rose-600">
+            <span className="text-sm sm:text-xs font-bold text-slate-800 transition-colors group-hover:text-rose-600">
               {item.label}
             </span>
             <span className="sm:hidden text-[12px] text-slate-400 font-medium truncate w-full">

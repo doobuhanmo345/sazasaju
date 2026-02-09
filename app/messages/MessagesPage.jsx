@@ -323,7 +323,7 @@ function MessagesContent() {
   if (!user) return null;
 
   return (
-    <div className="max-w-4xl mx-auto px-4 py-8">
+    <div className="max-w-2xl mx-auto px-4 py-8">
       <header className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
         <div>
           <h1 className="text-3xl font-black tracking-tighter text-slate-900 dark:text-white uppercase">
