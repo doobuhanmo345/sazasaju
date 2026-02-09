@@ -237,10 +237,13 @@ export default function SazaTalkAdKrPage() {
   };
 
   const handleNextStep = () => {
-    const { year, month, day } = birthData;
+    const { year, month, day, hour, minute } = birthData;
     const y = parseInt(year);
     const m = parseInt(month);
     const d = parseInt(day);
+    const h = parseInt(hour);
+    const min = parseInt(minute);
+
     if (!y || y < 1900 || y > 2030) return alert('연도를 1900~2030년 사이로 입력해주세요.');
     if (!m || m < 1 || m > 12) return alert('월을 1~12월 사이로 입력해주세요.');
     const lastDay = new Date(y, m, 0).getDate();

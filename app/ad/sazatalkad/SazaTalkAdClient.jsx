@@ -286,8 +286,8 @@ export default function SazaTalkAdPage() {
           <div className="flex justify-start mt-6"><div className="leading-8 w-full bg-slate-100 p-5 rounded-2xl rounded-tl-none shadow-sm"><div className="leading-8 w-full bg-white p-6 rounded-[24px] shadow-sm">{data.contents?.map((i, idx) => (<p key={idx}>{i}</p>))}<strong>Saza's Advice: {data.saza}</strong></div></div></div>
           <div className="mt-8 p-6 bg-white border-2 border-dashed border-indigo-200 rounded-2xl text-center">
             <p className="text-gray-600 font-medium mb-4">For a deeper analysis, visit Saza Saju!</p>
-            <div onClick={() => { navigator.clipboard.writeText('https://koreansaju.vercel.app'); alert('Link copied to clipboard!'); }} className="flex items-center justify-between bg-gray-50 p-3 rounded-lg border border-gray-200 cursor-pointer hover:bg-indigo-50 transition-colors group">
-              <span className="text-indigo-600 font-mono text-sm">koreansaju.vercel.app</span>
+            <div onClick={() => { navigator.clipboard.writeText(window.location.origin); alert('Link copied to clipboard!'); }} className="flex items-center justify-between bg-gray-50 p-3 rounded-lg border border-gray-200 cursor-pointer hover:bg-indigo-50 transition-colors group">
+              <span className="text-indigo-600 font-mono text-sm">{window.location.origin}</span>
               <span className="text-xs bg-indigo-100 text-indigo-700 px-2 py-1 rounded font-bold group-hover:bg-indigo-600 group-hover:text-white transition-colors">COPY</span>
             </div>
           </div>

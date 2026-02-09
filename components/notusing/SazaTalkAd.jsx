@@ -368,7 +368,7 @@ const SazaTalkAd = () => {
       }
     }
   }, [aiResult]); // aiResult가 업데이트될 때마다 실행
-  
+
   const Loading = () => {
     return (
       // transform-gpu 클래스로 GPU 가속 활성화
@@ -429,9 +429,9 @@ const SazaTalkAd = () => {
       </div>
     );
   };
-  
+
   if (loading) return <Loading />;
-  
+
   return (
     <div className="bg-white">
       {step !== 0.5 && step !== 'result' && !isAnalyzing && (
@@ -785,12 +785,12 @@ const SazaTalkAd = () => {
               {/* 복사 버튼 + 주소 표시 */}
               <div
                 onClick={() => {
-                  navigator.clipboard.writeText('https://koreansaju.vercel.app');
+                  navigator.clipboard.writeText(window.location.origin);
                   alert(language === 'ko' ? '주소가 복사되었습니다!' : 'Link copied to clipboard!');
                 }}
                 className="flex items-center justify-between bg-gray-50 p-3 rounded-lg border border-gray-200 cursor-pointer hover:bg-indigo-50 transition-colors group"
               >
-                <span className="text-indigo-600 font-mono text-sm">koreansaju.vercel.app</span>
+                <span className="text-indigo-600 font-mono text-sm">{window.location.origin}</span>
                 <span className="text-xs bg-indigo-100 text-indigo-700 px-2 py-1 rounded font-bold group-hover:bg-indigo-600 group-hover:text-white transition-colors">
                   COPY
                 </span>

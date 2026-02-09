@@ -16,7 +16,7 @@ export default function CopyUrl2({ saju, from }) {
 
     const handleCopy = async () => {
         // 1. 링크 복사
-        const url = typeof window !== 'undefined' ? window.location.origin : 'https://sazasaju.com';
+        const url = window.location.origin;
         await navigator.clipboard.writeText(url);
         alert(isKo ? '주소가 복사되었습니다!' : 'Link copied to clipboard!');
 

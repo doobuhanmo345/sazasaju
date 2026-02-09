@@ -10,7 +10,7 @@ export default function CopyUrlAd({ saju, from }) {
 
   const handleCopy = async () => {
     // 1. 링크 복사
-    const url = 'https://koreansaju.vercel.app';
+    const url = window.location.origin;
     await navigator.clipboard.writeText(url);
     alert(language === 'ko' ? '주소가 복사되었습니다!' : 'Link copied to clipboard!');
 
@@ -40,7 +40,7 @@ export default function CopyUrlAd({ saju, from }) {
           onClick={handleCopy}
           className="block sm:flex  items-center justify-between bg-white p-4 rounded-2xl border border-[#E8DCCF] cursor-pointer hover:border-[#F47521] transition-all group active:scale-[0.98]"
         >
-          <div className="text-[#F47521] font-mono text-sm font-bold">koreansaju.vercel.app</div>
+          <div className="text-[#F47521] font-mono text-sm font-bold">{window.location.origin}</div>
           <div className="text-[13px] bg-[#F47521] text-white px-3 py-1.5 sm:my-0 my-2 rounded-full font-black shadow-sm group-hover:bg-orange-800 transition-colors">
             {language === 'ko' ? '링크 복사하기' : 'Copy Url'}
           </div>
