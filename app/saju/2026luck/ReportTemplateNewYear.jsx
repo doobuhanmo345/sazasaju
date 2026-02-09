@@ -6,7 +6,6 @@ import { useLoading } from '@/contexts/useLoadingContext';
 import { useLanguage } from '@/contexts/useLanguageContext';
 import { parseAiResponse } from '@/utils/helpers';
 import AfterReport from '@/components/AfterReport';
-
 import { useRouter } from 'next/navigation';
 import { useAuthContext } from '@/contexts/useAuthContext';
 

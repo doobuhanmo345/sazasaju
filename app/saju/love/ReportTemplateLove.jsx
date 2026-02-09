@@ -7,6 +7,7 @@ import { HeartIcon } from '@heroicons/react/24/outline';
 import { parseAiResponse } from '@/utils/helpers';
 import { useRouter } from 'next/navigation';
 import { useLoading } from '@/contexts/useLoadingContext';
+import AfterReport from '@/components/AfterReport';
 
 export default function ReportTemplateLove({ storageKey }) {
     const { userData } = useAuthContext();
