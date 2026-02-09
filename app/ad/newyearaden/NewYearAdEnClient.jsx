@@ -18,10 +18,10 @@ import { classNames, parseAiResponse } from '@/utils/helpers';
 import { fetchGeminiAnalysis } from '@/lib/gemini';
 import NewYearEn from './NewYearEn';
 import CopyUrlAd from '@/components/CopyUrlAd';
-
+import { useRouter } from 'next/navigation'; // app 디렉토리 기준
 const NewYearAdEn = () => {
   const [guestId, setGuestId] = useState('');
-
+  const router = useRouter(); // 이 줄이 있는지 확인하세요!
   const [step, setStep] = useState(0.5); // '0.5' '1', 'input' 'result'
   const { language, setLanguage } = useLanguage();
   const { user, userData, loadingUser } = useAuthContext();
@@ -63,7 +63,7 @@ const NewYearAdEn = () => {
     const isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
 
     if (!isInApp && !isLocal) {
-      window.location.replace('/');
+      router.push('/')
     }
   }, [router]);
   //유즈이펙트의존성
