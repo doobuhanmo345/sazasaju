@@ -48,7 +48,7 @@ export default function NewYearKr({ setStep }) {
             </div>
             <div className="w-full flex justify-center">
               <img
-                src="/images/adImage/newyear/newyear_main_clay.png"
+                src="/images/adImage/newyear/newyear_main_clay.jpeg"
                 className="w-full max-w-4xl h-[500px] my-6 object-cover [mask-image:linear-gradient(to_bottom,transparent_0%,black_15%,black_85%,transparent_100%)]"
                 alt="사자사주 메인"
               />
