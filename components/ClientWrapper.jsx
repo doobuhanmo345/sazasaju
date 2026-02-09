@@ -82,7 +82,10 @@ export default function ClientWrapper({ children }) {
   const shouldRedirect = !loadingUser && user && userData && !userData.birthDate && !isExempt;
 
   // Initial Loading (Splash) OR Pending Redirect
-  if (loadingUser || shouldRedirect) {
+  // Bypass SplashScreen for specialPaths (e.g., ad pages) to prevent infinite loading in in-app browsers
+  const isSpecialPathForLoading = isSpecialPath || isExempt;
+
+  if ((loadingUser && !isSpecialPathForLoading) || shouldRedirect) {
     return <SplashScreen />;
   }
 
