@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useEffect, useRef, useState } from 'react';
+import FloatingHomeButton from '@/components/FloatingHomeButton';
 
 // step === 0.5 구간에 들어갈 컴포넌트 로직
 const SajuIntroSection2 = ({ language, setStep }) => {
@@ -30,6 +31,8 @@ const SajuIntroSection2 = ({ language, setStep }) => {
       ref={containerRef}
       className="dark:text-white flex flex-col gap-20 py-12 px-6 overflow-hidden text-slate-900"
     >
+      <FloatingHomeButton language={language} />
+
       {/* SECTION 1 */}
       <div
         id="item1"

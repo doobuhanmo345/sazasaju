@@ -13,6 +13,7 @@ import {
   CheckCircle2,
 } from 'lucide-react';
 import AdReviewEn from '@/app/ad/AdReviewEn';
+import FloatingHomeButton from '@/components/FloatingHomeButton';
 
 export default function AmaEn({ question, setQuestion, setStep }) {
   const inputRef = useRef(null);
@@ -57,6 +58,9 @@ export default function AmaEn({ question, setQuestion, setStep }) {
         }}
       />
 
+      {/* floating Home Button */}
+      <FloatingHomeButton language="en" />
+
       {/* Section 1: Hero */}
       <div className="w-full min-h-screen bg-[#FDF5F0] text-[#4A3428] flex flex-col items-center">
         {/* Logo */}
@@ -99,7 +103,7 @@ export default function AmaEn({ question, setQuestion, setStep }) {
               <input
                 ref={inputRef}
                 type="text"
-             
+
                 placeholder="What are you most curious about?"
                 className="w-full bg-white border border-[#E8DCCF] py-5 sm:py-6 pl-6 sm:pl-7 pr-14 rounded-2xl text-[#4A3428] placeholder-[#C4B5A9] text-base sm:text-lg shadow-sm focus:outline-none focus:border-[#F47521] transition-colors"
               />

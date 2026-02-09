@@ -11,6 +11,7 @@ import {
   Heart,
   Sparkles,
 } from 'lucide-react';
+import FloatingHomeButton from '@/components/FloatingHomeButton';
 import AdHid from '../AdHid'
 import AdReviewEn from '@/app/ad/AdReviewEn';
 
@@ -19,9 +20,11 @@ export default function NewYearEn({ setStep }) {
     setStep(1);
   };
   const [activeMonth, setActiveMonth] = useState(1);
-  
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-[#FFF8F3] via-[#FFF0E8] to-[#FFE8E0] text-[#5C4B51] font-serif pb-20">
+      <FloatingHomeButton language="en" />
+
       <>
         <div className="w-full min-h-screen bg-gradient-to-br from-[#FFFAF7] to-[#FFF0EB] text-[#5C4B51] font-serif flex flex-col items-center">
           <div className=" w-full py-12 flex flex-col items-center">

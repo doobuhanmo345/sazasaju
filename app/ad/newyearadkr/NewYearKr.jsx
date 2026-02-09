@@ -9,7 +9,7 @@ import {
   Database,
   Users,
 } from 'lucide-react';
-
+import FloatingHomeButton from '@/components/FloatingHomeButton';
 
 import AdHid from '../AdHid'
 import AdReview from '@/app/ad/AdReview';
@@ -23,6 +23,8 @@ export default function NewYearKr({ setStep }) {
 
   return (
     <div className="min-h-screen bg-indigo-50 text-slate-900 font-sans pb-20">
+      <FloatingHomeButton language="ko" />
+
       <>
         <div className="w-full min-h-screen bg-indigo-50 text-slate-900 font-sans flex flex-col items-center">
           <div className=" w-full max-w-4xl py-10 flex flex-col items-center">

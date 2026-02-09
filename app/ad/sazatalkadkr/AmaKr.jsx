@@ -11,6 +11,7 @@ import {
   CheckCircle2,
   Cpu
 } from 'lucide-react';
+import FloatingHomeButton from '@/components/FloatingHomeButton';
 import AdReview from '@/app/ad/AdReview';
 
 export default function AmaKr({ question, setQuestion, setStep }) {
@@ -55,6 +56,9 @@ export default function AmaKr({ question, setQuestion, setStep }) {
       `,
         }}
       />
+
+      {/* floating Home Button */}
+      <FloatingHomeButton language="ko" />
 
       {/* 섹션 1: 히어로 */}
       <div className="w-full min-h-screen bg-white text-slate-800 flex flex-col items-center">
