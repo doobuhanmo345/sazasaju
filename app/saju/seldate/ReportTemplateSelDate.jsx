@@ -9,7 +9,6 @@ import { useLoading } from '@/contexts/useLoadingContext';
 import AfterReport from '@/components/AfterReport';
 
 import { useRouter } from 'next/navigation';
-import ShareLinkButton from '@/components/ShareLinkButton';
 
 export default function ReportTemplateSelDate() {
   const { aiResult } = useLoading();

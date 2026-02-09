@@ -107,11 +107,38 @@ export default function ShareLinkButton({ fortuneType = 'basic', storageKey }) {
                     setTimeout(() => setIsCopied(false), 2000);
                 });
             }
+            const shareDataLink = {
+                title: 'SAZA SAJU',
+                text: language === 'ko' ? '사자(SAZA)에서 당신의 운세를 확인해보세요!' : 'Check your fortune at SAZA SAJU!',
+                url: shareUrl, // Share the home page URL or current URL
+            };
+
+            // Try Native Share
+            if (navigator.share) {
+                try {
+                    await navigator.share(shareDataLink);
+                } catch (err) {
+                    console.log('Error sharing:', err);
+                }
+            } else {
+                // Fallback to Clipboard Copy
+                try {
+                    await navigator.clipboard.writeText(shareData.url);
+                    setCopied(true);
+                    setTimeout(() => setCopied(false), 2000);
+                } catch (err) {
+                    console.error('Failed to copy keys', err);
+                }
+            }
 
         } catch (err) {
             console.error('Error sharing link:', err);
             alert(language === 'ko' ? '링크 공유 중 오류가 발생했습니다.' : 'Error sharing link.');
         }
+    };
+
+    const handleShare = async () => {
+
     };
 
     return (

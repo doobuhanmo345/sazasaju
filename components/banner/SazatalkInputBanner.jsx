@@ -127,7 +127,7 @@ const SazatalkInputBanner = () => {
                                 value={inputValue}
                                 onChange={(e) => setInputValue(e.target.value)}
                                 className="w-full min-h-[140px] max-h-[300px] py-2 text-[19px] font-black text-slate-900 dark:text-white outline-none resize-none leading-relaxed placeholder:font-normal placeholder:text-slate-300 dark:placeholder:text-slate-500 bg-transparent"
-                                placeholder={isKo ? "무엇이든 물어보세요" : "Ask anything"}
+                                placeholder={isKo ? "고민을 무엇이든 물어보세요!\n(ex. 작년에 헤어진 인연과 재회할 수 있을까요?)" : "Ask anything"}
                             />
                             <div className="flex justify-end mt-2">
                                 <button

@@ -9,7 +9,6 @@ import { useLoading } from '@/contexts/useLoadingContext';
 import { parseAiResponse } from '@/utils/helpers';
 import AfterReport from '@/components/AfterReport';
 import { useRouter } from 'next/navigation';
-import ShareLinkButton from '@/components/ShareLinkButton';
 
 const ReportTemplateInterview = ({ }) => {
   const { aiResult } = useLoading();

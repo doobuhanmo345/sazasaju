@@ -7,7 +7,7 @@ import { SparklesIcon } from '@heroicons/react/24/outline';
 import { parseAiResponse } from '@/utils/helpers';
 import { useRouter } from 'next/navigation';
 import { useLoading } from '@/contexts/useLoadingContext';
-import ShareLinkButton from '@/components/ShareLinkButton';
+import AfterReport from '@/components/AfterReport';
 
 export default function ReportTemplateWealth({ storageKey }) {
     const { userData } = useAuthContext();
@@ -148,13 +148,14 @@ export default function ReportTemplateWealth({ storageKey }) {
 
             {/* Share & Back Button */}
             <div className="mt-16 text-center flex flex-col items-center gap-4">
-                <ShareLinkButton fortuneType="wealth" storageKey={storageKey} />
+
                 <button
                     onClick={() => window.location.href = '/saju/wealth'}
                     className="inline-flex items-center gap-2 px-6 py-3 text-sm font-semibold text-slate-600 dark:text-slate-300 hover:text-amber-600 dark:hover:text-amber-400 transition-colors rounded-xl border border-slate-200 dark:border-slate-700 hover:border-amber-300 dark:hover:border-amber-600"
                 >
                     ← {language === 'en' ? 'Check Another Topic' : '다른 재물운 보기'}
                 </button>
+                <AfterReport fortuneType="wealth" storageKey={storageKey} />
             </div>
         </div>
     );

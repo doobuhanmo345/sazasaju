@@ -83,7 +83,7 @@ export default function HomeClient() {
       )}
 
       {/* Banners */}
-      <ImageBanner />
+
       <SazaTalkInputBanner />
       <NewYearBanner />
 

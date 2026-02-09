@@ -7,8 +7,6 @@ import { useAuthContext } from '@/contexts/useAuthContext';
 import { toymdt, parseAiResponse } from '@/utils/helpers';
 import { useLoading } from '@/contexts/useLoadingContext';
 import AfterReport from '@/components/AfterReport';
-import { calculateSaju } from '@/lib/sajuCalculator';
-import ShareLinkButton from '@/components/ShareLinkButton';
 
 export default function ReportTemplateSelBirth() {
   const { aiResult, lastParams } = useLoading();

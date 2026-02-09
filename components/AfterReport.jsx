@@ -8,7 +8,7 @@ import { useRouter } from 'next/navigation';
 import ShareButton from './ShareButton';
 import ShareLinkButton from './ShareLinkButton';
 
-export default function AfterReport({ fortuneType = 'basic' }) {
+export default function AfterReport({ fortuneType = 'basic', storageKey = false }) {
   const { language } = useLanguage();
   const navigate = useRouter();
 
@@ -24,7 +24,7 @@ export default function AfterReport({ fortuneType = 'basic' }) {
             </div>
             <div className="flex items-center justify-center gap-4">
               <div className="transform transition-transform hover:scale-110 duration-200">
-                <ShareLinkButton fortuneType={fortuneType} />
+                <ShareLinkButton fortuneType={fortuneType} storageKey={storageKey} />
               </div>
               <div className="transform transition-transform hover:scale-110 duration-200">
                 <ShareButton />
