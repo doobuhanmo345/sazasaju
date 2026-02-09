@@ -7,6 +7,8 @@ import { PlusIcon, ClipboardDocumentIcon, CameraIcon } from '@heroicons/react/24
 import { useLanguage } from '@/contexts/useLanguageContext';
 import { parseAiResponse } from '@/utils/helpers';
 import html2canvas from 'html2canvas';
+import ShareButton from '@/components/ShareButton';
+import ShareLinkButton from '@/components/ShareLinkButton';
 
 export default function ViewSazaResult({
   userQuestion,
@@ -59,7 +61,7 @@ export default function ViewSazaResult({
     }
   };
 
-  if (loading) return <>로딩중</>;
+  if (loading) return null;
 
   return (
     <div ref={scrollElRef} className="max-w-lg m-auto p-4 space-y-6">
@@ -76,9 +78,18 @@ export default function ViewSazaResult({
       <div className="flex flex-col items-start gap-2">
         <div className="leading-8 w-full bg-white dark:bg-slate-800 p-5 rounded-2xl rounded-tl-none shadow-sm border border-slate-100 dark:border-slate-700">
           {data.contents && Array.isArray(data.contents) ? (
-            data.contents.map((i, idx) => (
-              <p key={idx}>{i}</p>
-            ))
+            data.contents.map((i, idx) => {
+              if (typeof i === 'object' && i !== null) {
+                return (
+                  <div key={idx} className="mb-4 last:mb-0">
+                    {i.title && <strong className="block text-indigo-700 dark:text-indigo-300 mb-1">{i.title}</strong>}
+                    {i.detail && <p className="text-slate-600 dark:text-slate-400">{i.detail}</p>}
+                    {!i.title && !i.detail && <p>{JSON.stringify(i)}</p>}
+                  </div>
+                );
+              }
+              return <p key={idx} className="mb-2 last:mb-0">{i}</p>;
+            })
           ) : (
             <p>{typeof data.contents === 'string' ? data.contents : ''}</p>
           )}
@@ -120,6 +131,12 @@ export default function ViewSazaResult({
             <CameraIcon className="w-3 h-3 sm:w-4 sm:h-4" />
             {language === 'ko' ? '이미지 저장' : 'Save Image'}
           </button>
+          {!hideButtons && (
+            <div className="flex items-center gap-2">
+              <ShareLinkButton fortuneType="saza" />
+              <ShareButton />
+            </div>
+          )}
         </div>
       </div>
 

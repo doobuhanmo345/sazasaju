@@ -40,12 +40,16 @@ export default function ShareLinkButton({ fortuneType = 'basic', storageKey }) {
                     seldate: 'ZSelDate',
                     interview: 'Zinterview',
                     match: 'ZMatchAnalysis',
+                    saza: 'Zsazatalk',
                     // wealth & love should usually be provided via storageKey prop
                 };
                 targetStorageKey = typeToKeyMap[fortuneType];
             }
 
-            const aiResult = targetProfile?.usageHistory?.[targetStorageKey]?.result;
+            const historyItem = targetProfile?.usageHistory?.[targetStorageKey];
+            const aiResult = historyItem?.result;
+            const question = historyItem?.question;
+
             if (!aiResult) {
                 alert(language === 'ko' ? '공유할 분석 결과가 없습니다.' : 'No analysis result to share.');
                 return;
@@ -57,6 +61,7 @@ export default function ShareLinkButton({ fortuneType = 'basic', storageKey }) {
                 isTimeUnknown: targetProfile.isTimeUnknown,
                 gender: targetProfile.gender,
                 aiResult: aiResult,
+                userQuestion: question,
             };
 
             // Compress using LZString for client-side legacy support

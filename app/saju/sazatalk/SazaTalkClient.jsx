@@ -1,46 +1,133 @@
 'use client';
 
 import { useRef, useState, useEffect, useMemo, Suspense } from 'react';
+import dynamic from 'next/dynamic';
 import AnalysisStepContainer from '@/components/AnalysisStepContainer';
 import { useAuthContext } from '@/contexts/useAuthContext';
 import { useUsageLimit } from '@/contexts/useUsageLimit';
 import { db } from '@/lib/firebase';
 import { doc, getDoc } from 'firebase/firestore';
 import { useLoading } from '@/contexts/useLoadingContext';
-import { UI_TEXT } from '@/data/constants';
-import html2canvas from 'html2canvas';
+import { UI_TEXT, langPrompt, hanja } from '@/data/constants';
 import { useLanguage } from '@/contexts/useLanguageContext';
-import { classNames } from '@/utils/helpers';
+import { classNames, parseAiResponse } from '@/utils/helpers';
 import { PencilSquareIcon, LockClosedIcon, ClockIcon, XMarkIcon, ClipboardDocumentIcon, CameraIcon } from '@heroicons/react/24/outline';
 import { SajuAnalysisService, AnalysisPresets } from '@/lib/SajuAnalysisService';
 import AnalyzeButton from '@/ui/AnalyzeButton';
-import { langPrompt, hanja } from '@/data/constants';
 import EnergyBadge from '@/ui/EnergyBadge';
 import { useRouter, useSearchParams } from 'next/navigation';
 import ViewSazaResult from '@/app/saju/sazatalk/ViewSazaResult';
-import { parseAiResponse } from '@/utils/helpers';
 import { aiSajuStyle } from '@/data/aiResultConstants';
 import SazaTalkAppeal from '@/app/saju/sazatalk/SazaTalkAppeal';
 import SazaTalkResultModal from '@/components/SazaTalkResultModal';
 
+// Dynamic import for heavy html2canvas
+const html2canvas = dynamic(() => import('html2canvas'), { ssr: false });
+
 const DISABLED_STYLE = 'bg-gray-200 dark:bg-gray-700 text-gray-400 cursor-not-allowed';
+
+// Extracted Loading component for better performance
+const Loading = ({ language, progress, msgIdx, loadingMessages }) => {
+  return (
+    <div className="flex flex-col items-center justify-center min-h-[400px] overflow-hidden transform-gpu py-12">
+      <div className="relative flex items-center justify-center w-64 h-64 mb-8">
+        <div className="absolute w-40 h-40 rounded-full border-2 border-indigo-100/30 dark:border-indigo-900/10 animate-[spin_4s_linear_infinite] will-change-transform"></div>
+        <div className="absolute w-48 h-48 rounded-full border border-dashed border-indigo-200/20 dark:border-indigo-800/10 animate-[spin_12s_linear_infinite_reverse] will-change-transform"></div>
+
+        <div className="absolute w-48 h-48 animate-[spin_5s_linear_infinite] will-change-transform">
+          <span className="absolute top-0 left-1/2 -translate-x-1/2 text-2xl filter drop-shadow-md">✨</span>
+        </div>
+        <div className="absolute w-32 h-32 animate-[spin_7s_linear_infinite_reverse] will-change-transform">
+          <span className="absolute bottom-0 left-1/2 -translate-x-1/2 text-xl filter drop-shadow-md">⭐</span>
+        </div>
+
+        <div className="relative flex flex-col items-center z-10">
+          <div className="absolute inset-0 bg-indigo-500/10 blur-3xl rounded-full scale-150 animate-pulse"></div>
+          <span className="text-8xl select-none drop-shadow-2xl animate-bounce">🦁</span>
+        </div>
+      </div>
+
+      <div className="w-full max-w-xs px-6 flex flex-col items-center">
+        <div className="w-full bg-slate-100 dark:bg-slate-800 h-2 rounded-full overflow-hidden mb-3 shadow-inner border border-slate-200/50 dark:border-slate-700/50 relative">
+          <div
+            className="absolute inset-y-0 left-0 bg-gradient-to-r from-violet-500 via-indigo-500 to-purple-500 transition-transform duration-700 ease-out rounded-full w-full origin-left"
+            style={{ transform: `scaleX(${progress / 100})` }}
+          >
+            <div className="absolute inset-0 w-[200%] h-full bg-[linear-gradient(90deg,transparent_25%,rgba(255,255,255,0.3)_50%,transparent_75%)] animate-[shimmer_3s_infinite] will-change-transform"></div>
+          </div>
+        </div>
+        <p className="text-[10px] font-black text-indigo-500 dark:text-indigo-400 mb-6 tracking-[0.2em] uppercase">
+          {language === 'ko' ? '분석 중' : 'Analyzing'} {Math.round(progress)}%
+        </p>
+
+        <div className="text-center min-h-[60px] flex flex-col items-center justify-center">
+          <h2 className="text-xl font-black text-slate-800 dark:text-white mb-2 tracking-tight transition-all duration-500 animate-in fade-in slide-in-from-bottom-2" key={msgIdx}>
+            {loadingMessages[msgIdx]}
+          </h2>
+          <div className="flex items-center gap-1.5 bg-indigo-50/50 dark:bg-indigo-900/20 px-4 py-1.5 rounded-full border border-indigo-100/50 dark:border-indigo-800/30">
+            <span className="text-xs text-indigo-600 dark:text-indigo-400 font-bold">
+              {language === 'ko' ? '하늘의 영감을 기록하고 있어요' : 'Recording celestial inspiration'}
+            </span>
+            <span className="flex gap-0.5">
+              <span className="w-1 h-1 bg-indigo-500 rounded-full animate-bounce"></span>
+              <span className="w-1 h-1 bg-indigo-500 rounded-full animate-bounce [animation-delay:0.2s]"></span>
+              <span className="w-1 h-1 bg-indigo-500 rounded-full animate-bounce [animation-delay:0.4s]"></span>
+            </span>
+          </div>
+        </div>
+
+        <div className="mt-8 flex items-center justify-center gap-2 text-rose-500 font-black text-[10px] tracking-widest uppercase opacity-60">
+          <span className="animate-pulse">⚠️</span>
+          <span>{language === 'ko' ? '페이지를 나가지 마세요' : 'Do not leave this page'}</span>
+        </div>
+      </div>
+
+      <style>{`
+        @keyframes shimmer {
+          0% { transform: translateX(-50%); }
+          100% { transform: translateX(0%); }
+        }
+      `}</style>
+    </div>
+  );
+};
 
 function SazaTalkContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const initialQuery = searchParams.get('q');
   const { loading, setLoading, setAiResult } = useLoading();
-  const { userData, user, selectedProfile } = useAuthContext(); // selectedProfile 추가
+  const { userData, user, selectedProfile } = useAuthContext();
 
-  // 컨텍스트 스위칭
   const targetProfile = selectedProfile || userData;
   const { saju, gender, birthDate: inputDate } = targetProfile || {};
 
   const { language } = useLanguage();
-  const { setEditCount, MAX_EDIT_COUNT, editCount, isLocked } = useUsageLimit();
+  const { setEditCount, MAX_EDIT_COUNT, isLocked } = useUsageLimit();
   const [step, setStep] = useState('input');
 
-  // Client-side Title Update for Localization (Static Export Support)
+  const [userQuestion, setUserQuestion] = useState(initialQuery || '');
+  const [latestSazaTalk, setLatestSazaTalk] = useState(null);
+  const [isHistoryOpen, setIsHistoryOpen] = useState(false);
+  const historyContentRef = useRef(null);
+  const [autoStarted, setAutoStarted] = useState(false);
+  const [isButtonClicked, setIsButtonClicked] = useState(false);
+
+  const [progress, setProgress] = useState(0);
+  const [msgIdx, setMsgIdx] = useState(0);
+
+  const loadingMessages = useMemo(() => language === 'ko' ? [
+    "당신의 사주 원국을 분석하고 있어요",
+    "오늘의 천기(天氣)를 읽는 중입니다",
+    "사자와 전문가들이 지혜를 모으고 있어요",
+    "명쾌한 해답을 정리하고 있습니다"
+  ] : [
+    "Analyzing your Saju pillars...",
+    "Reading today's celestial flow...",
+    "Gathering wisdom from Saju masters...",
+    "Drafting a clear solution for you..."
+  ], [language]);
+
   useEffect(() => {
     if (language === 'ko') {
       document.title = '사자톡 (SazaTalk) |  사주 실시간 상담';
@@ -49,12 +136,31 @@ function SazaTalkContent() {
     }
   }, [language]);
 
-  const [userQuestion, setUserQuestion] = useState(initialQuery || '');
-  const [latestSazaTalk, setLatestSazaTalk] = useState(null);
-  const [isHistoryOpen, setIsHistoryOpen] = useState(false);
-  const historyContentRef = useRef(null);
-  const [autoStarted, setAutoStarted] = useState(false);
-  const [isButtonClicked, setIsButtonClicked] = useState(false);
+  useEffect(() => {
+    if (!loading) {
+      setProgress(0);
+      setMsgIdx(0);
+      return;
+    }
+
+    const progressTimer = setInterval(() => {
+      setProgress(prev => {
+        if (prev >= 98) return 98;
+        const step = prev < 80 ? Math.random() * 10 : Math.random() * 2;
+        return Math.min(prev + step, 98);
+      });
+    }, 800);
+
+    const msgTimer = setInterval(() => {
+      setMsgIdx(prev => (prev + 1) % loadingMessages.length);
+    }, 2500);
+
+    return () => {
+      clearInterval(progressTimer);
+      clearInterval(msgTimer);
+    };
+  }, [loading, loadingMessages.length]);
+
   const handleHistoryCopy = async () => {
     if (!latestSazaTalk?.result) return;
     try {
@@ -66,9 +172,8 @@ function SazaTalkContent() {
   };
 
   const handleHistoryCapture = async () => {
-    if (historyContentRef.current) {
+    if (historyContentRef.current && typeof window !== 'undefined') {
       const original = historyContentRef.current;
-
       const container = document.createElement('div');
       container.style.position = 'fixed';
       container.style.top = '0';
@@ -78,20 +183,19 @@ function SazaTalkContent() {
       document.body.appendChild(container);
 
       const clone = original.cloneNode(true);
-
       clone.style.width = '100%';
       clone.style.height = 'auto';
       clone.style.maxHeight = 'none';
       clone.style.overflow = 'visible';
       clone.style.borderRadius = '0';
       clone.style.background = '#ffffff';
-
       container.appendChild(clone);
 
       await new Promise(resolve => setTimeout(resolve, 300));
 
       try {
-        const canvas = await html2canvas(clone, {
+        const html2canvasLib = (await import('html2canvas')).default;
+        const canvas = await html2canvasLib(clone, {
           backgroundColor: '#ffffff',
           scale: 2,
           useCORS: true,
@@ -111,7 +215,6 @@ function SazaTalkContent() {
     }
   };
 
-  // Fetch recent history on mount
   useEffect(() => {
     if (user?.uid) {
       const fetchHistory = async () => {
@@ -132,7 +235,6 @@ function SazaTalkContent() {
     }
   }, [user]);
 
-  // Optimize history parsing
   const parsedHistoryData = useMemo(() => {
     if (!latestSazaTalk?.result) return null;
     try {
@@ -145,7 +247,7 @@ function SazaTalkContent() {
 
   const service = new SajuAnalysisService({
     user,
-    userData: targetProfile, // AI 분석에 타겟 프로필 전달
+    userData: targetProfile,
     language,
     maxEditCount: MAX_EDIT_COUNT,
     uiText: UI_TEXT,
@@ -163,14 +265,7 @@ function SazaTalkContent() {
       router.push('/');
       return;
     }
-
-    // if (latestSazaTalk) {
-    //   if (!window.confirm(UI_TEXT.overwriteConfirm?.[language] || (language === 'ko' ? "새로운 질문을 하시면 이전 답변은 사라집니다. 계속하시겠습니까?" : "Asking a new question will delete the previous answer. Do you want to continue?"))) {
-    //     return;
-    //   }
-    // }
     setIsButtonClicked(true);
-
     setAiResult('');
     try {
       const result = await service.analyze(
@@ -194,7 +289,6 @@ function SazaTalkContent() {
     }
   };
 
-  // Helper component to trigger start with the correct callback
   const AutoTrigger = ({ onStart, onTrigger }) => {
     useEffect(() => {
       const timer = setTimeout(() => {
@@ -205,119 +299,8 @@ function SazaTalkContent() {
     return null;
   };
 
-  const Loading = () => {
-    const [progress, setProgress] = useState(0);
-    const [msgIdx, setMsgIdx] = useState(0);
-
-    const loadingMessages = language === 'ko' ? [
-      "당신의 사주 원국을 분석하고 있어요",
-      "오늘의 천기(天氣)를 읽는 중입니다",
-      "사자와 전문가들이 지혜를 모으고 있어요",
-      "명쾌한 해답을 정리하고 있습니다"
-    ] : [
-      "Analyzing your Saju pillars...",
-      "Reading today's celestial flow...",
-      "Gathering wisdom from Saju masters...",
-      "Drafting a clear solution for you..."
-    ];
-
-    useEffect(() => {
-      const progressTimer = setInterval(() => {
-        setProgress(prev => {
-          if (prev >= 98) {
-            clearInterval(progressTimer);
-            return 98;
-          }
-          const step = prev < 80 ? Math.random() * 10 : Math.random() * 2;
-          return Math.min(prev + step, 98);
-        });
-      }, 800);
-
-      const msgTimer = setInterval(() => {
-        setMsgIdx(prev => (prev + 1) % loadingMessages.length);
-      }, 2500);
-
-      return () => {
-        clearInterval(progressTimer);
-        clearInterval(msgTimer);
-      };
-    }, []);
-
-    return (
-      <div className="flex flex-col items-center justify-center min-h-[400px] overflow-hidden transform-gpu py-12">
-        <div className="relative flex items-center justify-center w-64 h-64 mb-8">
-          {/* Background rotating rings */}
-          <div className="absolute w-40 h-40 rounded-full border-2 border-indigo-100/50 dark:border-indigo-900/20 animate-[spin_3s_linear_infinite] will-change-transform"></div>
-          <div className="absolute w-48 h-48 rounded-full border border-dashed border-indigo-200/30 dark:border-indigo-800/20 animate-[spin_10s_linear_infinite_reverse] will-change-transform"></div>
-
-          {/* Orbiting emojis */}
-          <div className="absolute w-48 h-48 animate-[spin_4s_linear_infinite] will-change-transform">
-            <span className="absolute top-0 left-1/2 -translate-x-1/2 text-2xl filter drop-shadow-md">✨</span>
-          </div>
-          <div className="absolute w-32 h-32 animate-[spin_6s_linear_infinite_reverse] will-change-transform">
-            <span className="absolute bottom-0 left-1/2 -translate-x-1/2 text-xl filter drop-shadow-md">⭐</span>
-          </div>
-          <div className="absolute w-56 h-56 animate-[spin_8s_linear_infinite] will-change-transform">
-            <span className="absolute left-0 top-1/2 -translate-y-1/2 text-xl filter drop-shadow-md">🌙</span>
-          </div>
-
-          {/* Central lion character */}
-          <div className="relative flex flex-col items-center z-10">
-            <div className="absolute inset-0 bg-indigo-500/20 blur-3xl rounded-full scale-150 animate-pulse"></div>
-            <span className="text-8xl select-none drop-shadow-2xl animate-bounce">🦁</span>
-          </div>
-        </div>
-
-        {/* Progress bar and text area */}
-        <div className="w-full max-w-xs px-6 flex flex-col items-center">
-          <div className="w-full bg-slate-100 dark:bg-slate-800 h-2 rounded-full overflow-hidden mb-3 shadow-inner border border-slate-200/50 dark:border-slate-700/50 relative">
-            <div
-              className="absolute inset-y-0 left-0 bg-gradient-to-r from-violet-500 via-indigo-500 to-purple-500 transition-transform duration-700 ease-out rounded-full w-full origin-left"
-              style={{ transform: `scaleX(${progress / 100})` }}
-            >
-              {/* Shimmer overlay using transform instead of background-position */}
-              <div className="absolute inset-0 w-[200%] h-full bg-[linear-gradient(90deg,transparent_25%,rgba(255,255,255,0.3)_50%,transparent_75%)] animate-[shimmer_2s_infinite] will-change-transform"></div>
-            </div>
-          </div>
-          <p className="text-[10px] font-black text-indigo-500 dark:text-indigo-400 mb-6 tracking-[0.2em] uppercase">
-            {language === 'ko' ? '분석 중' : 'Analyzing'} {Math.round(progress)}%
-          </p>
-
-          <div className="text-center min-h-[60px] flex flex-col items-center justify-center">
-            <h2 className="text-xl font-black text-slate-800 dark:text-white mb-2 tracking-tight transition-all duration-500 animate-in fade-in slide-in-from-bottom-2" key={msgIdx}>
-              {loadingMessages[msgIdx]}
-            </h2>
-            <div className="flex items-center gap-1.5 bg-indigo-50/50 dark:bg-indigo-900/20 px-4 py-1.5 rounded-full border border-indigo-100/50 dark:border-indigo-800/30">
-              <span className="text-xs text-indigo-600 dark:text-indigo-400 font-bold">
-                {language === 'ko' ? '하늘의 영감을 기록하고 있어요' : 'Recording celestial inspiration'}
-              </span>
-              <span className="flex gap-0.5">
-                <span className="w-1 h-1 bg-indigo-500 rounded-full animate-bounce"></span>
-                <span className="w-1 h-1 bg-indigo-500 rounded-full animate-bounce [animation-delay:0.2s]"></span>
-                <span className="w-1 h-1 bg-indigo-500 rounded-full animate-bounce [animation-delay:0.4s]"></span>
-              </span>
-            </div>
-          </div>
-
-          <div className="mt-8 flex items-center justify-center gap-2 text-rose-500 font-black text-[10px] tracking-widest uppercase opacity-60">
-            <span className="animate-pulse">⚠️</span>
-            <span>{language === 'ko' ? '페이지를 나가지 마세요' : 'Do not leave this page'}</span>
-          </div>
-        </div>
-
-        {/* Custom animation injection */}
-        <style>{`
-          @keyframes shimmer {
-            0% { transform: translateX(-50%); }
-            100% { transform: translateX(0%); }
-          }
-        `}</style>
-      </div>
-    );
-  };
-
   const renderContent = (onStart) => {
-    if (loading) return <Loading />;
+    if (loading) return <Loading language={language} progress={progress} msgIdx={msgIdx} loadingMessages={loadingMessages} />;
     const isDisabled = false;
 
     return (
@@ -333,7 +316,6 @@ function SazaTalkContent() {
         )}
         {step === 'intro' ? (
           <div className="max-w-lg mx-auto p-3 text-center px-6 animate-in fade-in slide-in-from-bottom-5 duration-700">
-            {/* Expert badge */}
             <div className="flex justify-center mb-3">
               <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-violet-50 dark:bg-violet-900/20 border border-violet-100 dark:border-violet-800 shadow-sm">
                 <div className="relative flex h-2 w-2">
@@ -353,21 +335,14 @@ function SazaTalkContent() {
                 <div className="absolute inset-0 bg-violet-200/50 dark:bg-violet-900/30 blur-md rounded-full scale-100"></div>
               </span>
             </h2>
-            {/* Description */}
             <div className="space-y-4 text-slate-600 dark:text-slate-400 mb-10 leading-relaxed break-keep">
               <p className="text-sm">
                 {language === 'ko' ? (
-                  <>
-                    <strong>사자</strong>에게 당신의 고민을 물어보세요.
-                  </>
+                  <><strong>사자</strong>에게 당신의 고민을 물어보세요.</>
                 ) : (
                   "Ask Saza what's in your mind"
                 )}
               </p>
-
-              <div className="m-auto max-w-sm rounded-2xl overflow-hidden shadow-sm border border-slate-100 dark:border-slate-800">
-                {/* Image placeholder */}
-              </div>
             </div>
 
             <button
@@ -382,15 +357,11 @@ function SazaTalkContent() {
             >
               {language === 'ko' ? '사자에게 물어보기' : 'Ask Saza'}
               {isLocked ? (
-                <>
-                  <div
-                    className="mt-1 flex items-center gap-1 backdrop-blur-sm px-2 py-0.5 rounded-full border shadow-sm relative z-10 border-gray-500/50 bg-gray-400/40"
-                  >
-                    <span className="text-[9px] font-bold text-white tracking-wide uppercase">
-                      <LockClosedIcon className="w-4 h-4 text-amber-500" />
-                    </span>
-                  </div>
-                </>
+                <div className="mt-1 flex items-center gap-1 backdrop-blur-sm px-2 py-0.5 rounded-full border shadow-sm relative z-10 border-gray-500/50 bg-gray-400/40">
+                  <span className="text-[9px] font-bold text-white tracking-wide uppercase">
+                    <LockClosedIcon className="w-4 h-4 text-amber-500" />
+                  </span>
+                </div>
               ) : (
                 user && (
                   <div className="relative scale-90">
@@ -411,14 +382,12 @@ function SazaTalkContent() {
               </p>
             )}
 
-            {/* SazaTalk Premium Appeal Section */}
             <div className="mt-16 -mx-6">
               <SazaTalkAppeal />
             </div>
           </div>
         ) : (
           <div className="animate-in slide-in-from-bottom duration-500">
-
             <div className=" max-w-lg mx-auto px-3 pt-6">
               <div className="text-center">
                 <div className="flex justify-center mb-3">
@@ -440,7 +409,6 @@ function SazaTalkContent() {
                     <div className="absolute inset-0 bg-violet-200/50 dark:bg-violet-900/30 blur-md rounded-full scale-100"></div>
                   </span>
                 </h2>
-                {/* Description */}
                 <div className="space-y-4 text-slate-600 dark:text-slate-400 mb-10 leading-relaxed break-keep">
                   <div className="text-sm">
                     {language === 'ko' ? (
@@ -496,16 +464,13 @@ function SazaTalkContent() {
               />
             </div>
 
-            {/* SazaTalk Premium Appeal Section */}
             <div className="mt-16 -mx-6">
               <SazaTalkAppeal />
             </div>
 
-            {/* Recent History Modal */}
             {isHistoryOpen && latestSazaTalk && (
               <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm animate-in fade-in duration-300">
                 <div className="relative w-full max-w-lg bg-white dark:bg-slate-900 rounded-3xl shadow-2xl overflow-hidden border border-slate-100 dark:border-slate-800 animate-in zoom-in-95 duration-300">
-                  {/* Modal Header */}
                   <div className="px-6 py-4 border-b border-slate-50 dark:border-slate-800 flex items-center justify-between bg-violet-50/50 dark:bg-violet-900/10">
                     <div className="flex items-center gap-2 text-violet-600 dark:text-violet-400">
                       <ClockIcon className="w-5 h-5" />
@@ -516,13 +481,11 @@ function SazaTalkContent() {
                     <button
                       onClick={() => setIsHistoryOpen(false)}
                       className="p-2 rounded-full hover:bg-white dark:hover:bg-slate-800 text-slate-400 hover:text-slate-600 transition-colors"
-                      aria-label="Close"
                     >
                       <XMarkIcon className="w-6 h-6" />
                     </button>
                   </div>
 
-                  {/* Modal Content */}
                   <div ref={historyContentRef} className="p-6 max-h-[70vh] overflow-y-auto space-y-6">
                     <div>
                       <div className="text-[10px] font-black text-violet-500 uppercase mb-2 tracking-widest">
@@ -549,7 +512,6 @@ function SazaTalkContent() {
                                     <div key={idx} className="mb-2">
                                       {i.title && <strong className="block text-indigo-700 dark:text-indigo-300">{i.title}</strong>}
                                       {i.detail && <p>{i.detail}</p>}
-                                      {!i.title && !i.detail && <p>{JSON.stringify(i)}</p>}
                                     </div>
                                   );
                                 }
@@ -578,11 +540,10 @@ function SazaTalkContent() {
                                 )}
                               </div>
                             )}
-                            {/* Style injection */}
                             {aiSajuStyle && <div dangerouslySetInnerHTML={{ __html: aiSajuStyle }} />}
                           </div>
                         ) : (
-                          <div className="text-slate-400 text-xs italic p-2 text-center">
+                          <div className="text-slate-400 text-xs italic p-2 text-center text-sm">
                             {language === 'ko' ? '내용을 불러올 수 없습니다.' : 'No content available'}
                           </div>
                         )}
@@ -590,7 +551,6 @@ function SazaTalkContent() {
                     </div>
                   </div>
 
-                  {/* Custom Utility Buttons for History */}
                   <div className="px-6 py-2 flex justify-end gap-2 bg-white dark:bg-slate-900 border-t border-slate-50 dark:border-slate-800">
                     <button
                       onClick={handleHistoryCopy}
@@ -608,7 +568,6 @@ function SazaTalkContent() {
                     </button>
                   </div>
 
-                  {/* Modal Footer */}
                   <div className="p-6 bg-slate-50/50 dark:bg-slate-800/20 text-center">
                     <p className="text-[11px] text-slate-400 break-keep leading-relaxed font-medium">
                       {language === 'ko'
@@ -623,7 +582,6 @@ function SazaTalkContent() {
                   onClose={() => setIsHistoryOpen(false)}
                 />
               </div>
-
             )}
           </div>
         )}
@@ -631,7 +589,6 @@ function SazaTalkContent() {
     );
   };
 
-  // Scroll to top when loading starts or step changes
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }, [loading, step]);
@@ -639,7 +596,7 @@ function SazaTalkContent() {
   return (
     <AnalysisStepContainer
       guideContent={renderContent}
-      loadingContent={<Loading />}
+      loadingContent={<Loading language={language} progress={progress} msgIdx={msgIdx} loadingMessages={loadingMessages} />}
       resultComponent={(p) => (
         <ViewSazaResult
           userQuestion={userQuestion}
@@ -647,7 +604,7 @@ function SazaTalkContent() {
           loading={loading}
         />
       )}
-      loadingTime={0}
+      loadingTime={800}
       defaultStep={initialQuery ? 'input' : 'intro'}
     />
   );

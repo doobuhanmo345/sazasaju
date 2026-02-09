@@ -31,7 +31,7 @@ export const AnalysisStepContainer = ({
 
   // 단계 변경 시 화면 맨 위로 스크롤
   useEffect(() => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    window.scrollTo({ top: 0, behavior: 'auto' });
   }, [stage]);
 
   return (
