@@ -4,13 +4,21 @@ Allow: /
 # Private and System Pages
 
 Disallow: /admin/
-Disallow: /ad/
-Disallow: /editprofile/
+Disallow: /profile/
 Disallow: /test/
 Disallow: /test2/
 Disallow: /api/
 Disallow: /nobirthday
 Disallow: /beforelogin
 Disallow: /login
+Disallow: /credit/
+Disallow: /messages/
+
+# Landing Pages (Ads) - Allow these for indexing
+Allow: /ad/newyearadkr
+Allow: /ad/newyearaden
+Allow: /ad/sazatalkadkr
+Allow: /ad/sazatalkad
+Disallow: /ad/
 
 Sitemap: https://sazasaju.com/sitemap.xml

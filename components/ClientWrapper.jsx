@@ -49,6 +49,8 @@ export default function ClientWrapper({ children }) {
     (path) => pathname === path || pathname.startsWith(path + '/')
   );
 
+  // Special logic for Credit page: Hide Navbar (it has its own) but show MenuBar
+  const isNoNavbarPath = isSpecialPath || pathname === '/credit' || pathname.startsWith('/credit/');
 
   // 2. Redirection logic for missing birthDate
   useEffect(() => {
@@ -89,10 +91,8 @@ export default function ClientWrapper({ children }) {
       {/* Global Login Loading Overlay */}
       {isLoggingIn && <LoginLoadingOverlay onCancel={cancelLogin} />}
 
-
-
       {/* Conditional Navbar */}
-      {!isSpecialPath && <Navbar />}
+      {!isNoNavbarPath && <Navbar />}
 
       <LoginModal
         isOpen={isLoginModalOpen}
@@ -114,7 +114,7 @@ export default function ClientWrapper({ children }) {
         />
       )}
 
-      <main className={!isSpecialPath ? "min-h-screen pt-[calc(64px+env(safe-area-inset-top))]" : "min-h-screen"}>
+      <main className={!isNoNavbarPath ? "min-h-screen pt-[calc(64px+env(safe-area-inset-top))]" : "min-h-screen"}>
         {children}
       </main>
 
@@ -156,4 +156,3 @@ export default function ClientWrapper({ children }) {
     </>
   );
 }
-

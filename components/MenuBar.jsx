@@ -17,7 +17,15 @@ import {
   IdentificationIcon,
   ChatBubbleLeftRightIcon,
   ArrowRightOnRectangleIcon,
-  EnvelopeIcon
+  EnvelopeIcon,
+  BriefcaseIcon,
+  HeartIcon,
+  ArrowPathIcon,
+  ClockIcon,
+  UserGroupIcon,
+  ShieldExclamationIcon,
+  MagnifyingGlassIcon,
+  UserMinusIcon
 } from '@heroicons/react/24/outline';
 
 import { useAuthContext } from '@/contexts/useAuthContext';
@@ -196,6 +204,82 @@ export default function MenuBar() {
             ],
           },
           {
+            subtitle: isKo ? '재물운 상세' : 'Wealth Detail',
+            items: [
+              {
+                name: isKo ? '평생 재물운' : 'Lifetime Wealth',
+                desc: isKo ? '타고난 그릇의 크기와 부자 사주' : 'Innate wealth capacity',
+                icon: <CircleStackIcon className="w-6 h-6" />,
+                path: '/saju/wealth/capacity',
+              },
+              {
+                name: isKo ? '올해/내년 흐름' : 'Yearly Flow',
+                desc: isKo ? '단기적 자금 흐름과 기회' : 'Short-term cash flow',
+                icon: <CalendarDaysIcon className="w-6 h-6" />,
+                path: '/saju/wealth/timing',
+              },
+              {
+                name: isKo ? '투자 / 재테크' : 'Investment',
+                desc: isKo ? '주식, 코인, 부동산 적합성' : 'Investment suitability',
+                icon: <PresentationChartLineIcon className="w-6 h-6" />,
+                path: '/saju/wealth/investment',
+              },
+              {
+                name: isKo ? '사업 / 창업운' : 'Business',
+                desc: isKo ? '사업가 자질과 창업 시기' : 'Entrepreneurial potential',
+                icon: <BriefcaseIcon className="w-6 h-6" />,
+                path: '/saju/wealth/business',
+              },
+            ],
+          },
+          {
+            subtitle: isKo ? '애정운 상세' : 'Love Detail',
+            items: [
+              {
+                name: isKo ? '평생애정운' : 'Lifetime Love',
+                desc: isKo ? '타고난 연애 스타일과 운명' : 'Innate love style and path',
+                icon: <HeartIcon className="w-6 h-6" />,
+                path: '/saju/love/lifetime',
+              },
+              {
+                name: isKo ? '월별 애정운' : 'Monthly Love',
+                desc: isKo ? '이번 달 나의 연애 기운' : 'Monthly romantic energy',
+                icon: <CalendarDaysIcon className="w-6 h-6" />,
+                path: '/saju/love/monthly',
+              },
+              {
+                name: isKo ? '재회운' : 'Reunion Luck',
+                desc: isKo ? '돌아선 마음이 다시 닿을까' : 'Will the heart come back?',
+                icon: <ArrowPathIcon className="w-6 h-6" />,
+                path: '/saju/love/reunion',
+              },
+              {
+                name: isKo ? '인연 타이밍' : 'Love Timing',
+                desc: isKo ? '연인이 나타나는 결정적 시기' : 'Specific timing for love',
+                icon: <ClockIcon className="w-6 h-6" />,
+                path: '/saju/love/timing',
+              },
+              {
+                name: isKo ? '잘 맞는 사람' : 'Good Match',
+                desc: isKo ? '나를 빛나게 해줄 찰떡궁합' : 'Who is the best match for you',
+                icon: <UserGroupIcon className="w-6 h-6" />,
+                path: '/saju/love/compatible',
+              },
+              {
+                name: isKo ? '피해야 할 사람' : 'Avoid',
+                desc: isKo ? '에너지를 깎아먹는 인연' : 'People you should avoid',
+                icon: <ShieldExclamationIcon className="w-6 h-6" />,
+                path: '/saju/love/avoid',
+              },
+              {
+                name: isKo ? '상대방의 속마음' : 'Partner Feelings',
+                desc: isKo ? '숨겨진 진심과 생각 열어보기' : 'Check their hidden feelings',
+                icon: <MagnifyingGlassIcon className="w-6 h-6" />,
+                path: '/saju/love/feelings',
+              },
+            ],
+          },
+          {
             subtitle: isKo ? '이벤트' : 'event',
             items: [
               {
@@ -211,7 +295,7 @@ export default function MenuBar() {
                 desc: isKo
                   ? '중요한 그날의 데이트, 과연 어떨까'
                   : 'Will your date go well? See your romantic energy.',
-                icon: <CalendarDaysIcon className="w-6 h-6" />,
+                icon: <HeartIcon className="w-6 h-6" />,
                 path: '/saju/date',
               },
               {
@@ -226,7 +310,7 @@ export default function MenuBar() {
                 desc: isKo
                   ? '아이와 부모의 기운에 맞는 조화로운 출산 택일'
                   : 'Find the most auspicious birth dates for your child.',
-                icon: <CalendarDaysIcon className="w-6 h-6" />,
+                icon: <UserMinusIcon className="w-6 h-6" />,
                 path: '/saju/selbirth',
               },
             ],

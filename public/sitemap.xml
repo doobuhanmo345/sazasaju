@@ -3,39 +3,55 @@
   <!-- Main -->
   <url>
     <loc>https://sazasaju.com</loc>
-    <lastmod>2026-02-02</lastmod>
+    <lastmod>2026-02-09</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
   
-  <!-- Saju Analyzers -->
-  <url><loc>https://sazasaju.com/saju/sazatalk</loc><lastmod>2026-02-02</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>
-  <url><loc>https://sazasaju.com/saju/basic</loc><lastmod>2026-02-02</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>
-  <url><loc>https://sazasaju.com/saju/todaysluck</loc><lastmod>2026-02-02</lastmod><changefreq>daily</changefreq><priority>0.9</priority></url>
-  <url><loc>https://sazasaju.com/saju/dayluck</loc><lastmod>2026-02-02</lastmod><changefreq>daily</changefreq><priority>0.9</priority></url>
-  <url><loc>https://sazasaju.com/saju/2026luck</loc><lastmod>2026-02-02</lastmod><changefreq>monthly</changefreq><priority>0.9</priority></url>
-  <url><loc>https://sazasaju.com/saju/wealth</loc><lastmod>2026-02-02</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
+  <!-- Saju Main Analyzers -->
+  <url><loc>https://sazasaju.com/saju/sazatalk</loc><lastmod>2026-02-09</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://sazasaju.com/saju/basic</loc><lastmod>2026-02-09</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://sazasaju.com/saju/todaysluck</loc><lastmod>2026-02-09</lastmod><changefreq>daily</changefreq><priority>0.9</priority></url>
+  <url><loc>https://sazasaju.com/saju/2026luck</loc><lastmod>2026-02-09</lastmod><changefreq>monthly</changefreq><priority>0.9</priority></url>
+  
+  <!-- Wealth Saju -->
+  <url><loc>https://sazasaju.com/saju/wealth</loc><lastmod>2026-02-09</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://sazasaju.com/saju/wealth/capacity</loc><lastmod>2026-02-09</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://sazasaju.com/saju/wealth/business</loc><lastmod>2026-02-09</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://sazasaju.com/saju/wealth/investment</loc><lastmod>2026-02-09</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://sazasaju.com/saju/wealth/timing</loc><lastmod>2026-02-09</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  
+  <!-- Love Saju -->
+  <url><loc>https://sazasaju.com/saju/love</loc><lastmod>2026-02-09</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://sazasaju.com/saju/love/lifetime</loc><lastmod>2026-02-09</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://sazasaju.com/saju/love/monthly</loc><lastmod>2026-02-09</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://sazasaju.com/saju/love/reunion</loc><lastmod>2026-02-09</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://sazasaju.com/saju/love/timing</loc><lastmod>2026-02-09</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://sazasaju.com/saju/love/compatible</loc><lastmod>2026-02-09</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://sazasaju.com/saju/love/avoid</loc><lastmod>2026-02-09</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://sazasaju.com/saju/love/feelings</loc><lastmod>2026-02-09</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
   
   <!-- Saju Selection/Match -->
-  <url><loc>https://sazasaju.com/saju/match</loc><lastmod>2026-02-02</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://sazasaju.com/saju/date</loc><lastmod>2026-02-02</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://sazasaju.com/saju/interview</loc><lastmod>2026-02-02</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://sazasaju.com/saju/seldate</loc><lastmod>2026-02-02</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://sazasaju.com/saju/selbirth</loc><lastmod>2026-02-02</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://sazasaju.com/saju/match</loc><lastmod>2026-02-09</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://sazasaju.com/saju/date</loc><lastmod>2026-02-09</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://sazasaju.com/saju/interview</loc><lastmod>2026-02-09</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://sazasaju.com/saju/seldate</loc><lastmod>2026-02-09</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://sazasaju.com/saju/selbirth</loc><lastmod>2026-02-09</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
   
   <!-- Tarot -->
-  <url><loc>https://sazasaju.com/tarot/tarotdaily</loc><lastmod>2026-02-02</lastmod><changefreq>daily</changefreq><priority>0.8</priority></url>
-  <url><loc>https://sazasaju.com/tarot/tarotlove</loc><lastmod>2026-02-02</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://sazasaju.com/tarot/tarotmoney</loc><lastmod>2026-02-02</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://sazasaju.com/tarot/tarotcounseling</loc><lastmod>2026-02-02</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://sazasaju.com/tarot/tarotdaily</loc><lastmod>2026-02-09</lastmod><changefreq>daily</changefreq><priority>0.8</priority></url>
+  <url><loc>https://sazasaju.com/tarot/tarotlove</loc><lastmod>2026-02-09</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://sazasaju.com/tarot/tarotmoney</loc><lastmod>2026-02-09</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://sazasaju.com/tarot/tarotcounseling</loc><lastmod>2026-02-09</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
   
   <!-- Others -->
-  <url><loc>https://sazasaju.com/fortunecookie</loc><lastmod>2026-02-02</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
-  <url><loc>https://sazasaju.com/sajuexp</loc><lastmod>2026-02-02</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://sazasaju.com/fortunecookie</loc><lastmod>2026-02-09</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+  <url><loc>https://sazasaju.com/sajuexp</loc><lastmod>2026-02-09</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://sazasaju.com/credit</loc><lastmod>2026-02-09</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
 
   <!-- Ad/Landing Pages -->
-  <url><loc>https://sazasaju.com/ad/newyearadkr</loc><lastmod>2026-02-02</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>
-  <url><loc>https://sazasaju.com/ad/newyearaden</loc><lastmod>2026-02-02</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>
-  <url><loc>https://sazasaju.com/ad/sazatalkadkr</loc><lastmod>2026-02-02</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://sazasaju.com/ad/sazatalkad</loc><lastmod>2026-02-02</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://sazasaju.com/ad/newyearadkr</loc><lastmod>2026-02-09</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://sazasaju.com/ad/newyearaden</loc><lastmod>2026-02-09</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://sazasaju.com/ad/sazatalkadkr</loc><lastmod>2026-02-09</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://sazasaju.com/ad/sazatalkad</loc><lastmod>2026-02-09</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
 </urlset>
