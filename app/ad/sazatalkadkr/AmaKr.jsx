@@ -86,7 +86,7 @@ export default function AmaKr({ question, setQuestion, setStep }) {
         <div className="w-full max-w-2xl px-4 flex items-center justify-center">
           <img
             src="/images/adImage/sazatalk/sazatalk_main_clay.png"
-            className="h-[400px] "
+            className=""
             alt="사자사주 메인"
           />
         </div>
