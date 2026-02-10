@@ -100,7 +100,14 @@ export default function AppBanner() {
 
     const isBackground = !!queueDoc;
     const isDirect = loading;
-    const shouldShow = isBackground || isDirect;
+    const isStaleFlag = (() => {
+        if (!userData?.isAnalyzing || loading || isBackground) return false;
+        const updatedAt = userData.updatedAt?.toMillis ? userData.updatedAt.toMillis() : (userData.updatedAt ? new Date(userData.updatedAt).getTime() : 0);
+        if (!updatedAt) return false;
+        return Date.now() - updatedAt > 5 * 60 * 1000;
+    })();
+
+    const shouldShow = isBackground || isDirect || (userData?.isAnalyzing && !isStaleFlag);
     if (!shouldShow) return null;
 
     // Enhanced Progress Logic:

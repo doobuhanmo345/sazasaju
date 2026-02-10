@@ -211,16 +211,94 @@ exports.processAnalysisQueue = onDocumentCreated(
         completedAt: admin.firestore.FieldValue.serverTimestamp(),
       });
 
-      // 4. Release isAnalyzing lock
+      // 4. Release isAnalyzing lock and persist results if necessary
       const userId = data.userId;
+      const type = data.analysisType;
+      const params = data.params;
+
       if (userId) {
         try {
-          await admin.firestore().collection('users').doc(userId).update({
-            isAnalyzing: false
-          });
-          console.log(`[processAnalysisQueue] Released isAnalyzing lock for user ${userId}`);
+          const userRef = admin.firestore().collection('users').doc(userId);
+          const now = new Date();
+          // KST (UTC+9) date string for dailyUsage
+          const kstDate = new Date(now.getTime() + (9 * 60 * 60 * 1000));
+          const todayStr = kstDate.toISOString().split('T')[0];
+          const timestamp = now.toISOString();
+
+          // Prepare basic user updates
+          const userUpdates = {
+            isAnalyzing: false,
+            editCount: admin.firestore.FieldValue.increment(1),
+            lastEditDate: todayStr,
+            [`dailyUsage.${todayStr}`]: admin.firestore.FieldValue.increment(1),
+          };
+
+          // Specific persistence logic based on type
+          if (type === 'saza' && params?.question) {
+            // 1. Save to sazatalk_messages
+            await admin.firestore().collection('sazatalk_messages').add({
+              userId,
+              question: params.question,
+              result: text,
+              createdAt: admin.firestore.FieldValue.serverTimestamp(),
+            });
+
+            // 2. Update user history
+            userUpdates['usageHistory.Zsazatalk'] = {
+              question: params.question,
+              result: text,
+              timestamp: timestamp,
+            };
+            userUpdates['usageHistory.question_history'] = admin.firestore.FieldValue.arrayUnion({
+              question: params.question,
+              timestamp: timestamp,
+            });
+          } else {
+            // 2. All other Saju & Tarot types
+            const finalCacheKey = data.cacheKey || (type && type.startsWith('tarot') ? type : 'ZApiAnalysis');
+
+            // Build a comprehensive history entry
+            const historyEntry = {
+              result: text,
+              saju: params?.saju || null,
+              language: params?.language || 'ko',
+              gender: params?.gender || null,
+              timestamp: timestamp,
+            };
+
+            // Add variety of possible params (merging what different presets use)
+            if (params?.question) historyEntry.question = params.question;
+            if (params?.ques) historyEntry.ques = params.ques;
+            if (params?.ques2) historyEntry.ques2 = params.ques2;
+            if (params?.saju2) historyEntry.saju2 = params.saju2;
+            if (params?.gender2) historyEntry.gender2 = params.gender2;
+            if (params?.relationship) historyEntry.relationship = params.relationship;
+            if (params?.startDate) historyEntry.startDate = params.startDate;
+            if (params?.endDate) historyEntry.endDate = params.endDate;
+            if (params?.purpose) historyEntry.purpose = params.purpose;
+            if (params?.selectedDate) historyEntry.selectedDate = params.selectedDate;
+            if (params?.date) historyEntry.date = params.date;
+            if (params?.sajuDate) historyEntry.sajuDate = params.sajuDate;
+            if (params?.partnerSaju) historyEntry.partnerSaju = params.partnerSaju;
+            if (params?.partnerGender) historyEntry.partnerGender = params.partnerGender;
+
+            if (type && type.startsWith('tarot')) {
+              // Tarot usually has a nested date structure
+              userUpdates[`usageHistory.${finalCacheKey}`] = {
+                [todayStr]: admin.firestore.FieldValue.increment(1),
+                result: text,
+                ...historyEntry
+              };
+            } else {
+              // Standard Saju mapping
+              userUpdates[`usageHistory.${finalCacheKey}`] = historyEntry;
+            }
+          }
+
+          await userRef.update(userUpdates);
+          console.log(`[processAnalysisQueue] Successfully persisted results for user ${userId}`);
         } catch (lockError) {
-          console.error(`[processAnalysisQueue] Failed to release lock for user ${userId}:`, lockError);
+          console.error(`[processAnalysisQueue] Failed to update user ${userId}:`, lockError);
         }
 
         // 5. Create notification
@@ -238,16 +316,17 @@ exports.processAnalysisQueue = onDocumentCreated(
         } catch (notifError) {
           console.error(`[processAnalysisQueue] Failed to create notification for user ${userId}:`, notifError);
         }
-
-        // 6. Delete completed queue document to prevent stale UI
-        try {
-          await snapshot.ref.delete();
-          console.log(`[processAnalysisQueue] Deleted completed queue document ${docId}`);
-        } catch (deleteError) {
-          console.error(`[processAnalysisQueue] Failed to delete queue document ${docId}:`, deleteError);
-        }
       }
 
+      /*
+      // 6. Delete completed queue document to prevent stale UI
+      try {
+        await snapshot.ref.delete();
+        console.log(`[processAnalysisQueue] Deleted completed queue document ${docId}`);
+      } catch (deleteError) {
+        console.error(`[processAnalysisQueue] Failed to delete queue document ${docId}:`, deleteError);
+      }
+      */
       console.log(`[processAnalysisQueue] Successfully processed ${docId}`);
     } catch (error) {
       console.error(`[processAnalysisQueue] Error processing ${docId}:`, error);
@@ -290,6 +369,9 @@ exports.onNotificationCreated = onDocumentCreated(
     const data = snapshot.data();
     const { userId, targetRole, message, targetPath, title } = data;
 
+    // Extract string path if targetPath is an object
+    const finalPath = typeof targetPath === 'object' ? targetPath.path : targetPath;
+
     if (!userId && targetRole !== 'admin') {
       console.log('No userId or targetRole=admin found in notification document');
       return;
@@ -331,7 +413,7 @@ exports.onNotificationCreated = onDocumentCreated(
           body: message || '새로운 알림이 도착했습니다.',
         },
         data: {
-          url: targetPath || '/',
+          url: finalPath || '/',
           click_action: 'FLUTTER_NOTIFICATION_CLICK', // For some older native integrations
         },
       };
@@ -356,7 +438,7 @@ exports.onNotificationCreated = onDocumentCreated(
         },
         webpush: {
           fcmOptions: {
-            link: targetPath || '/',
+            link: finalPath || '/',
           },
         },
       });

@@ -27,8 +27,11 @@ export default function NotificationList() {
     }
     // 2. Redirect if targetPath exists
     if (note.targetPath) {
-      router.push(note.targetPath);
-      setIsOpen(false); // Close dropdown
+      const dest = typeof note.targetPath === 'object' ? note.targetPath.path : note.targetPath;
+      if (dest) {
+        router.push(dest);
+        setIsOpen(false); // Close dropdown
+      }
     }
   };
 
