@@ -412,7 +412,14 @@ function MessagesContent() {
                     />
                   ) : msg.messageType === 'analysis' ? (
                     <div
-                      onClick={() => msg.targetPath && (window.location.href = msg.targetPath)}
+                      onClick={() => {
+                        let url = msg.targetPath;
+                        console.log(url);
+                        if (typeof url === 'object' && url?.path) {
+                          url = url.path;
+                        }
+                        if (url) window.location.href = url;
+                      }}
                       className="group px-6 py-4 hover:bg-blue-50/50 dark:hover:bg-blue-900/10 cursor-pointer transition-colors"
                     >
                       <div className="flex items-center justify-between gap-4">
