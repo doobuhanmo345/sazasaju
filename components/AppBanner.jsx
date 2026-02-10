@@ -9,9 +9,9 @@ import { XMarkIcon, SparklesIcon } from '@heroicons/react/24/outline';
 
 export default function AppBanner() {
     const { user, userData } = useAuthContext();
-    const { loading, progress, elapsedTime, onCancel } = useLoading();
+    const { loading, progress, elapsedTime, onCancel, statusText: globalStatusText } = useLoading();
     const [queueDoc, setQueueDoc] = useState(null);
-    const [statusText, setStatusText] = useState('');
+    const [localStatusText, setLocalStatusText] = useState('');
 
     // Listen to queue documents (Background Analysis)
     useEffect(() => {
@@ -32,13 +32,15 @@ export default function AppBanner() {
                 setQueueDoc(null);
                 if (userData?.isAnalyzing && !loading) {
                     // Stale flag detection
-                    const updatedAt = userData.updatedAt ? new Date(userData.updatedAt) : null;
-                    const fiveMinsAgo = new Date(Date.now() - 5 * 60 * 1000);
+                    const startAt = userData.analysisStartedAt?.toMillis ? userData.analysisStartedAt.toMillis() : (userData.analysisStartedAt ? new Date(userData.analysisStartedAt).getTime() : 0);
+                    const updateAt = userData.updatedAt?.toMillis ? userData.updatedAt.toMillis() : (userData.updatedAt ? new Date(userData.updatedAt).getTime() : 0);
+                    const lastActive = Math.max(startAt, updateAt);
+                    const fiveMinsAgo = Date.now() - 5 * 60 * 1000;
 
-                    if (updatedAt && updatedAt < fiveMinsAgo) {
+                    if (lastActive && lastActive < fiveMinsAgo) {
                         updateDoc(doc(db, 'users', user.uid), { isAnalyzing: false }).catch(console.error);
                     } else {
-                        setStatusText('분석 준비 중...');
+                        setLocalStatusText('분석 준비 중...');
                     }
                 }
                 return;
@@ -50,9 +52,9 @@ export default function AppBanner() {
             if (data.status === 'pending' || data.status === 'processing') {
                 setQueueDoc({ id: docData.id, ...data });
                 if (data.status === 'pending') {
-                    setStatusText('대기 중...');
+                    setLocalStatusText('대기 중...');
                 } else if (data.status === 'processing') {
-                    setStatusText(data.progressMessage || '분석 중...');
+                    setLocalStatusText(data.progressMessage || '분석 중...');
                 }
             } else {
                 setQueueDoc(null);
@@ -75,7 +77,7 @@ export default function AppBanner() {
         // [UI] Update local state immediately for instant dismissal
         onCancel();
         setQueueDoc(null);
-        setStatusText('');
+        setLocalStatusText('');
 
         try {
             // [Background] Cleanup Firestore resources
@@ -102,9 +104,11 @@ export default function AppBanner() {
     const isDirect = loading;
     const isStaleFlag = (() => {
         if (!userData?.isAnalyzing || loading || isBackground) return false;
-        const updatedAt = userData.updatedAt?.toMillis ? userData.updatedAt.toMillis() : (userData.updatedAt ? new Date(userData.updatedAt).getTime() : 0);
-        if (!updatedAt) return false;
-        return Date.now() - updatedAt > 5 * 60 * 1000;
+        const startAt = userData.analysisStartedAt?.toMillis ? userData.analysisStartedAt.toMillis() : (userData.analysisStartedAt ? new Date(userData.analysisStartedAt).getTime() : 0);
+        const updateAt = userData.updatedAt?.toMillis ? userData.updatedAt.toMillis() : (userData.updatedAt ? new Date(userData.updatedAt).getTime() : 0);
+        const lastActive = Math.max(startAt, updateAt);
+        if (!lastActive) return false;
+        return Date.now() - lastActive > 5 * 60 * 1000;
     })();
 
     const shouldShow = isBackground || isDirect || (userData?.isAnalyzing && !isStaleFlag);
@@ -161,7 +165,7 @@ export default function AppBanner() {
                             </span>
                         </div>
                         <h4 className="text-sm font-bold text-slate-800 dark:text-white truncate">
-                            {statusText || (isDirect ? 'AI 분석 중...' : '서버 연결 중...')}
+                            {isDirect ? (globalStatusText || 'AI 분석 중...') : (localStatusText || '서버 연결 중...')}
                         </h4>
                     </div>
                 </div>

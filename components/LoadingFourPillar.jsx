@@ -8,9 +8,12 @@ import processSajuData from '@/lib/sajuDataProcessor';
 import { useLanguage } from '@/contexts/useLanguageContext';
 import { useTheme } from '@/contexts/useThemeContext';
 
+import { useLoading } from '@/contexts/useLoadingContext';
+
 export default function LoadingFourPillar({ isTimeUnknown, saju }) {
   const { language } = useLanguage();
   const { theme } = useTheme();
+  const { progress: globalProgress, statusText: globalStatusText } = useLoading();
 
   // 분석 상태 관리
   const [analysisStep, setAnalysisStep] = useState(1);
@@ -38,30 +41,22 @@ export default function LoadingFourPillar({ isTimeUnknown, saju }) {
   } = processedData;
 
   useEffect(() => {
-    const totalDuration = 75000; // 75초
     const intervalTime = 100;
 
-    // 1. 메인 프로그레스 타이머
-    const mainTimer = setInterval(() => {
-      if (elapsedRef.current < totalDuration) {
-        elapsedRef.current += intervalTime;
-      }
-      const currentProgress = (elapsedRef.current / totalDuration) * 100;
+    // Use global progress if available, otherwise fallback to local simulation
+    if (globalProgress !== undefined) {
+      setProgress(globalProgress);
+      if (globalProgress >= 90) setAnalysisStep(5);
+      else if (globalProgress >= 70) setAnalysisStep(4);
+      else if (globalProgress >= 50) setAnalysisStep(3);
+      else if (globalProgress >= 30) setAnalysisStep(2);
+      else setAnalysisStep(1);
 
-      if (currentProgress >= 100) {
-        setProgress(100);
-        setIsDeepAnalyzing(true);
-      } else {
-        setProgress(currentProgress);
-      }
+      if (globalProgress >= 99) setIsDeepAnalyzing(true);
+      return;
+    }
 
-      const cur = elapsedRef.current;
-      if (cur < 15000) setAnalysisStep(1);
-      else if (cur < 30000) setAnalysisStep(2);
-      else if (cur < 45000) setAnalysisStep(3);
-      else if (cur < 60000) setAnalysisStep(4);
-      else setAnalysisStep(5);
-    }, intervalTime);
+    const totalDuration = 75000; // Fallback
 
     // 2. 다국어 서브 로그 데이터 정의
     const logData = {
@@ -108,10 +103,10 @@ export default function LoadingFourPillar({ isTimeUnknown, saju }) {
     );
 
     return () => {
-      clearInterval(mainTimer);
+      // clearInterval(mainTimer); // mainTimer removed in favor of global sync
       clearInterval(logInterval);
     };
-  }, [isDeepAnalyzing, language]); // language 추가: 언어 변경 시 즉시 반영
+  }, [isDeepAnalyzing, language, globalProgress]); // language 추가: 언어 변경 시 즉시 반영
 
   const statusMessages = {
     1: '년주 분석: 타고난 가문의 기운과 근본적 에너지 스캔 중 (1/5)',
@@ -164,8 +159,7 @@ export default function LoadingFourPillar({ isTimeUnknown, saju }) {
           <div className="space-y-2">
             <h3 className="text-md font-serif font-light italic text-slate-800 dark:text-slate-100 tracking-tight leading-snug">
               <span className="not-italic font-normal">“</span>
-              {language === 'en' ? statusMessagesEn[analysisStep] : statusMessages[analysisStep]}
-
+              {globalStatusText || (language === 'en' ? statusMessagesEn[analysisStep] : statusMessages[analysisStep])}
               <span className="not-italic font-normal">”</span>
             </h3>
             <p className="text-[11px] font-mono text-slate-400 dark:text-slate-500 transition-opacity duration-1000">

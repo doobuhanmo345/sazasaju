@@ -228,10 +228,18 @@ exports.processAnalysisQueue = onDocumentCreated(
           // Prepare basic user updates
           const userUpdates = {
             isAnalyzing: false,
-            editCount: admin.firestore.FieldValue.increment(1),
+            analysisStartedAt: null,
+            updatedAt: admin.firestore.FieldValue.serverTimestamp(),
             lastEditDate: todayStr,
             [`dailyUsage.${todayStr}`]: admin.firestore.FieldValue.increment(1),
           };
+
+          // Decide whether to increment editCount (free) or deduct credit (paid)
+          if (params?.useCredit) {
+            userUpdates.credits = admin.firestore.FieldValue.increment(-1);
+          } else {
+            userUpdates.editCount = admin.firestore.FieldValue.increment(1);
+          }
 
           // Specific persistence logic based on type
           if (type === 'saza' && params?.question) {
@@ -343,7 +351,9 @@ exports.processAnalysisQueue = onDocumentCreated(
       if (userId) {
         try {
           await admin.firestore().collection('users').doc(userId).update({
-            isAnalyzing: false
+            isAnalyzing: false,
+            analysisStartedAt: null,
+            updatedAt: admin.firestore.FieldValue.serverTimestamp()
           });
           console.log(`[processAnalysisQueue] Released isAnalyzing lock after error for user ${userId}`);
         } catch (lockError) {

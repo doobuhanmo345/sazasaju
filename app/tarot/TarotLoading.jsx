@@ -2,18 +2,24 @@
 
 import React, { useState, useEffect } from 'react';
 import { useLanguage } from '@/contexts/useLanguageContext';
+import { useLoading } from '@/contexts/useLoadingContext';
 
 export default function TarotLoading({ cardPicked }) {
   const { language } = useLanguage();
+  const { progress: globalProgress, statusText: globalStatusText } = useLoading();
   const [progress, setProgress] = useState(0);
 
   useEffect(() => {
-    // 마운트 직후 애니메이션 시작
+    if (globalProgress !== undefined) {
+      setProgress(globalProgress);
+      return;
+    }
+    // 마운트 직후 애니메이션 시작 (Fallback)
     const timer = setTimeout(() => {
       setProgress(100);
     }, 100);
     return () => clearTimeout(timer);
-  }, []);
+  }, [globalProgress]);
 
   return (
     <div className="flex flex-col items-center justify-center px-6 overflow-hidden min-h-[60vh] relative">
@@ -78,7 +84,7 @@ export default function TarotLoading({ cardPicked }) {
           ))}
         </div>
         <p className="text-amber-700 dark:text-amber-500 font-serif italic text-base tracking-widest animate-pulse mb-6">
-          {language === 'ko' ? '운명의 카드를 해석하고 있습니다' : 'Interpreting your destiny...'}
+          {globalStatusText || (language === 'ko' ? '운명의 카드를 해석하고 있습니다' : 'Interpreting your destiny...')}
         </p>
 
         {/* 30초 로딩 프로그래스 바 */}
@@ -89,8 +95,10 @@ export default function TarotLoading({ cardPicked }) {
           />
         </div>
         <div className="mt-2 flex justify-between px-1">
-          <span className="text-[10px] text-amber-600/40 font-mono uppercase tracking-tighter">Synchronizing</span>
-          <span className="text-[10px] text-amber-600/40 font-mono">30s</span>
+          <span className="text-[10px] text-amber-600/40 font-mono uppercase tracking-tighter">
+            {globalProgress !== undefined ? 'Synchronized' : 'Simulating'}
+          </span>
+          <span className="text-[10px] text-amber-600/40 font-mono">{Math.round(progress)}%</span>
         </div>
       </div>
 

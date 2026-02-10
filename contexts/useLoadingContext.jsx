@@ -12,12 +12,14 @@ export function LoadingProvider({ children }) {
   const [isCachedLoading, setIsCachedLoading] = useState(false);
   const [progress, setProgress] = useState(0);
   const [elapsedTime, setElapsedTime] = useState(0); // [NEW] Track analysis time
+  const [statusText, setStatusText] = useState(''); // [NEW] Track detailed status (e.g. "Mapping Saju...")
 
   // Timer for elapsedTime
   useEffect(() => {
     let timer;
     if (loading) {
       setElapsedTime(0);
+      setStatusText(''); // Reset on start
       timer = setInterval(() => {
         setElapsedTime((prev) => prev + 1);
       }, 1000);
@@ -71,6 +73,8 @@ export function LoadingProvider({ children }) {
     setLastParams,
     elapsedTime,
     onCancel,
+    statusText,
+    setStatusText,
   };
 
   return <LoadingContext.Provider value={value}>{children}</LoadingContext.Provider>;
