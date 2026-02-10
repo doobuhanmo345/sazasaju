@@ -165,7 +165,7 @@ export default function AppBanner() {
                             </span>
                         </div>
                         <h4 className="text-sm font-bold text-slate-800 dark:text-white truncate">
-                            {isDirect ? (globalStatusText || 'AI 분석 중...') : (localStatusText || '서버 연결 중...')}
+                            {isDirect ? (globalStatusText || '분석 중...') : (localStatusText || '서버 연결 중...')}
                         </h4>
                     </div>
                 </div>
