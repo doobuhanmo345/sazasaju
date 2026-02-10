@@ -180,7 +180,7 @@ export default function SelBirthPage() {
     },
     [service, saju, gender, language, startDate, endDate, dueDate, partnerBirthInfo, partnerTimeUnknown, birthMethod, babyGender, setAiResult, user, isAnalysisDone, router],
   );
-  console.log(prevData)
+
   // [UX FIX] Reset AI Result on Mount
 
   // [NEW] Reactive Redirect

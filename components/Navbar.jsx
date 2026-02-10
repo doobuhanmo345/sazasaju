@@ -13,6 +13,7 @@ import {
   ArrowRightOnRectangleIcon,
   ArrowLeftOnRectangleIcon,
   BoltIcon,
+  ClockIcon,
   GlobeAltIcon,
   ArrowLeftIcon,
 } from '@heroicons/react/24/outline';
@@ -21,6 +22,7 @@ import Credit from '@/components/Credit';
 import { useLanguage } from '@/contexts/useLanguageContext';
 import { useAuthContext } from '@/contexts/useAuthContext';
 import { useUsageLimit } from '@/contexts/useUsageLimit';
+import { useAnalysisMode } from '@/contexts/AnalysisModeContext';
 import NotificationList from '@/components/NotificationList';
 import AppBanner from '@/components/AppBanner';
 
@@ -42,6 +44,7 @@ const UTILITY_ITEMS = [
 export default function NavBar() {
   const { language, setLanguage } = useLanguage();
   const { user, logout, userData, isCookieDone, openLoginModal, openContactModal } = useAuthContext();
+  const { analysisMode, setAnalysisMode } = useAnalysisMode();
 
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
@@ -189,6 +192,28 @@ export default function NavBar() {
                       <span className={language === 'en' ? 'text-indigo-600' : 'text-gray-400'}>
                         EN
                       </span>
+                    </div>
+                  </div>
+
+                  {/* Analysis Mode Toggle */}
+                  <div className="p-2">
+                    <div className="flex bg-gray-100 dark:bg-slate-900 rounded-xl p-1 gap-1 border border-gray-200 dark:border-slate-800">
+                      <button
+                        onClick={() => setAnalysisMode('direct')}
+                        className={`flex-1 flex flex-col items-center justify-center py-2 px-1 rounded-lg transition-all ${analysisMode === 'direct' ? 'bg-white dark:bg-slate-700 shadow-sm text-indigo-600' : 'text-gray-400 hover:text-gray-600'}`}
+                      >
+                        <BoltIcon className={`w-4 h-4 mb-0.5 ${analysisMode === 'direct' ? 'text-indigo-500' : ''}`} />
+                        <span className="text-[10px] font-black tracking-tighter">DIRECT</span>
+                        <span className="text-[8px] opacity-60 leading-tight">{language === 'ko' ? '빠른 결과' : 'Fast Result'}</span>
+                      </button>
+                      <button
+                        onClick={() => setAnalysisMode('background')}
+                        className={`flex-1 flex flex-col items-center justify-center py-2 px-1 rounded-lg transition-all ${analysisMode === 'background' ? 'bg-white dark:bg-slate-700 shadow-sm text-indigo-600' : 'text-gray-400 hover:text-gray-600'}`}
+                      >
+                        <ClockIcon className={`w-4 h-4 mb-0.5 ${analysisMode === 'background' ? 'text-indigo-500' : ''}`} />
+                        <span className="text-[10px] font-black tracking-tighter">BACKEND</span>
+                        <span className="text-[8px] opacity-60 leading-tight">{language === 'ko' ? '자동 저장' : 'Auto Save'}</span>
+                      </button>
                     </div>
                   </div>
 

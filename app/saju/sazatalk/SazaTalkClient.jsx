@@ -96,7 +96,7 @@ function SazaTalkContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const initialQuery = searchParams.get('q');
-  const { loading, setLoading, setAiResult } = useLoading();
+  const { loading, setLoading, setLoadingType, aiResult, setAiResult } = useLoading();
   const { userData, user, selectedProfile } = useAuthContext();
 
   const targetProfile = selectedProfile || userData;
@@ -324,8 +324,8 @@ function SazaTalkContent() {
           result: result,
           timestamp: new Date().toISOString(),
         });
+        onstart();
       }
-      onstart();
     } catch (error) {
       console.error(error);
     }

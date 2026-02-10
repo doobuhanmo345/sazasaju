@@ -29,7 +29,7 @@ function ChatClientContent() {
     const searchParams = useSearchParams();
     const initialQuery = searchParams.get('q');
 
-    const { loading, setLoading, setAiResult } = useLoading();
+    const { loading, setLoading, setLoadingType, setAiResult, aiResult } = useLoading();
     const { userData, user, selectedProfile } = useAuthContext();
 
     const targetProfile = selectedProfile || userData;

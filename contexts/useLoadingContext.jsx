@@ -11,6 +11,21 @@ export function LoadingProvider({ children }) {
   const [loadingType, setLoadingType] = useState(null);
   const [isCachedLoading, setIsCachedLoading] = useState(false);
   const [progress, setProgress] = useState(0);
+  const [elapsedTime, setElapsedTime] = useState(0); // [NEW] Track analysis time
+
+  // Timer for elapsedTime
+  useEffect(() => {
+    let timer;
+    if (loading) {
+      setElapsedTime(0);
+      timer = setInterval(() => {
+        setElapsedTime((prev) => prev + 1);
+      }, 1000);
+    } else {
+      clearInterval(timer);
+    }
+    return () => clearInterval(timer);
+  }, [loading]);
 
   // Auto-increment progress when loading
   useEffect(() => {
@@ -32,6 +47,15 @@ export function LoadingProvider({ children }) {
     return () => clearInterval(interval);
   }, [loading, isCachedLoading]);
 
+  const onCancel = () => {
+    // Dispatch global event for services to catch
+    if (typeof window !== 'undefined') {
+      console.log('[LoadingContext] Dispatching cancellation event');
+      window.dispatchEvent(new CustomEvent('sazasaju-analysis-cancel'));
+    }
+    setLoading(false);
+  };
+
   const value = {
     loading,
     setLoading,
@@ -45,6 +69,8 @@ export function LoadingProvider({ children }) {
     setAiResult,
     lastParams,
     setLastParams,
+    elapsedTime,
+    onCancel,
   };
 
   return <LoadingContext.Provider value={value}>{children}</LoadingContext.Provider>;

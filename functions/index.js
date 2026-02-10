@@ -4,6 +4,7 @@ const { onDocumentCreated } = require("firebase-functions/v2/firestore");
 const { setGlobalOptions } = require("firebase-functions/v2");
 const { defineSecret } = require('firebase-functions/params');
 const admin = require('firebase-admin');
+
 const axios = require('axios');
 const { GoogleGenerativeAI } = require('@google/generative-ai');
 
@@ -21,7 +22,7 @@ setGlobalOptions({ region: "asia-northeast3" });
 exports.fetchGeminiAnalysis = onCall(
   {
     secrets: [GEMINI_API_KEY],
-    timeoutSeconds: 300,
+    timeoutSeconds: 540,
     memory: '1024MiB',
   },
   async (request) => {
@@ -155,7 +156,7 @@ exports.processAnalysisQueue = onDocumentCreated(
   {
     document: "analysis_queue/{docId}",
     secrets: [GEMINI_API_KEY],
-    timeoutSeconds: 300,
+    timeoutSeconds: 540,
     memory: '1024MiB',
     region: "asia-northeast3",
   },
@@ -205,7 +206,8 @@ exports.processAnalysisQueue = onDocumentCreated(
       console.log(`[processAnalysisQueue] Updating status to 'completed' for ${docId}`);
       await snapshot.ref.update({
         status: 'completed',
-        airesult: text,
+        result: text,
+        airesult: text, // Keep for backward compatibility
         completedAt: admin.firestore.FieldValue.serverTimestamp(),
       });
 
@@ -223,10 +225,11 @@ exports.processAnalysisQueue = onDocumentCreated(
 
         // 5. Create notification
         try {
+          const typeLabel = data.analysisTitle || '사주/타로 분석';
           await admin.firestore().collection('notifications').add({
             userId: userId,
             type: 'analysis',
-            message: '사주 분석이 완료되었습니다.',
+            message: `${typeLabel}이 완료되었습니다.`,
             targetPath: data.targetPath || '/saju/basic/result', // Add navigation path
             isRead: false,
             createdAt: admin.firestore.FieldValue.serverTimestamp(),

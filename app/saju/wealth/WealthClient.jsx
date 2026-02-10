@@ -20,6 +20,7 @@ import { ExclamationTriangleIcon } from '@heroicons/react/24/solid';
 import { useAuthContext } from '@/contexts/useAuthContext';
 import { useLanguage } from '@/contexts/useLanguageContext';
 import { useUsageLimit } from '@/contexts/useUsageLimit';
+import { useLoading } from '@/contexts/useLoadingContext';
 import { useConsumeEnergy } from '@/hooks/useConsumingEnergy';
 import { useSajuCalculator } from '@/hooks/useSajuCalculator';
 
@@ -38,6 +39,7 @@ export default function Wealth({ }) {
   const router = useRouter();
   const { user, userData, selectedProfile } = useAuthContext();
   const { MAX_EDIT_COUNT, isLocked, setEditCount, editCount } = useUsageLimit();
+  const { setLoading, setAiResult } = useLoading();
   // 컨텍스트 스위칭
   const targetProfile = selectedProfile || userData;
   const { birthDate: inputDate, isTimeUnknown, gender, saju } = targetProfile || {};
@@ -51,10 +53,8 @@ export default function Wealth({ }) {
     }
   }, [language]);
 
-  const [aiResult, setAiResult] = useState('');
   const [step, setStep] = useState(0);
   const [selectedQ, setSelectedQ] = useState(null);
-  const [loading, setLoading] = useState(false);
   const [selectedSubQ, setSelectedSubQ] = useState(null);
   const [isCachedLoading, setIsCachedLoading] = useState(false);
   const [progress, setProgress] = useState(0);

@@ -20,7 +20,7 @@ import { useRouter } from 'next/navigation';
 
 export default function TarotMoneyPage() {
   const router = useRouter();
-  const { loading,setLoading,setLoadingType, setAiResult, aiResult } = useLoading();
+  const { loading, setLoading, setLoadingType, setAiResult, aiResult } = useLoading();
   const { userData, user } = useAuthContext();
   const { language } = useLanguage();
   const { setEditCount, MAX_EDIT_COUNT } = useUsageLimit();
