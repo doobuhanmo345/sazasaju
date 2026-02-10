@@ -136,15 +136,7 @@ function SazaTalkContent() {
               return timeB - timeA;
             });
 
-            const latest = docs[0];
 
-            // Check for exact match
-            if (latest && latest.question === initialQuery && latest.answer) {
-              console.log('Duplicate query detected. Redirecting to messages...');
-              router.replace('/messages?tab=sazatalk&view=latest_saza');
-              // Prevent auto-start
-              setAutoStarted(true);
-            }
           }
         } catch (error) {
           console.error('Error checking duplicate query:', error);

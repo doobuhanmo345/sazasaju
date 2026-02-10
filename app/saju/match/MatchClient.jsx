@@ -58,7 +58,7 @@ export default function MatchClient() {
   const { setEditCount, MAX_EDIT_COUNT, isLocked } = useUsageLimit();
   const [step, setStep] = useState('intro')
   const [selectedRel, setSelectedRel] = useState(null)
-  const prevData = userData?.usageHistory?.ZMatch;
+  const prevData = userData?.usageHistory?.ZMatchAnalysis;
 
 
   const [gender2, setGender2] = useState('male');
@@ -551,7 +551,7 @@ export default function MatchClient() {
       router.push('/saju/match/result');
     }
   }, [isButtonClicked, prevData, router, isAnalysisDone, loading]);
-  console.log(isButtonClicked, loading, prevData?.result, prevData?.result?.length)
+  console.log(isButtonClicked, loading)
 
   return (
     <div className="min-h-screen">
