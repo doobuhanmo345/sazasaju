@@ -6,7 +6,7 @@ import AnalysisStepContainer from '@/components/AnalysisStepContainer';
 import { useAuthContext } from '@/contexts/useAuthContext';
 import { useUsageLimit } from '@/contexts/useUsageLimit';
 import { db } from '@/lib/firebase';
-import { doc, getDoc } from 'firebase/firestore';
+import { doc, getDoc, collection, query, where, orderBy, limit, getDocs } from 'firebase/firestore';
 import { useLoading } from '@/contexts/useLoadingContext';
 import { UI_TEXT, langPrompt, hanja } from '@/data/constants';
 import { useLanguage } from '@/contexts/useLanguageContext';
@@ -112,6 +112,48 @@ function SazaTalkContent() {
   const historyContentRef = useRef(null);
   const [autoStarted, setAutoStarted] = useState(false);
   const [isButtonClicked, setIsButtonClicked] = useState(false);
+
+  // [NEW] Check for duplicate query and redirect
+  useEffect(() => {
+    if (user?.uid && initialQuery) {
+      const checkDuplicate = async () => {
+        try {
+          // Client-side sort/filter to avoid indexing issues (limiting to 5 latest to be safe)
+          const q = query(
+            collection(db, 'sazatalk_messages'),
+            where('userId', '==', user.uid),
+            // orderBy('createdAt', 'desc'), // Avoid index requirement
+            limit(10)
+          );
+
+          const snapshot = await getDocs(q);
+          if (!snapshot.empty) {
+            // Client-side sort
+            const docs = snapshot.docs.map(d => ({ id: d.id, ...d.data() }));
+            docs.sort((a, b) => {
+              const timeA = a.createdAt?.seconds || 0;
+              const timeB = b.createdAt?.seconds || 0;
+              return timeB - timeA;
+            });
+
+            const latest = docs[0];
+
+            // Check for exact match
+            if (latest && latest.question === initialQuery && latest.answer) {
+              console.log('Duplicate query detected. Redirecting to messages...');
+              router.replace('/messages?tab=sazatalk&view=latest_saza');
+              // Prevent auto-start
+              setAutoStarted(true);
+            }
+          }
+        } catch (error) {
+          console.error('Error checking duplicate query:', error);
+        }
+      };
+
+      checkDuplicate();
+    }
+  }, [user?.uid, initialQuery, router]);
 
   const [progress, setProgress] = useState(0);
   const [msgIdx, setMsgIdx] = useState(0);

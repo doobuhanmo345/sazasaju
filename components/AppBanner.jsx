@@ -101,6 +101,7 @@ export default function AppBanner() {
     // 2. isAnalyzing flag is true (direct analysis), OR
     // 3. loading state is true (immediate feedback)
     const shouldShow = queueDoc || userData?.isAnalyzing || loading;
+    console.log(queueDoc, userData?.isAnalyzing, loading)
 
     if (!shouldShow) return null;
 
