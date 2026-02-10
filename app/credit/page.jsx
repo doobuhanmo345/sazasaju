@@ -38,8 +38,8 @@ export default function CreditInfoPage() {
             icon: <ChatBubbleLeftRightIcon className="w-5 h-5 text-purple-500" />,
             title: isKo ? '합리적인 프리미엄 기회' : 'Affordable Premium',
             desc: isKo
-                ? '단돈 990원부터 시작하는 고민 해결'
-                : 'Start deep dives from just ₩990',
+                ? '단돈 1000원부터 시작하는 고민 해결'
+                : 'Start deep dives from just ₩1000',
         }
     ];
 
@@ -47,14 +47,14 @@ export default function CreditInfoPage() {
         {
             name: isKo ? '라이트' : 'Lite',
             credits: '1',
-            price: '990',
-            originalPrice: '1500',
-            discount: '34%',
+            price: '1000',
+            originalPrice: '1000',
+            discount: '',
         },
         {
             name: isKo ? '베스트' : 'Best',
             credits: '3',
-            price: '1990',
+            price: '2000',
             originalPrice: '3990',
             discount: '50%',
             recommended: true,
@@ -142,14 +142,21 @@ export default function CreditInfoPage() {
                                     </div>
                                     <div>
                                         <div className="flex items-center gap-2">
+
                                             <span className="font-black text-xl">{plan.credits} Credits</span>
-                                            <span className="text-xs bg-rose-100 dark:bg-rose-900/50 text-rose-600 dark:text-rose-400 font-black px-1.5 py-0.5 rounded">-{plan.discount}</span>
+                                            {plan.price !== plan.originalPrice && (
+                                                <span className="text-xs bg-rose-100 dark:bg-rose-900/50 text-rose-600 dark:text-rose-400 font-black px-1.5 py-0.5 rounded">-{plan.discount}</span>
+                                            )}
+
                                         </div>
                                         <span className="text-xs text-slate-400 font-bold uppercase tracking-wider">{plan.name} Package</span>
                                     </div>
                                 </div>
                                 <div className="text-right">
-                                    <div className="text-slate-300 dark:text-slate-600 text-xs line-through font-bold mb-0.5">₩{plan.originalPrice}</div>
+                                    {plan.price !== plan.originalPrice && (
+                                        <div className="text-slate-300 dark:text-slate-600 text-xs line-through font-bold mb-0.5">₩{plan.originalPrice}</div>
+                                    )}
+
                                     <div className="text-2xl font-black text-slate-900 dark:text-white">₩{plan.price}</div>
                                 </div>
                             </div>
