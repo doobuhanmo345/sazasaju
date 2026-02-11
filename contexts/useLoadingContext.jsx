@@ -1,6 +1,6 @@
 'use client';
 
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { createContext, useMemo, useContext, useState, useEffect } from 'react';
 import { db } from '../lib/firebase';
 import { collection, query, where, orderBy, limit, onSnapshot, doc, updateDoc, deleteDoc } from 'firebase/firestore';
 import { useRouter } from 'next/navigation';
@@ -178,16 +178,15 @@ export function LoadingProvider({ children }) {
 
   const isBackground = !!queueDoc;
   const isDirect = loading;
-  const isStaleFlag = (() => {
+  const isStaleFlag = useMemo(() => {
     if (!userData?.isAnalyzing || loading || isBackground) return false;
     const startAt = userData.analysisStartedAt?.toMillis ? userData.analysisStartedAt.toMillis() : (userData.analysisStartedAt ? new Date(userData.analysisStartedAt).getTime() : 0);
     const updateAt = userData.updatedAt?.toMillis ? userData.updatedAt.toMillis() : (userData.updatedAt ? new Date(userData.updatedAt).getTime() : 0);
     const lastActive = Math.max(startAt, updateAt);
     if (!lastActive) return false;
     return Date.now() - lastActive > 5 * 60 * 1000;
-  })();
-
-
+  }, [userData, loading, isBackground])
+  const isAnalyzing = isBackground || isDirect || (userData?.isAnalyzing && !isStaleFlag);
 
   const value = {
     handleCancelHelper,
@@ -214,7 +213,7 @@ export function LoadingProvider({ children }) {
     setStatusText,
     isBackground,
     isDirect,
-    isStaleFlag,
+    isAnalyzing,
   };
 
   return <LoadingContext.Provider value={value}>{children}</LoadingContext.Provider>;

@@ -11,6 +11,7 @@ import { useLoading } from '@/contexts/useLoadingContext';
 import EnergyBadge from '@/ui/EnergyBadge';
 import LoadingFourPillar from '@/components/LoadingFourPillar';
 import { SajuAnalysisService, AnalysisPresets } from '@/lib/SajuAnalysisService';
+import AnalyzeButton from '@/ui/AnalyzeButton';
 
 export default function CapacityPage() {
     const { language } = useLanguage();

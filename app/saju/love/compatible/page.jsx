@@ -11,7 +11,7 @@ import { useLoading } from '@/contexts/useLoadingContext';
 import EnergyBadge from '@/ui/EnergyBadge';
 import LoadingFourPillar from '@/components/LoadingFourPillar';
 import { SajuAnalysisService, AnalysisPresets, getPromptFromDB } from '@/lib/SajuAnalysisService';
-
+import AnalyzeButton from '@/ui/AnalyzeButton';
 export default function CompatiblePage() {
     const { language } = useLanguage();
     const router = useRouter();
@@ -147,44 +147,14 @@ export default function CompatiblePage() {
                 </div>
 
                 <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
-                    <div className="flex flex-col items-center gap-4 py-8">
-                        <button
-                            onClick={() => loveEnergy.triggerConsume(handleAnalysis)}
-                            disabled={isDisabled || isDisabled2}
-                            className={`w-full sm:w-auto px-16 py-6 font-bold text-xl rounded-2xl shadow-2xl transform transition-all flex items-center justify-center gap-3 ${isDisabled || isDisabled2
-                                ? 'bg-slate-100 text-slate-400 cursor-not-allowed border-2 border-slate-200'
-                                : 'bg-gradient-to-r from-emerald-600 to-green-600 hover:from-emerald-500 hover:to-green-500 text-white shadow-emerald-400 dark:shadow-emerald-900/50 hover:-translate-y-1 hover:shadow-emerald-500'
-                                }`}
-                        >
-                            <SparklesIcon className="w-7 h-7 animate-pulse" />
-                            <span>{language === 'en' ? 'Start Analysis' : '분석 시작하기'}</span>
-                            {isAnalysisDone ? (
-                                <div className="flex items-center gap-1 backdrop-blur-md bg-white/20 px-3 py-1 rounded-full border border-white/30">
-                                    <span className="text-xs font-bold text-white uppercase">Free</span>
-                                    <TicketIcon className="w-4 h-4 text-white" />
-                                </div>
-                            ) : isLocked ? (
-                                <div className="flex items-center gap-1 backdrop-blur-sm px-3 py-1 rounded-full border shadow-sm border-gray-500/50 bg-gray-400/40">
-                                    <LockClosedIcon className="w-5 h-5 text-emerald-500" />
-                                </div>
-                            ) : user && (
-                                <div className="relative">
-                                    <EnergyBadge active={!!userData?.birthDate} consuming={loading} cost={-1} />
-                                </div>
-                            )}
-                        </button>
+                    <AnalyzeButton
+                        onClick={() => loveEnergy.triggerConsume(handleAnalysis)}
+                        disabled={isDisabled || isDisabled2}
+                        isDone={isAnalysisDone}
+                        label={language === 'en' ? 'Start Analysis' : '분석 시작하기'}
+                        color="emerald"
+                    />
 
-                        {isLocked ? (
-                            <p className="text-emerald-600 font-bold text-sm flex items-center gap-2 animate-pulse">
-                                <ExclamationTriangleIcon className="w-5 h-5" />
-                                {language === 'ko' ? '크레딧이 부족합니다' : 'Not Enough Credit'}
-                            </p>
-                        ) : (
-                            <p className="text-xs text-slate-400">
-                                {language === 'ko' ? '이미 분석된 운세는 크래딧을 재소모하지 않습니다.' : 'Already analyzed fortunes do not consume credits.'}
-                            </p>
-                        )}
-                    </div>
                 </div>
             </div>
         </div>

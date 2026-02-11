@@ -523,13 +523,15 @@ export default function MatchClient() {
             </div></div>
           {/* Main Input Area */}
 
-          <div className='flex max-w-lg mx-auto justify-center align-center'>  <AnalyzeButton
-            onClick={() => handleStartClick(onStart)}
-            disabled={loading}
-            isDone={isAnalysisDone}
-            label={language === 'ko' ? '궁합 분석 시작하기' : 'Start Chemistry Analysis'}
-            color="rose"
-          /></div>
+          <div className='flex max-w-lg mx-auto justify-center align-center'>
+            <AnalyzeButton
+              onClick={() => handleStartClick(onStart)}
+              disabled={loading}
+              isDone={isAnalysisDone}
+              label={language === 'ko' ? '궁합 분석 시작하기' : 'Start Chemistry Analysis'}
+              color="rose"
+              cost={-1}
+            /></div>
         </div>
       );
     }

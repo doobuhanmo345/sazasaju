@@ -60,13 +60,15 @@ export default function AnalyzeButton({
   const { user, userData, login } = useAuthContext();
   const { isLocked } = useUsageLimit();
 
-  const { loading: contextLoading, isStaleflag } = useLoading(); // [NEW] Global loading state
-
+  const { loading: contextLoading, isAnalyzing } = useLoading(); // [NEW] Global loading state
+  const noCredit = isLocked && !isDone
+  const isAna = isAnalyzing && !isDone
+  const disable = noCredit || isAna;
+  console.log(isLocked, isAna, isDone, 1)
   // Combine local loading prop with global loading context and user analyzing state
-  const isAnalyzing = isStaleflag
 
   const lockCheck = () => {
-    if (isAnalyzing) return true; // [NEW] Lock if analyzing
+    if (isAna) return true; // [NEW] Lock if analyzing
     if (isLocked) {
       if (isDone) {
         return false
@@ -78,7 +80,7 @@ export default function AnalyzeButton({
     }
   }
   const buttonClicked = () => {
-    if (isAnalyzing) {
+    if (isAna) {
       alert(language === 'ko' ? '다른 분석이 진행 중입니다. 잠시만 기다려주세요.' : 'Another analysis is in progress. Please wait.');
       return;
     }
@@ -125,10 +127,10 @@ export default function AnalyzeButton({
   return (
     <button
       onClick={buttonClicked}
-      disabled={disabled}
+      disabled={disable}
       className={classNames(
         'w-full px-10 py-4 font-bold rounded-xl shadow-lg dark:shadow-none transform transition-all flex items-center justify-center gap-2',
-        disabled
+        disable
           ? DISABLED_STYLE
           : `${theme.classes} text-white hover:-translate-y-1`
       )}
@@ -149,7 +151,7 @@ export default function AnalyzeButton({
       ) : (
         user && (
           <div className="relative scale-90">
-            <EnergyBadge active={userData?.birthDate} consuming={isStaleflag} cost={cost} />
+            <EnergyBadge active={userData?.birthDate} consuming={isAna} cost={cost} />
           </div>
         )
       )}

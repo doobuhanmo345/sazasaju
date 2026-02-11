@@ -13,7 +13,7 @@ import LoadingFourPillar from '@/components/LoadingFourPillar';
 import { SajuAnalysisService, AnalysisPresets } from '@/lib/SajuAnalysisService';
 import CustomCalendar from '@/components/CustomCalendar';
 import ReportTemplateToday from '@/app/saju/dayluck/ReportTemplateToday';
-
+import AnalyzeButton from '@/ui/AnalyzeButton';
 
 export default function DayLuckPage() {
   const { setLoadingType, aiResult, setAiResult, handleCancelHelper } = useLoading();
@@ -166,6 +166,13 @@ export default function DayLuckPage() {
         <section className="mb-12">{datePickerSection()}</section>
 
         <footer className="space-y-6">
+          <AnalyzeButton
+            onClick={() => handleStartClick(onStart)}
+            disabled={isDisabled || isDisabled2}
+            isDone={isAnalysisDone}
+            label={language === 'ko' ? '운세 확인하기' : 'Check Fortune'}
+            color="amber"
+          />
           <button
             onClick={() => handleStartClick(onStart)}
             disabled={isDisabled || isDisabled2}

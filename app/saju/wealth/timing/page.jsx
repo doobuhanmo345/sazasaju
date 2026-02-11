@@ -11,13 +11,14 @@ import { useLoading } from '@/contexts/useLoadingContext';
 import EnergyBadge from '@/ui/EnergyBadge';
 import LoadingFourPillar from '@/components/LoadingFourPillar';
 import { SajuAnalysisService, AnalysisPresets } from '@/lib/SajuAnalysisService';
+import AnalyzeButton from '@/ui/AnalyzeButton';
 
 export default function TimingPage() {
     const { language } = useLanguage();
     const router = useRouter();
     const { user, userData, selectedProfile } = useAuthContext();
     const { MAX_EDIT_COUNT, isLocked, setEditCount } = useUsageLimit();
-    const { loading, setLoading, setAiResult,handleCancelHelper } = useLoading();
+    const { loading, setLoading, setAiResult, handleCancelHelper } = useLoading();
     const targetProfile = selectedProfile || userData;
     const { gender, saju, isTimeUnknown } = targetProfile || {};
     const wealthEnergy = useConsumeEnergy();
@@ -195,31 +196,16 @@ export default function TimingPage() {
                     <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
 
                         <div className="flex flex-col items-center gap-4 py-8">
-                            <button
+
+                            <AnalyzeButton
                                 onClick={() => wealthEnergy.triggerConsume(handleAnalysis)}
                                 disabled={isDisabled || isDisabled2}
-                                className={`w-full sm:w-auto px-16 py-6 font-bold text-xl rounded-2xl shadow-2xl transform transition-all flex items-center justify-center gap-3 ${isDisabled || isDisabled2
-                                    ? 'bg-slate-100 text-slate-400 cursor-not-allowed border-2 border-slate-200'
-                                    : 'bg-gradient-to-r from-sky-600 to-blue-600 hover:from-sky-500 hover:to-blue-500 text-white shadow-sky-400 dark:shadow-sky-900/50 hover:-translate-y-1 hover:shadow-sky-500'
-                                    }`}
-                            >
-                                <SparklesIcon className="w-7 h-7 animate-pulse" />
-                                <span>{language === 'en' ? 'Start Analysis' : '분석 시작하기'}</span>
-                                {isAnalysisDone ? (
-                                    <div className="flex items-center gap-1 backdrop-blur-md bg-white/20 px-3 py-1 rounded-full border border-white/30">
-                                        <span className="text-xs font-bold text-white uppercase">Free</span>
-                                        <TicketIcon className="w-4 h-4 text-white" />
-                                    </div>
-                                ) : isLocked ? (
-                                    <div className="flex items-center gap-1 backdrop-blur-sm px-3 py-1 rounded-full border shadow-sm border-gray-500/50 bg-gray-400/40">
-                                        <LockClosedIcon className="w-5 h-5 text-sky-500" />
-                                    </div>
-                                ) : user && (
-                                    <div className="relative">
-                                        <EnergyBadge active={!!userData?.birthDate} consuming={loading} cost={-1} />
-                                    </div>
-                                )}
-                            </button>
+                                isDone={isAnalysisDone}
+                                language={language}
+                                label={language === 'en' ? 'Start Analysis' : '분석 시작하기'}
+                                cost={-1}
+                                color="blue"
+                            />
 
                             {isLocked ? (
                                 <p className="text-rose-600 font-bold text-sm flex items-center gap-2 animate-pulse">

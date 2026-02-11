@@ -339,12 +339,13 @@ export default function FirstDatePage() {
               <AnalyzeButton
                 onClick={() => handleStartClick(onStart)}
                 disabled={isDisabled || isDisabled2}
-                loading={loading}
+                loading={loading} s
                 isDone={isAnalysisDone}
                 label={language === 'ko' ? '데이트 분석하기' : 'Analyze Date'}
                 color="rose"
                 cost={-1}
               />
+
               {isLocked ? (
                 <p className="mt-4 text-rose-600 font-black text-sm flex items-center justify-center gap-1 animate-pulse">
                   <ExclamationTriangleIcon className="w-4 h-4" />

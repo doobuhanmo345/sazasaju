@@ -23,10 +23,11 @@ import TarotLoading from '@/app/tarot/TarotLoading';
 import { DateService } from '@/utils/dateService';
 import StartButton from '@/ui/StartButton';
 import { useRouter } from 'next/navigation';
+import { handleCancelHelper } from '../../../lib/helpers';
 
 export default function TarotLovePage() {
   const router = useRouter();
-  const { loading, setLoading, setLoadingType, setAiResult, aiResult } = useLoading();
+  const { loading, setLoading, setLoadingType, setAiResult, aiResult, handleCancelHelper } = useLoading();
   const { userData, user } = useAuthContext();
   const { language } = useLanguage();
   const { setEditCount, MAX_EDIT_COUNT } = useUsageLimit();
@@ -105,6 +106,7 @@ export default function TarotLovePage() {
         setLoadingType,
         setAiResult,
         onStart,
+        handleCancelHelper
       });
 
       try {
