@@ -9,8 +9,9 @@ import { useLanguage } from './useLanguageContext';
 import { DateService } from '@/utils/dateService';
 
 export const useUsageLimit = () => {
-  const [editCount, setEditCount] = useState(0);
   const { user, userData } = useAuthContext();
+  const [editCount, setEditCount] = useState(userData?.editCount || 0);
+
   const { language } = useLanguage();
 
   const MAX_EDIT_COUNT = useMemo(() => {

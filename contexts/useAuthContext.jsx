@@ -73,20 +73,31 @@ export function AuthContextProvider({ children }) {
   }, [user]);
 
   // 프로필 선택 함수 (Firebase 연동)
+  // 프로필 선택 함수 (Firebase 연동)
   const selectProfile = async (profile) => {
+    console.log('selectProfile', profile);
+
     if (!user) return;
     const userDocRef = doc(db, 'users', user.uid);
     try {
-      // profile이 없거나, profile이 본인(uid 일치)인 경우 -> 본인 선택으로 처리
       const isSelf = !profile || (profile.uid === user.uid);
 
       if (isSelf) {
-        setSelectedProfile(userData); // UI 즉시 반영
-        await updateDoc(userDocRef, { currentProfileId: null }); // DB 저장 (본인)
+        setSelectedProfile(userData); // 본인은 그대로
+        await updateDoc(userDocRef, { currentProfileId: null });
         localStorage.removeItem('lastSelectedProfileId');
       } else {
-        setSelectedProfile(profile); // UI 즉시 반영
-        await updateDoc(userDocRef, { currentProfileId: profile.id }); // DB 저장
+        // ⭐️ 친구 프로필에 본인의 usage 데이터 병합
+        const enrichedProfile = {
+          ...profile,
+          editCount: userData.editCount, // 본인의 editCount
+          credits: userData.credits, // 본인의 credits
+          dailyUsage: userData.dailyUsage, // 본인의 dailyUsage
+          lastEditDate: userData.lastEditDate, // 본인의 lastEditDate
+        };
+
+        setSelectedProfile(enrichedProfile);
+        await updateDoc(userDocRef, { currentProfileId: profile.id });
         localStorage.setItem('lastSelectedProfileId', profile.id);
       }
     } catch (e) {
@@ -306,7 +317,7 @@ export function AuthContextProvider({ children }) {
             phoneNumber: user.phoneNumber || '', // 이미 있으면 저장
             role: 'user',
             status: 'active',
-            editCount: 0,
+
             lastLoginDate: todayStr,
             gender: 'female',
             birthDate: '',

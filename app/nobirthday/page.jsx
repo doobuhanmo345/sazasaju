@@ -45,6 +45,12 @@ export default function NoBirthdayPage() {
   const [introStep, setIntroStep] = useState(0);
   const [nameConfirmed, setNameConfirmed] = useState(false);
   const [isWelcome, setIsWelcome] = useState(false);
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
 
 
   // Intro transition timers
@@ -52,6 +58,7 @@ export default function NoBirthdayPage() {
     // 만약 이미 정보가 있는 상태라면 인트로를 보여주지 않음
     if (userData?.birthDate) {
       setIsIntro(false);
+      console.log('Intro skipped');
       return;
     }
 
@@ -69,7 +76,7 @@ export default function NoBirthdayPage() {
 
       const finishTimer = setTimeout(() => {
         setIsIntro(false);
-      }, 500);
+      }, 2500);
 
       return () => {
         timers.forEach(clearTimeout);
@@ -166,6 +173,8 @@ export default function NoBirthdayPage() {
   };
 
   const containerClass = "w-full max-w-xl relative z-10";
+
+  if (!mounted) return null;
 
   if (isIntro) {
     const lineClass = "transition-all duration-1000 ease-out transform";

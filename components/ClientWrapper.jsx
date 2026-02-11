@@ -62,16 +62,22 @@ export default function ClientWrapper({ children }) {
       (path) => pathname === path || pathname.startsWith(path + '/')
     );
 
-    if (user && userData && !userData.birthDate && !isExempt) {
+    let timer;
+
+    if (user && userData && !userData?.birthDate && !isExempt) {
       // 데이터가 실제 없는지 확인하기 위해 아주 짧은 지연 후 리다이렉트 (깜빡임 방지)
-      const timer = setTimeout(() => {
-        if (!userData.birthDate) {
+      timer = setTimeout(() => {
+        // Double check inside timeout
+        if (!userData?.birthDate) {
           console.log('Redirecting to nobirthday: User data exists but birthDate is missing.');
           router.push('/nobirthday');
         }
       }, 500);
-      return () => clearTimeout(timer);
     }
+
+    return () => {
+      if (timer) clearTimeout(timer);
+    };
   }, [user, userData, loadingUser, pathname, router]);
 
   // Determine if we need to redirect (to show Splash instead of content)
