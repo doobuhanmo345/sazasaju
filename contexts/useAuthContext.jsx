@@ -36,7 +36,6 @@ export function AuthContextProvider({ children }) {
 
     // 1. 최초 초기화: 선택된 프로필이 없고 userData가 처음 로드되었을 때
     if (!selectedProfile) {
-      // 로컬 스토리지에서 복원하려는 시도가 이미 있었는지 확인 (savedProfiles 로드 로직과 연결)
       setSelectedProfile(userData);
       return;
     }
@@ -45,8 +44,15 @@ export function AuthContextProvider({ children }) {
     const isOwnerSelected = selectedProfile && (selectedProfile.uid === userData.uid && !selectedProfile.id);
 
     if (isOwnerSelected) {
-      // 무한 루프 방지를 위해 실제 값이 다를 때만 업데이트
-      if (JSON.stringify(selectedProfile) !== JSON.stringify(userData)) {
+      // 무한 루프 방지: 주요 데이터 필드만 비교
+      const hasChanged =
+        selectedProfile.editCount !== userData.editCount ||
+        selectedProfile.credits !== userData.credits ||
+        selectedProfile.displayName !== userData.displayName ||
+        JSON.stringify(selectedProfile.saju) !== JSON.stringify(userData.saju);
+
+      if (hasChanged) {
+        console.log('🔄 Syncing owner profile with latest userData');
         setSelectedProfile(userData);
       }
     }
@@ -317,6 +323,8 @@ export function AuthContextProvider({ children }) {
             status: 'active',
 
             lastLoginDate: todayStr,
+            editCount: 0,
+            credits: 0,
             gender: 'female',
             birthDate: '',
             birthCity: '',
@@ -349,27 +357,28 @@ export function AuthContextProvider({ children }) {
     if (!selectedProfile || !userData) return;
 
     const isSelf = selectedProfile.uid === userData.uid && !selectedProfile.id;
-
-    // 본인이면 그냥 패스
     if (isSelf) return;
 
-    // 친구 프로필이면 usage 데이터 병합
-    const hasUsageData =
-      selectedProfile.editCount !== undefined &&
-      selectedProfile.credits !== undefined;
+    // 친구 프로필이면 본인의 usage 데이터(editCount, credits 등) 병합
+    // 0도 유효한 값이므로 undefined/null 체크
+    const userDataEditCount = userData.editCount ?? 0;
+    const userDataCredits = userData.credits ?? 0;
 
-    // 이미 병합되어 있으면 패스
-    if (hasUsageData) return;
+    const needsSync =
+      selectedProfile.editCount !== userDataEditCount ||
+      selectedProfile.credits !== userDataCredits;
 
-    // 병합 실행
-    setSelectedProfile(prev => ({
-      ...prev,
-      editCount: userData.editCount,
-      credits: userData.credits,
-      dailyUsage: userData.dailyUsage,
-      lastEditDate: userData.lastEditDate,
-    }));
-  }, [selectedProfile, userData]);
+    if (needsSync) {
+      console.log('🔗 Merging owner usage data into friend profile');
+      setSelectedProfile(prev => ({
+        ...prev,
+        editCount: userDataEditCount,
+        credits: userDataCredits,
+        dailyUsage: userData.dailyUsage || {},
+        lastEditDate: userData.lastEditDate || '',
+      }));
+    }
+  }, [selectedProfile?.id, userData?.editCount, userData?.credits]);
 
   const [isLoggingIn, setIsLoggingIn] = useState(false);
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);

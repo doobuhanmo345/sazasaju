@@ -33,7 +33,7 @@ export default function YearlyLuckPage() {
   const DISABLED_STYLE = 'bg-gray-100 text-gray-400 cursor-not-allowed border border-gray-200';
   const isDisabled = !user || loading;
   const isTargetOthers = !!selectedProfile;
-
+  console.log(targetProfile)
   // [NEW] Strict Analysis Check from User Data
   const prevData = userData?.usageHistory?.ZNewYear;
   // Note: Assuming ZNewYear is the key. Provide manual fallback if key differs?
