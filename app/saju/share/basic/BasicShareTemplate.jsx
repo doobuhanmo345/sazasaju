@@ -106,97 +106,143 @@ export default function BasicShareTemplate({ shareData, language = 'ko' }) {
 
             {/* AI Analysis */}
             <div className="report-container">
-                {data?.summary && (
-                    <section className="my-9">
-                        <h2 className="rt-card__title">{isEn ? 'Saju Identity Summary' : '사주 정체성 요약'}</h2>
-                        {data?.summary?.desc && <div className="rt-card__text text-left">{data.summary.desc}</div>}
-                        {data?.summary?.title && (
-                            <div className="my-3">
-                                <p className="rt-timing-grid__item">{data.summary.title}</p>
-                            </div>
-                        )}
-                        {data?.keywords && Array.isArray(data.keywords) && data.keywords.length > 0 && (
-                            <div className="gap-3 flex justify-center flex-wrap mt-4">
-                                {data.keywords.map((keyword, idx) => (
-                                    <div key={idx} className="rt-id-card__label">#{keyword}</div>
-                                ))}
-                            </div>
-                        )}
-                    </section>
-                )}
+                <section className="my-9">
+                    <h2 className="rt-card__title">
+                        {isEn ? 'Core Personality' : '핵심 성격'}
+                    </h2>
 
-                {data?.overview?.desc && (
-                    <section className="my-9">
-                        <h2 className="rt-card__title">{isEn ? 'Overview of Destiny' : '운명의 개요'}</h2>
-                        <p className="rt-card__text text-left">{data.overview.desc}</p>
-                    </section>
-                )}
-
-                {(data?.wealth || data?.job || data?.love || data?.health) && (
-                    <section className="my-9">
-                        <h2 className="rt-card__title">{isEn ? 'Detailed Analysis' : '상세 분석'}</h2>
-                        {data?.wealth && (
-                            <div className="rt-card">
-                                <div className="rt-ootd-item">
-                                    <h3 className="rt-ootd-item__value">{isEn ? 'Wealth & Finance' : '재물운'}</h3>
-                                    {data?.wealth?.summary && <p className="rt-ootd-item__label">{data.wealth.summary}</p>}
-                                </div>
-                                {data?.wealth?.desc && <p className="rt-card__text text-left">{data.wealth.desc}</p>}
-                            </div>
-                        )}
-                        {data?.job && (
-                            <div className="rt-card">
-                                <div className="rt-ootd-item">
-                                    <h3 className="rt-ootd-item__value">{isEn ? 'Career & Success' : '직업운'}</h3>
-                                    {data?.job?.summary && <p className="rt-ootd-item__label">{data.job.summary}</p>}
-                                </div>
-                                {data?.job?.desc && <p className="rt-card__text text-left">{data.job.desc}</p>}
-                            </div>
-                        )}
-                        {data?.love && (
-                            <div className="rt-card">
-                                <div className="rt-ootd-item">
-                                    <h3 className="rt-ootd-item__value">{isEn ? 'Love & Romance' : '애정운'}</h3>
-                                    {data?.love?.summary && <p className="rt-ootd-item__label">{data.love.summary}</p>}
-                                </div>
-                                {data?.love?.desc && <p className="rt-card__text text-left">{data.love.desc}</p>}
-                            </div>
-                        )}
-                        {data?.health && (
-                            <div className="rt-card">
-                                <div className="rt-ootd-item">
-                                    <h3 className="rt-ootd-item__value">{isEn ? 'Health & Wellness' : '건강운'}</h3>
-                                    {data?.health?.summary && <p className="rt-ootd-item__label">{data.health.summary}</p>}
-                                </div>
-                                {data?.health?.desc && <p className="rt-card__text text-left">{data.health.desc}</p>}
-                            </div>
-                        )}
-                    </section>
-                )}
-
-                {data?.daewoon && Array.isArray(data.daewoon) && data.daewoon.length > 0 && (
-                    <section className="my-9">
-                        <h2 className="rt-card__title">{isEn ? 'Major Life Cycles' : '대운 해설'}</h2>
-                        <div className="rt-analysis-list__item gap-3">
-                            {data.daewoon.map((item, idx) => (
-                                <div key={idx} className="rt-gap2">
-                                    {item?.name && <span className="rt-analysis-list__sub-title">{item.name}</span>}
-                                    {item?.interpretation && <p className="rt-card__text text-left">{item.interpretation}</p>}
+                    <div className="rt-card__text text-left">{data?.corePersonality?.essence}</div>
+                    <div className="my-3">
+                        <p className="rt-timing-grid__item">{data?.corePersonality?.title}</p>
+                        <p className="text-sm text-gray-600 italic my-2">{data?.corePersonality?.metaphor}</p>
+                        <div className="gap-3 flex justify-center flex-wrap">
+                            {data?.corePersonality?.keywords?.map((keyword, idx) => (
+                                <div key={idx} className="rt-id-card__label">
+                                    {keyword}
                                 </div>
                             ))}
                         </div>
-                    </section>
-                )}
+                    </div>
 
-                {data?.finalConclusion && (data?.finalConclusion?.title || data?.finalConclusion?.desc) && (
-                    <section className="rt-card">
-                        <h2 className="rt-card__title">{isEn ? 'Final Conclusion' : '최종 결론'}</h2>
-                        <div className="rt-tip-box">
-                            {data?.finalConclusion?.title && <span className="rt-tip-box__label">{data.finalConclusion.title}</span>}
-                            {data?.finalConclusion?.desc && <p className="rt-card__text text-left">{data.finalConclusion.desc}</p>}
+                    <div className="mt-4 gap-3">
+                        <div className="rt-card">
+                            <h4 className="font-bold text-sm mb-2">{isEn ? 'Strengths' : '강점'}</h4>
+                            <ul className="text-sm space-y-1">
+                                {data?.corePersonality?.strengths?.map((item, idx) => (
+                                    <li key={idx}>• {item}</li>
+                                ))}
+                            </ul>
                         </div>
-                    </section>
-                )}
+                        <div className="rt-card">
+                            <h4 className="font-bold text-sm mb-2">{isEn ? 'Risks' : '약점'}</h4>
+                            <ul className="text-sm space-y-1">
+                                {data?.corePersonality?.risks?.map((item, idx) => (
+                                    <li key={idx}>• {item}</li>
+                                ))}
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
+                <section className="my-9">
+                    <h2 className="rt-card__title">
+                        {isEn ? 'Personality Overview' : '성격 개요'}
+                    </h2>
+                    <p className="rt-card__text text-left">{data?.personalityOverview?.desc}</p>
+                </section>
+
+                <section className="my-9">
+                    <h2 className="rt-card__title">{isEn ? 'Personality Through Different Lenses' : '관점별 성격 해석'}</h2>
+
+                    <div className="rt-card">
+                        <div className="rt-ootd-item">
+                            <h3 className="rt-ootd-item__value">{data?.lensInterpretations?.wealth?.summary}</h3>
+
+                        </div>
+                        <p className="rt-card__text text-left">{data?.lensInterpretations?.wealth?.desc}</p>
+                    </div>
+
+                    <div className="rt-card">
+                        <div className="rt-ootd-item">
+                            <h3 className="rt-ootd-item__value">{data?.lensInterpretations?.job?.summary}</h3>
+
+                        </div>
+                        <p className="rt-card__text text-left">{data?.lensInterpretations?.job?.desc}</p>
+                    </div>
+
+                    <div className="rt-card">
+                        <div className="rt-ootd-item">
+                            <h3 className="rt-ootd-item__value">{data?.lensInterpretations?.love?.summary}</h3>
+
+                        </div>
+                        <p className="rt-card__text text-left">{data?.lensInterpretations?.love?.desc}</p>
+                    </div>
+
+                    <div className="rt-card">
+                        <div className="rt-ootd-item">
+                            <h3 className="rt-ootd-item__value">{data?.lensInterpretations?.health?.summary}</h3>
+
+                        </div>
+                        <p className="rt-card__text text-left">{data?.lensInterpretations?.health?.desc}</p>
+                    </div>
+
+                    <div className="rt-card">
+                        <div className="rt-ootd-item">
+                            <h3 className="rt-ootd-item__value">{data?.lensInterpretations?.conflict?.summary}</h3>
+
+                        </div>
+                        <p className="rt-card__text text-left">{data?.lensInterpretations?.conflict?.desc}</p>
+                    </div>
+
+                    <div className="rt-card">
+                        <div className="rt-ootd-item">
+                            <h3 className="rt-ootd-item__value">{data?.lensInterpretations?.relationship?.summary}</h3>
+
+                        </div>
+                        <p className="rt-card__text text-left">{data?.lensInterpretations?.relationship?.desc}</p>
+                    </div>
+                </section>
+
+                <section className="my-9">
+                    <h2 className="rt-card__title">{isEn ? 'Timing & Life Flow' : '시기와 흐름'}</h2>
+                    <p className="rt-card__text text-left mb-4">{data?.timingAndFlow?.principle}</p>
+                    <div className="rt-analysis-list__item gap-3">
+                        <div className="rt-card">
+                            <h3 className="font-bold mb-2">{data?.timingAndFlow?.daewoon?.[0]?.name}</h3>
+                            <p className="rt-card__text text-left">{data?.timingAndFlow?.daewoon?.[0]?.interpretation}</p>
+                        </div>
+                        <div className="rt-card">
+                            <h3 className="font-bold mb-2">{data?.timingAndFlow?.daewoon?.[1]?.name}</h3>
+                            <p className="rt-card__text text-left">{data?.timingAndFlow?.daewoon?.[1]?.interpretation}</p>
+                        </div>
+                        <div className="rt-card">
+                            <h3 className="font-bold mb-2">{data?.timingAndFlow?.daewoon?.[2]?.name}</h3>
+                            <p className="rt-card__text text-left">{data?.timingAndFlow?.daewoon?.[2]?.interpretation}</p>
+                        </div>
+                        {/* {data?.timingAndFlow?.daewoon?.map((item, idx) => (
+                  <div key={idx} className="rt-gap2">
+                    <span className="rt-analysis-list__sub-title">{item?.name}</span>
+                    <p className="rt-card__text text-left">{item?.interpretation}</p>
+                  </div>
+                ))} */}
+                    </div>
+                </section>
+
+                <section className="my-9">
+                    <h2 className="rt-card__title">{isEn ? 'Optimal Environment' : '최적의 환경'}</h2>
+                    <div className="rt-card">
+                        <h3 className="font-bold mb-2">{data?.environmentGuide?.summary}</h3>
+                        <p className="rt-card__text text-left">{data?.environmentGuide?.desc}</p>
+                    </div>
+                </section>
+
+                <section className="rt-card">
+                    <h2 className="rt-card__title">{isEn ? 'Final User Manual' : '최종 사용 설명서'}</h2>
+                    <div className="rt-tip-box">
+                        <span className="rt-tip-box__label">{data?.finalConclusion?.title}</span>
+                        <p className="rt-card__text text-left">{data?.finalConclusion?.desc}</p>
+                    </div>
+                </section>
             </div>
         </ShareTemplate>
     );

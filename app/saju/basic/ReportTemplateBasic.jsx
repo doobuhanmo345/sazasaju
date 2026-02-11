@@ -88,61 +88,62 @@ const ReportTemplateBasic = ({ shareData }) => {
       metal: 'bg-slate-400',
       water: 'bg-blue-600',
     })[type];
-  // const data = {
-  //   "corePersonality": {
-  //     "title": "성격을 관통하는 한 문장",
-  //     "metaphor": "이 사람의 기질을 상징하는 비유 (예: 차가운 서리 아래 피어난 꽃)",
-  //     "essence": "타고난 기질과 절대 변하지 않는 성격의 중심축",
-  //     "strengths": ["강점1", "강점2"],
-  //     "risks": ["약점1", "약점2"],
-  //     "keywords": ["#키워드1", "#키워드2", "#키워드3"]
-  //   },
-  //   "personalityOverview": {
-  //     "desc": "이 성격이 인생 전반(사회적/개인적)에서 어떻게 작동하는지에 대한 심층 개요"
-  //   },
-  //   "lensInterpretations": {
-  //     "wealth": {
-  //       "summary": "돈 앞에서 보이는 성격적 특징",
-  //       "desc": "재물을 대하는 태도, 소비 패턴, 투자 시 나타나는 본능적 선택"
-  //     },
-  //     "job": {
-  //       "summary": "사회적 성공과 일에서 보이는 특징",
-  //       "desc": "조직 내에서의 위치, 성취를 얻는 방식, 유리한 직무 환경"
-  //     },
-  //     "love": {
-  //       "summary": "관계와 사랑 앞에서 보이는 특징",
-  //       "desc": "연애 시 나타나는 반복적인 패턴, 파트너에게 원하는 핵심 가치"
-  //     },
-  //     "health": {
-  //       "summary": "에너지 소모와 몸의 반응 특징",
-  //       "desc": "성격적 스트레스가 신체 어디로 가는지, 에너지를 충전하는 방식"
-  //     },
-  //     "conflict": {
-  //       "summary": "갈등과 스트레스 상황에서의 돌발 행동",
-  //       "desc": "위기 시 성격이 어떻게 왜곡되거나 폭발하는지, 그때의 심리 상태"
-  //     },
-  //     "relationship": {
-  //       "summary": "사람을 대하는 기본 필터",
-  //       "desc": "인맥을 맺는 기준, 사람에게 상처받거나 정을 떼는 포인트"
-  //     }
-  //   },
-  //   "timingAndFlow": {
-  //     "principle": "이 성격이 운의 흐름을 타는 기본 원리",
-  //     "daewoon": [
-  //       { "name": "현재 시기", "interpretation": "지금 이 성격이 어떤 성장을 위해 시험받고 있는가" },
-  //       { "name": "다음 시기", "interpretation": "미래의 파도를 타기 위해 지금 성격적으로 준비해야 할 것" },
-  //       { "name": "이후 시기", "interpretation": "인생 후반전, 성격이 어떤 완숙한 형태로 변해갈 것인가" }
-  //     ]
-  //   },
-  //   "environmentGuide": {
-  //     "summary": "성격을 살리는 최적의 환경 요약",
-  //     "desc": "공간, 방향, 라이프스타일 중 이 성격을 빛나게 해줄 개운 조건"
-  //   },
-  //   "finalConclusion": {
-  //     "title": "최종 사용 설명서",
-  //     "desc": "성격을 바꾸려 애쓰지 말고, 지금 당장 '이렇게' 활용하라는 마스터의 직언"
-  //   }
-  // }
+  const data2 = {
+    "corePersonality": {
+      "title": "성격을 관통하는 한 문장",
+      "metaphor": "이 사람의 기질을 상징하는 비유 (예: 차가운 서리 아래 피어난 꽃)",
+      "essence": "타고난 기질과 절대 변하지 않는 성격의 중심축",
+      "strengths": ["강점1", "강점2"],
+      "risks": ["약점1", "약점2"],
+      "keywords": ["#키워드1", "#키워드2", "#키워드3"]
+    },
+    "personalityOverview": {
+      "desc": "이 성격이 인생 전반(사회적/개인적)에서 어떻게 작동하는지에 대한 심층 개요"
+    },
+    "lensInterpretations": {
+      "wealth": {
+        "summary": "돈 앞에서 보이는 성격적 특징",
+        "desc": "재물을 대하는 태도, 소비 패턴, 투자 시 나타나는 본능적 선택"
+      },
+      "job": {
+        "summary": "사회적 성공과 일에서 보이는 특징",
+        "desc": "조직 내에서의 위치, 성취를 얻는 방식, 유리한 직무 환경"
+      },
+      "love": {
+        "summary": "관계와 사랑 앞에서 보이는 특징",
+        "desc": "연애 시 나타나는 반복적인 패턴, 파트너에게 원하는 핵심 가치"
+      },
+      "health": {
+        "summary": "에너지 소모와 몸의 반응 특징",
+        "desc": "성격적 스트레스가 신체 어디로 가는지, 에너지를 충전하는 방식"
+      },
+      "conflict": {
+        "summary": "갈등과 스트레스 상황에서의 돌발 행동",
+        "desc": "위기 시 성격이 어떻게 왜곡되거나 폭발하는지, 그때의 심리 상태"
+      },
+      "relationship": {
+        "summary": "사람을 대하는 기본 필터",
+        "desc": "인맥을 맺는 기준, 사람에게 상처받거나 정을 떼는 포인트"
+      }
+    },
+    "timingAndFlow": {
+      "principle": "이 성격이 운의 흐름을 타는 기본 원리",
+      "daewoon": {
+        "past": { "name": "현재 시기", "interpretation": "지금 이 성격이 어떤 성장을 위해 시험받고 있는가" },
+        "current": { "name": "다음 시기", "interpretation": "미래의 파도를 타기 위해 지금 성격적으로 준비해야 할 것" },
+        "future": { "name": "이후 시기", "interpretation": "인생 후반전, 성격이 어떤 완숙한 형태로 변해갈 것인가" }
+      }
+    },
+    "environmentGuide": {
+      "summary": "성격을 살리는 최적의 환경 요약",
+      "desc": "공간, 방향, 라이프스타일 중 이 성격을 빛나게 해줄 개운 조건"
+    },
+    "finalConclusion": {
+      "title": "최종 사용 설명서",
+      "desc": "성격을 바꾸려 애쓰지 말고, 지금 당장 '이렇게' 활용하라는 마스터의 직언"
+    }
+  }
+
 
   return (
     <div
@@ -348,48 +349,48 @@ const ReportTemplateBasic = ({ shareData }) => {
 
               <div className="rt-card">
                 <div className="rt-ootd-item">
-                  <h3 className="rt-ootd-item__value">{isEn ? 'Wealth & Finance' : '재물운'}</h3>
-                  <p className="rt-ootd-item__label">{data?.lensInterpretations?.wealth?.summary}</p>
+                  <h3 className="rt-ootd-item__value">{data?.lensInterpretations?.wealth?.summary}</h3>
+
                 </div>
                 <p className="rt-card__text text-left">{data?.lensInterpretations?.wealth?.desc}</p>
               </div>
 
               <div className="rt-card">
                 <div className="rt-ootd-item">
-                  <h3 className="rt-ootd-item__value">{isEn ? 'Career & Success' : '직업운'}</h3>
-                  <p className="rt-ootd-item__label">{data?.lensInterpretations?.job?.summary}</p>
+                  <h3 className="rt-ootd-item__value">{data?.lensInterpretations?.job?.summary}</h3>
+
                 </div>
                 <p className="rt-card__text text-left">{data?.lensInterpretations?.job?.desc}</p>
               </div>
 
               <div className="rt-card">
                 <div className="rt-ootd-item">
-                  <h3 className="rt-ootd-item__value">{isEn ? 'Love & Romance' : '애정운'}</h3>
-                  <p className="rt-ootd-item__label">{data?.lensInterpretations?.love?.summary}</p>
+                  <h3 className="rt-ootd-item__value">{data?.lensInterpretations?.love?.summary}</h3>
+
                 </div>
                 <p className="rt-card__text text-left">{data?.lensInterpretations?.love?.desc}</p>
               </div>
 
               <div className="rt-card">
                 <div className="rt-ootd-item">
-                  <h3 className="rt-ootd-item__value">{isEn ? 'Health & Wellness' : '건강운'}</h3>
-                  <p className="rt-ootd-item__label">{data?.lensInterpretations?.health?.summary}</p>
+                  <h3 className="rt-ootd-item__value">{data?.lensInterpretations?.health?.summary}</h3>
+
                 </div>
                 <p className="rt-card__text text-left">{data?.lensInterpretations?.health?.desc}</p>
               </div>
 
               <div className="rt-card">
                 <div className="rt-ootd-item">
-                  <h3 className="rt-ootd-item__value">{isEn ? 'Conflict & Stress' : '갈등 대응'}</h3>
-                  <p className="rt-ootd-item__label">{data?.lensInterpretations?.conflict?.summary}</p>
+                  <h3 className="rt-ootd-item__value">{data?.lensInterpretations?.conflict?.summary}</h3>
+
                 </div>
                 <p className="rt-card__text text-left">{data?.lensInterpretations?.conflict?.desc}</p>
               </div>
 
               <div className="rt-card">
                 <div className="rt-ootd-item">
-                  <h3 className="rt-ootd-item__value">{isEn ? 'Relationships' : '인간관계'}</h3>
-                  <p className="rt-ootd-item__label">{data?.lensInterpretations?.relationship?.summary}</p>
+                  <h3 className="rt-ootd-item__value">{data?.lensInterpretations?.relationship?.summary}</h3>
+
                 </div>
                 <p className="rt-card__text text-left">{data?.lensInterpretations?.relationship?.desc}</p>
               </div>
@@ -399,12 +400,24 @@ const ReportTemplateBasic = ({ shareData }) => {
               <h2 className="rt-card__title">{isEn ? 'Timing & Life Flow' : '시기와 흐름'}</h2>
               <p className="rt-card__text text-left mb-4">{data?.timingAndFlow?.principle}</p>
               <div className="rt-analysis-list__item gap-3">
-                {data?.timingAndFlow?.daewoon?.map((item, idx) => (
+                <div className="rt-card">
+                  <h3 className="font-bold mb-2">{data?.timingAndFlow?.daewoon?.[0]?.name}</h3>
+                  <p className="rt-card__text text-left">{data?.timingAndFlow?.daewoon?.[0]?.interpretation}</p>
+                </div>
+                <div className="rt-card">
+                  <h3 className="font-bold mb-2">{data?.timingAndFlow?.daewoon?.[1]?.name}</h3>
+                  <p className="rt-card__text text-left">{data?.timingAndFlow?.daewoon?.[1]?.interpretation}</p>
+                </div>
+                <div className="rt-card">
+                  <h3 className="font-bold mb-2">{data?.timingAndFlow?.daewoon?.[2]?.name}</h3>
+                  <p className="rt-card__text text-left">{data?.timingAndFlow?.daewoon?.[2]?.interpretation}</p>
+                </div>
+                {/* {data?.timingAndFlow?.daewoon?.map((item, idx) => (
                   <div key={idx} className="rt-gap2">
                     <span className="rt-analysis-list__sub-title">{item?.name}</span>
                     <p className="rt-card__text text-left">{item?.interpretation}</p>
                   </div>
-                ))}
+                ))} */}
               </div>
             </section>
 

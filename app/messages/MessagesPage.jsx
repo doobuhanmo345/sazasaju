@@ -3,7 +3,7 @@
 import React, { useState, useEffect, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { db } from '@/lib/firebase';
-import { collection, query, where, onSnapshot, orderBy, doc, updateDoc, writeBatch, deleteDoc, arrayUnion } from 'firebase/firestore';
+import { collection, query, where, getDocs, onSnapshot, orderBy, doc, updateDoc, writeBatch, deleteDoc, arrayUnion } from 'firebase/firestore';
 import { useAuthContext } from '@/contexts/useAuthContext';
 import { useLanguage } from '@/contexts/useLanguageContext';
 import { InboxStackIcon, ChatBubbleLeftRightIcon, UserCircleIcon, DocumentTextIcon, CheckIcon, TrashIcon } from '@heroicons/react/24/outline';
@@ -59,12 +59,35 @@ function MessagesContent() {
     const q_received = query(collection(db, 'direct_messages'), where('receiverId', 'in', receiverIds));
 
     // AI 상담용: 사자톡 메시지 + 분석 완료 알림 (최근 7일치)
+    // [NEW] Cleanup: Delete messages older than 7 days
+    const cleanupOldMessages = async () => {
+      try {
+        const oldMsgQuery = query(
+          collection(db, 'sazatalk_messages'),
+          where('userId', '==', user.uid),
+          where('createdAt', '<', sevenDaysAgo)
+        );
+        const oldSnap = await getDocs(oldMsgQuery);
+        if (!oldSnap.empty) {
+          const batch = writeBatch(db);
+          oldSnap.docs.forEach((doc) => batch.delete(doc.ref));
+          await batch.commit();
+          console.log(`[Cleanup] Deleted ${oldSnap.size} old messages.`);
+        }
+      } catch (e) {
+        console.error('Failed to cleanup old messages:', e);
+      }
+    };
+    cleanupOldMessages();
+
+    // Query for display (only recent 7 days)
     const q_sazatalk = query(
       collection(db, 'sazatalk_messages'),
       where('userId', '==', user.uid),
       where('createdAt', '>=', sevenDaysAgo),
       orderBy('createdAt', 'desc')
     );
+
     const q_analysis = query(
       collection(db, 'notifications'),
       where('userId', '==', user.uid),
