@@ -371,7 +371,7 @@ export default function SelBirthPage() {
   const sajuGuide = useCallback(
     (onStart) => {
       if (loading) {
-        return <LoadingFourPillar saju={saju} isTimeUnknown={isTimeUnknown} />;
+        return <LoadingFourPillar saju={saju} isTimeUnknown={isTimeUnknown} isAnalysisDone={isAnalysisDone} />;
       }
 
       if (step === 'intro') {
@@ -441,7 +441,7 @@ export default function SelBirthPage() {
     <main className="min-h-screen pt-20 pb-12 bg-slate-50 dark:bg-slate-950 transition-colors">
       <AnalysisStepContainer
         guideContent={sajuGuide}
-        loadingContent={<LoadingFourPillar saju={saju} isTimeUnknown={isTimeUnknown} />}
+        loadingContent={<LoadingFourPillar saju={saju} isTimeUnknown={isTimeUnknown} isAnalysisDone={isAnalysisDone} />}
         resultComponent={null}
         loadingTime={10000000}
       />

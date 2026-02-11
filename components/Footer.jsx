@@ -51,7 +51,7 @@ const Footer = () => {
   };
 
   return (
-    <footer className="w-full bg-slate-50 dark:bg-slate-900/50 p-6  border-t border-slate-100 dark:border-slate-800">
+    <footer className="w-full bg-slate-50 dark:bg-slate-900/50 p-6  border-t border-slate-100 dark:border-slate-800 pb-12">
       <div className="max-w-lg mx-auto space-y-6">
         {/* Logo/Title */}
         <div className="flex items-center space-x-1">

@@ -280,7 +280,7 @@ export default function SelDatePage() {
   const sajuGuide = useCallback(
     (onStart) => {
       if (loading) {
-        return <LoadingFourPillar saju={saju} isTimeUnknown={isTimeUnknown} />;
+        return <LoadingFourPillar saju={saju} isTimeUnknown={isTimeUnknown} isAnalysisDone={isAnalysisDone} />;
       }
       return (
         <div className="mx-auto px-6 py-12 animate-in fade-in slide-in-from-bottom-3 duration-1000">
@@ -379,7 +379,7 @@ export default function SelDatePage() {
     <>
       <AnalysisStepContainer
         guideContent={sajuGuide}
-        loadingContent={<LoadingFourPillar saju={saju} isTimeUnknown={isTimeUnknown} />}
+        loadingContent={<LoadingFourPillar saju={saju} isTimeUnknown={isTimeUnknown} isAnalysisDone={isAnalysisDone} />}
         resultComponent={null}
         loadingTime={10000000}
       />

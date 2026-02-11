@@ -155,7 +155,7 @@ export default function FeelingsPage() {
     const isDisabled2 = !isAnalysisDone && isLocked;
 
     if (loading && saju) {
-        return <LoadingFourPillar saju={saju} isTimeUnknown={isTimeUnknown} />;
+        return <LoadingFourPillar saju={saju} isTimeUnknown={isTimeUnknown} isAnalysisDone={isAnalysisDone} />;
     }
 
 

@@ -256,9 +256,7 @@ export default function NavBar() {
           </div>
         </div>
       </div>
-      <div className="w-full">
-        <AppBanner />
-      </div>
+
     </div>
 
   );

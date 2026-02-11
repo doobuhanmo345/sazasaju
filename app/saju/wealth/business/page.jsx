@@ -116,7 +116,7 @@ export default function BusinessPage() {
 
     // Full-screen loading display
     if (loading && saju) {
-        return <LoadingFourPillar saju={saju} isTimeUnknown={isTimeUnknown} />;
+        return <LoadingFourPillar saju={saju} isTimeUnknown={isTimeUnknown} isAnalysisDone={isAnalysisDone} />;
     }
 
     return (

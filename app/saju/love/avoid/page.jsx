@@ -65,8 +65,6 @@ export default function AvoidPage() {
         if (!prevData || !prevData.result) return false;
         if (prevData?.language !== language) return false;
         if (prevData?.gender !== targetProfile?.gender) return false;
-        if (prevData?.ques !== promptQ1) return false;
-        if (prevData?.ques2 !== promptQ2) return false;
         return SajuAnalysisService.compareSaju(prevData.saju, targetProfile?.saju);
     })();
 
@@ -107,7 +105,7 @@ export default function AvoidPage() {
     const isDisabled2 = !isAnalysisDone && isLocked;
 
     if (loading && saju) {
-        return <LoadingFourPillar saju={saju} isTimeUnknown={isTimeUnknown} />;
+        return <LoadingFourPillar saju={saju} isTimeUnknown={isTimeUnknown} isAnalysisDone={isAnalysisDone} />;
     }
 
     return (

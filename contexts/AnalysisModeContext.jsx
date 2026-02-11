@@ -5,7 +5,7 @@ import React, { createContext, useContext, useState, useEffect } from 'react';
 const AnalysisModeContext = createContext();
 
 export function AnalysisModeProvider({ children }) {
-    const [analysisMode, setAnalysisMode] = useState('direct'); // 'direct' or 'background'
+    const [analysisMode, setAnalysisMode] = useState('background'); // 'direct' or 'background'
 
     // Load from localStorage on mount
     useEffect(() => {

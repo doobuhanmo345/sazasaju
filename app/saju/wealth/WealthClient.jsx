@@ -347,7 +347,7 @@ export default function Wealth({ }) {
             <StartButton
               onClick={handleStartClick}
               disabled={loading}
-              isDone={false}
+              isDone={isAnalysisDone}
               label={language === 'ko' ? '나의 재물운 분석하기' : 'Start Wealth Analysis'}
               color="emerald"
             />

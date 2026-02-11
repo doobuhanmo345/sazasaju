@@ -141,7 +141,7 @@ export default function BasicAnaPage() {
   const sajuGuide = useCallback(
     (onStart) => {
       if (loading) {
-        return <LoadingFourPillar saju={saju} isTimeUnknown={isTimeUnknown} />;
+        return <LoadingFourPillar saju={saju} isTimeUnknown={isTimeUnknown} isAnalysisDone={isAnalysisDone} />;
       }
 
       const iljuName = saju ? `${saju.sky1}${saju.grd1}` : '';
@@ -292,7 +292,7 @@ export default function BasicAnaPage() {
     <>
       <AnalysisStepContainer
         guideContent={sajuGuide}
-        loadingContent={<LoadingFourPillar saju={saju} isTimeUnknown={isTimeUnknown} />}
+        loadingContent={<LoadingFourPillar saju={saju} isTimeUnknown={isTimeUnknown} isAnalysisDone={isAnalysisDone} />}
         resultComponent={null}
         loadingTime={10000000} // Redirect handles result view
       />

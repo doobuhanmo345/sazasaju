@@ -313,7 +313,7 @@ export default function FirstDatePage() {
 
   const sajuGuide = useCallback(
     (onStart) => {
-      if (loading) return <LoadingFourPillar saju={saju} isTimeUnknown={isTimeUnknown} />;
+      if (loading) return <LoadingFourPillar saju={saju} isTimeUnknown={isTimeUnknown} isAnalysisDone={isAnalysisDone} />;
 
       return (
         <div className="mx-auto px-6 py-12 animate-in fade-in slide-in-from-bottom-3 duration-1000">
@@ -375,7 +375,7 @@ export default function FirstDatePage() {
                 onClick={() => handleStartClick(onStart)}
                 disabled={isDisabled || isDisabled2}
                 loading={loading}
-                isDone={false}
+                isDone={isAnalysisDone}
                 label={language === 'ko' ? '데이트 가이드 받기' : 'Get Date Guide'}
                 color="rose"
                 cost={-1}
@@ -424,7 +424,7 @@ export default function FirstDatePage() {
     <main className="min-h-screen">
       <AnalysisStepContainer
         guideContent={sajuGuide}
-        loadingContent={<LoadingFourPillar saju={saju} isTimeUnknown={isTimeUnknown} />}
+        loadingContent={<LoadingFourPillar saju={saju} isTimeUnknown={isTimeUnknown} isAnalysisDone={isAnalysisDone} />}
         resultComponent={null}
         loadingTime={10000000}
       />

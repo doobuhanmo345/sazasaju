@@ -6,13 +6,13 @@ import { useLoading } from '@/contexts/useLoadingContext';
 import { db } from '@/lib/firebase';
 import { collection, query, where, orderBy, limit, onSnapshot, doc, updateDoc, deleteDoc } from 'firebase/firestore';
 import { XMarkIcon, SparklesIcon } from '@heroicons/react/24/outline';
-
+import { useRouter } from 'next/navigation';
 export default function AppBanner() {
     const { user, userData } = useAuthContext();
     const { loading, progress, elapsedTime, onCancel, statusText: globalStatusText } = useLoading();
     const [queueDoc, setQueueDoc] = useState(null);
     const [localStatusText, setLocalStatusText] = useState('');
-
+    const router = useRouter();
     // Listen to queue documents (Background Analysis)
     useEffect(() => {
         if (!user?.uid) {
@@ -67,7 +67,8 @@ export default function AppBanner() {
     }, [user?.uid, userData?.isAnalyzing, userData?.updatedAt, loading]);
 
     const handleCancel = async () => {
-        if (!loading && !queueDoc) return;
+        // if (!loading && !queueDoc) return;
+        // console.log(loading, queueDoc)
         const confirmCancel = confirm('분석을 취소하시겠습니까?');
         if (!confirmCancel) return;
 
@@ -79,6 +80,7 @@ export default function AppBanner() {
         setQueueDoc(null);
         setLocalStatusText('');
 
+
         try {
             // [Background] Cleanup Firestore resources
             if (docId) {
@@ -89,9 +91,11 @@ export default function AppBanner() {
             if (uid) {
                 await updateDoc(doc(db, 'users', uid), { isAnalyzing: false });
             }
+            console.log('Analysis cancelled');
         } catch (error) {
             console.error('Failed to cancel analysis:', error);
         }
+        router.push('/');
     };
 
     const formatTime = (seconds) => {

@@ -105,7 +105,7 @@ export default function YearlyLuckPage() {
 
   const sajuGuide = (onStart) => {
     if (loading) {
-      return <LoadingFourPillar saju={saju} isTimeUnknown={isTimeUnknown} />;
+      return <LoadingFourPillar saju={saju} isTimeUnknown={isTimeUnknown} isAnalysisDone={isAnalysisDone} />;
     }
 
     return (
@@ -240,7 +240,7 @@ export default function YearlyLuckPage() {
     <>
       <AnalysisStepContainer
         guideContent={sajuGuide}
-        loadingContent={<LoadingFourPillar saju={saju} isTimeUnknown={isTimeUnknown} />}
+        loadingContent={<LoadingFourPillar saju={saju} isTimeUnknown={isTimeUnknown} isAnalysisDone={isAnalysisDone} />}
         resultComponent={null}
         loadingTime={10000000}
       />

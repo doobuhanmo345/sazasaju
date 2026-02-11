@@ -123,7 +123,11 @@ export default function ClientWrapper({ children }) {
         />
       )}
 
+
       <main className={!isNoNavbarPath ? "min-h-screen pt-[calc(64px+env(safe-area-inset-top))]" : "min-h-screen"}>
+        <div className="w-full mb-5">
+          <AppBanner />
+        </div>
         {children}
       </main>
 
@@ -131,6 +135,7 @@ export default function ClientWrapper({ children }) {
       {!isSpecialPath && (
         <>
           <Footer />
+
           <MenuBar />
         </>
       )}

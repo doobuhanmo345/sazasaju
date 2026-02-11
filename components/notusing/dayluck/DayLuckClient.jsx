@@ -125,7 +125,7 @@ export default function DayLuckPage() {
 
   const sajuGuide = (onStart) => {
     if (loading) {
-      return <LoadingFourPillar saju={saju} isTimeUnknown={isTimeUnknown} />;
+      return <LoadingFourPillar saju={saju} isTimeUnknown={isTimeUnknown} isAnalysisDone={isAnalysisDone} />;
     }
 
     return (
@@ -210,7 +210,7 @@ export default function DayLuckPage() {
     <>
       <AnalysisStepContainer
         guideContent={sajuGuide}
-        loadingContent={<LoadingFourPillar saju={saju} isTimeUnknown={isTimeUnknown} />}
+        loadingContent={<LoadingFourPillar saju={saju} isTimeUnknown={isTimeUnknown} isAnalysisDone={isAnalysisDone} />}
         resultComponent={ReportTemplateToday}
         loadingTime={0}
       />

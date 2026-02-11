@@ -341,7 +341,7 @@ export default function InterviewPage() {
 
   const sajuGuide = useCallback(
     (onStart) => {
-      if (loading) return <LoadingFourPillar saju={saju} isTimeUnknown={isTimeUnknown} />;
+      if (loading) return <LoadingFourPillar saju={saju} isTimeUnknown={isTimeUnknown} isAnalysisDone={isAnalysisDone} />;
 
       return (
         <div className="mx-auto px-6 py-12 animate-in fade-in slide-in-from-bottom-3 duration-1000">
@@ -406,7 +406,7 @@ export default function InterviewPage() {
                 onClick={() => handleStartClick(onStart)}
                 disabled={isDisabled || isDisabled2}
                 loading={loading}
-                isDone={false}
+                isDone={isAnalysisDone}
                 label={language === 'ko' ? '면접/시험 분석 받기' : 'Get Interview Analysis'}
                 color="blue"
                 cost={-1}
@@ -457,7 +457,7 @@ export default function InterviewPage() {
     <>
       <AnalysisStepContainer
         guideContent={sajuGuide}
-        loadingContent={<LoadingFourPillar saju={saju} isTimeUnknown={isTimeUnknown} />}
+        loadingContent={<LoadingFourPillar saju={saju} isTimeUnknown={isTimeUnknown} isAnalysisDone={isAnalysisDone} />}
         resultComponent={null}
         loadingTime={10000000}
       />

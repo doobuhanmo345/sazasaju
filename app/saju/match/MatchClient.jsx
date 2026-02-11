@@ -94,7 +94,7 @@ export default function MatchClient() {
       SajuAnalysisService.compareSaju(prevData.saju2, saju2) &&
       prevData.gender === targetProfile?.gender &&
       prevData.gender2 === gender2 &&
-      prevData.relation === selectedRel
+      prevData.relationship === selectedRel
     );
   }, [targetProfile, saju2, gender2, selectedRel]);
   const isDisabled2 = !isAnalysisDone && isLocked;
@@ -525,7 +525,7 @@ export default function MatchClient() {
           <div className='flex max-w-lg mx-auto justify-center align-center'>  <AnalyzeButton
             onClick={() => handleStartClick(onStart)}
             disabled={loading}
-            isDone={false}
+            isDone={isAnalysisDone}
             label={language === 'ko' ? '궁합 분석 시작하기' : 'Start Chemistry Analysis'}
             color="rose"
           /></div>
@@ -551,12 +551,11 @@ export default function MatchClient() {
       router.push('/saju/match/result');
     }
   }, [isButtonClicked, prevData, router, isAnalysisDone, loading]);
-  console.log(isButtonClicked, loading)
 
   return (
     <div className="min-h-screen">
       {loading ? (
-        <LoadingFourPillar saju={saju} isTimeUnknown={isTimeUnknown} />
+        <LoadingFourPillar saju={saju} isTimeUnknown={isTimeUnknown} isAnalysisDone={isAnalysisDone} />
       ) : (
         renderContent(() => setLoading(true))
       )}

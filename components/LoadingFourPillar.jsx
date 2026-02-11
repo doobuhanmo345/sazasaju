@@ -7,14 +7,15 @@ import { getIcon, classNames, getHanja, bgToBorder } from '@/lib/helpers';
 import processSajuData from '@/lib/sajuDataProcessor';
 import { useLanguage } from '@/contexts/useLanguageContext';
 import { useTheme } from '@/contexts/useThemeContext';
-
+import { useRouter } from 'next/navigation';
 import { useLoading } from '@/contexts/useLoadingContext';
-
-export default function LoadingFourPillar({ isTimeUnknown, saju }) {
+import { useAuthContext } from '@/contexts/useAuthContext';
+export default function LoadingFourPillar({ isTimeUnknown, saju, isAnalysisDone }) {
   const { language } = useLanguage();
   const { theme } = useTheme();
   const { progress: globalProgress, statusText: globalStatusText } = useLoading();
-
+  const { userData } = useAuthContext()
+  const router = useRouter(); // 이 줄이 있는지 확인하세요!
   // 분석 상태 관리
   const [analysisStep, setAnalysisStep] = useState(1);
   const [progress, setProgress] = useState(0);
@@ -126,6 +127,31 @@ export default function LoadingFourPillar({ isTimeUnknown, saju }) {
       ? 'Crafting your unique, personalized report with precision...'
       : 'Final Synthesis: Harmonizing the overall energy flow (5/5)',
   };
+  if (!userData?.isAnalyzing && !isAnalysisDone) {
+    console.log('아날리시스 중이 아니고 던도 아님')
+    return
+  }
+
+  if (!userData?.isAnalyzing && isAnalysisDone) {
+    console.log('아날리시스 중이 아니고 던도 맞음')
+
+    return (
+      <div className="flex flex-col items-center justify-center min-h-[50vh] space-y-4">
+        <div className="relative w-16 h-16">
+          <div className="absolute inset-0 border-4 border-slate-200 dark:border-slate-700 rounded-full"></div>
+          <div className="absolute inset-0 border-4 border-sky-500 rounded-full border-t-transparent animate-spin"></div>
+        </div>
+        <div className="text-center animate-pulse">
+          <p className="text-lg font-bold text-slate-700 dark:text-slate-200">
+            결과를 불러오는 중입니다
+          </p>
+          <p className="text-sm text-slate-400 dark:text-slate-500 mt-1">
+            잠시만 기다려주세요...
+          </p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="flex flex-col items-center justify-center py-9 select-none px-2 relative">

@@ -100,6 +100,7 @@ export default function ReunionPage() {
         return SajuAnalysisService.compareSaju(prevData.saju, targetProfile?.saju);
     })();
 
+
     const handleAnalysis = async () => {
         setAiResult('');
         setIsButtonClicked(true);
@@ -140,7 +141,7 @@ export default function ReunionPage() {
     const isDisabled2 = !isAnalysisDone && isLocked;
 
     if (loading && saju) {
-        return <LoadingFourPillar saju={saju} isTimeUnknown={isTimeUnknown} />;
+        return <LoadingFourPillar saju={saju} isTimeUnknown={isTimeUnknown} isAnalysisDone={isAnalysisDone} />;
     }
 
     return (

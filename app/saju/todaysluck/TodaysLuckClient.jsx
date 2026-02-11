@@ -113,7 +113,7 @@ export default function TodaysLuckPage() {
 
   const sajuGuide = (onStart) => {
     if (loading) {
-      return <LoadingFourPillar saju={saju} isTimeUnknown={isTimeUnknown} />;
+      return <LoadingFourPillar saju={saju} isTimeUnknown={isTimeUnknown} isAnalysisDone={isAnalysisDone} />;
     }
     return (
       <div className="mx-auto  text-center px-6 animate-in fade-in slide-in-from-bottom-5 duration-700">
@@ -244,7 +244,7 @@ export default function TodaysLuckPage() {
     <>
       <AnalysisStepContainer
         guideContent={sajuGuide}
-        loadingContent={<LoadingFourPillar saju={saju} isTimeUnknown={isTimeUnknown} />}
+        loadingContent={<LoadingFourPillar saju={saju} isTimeUnknown={isTimeUnknown} isAnalysisDone={isAnalysisDone} />}
         resultComponent={null}
         loadingTime={10000000}
       />
