@@ -92,7 +92,7 @@ export default function TutorialClient() {
                                 번개 <span className="text-sm text-slate-400 font-bold uppercase tracking-widest">(Daily)</span>
                             </h3>
                             <p className="text-sm text-slate-500 dark:text-slate-400 font-medium leading-relaxed break-keep">
-                                <span className="text-slate-900 dark:text-white font-black underline decoration-amber-200/50 decoration-4 underline-offset-4">매일 낮 12시에 3개씩</span> 정성껏 준비해 둬요. <br />
+                                <span className="text-slate-900 dark:text-white font-black underline decoration-amber-200/50 decoration-4 underline-offset-4">매일 밤 12시에 3개씩</span> 정성껏 준비해 둬요. <br />
                                 당일 소진이 원칙이니, 사자에게 궁금한 걸 아낌없이 물어보세요!
                             </p>
                         </div>

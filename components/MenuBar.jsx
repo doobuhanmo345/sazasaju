@@ -157,196 +157,6 @@ export default function MenuBar() {
     }
 
     return {
-      fortune: {
-        title: isKo ? '운세보기' : 'Fortunes',
-        color: 'text-amber-500',
-        sections: [
-          {
-            subtitle: isKo ? '전통 사주' : 'Traditional Saju',
-            items: [
-              {
-                name: isKo ? '기본 사주 분석' : 'Saju Analysis',
-                desc: isKo ? '타고난 성격과 평생의 운명 흐름' : 'Your innate traits and destiny',
-                icon: <IdentificationIcon className="w-6 h-6" />,
-                path: '/saju/basic',
-              },
-              {
-                name: isKo ? '오늘의 운세' : 'Luck of the day',
-                desc: isKo ? '오늘 하루 나의 기운 확인' : 'Daily Energy Check',
-                icon: <CalendarDaysIcon className="w-6 h-6" />,
-                path: '/saju/todaysluck',
-              },
-              {
-                name: isKo ? '신년 운세' : '2026 Fortune',
-                desc: isKo ? '병오년 한 해의 흐름' : 'Flow of the Year',
-                icon: <SparklesIcon className="w-6 h-6" />,
-                path: '/saju/2026luck',
-              },
-              {
-                name: isKo ? '궁합 보기' : 'Chemistry',
-                desc: isKo ? '상대방과의 에너지 조화' : 'Match with Others',
-                icon: <UserPlusIcon className="w-6 h-6" />,
-                path: '/saju/match',
-              },
-              {
-                name: isKo ? '재물운 분석' : 'Wealth Luck',
-                desc: isKo ? '타고난 재복과 부의 흐름' : 'Your innate wealth and financial flow',
-                icon: <CircleStackIcon className="w-6 h-6" />,
-                path: '/saju/wealth',
-              },
-              {
-                name: isKo ? '사자와의 대화' : 'Chat with SAZA',
-                desc: isKo
-                  ? '무엇이든 물어보세요, 사자가 답해드립니다'
-                  : 'Ask anything, SAZA will answer your questions',
-                icon: <ChatBubbleLeftRightIcon className="w-6 h-6" />,
-                path: '/saju/sazatalk',
-              },
-            ],
-          },
-          {
-            subtitle: isKo ? '재물운 상세' : 'Wealth Detail',
-            items: [
-              {
-                name: isKo ? '평생 재물운' : 'Lifetime Wealth',
-                desc: isKo ? '타고난 그릇의 크기와 부자 사주' : 'Innate wealth capacity',
-                icon: <CircleStackIcon className="w-6 h-6" />,
-                path: '/saju/wealth/capacity',
-              },
-              {
-                name: isKo ? '올해/내년 흐름' : 'Yearly Flow',
-                desc: isKo ? '단기적 자금 흐름과 기회' : 'Short-term cash flow',
-                icon: <CalendarDaysIcon className="w-6 h-6" />,
-                path: '/saju/wealth/timing',
-              },
-              {
-                name: isKo ? '투자 / 재테크' : 'Investment',
-                desc: isKo ? '주식, 코인, 부동산 적합성' : 'Investment suitability',
-                icon: <PresentationChartLineIcon className="w-6 h-6" />,
-                path: '/saju/wealth/investment',
-              },
-              {
-                name: isKo ? '사업 / 창업운' : 'Business',
-                desc: isKo ? '사업가 자질과 창업 시기' : 'Entrepreneurial potential',
-                icon: <BriefcaseIcon className="w-6 h-6" />,
-                path: '/saju/wealth/business',
-              },
-            ],
-          },
-          {
-            subtitle: isKo ? '애정운 상세' : 'Love Detail',
-            items: [
-              {
-                name: isKo ? '평생애정운' : 'Lifetime Love',
-                desc: isKo ? '타고난 연애 스타일과 운명' : 'Innate love style and path',
-                icon: <HeartIcon className="w-6 h-6" />,
-                path: '/saju/love/lifetime',
-              },
-              {
-                name: isKo ? '월별 애정운' : 'Monthly Love',
-                desc: isKo ? '이번 달 나의 연애 기운' : 'Monthly romantic energy',
-                icon: <CalendarDaysIcon className="w-6 h-6" />,
-                path: '/saju/love/monthly',
-              },
-              {
-                name: isKo ? '재회운' : 'Reunion Luck',
-                desc: isKo ? '돌아선 마음이 다시 닿을까' : 'Will the heart come back?',
-                icon: <ArrowPathIcon className="w-6 h-6" />,
-                path: '/saju/love/reunion',
-              },
-              {
-                name: isKo ? '인연 타이밍' : 'Love Timing',
-                desc: isKo ? '연인이 나타나는 결정적 시기' : 'Specific timing for love',
-                icon: <ClockIcon className="w-6 h-6" />,
-                path: '/saju/love/timing',
-              },
-              {
-                name: isKo ? '잘 맞는 사람' : 'Good Match',
-                desc: isKo ? '나를 빛나게 해줄 찰떡궁합' : 'Who is the best match for you',
-                icon: <UserGroupIcon className="w-6 h-6" />,
-                path: '/saju/love/compatible',
-              },
-              {
-                name: isKo ? '피해야 할 사람' : 'Avoid',
-                desc: isKo ? '에너지를 깎아먹는 인연' : 'People you should avoid',
-                icon: <ShieldExclamationIcon className="w-6 h-6" />,
-                path: '/saju/love/avoid',
-              },
-              {
-                name: isKo ? '상대방의 속마음' : 'Partner Feelings',
-                desc: isKo ? '숨겨진 진심과 생각 열어보기' : 'Check their hidden feelings',
-                icon: <MagnifyingGlassIcon className="w-6 h-6" />,
-                path: '/saju/love/feelings',
-              },
-            ],
-          },
-          {
-            subtitle: isKo ? '이벤트' : 'event',
-            items: [
-              {
-                name: isKo ? '인터뷰' : 'Interview Luck',
-                desc: isKo
-                  ? '떨리는 면접날. 잘 될까?'
-                  : 'Important interview today? Check your success rate.',
-                icon: <IdentificationIcon className="w-6 h-6" />,
-                path: '/saju/interview',
-              },
-              {
-                name: isKo ? '데이트' : 'Date Luck',
-                desc: isKo
-                  ? '중요한 그날의 데이트, 과연 어떨까'
-                  : 'Will your date go well? See your romantic energy.',
-                icon: <HeartIcon className="w-6 h-6" />,
-                path: '/saju/date',
-              },
-              {
-                name: isKo ? '길일 선정' : 'Select Day',
-                desc: isKo
-                  ? '이사, 결혼, 계약 등 중요한 날을 위한 길일 선택'
-                  : 'Find the most auspicious days for your important events.',
-                icon: <CalendarDaysIcon className="w-6 h-6" />,
-                path: '/saju/seldate',
-              }, {
-                name: isKo ? '출산 택일' : 'Childbirth Selection',
-                desc: isKo
-                  ? '아이와 부모의 기운에 맞는 조화로운 출산 택일'
-                  : 'Find the most auspicious birth dates for your child.',
-                icon: <UserMinusIcon className="w-6 h-6" />,
-                path: '/saju/selbirth',
-              },
-            ],
-          },
-          {
-            subtitle: isKo ? '신비로운 타로' : 'Mystical Tarot',
-            items: [
-              {
-                name: isKo ? '타로 오늘의 운세' : 'Tarot Luck of the day',
-                desc: isKo ? '카드로 보는 오늘 하루' : 'Daily Tarot Reading',
-                icon: <CalendarDaysIcon className="w-6 h-6" />,
-                path: '/tarot/tarotdaily',
-              },
-              {
-                name: isKo ? '타로 연애운' : 'Tarot Love Fortune',
-                desc: isKo ? '사랑과 설렘의 향방' : 'Direction of Love',
-                icon: <SparklesIcon className="w-6 h-6" />,
-                path: '/tarot/tarotlove',
-              },
-              {
-                name: isKo ? '타로 금전운' : 'Tarot Wealth Luck',
-                desc: isKo ? '나의 재물과 풍요의 흐름' : 'Flow of Wealth',
-                icon: <CircleStackIcon className="w-6 h-6" />,
-                path: '/tarot/tarotmoney',
-              },
-              {
-                name: isKo ? '타로 고민상담' : 'Tarot Counseling',
-                desc: isKo ? '해답이 필요한 순간의 조언' : 'Advice for Difficult Moments',
-                icon: <PresentationChartLineIcon className="w-6 h-6" />,
-                path: '/tarot/tarotcounseling',
-              },
-            ],
-          },
-        ],
-      },
       credits: {
         title: isKo ? '크레딧 받기' : 'Get Credits',
         color: 'text-emerald-500',
@@ -546,25 +356,9 @@ export default function MenuBar() {
               )}
 
               <div className="space-y-3">
-                {activeMenu === 'fortune'
-                  ? menuData.fortune.sections.map((section, sIdx) => (
-                    <div key={sIdx} className="space-y-3">
-                      <div className="flex items-center gap-2 px-2">
-                        <div className="w-1 h-3 bg-indigo-500 rounded-full"></div>
-                        <h3 className="text-sm font-black text-slate-500 uppercase tracking-widest">
-                          {section.subtitle}
-                        </h3>
-                      </div>
-                      <div className="grid grid-cols-1 gap-2">
-                        {section.items.map((item, idx) => (
-                          <MenuItem key={idx} item={item} color={menuData.fortune.color} />
-                        ))}
-                      </div>
-                    </div>
-                  ))
-                  : menuData[activeMenu]?.items?.map(
-                    (item, idx) => <MenuItem key={idx} item={item} color={menuData[activeMenu].color} />,
-                  )}
+                {activeMenu && menuData[activeMenu]?.items?.map(
+                  (item, idx) => <MenuItem key={idx} item={item} color={menuData[activeMenu].color} />,
+                )}
               </div>
             </div>
           )}
@@ -583,18 +377,24 @@ export default function MenuBar() {
             <span className="text-xs font-black">{isKo ? '홈' : 'Home'}</span>
           </button>
           <button
-            onClick={() => setActiveMenu('fortune')}
-            className={`flex flex-col items-center gap-1 ${activeMenu === 'fortune' ? 'text-indigo-600' : 'text-slate-400'}`}
+            onClick={() => {
+              setActiveMenu(null);
+              router.push('/fortune');
+            }}
+            className={`flex flex-col items-center gap-1 ${pathname === '/fortune' ? 'text-indigo-600' : 'text-slate-400'}`}
           >
             <SparklesIcon className="w-6 h-6" />
-            <span className="text-xs font-black">{isKo ? '운세보기' : 'Fortune'}</span>
+            <span className="text-xs font-black">{isKo ? '사주' : 'Saju'}</span>
           </button>
           <button
-            onClick={() => setActiveMenu('credits')}
-            className={`flex flex-col items-center gap-1 ${activeMenu === 'credits' ? 'text-indigo-600' : 'text-slate-400'}`}
+            onClick={() => {
+              setActiveMenu(null);
+              router.push('/tarot');
+            }}
+            className={`flex flex-col items-center gap-1 ${pathname === '/tarot' ? 'text-indigo-600' : 'text-slate-400'}`}
           >
-            <CircleStackIcon className="w-6 h-6" />
-            <span className="text-xs font-black">{isKo ? '크레딧' : 'Credits'}</span>
+            <IdentificationIcon className="w-6 h-6" />
+            <span className="text-xs font-black">{isKo ? '타로' : 'Tarot'}</span>
           </button>
           <button
             onClick={() => {

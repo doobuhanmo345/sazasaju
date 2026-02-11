@@ -11,7 +11,7 @@ export default function MyCredit() {
     const [timeLeft, setTimeLeft] = useState('');
     const [showTimer, setShowTimer] = useState(false);
 
-    const credit = userData?.credit || 0;
+    const credit = userData?.credits || 0;
     const remainingCount = Math.max(0, MAX_EDIT_COUNT - editCount);
 
     useEffect(() => {
