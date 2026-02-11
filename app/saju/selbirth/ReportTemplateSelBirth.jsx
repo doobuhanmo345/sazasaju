@@ -173,7 +173,7 @@ export default function ReportTemplateSelBirth() {
                 </div>
                 <div className="flex items-center justify-between mb-3">
                   <span className="text-xl font-black text-emerald-600 dark:text-emerald-400 tracking-tight">{item.date}</span>
-                  <span className="text-[10px] font-bold px-2 py-1 bg-emerald-100 dark:bg-emerald-900 text-emerald-700 dark:text-emerald-300 rounded shadow-sm">
+                  <span className="text-xs font-bold px-2 py-1 bg-emerald-100 dark:bg-emerald-900 text-emerald-700 dark:text-emerald-300 rounded shadow-sm">
                     TOP {idx + 1}
                   </span>
                 </div>

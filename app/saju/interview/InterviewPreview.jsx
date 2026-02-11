@@ -15,7 +15,7 @@ export default function InterviewPreview({ onStart, isDisabled, userData, select
             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
             <span className="relative inline-flex rounded-full h-2 w-2 bg-blue-500"></span>
           </span>
-          <span className="text-[11px] font-bold text-blue-600 dark:text-blue-400 tracking-tight uppercase">
+          <span className="text-sm font-bold text-blue-600 dark:text-blue-400 tracking-tight uppercase">
             Preview Mode
           </span>
         </div>

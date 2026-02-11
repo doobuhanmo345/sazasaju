@@ -1,10 +1,10 @@
 'use client';
 
 import React, { useState, useRef, useEffect } from 'react';
-import { 
-  CalendarDaysIcon, 
-  ClockIcon, 
-  ChevronLeftIcon, 
+import {
+  CalendarDaysIcon,
+  ClockIcon,
+  ChevronLeftIcon,
   ChevronRightIcon,
   ChevronDownIcon
 } from '@heroicons/react/24/outline';
@@ -12,14 +12,14 @@ import {
 const DAYS_KO = ['일', '월', '화', '수', '목', '금', '토'];
 const DAYS_EN = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 
-const BdInput = ({ 
-  label, 
-  value, 
-  onChange, 
-  isTimeUnknown, 
-  setIsTimeUnknown, 
+const BdInput = ({
+  label,
+  value,
+  onChange,
+  isTimeUnknown,
+  setIsTimeUnknown,
   language = 'ko',
-  color = 'indigo' 
+  color = 'indigo'
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [viewMode, setViewMode] = useState('calendar');
@@ -75,8 +75,8 @@ const BdInput = ({
 
   const handleDateClick = (day) => {
     const newDate = new Date(viewDate.getFullYear(), viewDate.getMonth(), day);
-    if (newDate > today) return; 
-    
+    if (newDate > today) return;
+
     const y = newDate.getFullYear();
     const m = String(newDate.getMonth() + 1).padStart(2, '0');
     const d = String(newDate.getDate()).padStart(2, '0');
@@ -102,14 +102,14 @@ const BdInput = ({
   return (
     <div className="space-y-3" ref={containerRef}>
       {label && (
-        <label className="block text-[11px] font-black text-slate-400 uppercase tracking-[0.3em] ml-1">
+        <label className="block text-sm font-black text-slate-400 uppercase tracking-[0.3em] ml-1">
           {label}
         </label>
       )}
 
       <div className={`overflow-hidden rounded-2xl bg-white dark:bg-slate-800 border transition-all duration-300 shadow-sm hover:shadow-md ${isOpen ? `${theme.border} ring-4 ${theme.ring}` : 'border-slate-100 dark:border-slate-700'}`}>
-        
-        <div 
+
+        <div
           onClick={() => setIsOpen(!isOpen)}
           className={`
             group relative flex items-center justify-between px-5 py-5
@@ -122,7 +122,7 @@ const BdInput = ({
               <CalendarDaysIcon className={`w-5 h-5 ${isOpen ? theme.accent : 'text-slate-400'}`} />
             </div>
             <div className="flex flex-col">
-              <span className={`text-[15px] font-bold font-serif ${datePart ? 'text-slate-900 dark:text-white' : 'text-slate-400'}`}>
+              <span className={`text-sm font-bold font-serif ${datePart ? 'text-slate-900 dark:text-white' : 'text-slate-400'}`}>
                 {datePart ? formattedDisplayDate : (language === 'ko' ? '생년월일 선택' : 'Select Birth Date')}
               </span>
             </div>
@@ -132,8 +132,8 @@ const BdInput = ({
 
         {isOpen && (
           <div className="p-4 bg-white dark:bg-slate-800 border-t border-slate-50 dark:border-slate-700 animate-in fade-in slide-in-from-top-2 duration-300">
-             <div className="flex items-center justify-between mb-4 px-1">
-              <button 
+            <div className="flex items-center justify-between mb-4 px-1">
+              <button
                 onClick={(e) => { e.stopPropagation(); setViewMode(viewMode === 'year' ? 'calendar' : 'year'); }}
                 className="text-sm font-black text-slate-800 dark:text-white hover:text-indigo-600 transition-colors flex items-center gap-1"
               >
@@ -141,7 +141,7 @@ const BdInput = ({
                 <ChevronDownIcon className="w-3 h-3" />
               </button>
               <div className="flex items-center gap-3">
-                <button 
+                <button
                   onClick={(e) => { e.stopPropagation(); setViewMode(viewMode === 'month' ? 'calendar' : 'month'); }}
                   className="text-sm font-bold text-slate-600 dark:text-slate-400 hover:text-indigo-600 transition-colors flex items-center gap-1"
                 >
@@ -165,7 +165,7 @@ const BdInput = ({
               <div className="animate-in fade-in duration-300">
                 <div className="grid grid-cols-7 mb-2">
                   {(language === 'ko' ? DAYS_KO : DAYS_EN).map(d => (
-                    <div key={d} className="text-center text-[10px] font-black text-slate-300 uppercase py-1">{d}</div>
+                    <div key={d} className="text-center text-xs font-black text-slate-300 uppercase py-1">{d}</div>
                   ))}
                 </div>
                 <div className="grid grid-cols-7 gap-1">
@@ -230,16 +230,16 @@ const BdInput = ({
 
         <div className="bg-white dark:bg-slate-800 px-5 pt-3 pb-6 border-t border-slate-50 dark:border-slate-700">
           <div className="flex items-center justify-between mb-4">
-            <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">{language === 'ko' ? '태어난 시간 옵션' : 'Birth Time Options'}</span>
+            <span className="text-xs font-black text-slate-400 uppercase tracking-widest">{language === 'ko' ? '태어난 시간 옵션' : 'Birth Time Options'}</span>
             <label className="relative inline-flex items-center cursor-pointer">
-              <input 
-                type="checkbox" 
-                checked={isTimeUnknown} 
-                onChange={(e) => setIsTimeUnknown(e.target.checked)} 
-                className="sr-only peer" 
+              <input
+                type="checkbox"
+                checked={isTimeUnknown}
+                onChange={(e) => setIsTimeUnknown(e.target.checked)}
+                className="sr-only peer"
               />
               <div className="w-9 h-5 bg-slate-100 peer-focus:outline-none rounded-full peer dark:bg-slate-700 peer-checked:after:translate-x-4 peer-checked:after:border-white after:content-[''] after:absolute after:top-[4px] after:left-[4px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-3 after:w-3 after:transition-all dark:after:bg-slate-300 peer-checked:bg-indigo-500"></div>
-              <span className="ml-3 text-[11px] font-black text-slate-500 uppercase tracking-tight">{language === 'ko' ? '모름' : 'Unknown'}</span>
+              <span className="ml-3 text-sm font-black text-slate-500 uppercase tracking-tight">{language === 'ko' ? '모름' : 'Unknown'}</span>
             </label>
           </div>
 
@@ -249,10 +249,10 @@ const BdInput = ({
                 <ClockIcon className="w-5 h-5 text-indigo-400 group-hover:text-indigo-500 transition-colors" />
               </div>
               <div className="flex-1 flex flex-col">
-                <span className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-1">{language === 'ko' ? '정확한 시간' : 'Exact Time'}</span>
-                <input 
-                  type="time" 
-                  value={timePart || '12:00'} 
+                <span className="text-xs font-black text-slate-400 uppercase tracking-[0.2em] mb-1">{language === 'ko' ? '정확한 시간' : 'Exact Time'}</span>
+                <input
+                  type="time"
+                  value={timePart || '12:00'}
                   onChange={(e) => onChange(`${datePart}T${e.target.value}`)}
                   className="bg-transparent text-sm font-bold font-serif text-slate-800 dark:text-white outline-none cursor-pointer [color-scheme:light] dark:[color-scheme:dark]"
                 />

@@ -376,7 +376,7 @@ const NewYearAdKr = () => {
             <span className="text-8xl select-none drop-shadow-[0_10px_10px_rgba(0,0,0,0.1)] mb-2">
               🦁
             </span>
-            <div className="bg-indigo-600 text-white text-[10px] font-black px-3 py-1 rounded-full tracking-widest animate-pulse">
+            <div className="bg-indigo-600 text-white text-xs font-black px-3 py-1 rounded-full tracking-widest animate-pulse">
               ANALYZING
             </div>
           </div>
@@ -388,7 +388,7 @@ const NewYearAdKr = () => {
             {language === 'ko' ? '사자가 분석 중...' : 'Saza is Analyzing...'}
           </h2>
           <div className="flex flex-col items-center justify-center gap-2">
-            <p className="text-[15px] mb-2 text-slate-500 font-bold break-keep leading-snug">
+            <p className="text-sm mb-2 text-slate-500 font-bold break-keep leading-snug">
               {language === 'ko'
                 ? '사자와 27명의 명리학자가 함께 당신의 사주를 풀고 있어요'
                 : 'Saza and 27 Saju masters are analyzing together'}
@@ -704,11 +704,11 @@ const NewYearAdKr = () => {
                           <div className="absolute -right-1 -bottom-1 w-4 h-4 bg-green-500 border-[3px] border-[#F2ECE4] rounded-full shadow-sm"></div>
                         </div>
                         <div className="flex flex-col gap-0.5">
-                          <span className="text-[10px] font-black text-indigo-500/80 uppercase tracking-[0.15em] leading-none">
+                          <span className="text-xs font-black text-indigo-500/80 uppercase tracking-[0.15em] leading-none">
                             Saza AI Analyst
                           </span>
                           {/* 메인 타이틀: 가독성 높은 폰트 두께와 색상 정제 */}
-                          <span className="text-[17px] font-black text-slate-800 tracking-tight">
+                          <span className="text-lg font-black text-slate-800 tracking-tight">
                             사자사주 분석팀
                           </span>
                         </div>
@@ -757,7 +757,7 @@ const NewYearAdKr = () => {
                             <div className="w-8 h-8 shrink-0 bg-white rounded-full flex items-center justify-center shadow-sm border border-indigo-100 text-sm">
                               🦁
                             </div>
-                            <div className="bg-white p-4 rounded-[20px] rounded-tl-none border border-indigo-100 text-[15px] text-slate-800 max-w-[80%] shadow-sm">
+                            <div className="bg-white p-4 rounded-[20px] rounded-tl-none border border-indigo-100 text-sm text-slate-800 max-w-[80%] shadow-sm">
                               방금 분석한 내용 외에, 2026년 하반기에 정말 조심해야 할 운의 흐름이 하나
                               더 보여요.
                             </div>
@@ -768,7 +768,7 @@ const NewYearAdKr = () => {
                             <div className="w-8 h-8 shrink-0 bg-white rounded-full flex items-center justify-center shadow-sm border border-indigo-100 text-sm">
                               🦁
                             </div>
-                            <div className="bg-white p-4 rounded-[20px] rounded-tl-none border border-indigo-100 text-[15px] text-slate-800 max-w-[80%] shadow-sm leading-relaxed">
+                            <div className="bg-white p-4 rounded-[20px] rounded-tl-none border border-indigo-100 text-sm text-slate-800 max-w-[80%] shadow-sm leading-relaxed">
                               {language === 'en' ? (
                                 <>
                                   Your financial luck could fluctuate significantly between
@@ -785,7 +785,7 @@ const NewYearAdKr = () => {
                           </div>
                           {/* 사용자 리액션 유도 (더 리얼하게) */}
                           <div className="flex justify-end">
-                            <div className="bg-indigo-500 text-white p-3 px-5 rounded-[20px] rounded-br-none text-[14px] font-bold shadow-md">
+                            <div className="bg-indigo-500 text-white p-3 px-5 rounded-[20px] rounded-br-none text-sm font-bold shadow-md">
                               그게 뭐예요? 저 조심해야 하나요? 🥺
                             </div>
                           </div>
@@ -795,7 +795,7 @@ const NewYearAdKr = () => {
                             <div className="w-8 h-8 shrink-0 bg-white rounded-full flex items-center justify-center shadow-sm border border-indigo-100 text-sm">
                               🦁
                             </div>
-                            <div className="bg-white p-4 rounded-[20px] rounded-tl-none border border-indigo-100 text-[15px] text-slate-800 max-w-[80%] shadow-sm">
+                            <div className="bg-white p-4 rounded-[20px] rounded-tl-none border border-indigo-100 text-sm text-slate-800 max-w-[80%] shadow-sm">
                               그 시기에는 주변 사람 중 'ㅅ' 성씨를 가진 사람과... (내용 더보기)
                             </div>
                           </div>

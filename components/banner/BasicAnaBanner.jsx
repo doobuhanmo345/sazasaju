@@ -184,11 +184,11 @@ export default function BasicAnaBanner({ inputDate, isTimeUnknown, gender }) {
               </h2>
               {/* 하단 행동 유도 텍스트 */}
               <div className="mt-3">
-                <span className="inline-flex items-center text-[10px] font-bold py-1 px-3 bg-gray-100 rounded-full text-gray-600 uppercase tracking-tighter group-hover:bg-indigo-600 group-hover:text-white transition-all duration-300">
+                <span className="inline-flex items-center text-xs font-bold py-1 px-3 bg-gray-100 rounded-full text-gray-600 uppercase tracking-tighter group-hover:bg-indigo-600 group-hover:text-white transition-all duration-300">
                   {hasData
                     ? (isKo ? '상세 분석 확인하기' : 'View Full Report')
                     : (isKo ? '정보 등록하고 확인하기' : 'Register to View')}
-                  <span className="ml-1 text-[12px] leading-none">→</span>
+                  <span className="ml-1 text-sm leading-none">→</span>
                 </span>
               </div>
             </div>

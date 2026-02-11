@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useMemo, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter, usePathname } from 'next/navigation';
 import Image from 'next/image';
 import {
   HomeIcon,
@@ -41,6 +41,7 @@ export default function MenuBar() {
   const [activeMenu, setActiveMenu] = useState(null);
   const { user, userData, iljuImagePath, openLoginModal, selectedProfile, logout, selectProfile } = useAuthContext();
   const router = useRouter();
+  const pathname = usePathname();
   const { language } = useLanguage();
 
   const isKo = language === 'ko';
@@ -129,29 +130,29 @@ export default function MenuBar() {
     if (user) {
       profileItems.push(
         {
-          name: isKo ? '프로필 수정' : 'Edit Profile',
+          name: isKo ? '내 정보 수정' : 'Edit Profile',
           desc: isKo ? '이름, 생년월일 정보 변경' : 'Change Name, Birthdate',
           icon: <UserCircleIcon className="w-6 h-6" />,
-          path: '/profile/edit',
+          path: '/mypage/profile/edit',
         },
         {
-          name: isKo ? '생일 관리' : 'Birthday Management',
-          desc: isKo ? '생년월일 목록 관리' : 'Manage Birthday List',
+          name: isKo ? '생일 목록 관리' : 'Birthday Management',
+          desc: isKo ? '생년월일 목록 관리 및 선택하기' : 'Manage Birthday List',
           icon: <UserCircleIcon className="w-6 h-6" />,
-          path: '/profile/manage',
+          path: '/mypage/manage',
         },
-        {
-          name: isKo ? '메시지함' : 'Messages',
-          desc: isKo ? '알림 및 메시지 확인' : 'Check notifications and messages',
-          icon: <EnvelopeIcon className="w-6 h-6" />,
-          path: '/messages',
-        },
+
         {
           name: isKo ? '상담 내역' : 'History',
           desc: isKo ? '내가 본 운세 기록 확인' : 'Check Fortune Records',
           icon: <PresentationChartLineIcon className="w-6 h-6" />,
-          path: '/profile/history',
-        },
+          path: '/mypage/history',
+        }, {
+        name: isKo ? '메시지함' : 'Messages',
+        desc: isKo ? '알림 및 메시지 확인' : 'Check notifications and messages',
+        icon: <EnvelopeIcon className="w-6 h-6" />,
+        path: '//messages',
+      },
       );
     }
 
@@ -382,16 +383,16 @@ export default function MenuBar() {
           {React.cloneElement(item.icon, { className: 'w-5 h-5' })}
         </div>
         <div>
-          <p className="font-bold text-[14px] text-slate-900 dark:text-white leading-tight">
+          <p className="font-bold text-sm text-slate-900 dark:text-white leading-tight">
             {item.name}
           </p>
-          <p className="text-[10px] text-slate-400 font-medium mt-0.5">{item.desc}</p>
+          <p className="text-xs text-slate-400 font-medium mt-0.5">{item.desc}</p>
         </div>
       </div>
       {item.path ? (
         <ChevronRightIcon className="w-4 h-4 text-slate-300" />
       ) : (
-        <span className="text-[9px] font-bold text-slate-300 bg-slate-100 dark:bg-slate-800 px-1.5 py-0.5 rounded-md">
+        <span className="text-xs font-bold text-slate-300 bg-slate-100 dark:bg-slate-800 px-1.5 py-0.5 rounded-md">
           {isKo ? '준비 중' : 'Soon'}
         </span>
       )}
@@ -452,7 +453,7 @@ export default function MenuBar() {
                             })()}
                           </div>
                           <div className="flex-1">
-                            <p className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Logged in as</p>
+                            <p className="text-xs text-slate-400 font-bold uppercase tracking-wider">Logged in as</p>
                             <p className="text-sm font-bold text-slate-800 dark:text-slate-200">{userData?.displayName}</p>
                           </div>
                           <div className="text-xs font-bold text-indigo-500 bg-indigo-50 dark:bg-indigo-900/20 px-2 py-1 rounded-lg">
@@ -461,117 +462,56 @@ export default function MenuBar() {
                         </div>
                       )}
 
-                      {/* [Main Display] Selected Profile Info (Friend or Self) */}
-                      <div className={`relative overflow-hidden p-6 rounded-[2rem] bg-white dark:bg-[#1a1a2e] text-slate-800 dark:text-white shadow-xl border border-slate-100 dark:border-white/5 group transition-colors ${selectedProfile && selectedProfile.uid !== userData?.uid ? 'ring-2 ring-indigo-500 ring-offset-2 dark:ring-offset-slate-950' : ''}`}>
-                        {selectedProfile && selectedProfile.uid !== userData?.uid && (
-                          <div className="absolute top-0 right-0 bg-indigo-500 text-white text-[10px] font-bold px-3 py-1 rounded-bl-xl shadow-md z-20">
-                            {isKo ? '친구 프로필 보는 중' : 'Viewing Friend Profile'}
-                          </div>
-                        )}
+                      {/* [Main Display] Simplified Profile Summary linking to MyPage */}
+                      <div className={`relative p-8 rounded-[2.5rem] bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 shadow-xl overflow-hidden transition-all ${selectedProfile && selectedProfile.uid !== userData?.uid ? 'ring-2 ring-indigo-500 ring-offset-2 dark:ring-offset-slate-950' : ''}`}>
 
-                        {/* Logout Button (Only on Own Profile) */}
-                        {selectedProfile && selectedProfile.uid === userData?.uid && (
+                        {/* Background Decoration */}
+                        <div className="absolute top-0 right-0 w-32 h-32 bg-indigo-50 dark:bg-indigo-900/20 rounded-full -mr-10 -mt-10 blur-3xl opacity-50" />
+
+                        <div className="relative z-10 flex flex-col items-center text-center">
+                          {/* Avatar Showcase */}
+                          <div className="relative w-24 h-24 mb-6 group cursor-pointer" onClick={() => { setActiveMenu(null); router.push('/profile/my'); }}>
+                            <div className="absolute inset-0 bg-indigo-100 dark:bg-indigo-500/10 rounded-full transform scale-125 blur-xl group-hover:scale-150 transition-transform duration-700" />
+                            <div className="relative w-full h-full rounded-full overflow-hidden border-4 border-white dark:border-slate-800 shadow-2xl bg-white dark:bg-slate-950 flex items-center justify-center transition-transform duration-500 group-hover:scale-105">
+                              <Image
+                                src={iljuImagePath}
+                                alt="Profile"
+                                fill
+                                className="object-contain p-2"
+                              />
+                            </div>
+                          </div>
+
+                          {/* User Greeting */}
+                          <p className="text-[10px] font-black text-indigo-500 uppercase tracking-[0.2em] mb-2">
+                            {selectedProfile?.uid !== userData?.uid ? (isKo ? '친구 프로필' : 'Friend Profile') : (isKo ? '내 메뉴' : 'My Account')}
+                          </p>
+                          <h2 className="text-2xl font-black text-slate-800 dark:text-white mb-6">
+                            {selectedProfile?.displayName || userData?.displayName || 'User'}님
+                          </h2>
+
+                          {/* Main Link to MyPage */}
                           <button
-                            onClick={async () => {
-                              if (confirm(isKo ? '로그아웃 하시겠습니까?' : 'Are you sure you want to log out?')) {
-                                await logout();
-                                window.location.reload();
-                              }
+                            onClick={() => {
+                              setActiveMenu(null);
+                              router.push('/profile/my');
                             }}
-                            className="absolute top-5 right-5 p-2 rounded-full bg-slate-50 dark:bg-white/5 text-slate-400 dark:text-slate-500 hover:bg-rose-50 dark:hover:bg-rose-500/10 hover:text-rose-500 dark:hover:text-rose-400 transition-all z-20"
-                            title={isKo ? '로그아웃' : 'Log Out'}
+                            className="w-full py-4 bg-indigo-600 hover:bg-indigo-700 text-white rounded-2xl font-black text-sm transition-all active:scale-95 shadow-lg shadow-indigo-500/20 flex items-center justify-center gap-3 group"
                           >
-                            <ArrowRightOnRectangleIcon className="w-5 h-5" />
+                            <span>{isKo ? '마이페이지 상세 보기' : 'View My Page'}</span>
+                            <ChevronRightIcon className="w-4 h-4 text-white/50 group-hover:translate-x-1 transition-transform" />
                           </button>
-                        )}
 
-                        <div className="absolute -bottom-24 -left-24 w-48 h-48 bg-purple-50 dark:bg-purple-600/10 rounded-full blur-[60px]" />
-
-                        <div className="relative z-10">
-                          <div className="flex items-center gap-6">
-                            {/* Character Image (Always reflects selectedProfile via iljuImagePath from context) */}
-                            <div className="relative shrink-0 w-32 h-32 h-32">
-                              <div className="absolute inset-0 bg-gradient-to-tr from-indigo-100 to-purple-100 dark:from-indigo-500/20 dark:to-purple-500/20 rounded-3xl rotate-6 group-hover:rotate-12 transition-transform duration-500" />
-                              <div className="absolute inset-0 bg-white/60 dark:bg-white/5 backdrop-blur-md rounded-3xl border border-white dark:border-white/10 shadow-inner" />
-                              <div className="relative w-full h-full p-2 hover:scale-110 transition-transform duration-500">
-                                <Image
-                                  src={iljuImagePath}
-                                  alt="ilju character"
-                                  fill
-                                  className="object-contain"
-                                />
-                              </div>
-                            </div>
-
-                            {/* Info */}
-                            <div className="flex-1 min-w-0">
-                              <div className="mb-3">
-                                <p className="text-[10px] font-black text-indigo-500 dark:text-indigo-400 tracking-[0.2em] uppercase mb-1">
-                                  {selectedProfile?.uid !== userData?.uid ? (isKo ? 'FRIEND INFO' : 'FRIEND INFO') : 'USER INFORMATION'}
-                                </p>
-                                <div className="flex items-center gap-2">
-                                  <h2 className="text-2xl font-black truncate tracking-tight text-slate-900 dark:text-white">
-                                    {selectedProfile?.displayName || userData?.displayName || 'User'}
-                                  </h2>
-                                  {/* Badges only for main user */}
-                                  {selectedProfile?.uid === userData?.uid && (
-                                    <>
-                                      {userData?.provider?.includes('google') && <SiGoogle className="w-4 h-4 text-[#4285F4]" />}
-                                      {userData?.provider?.includes('kakao') && <SiKakaotalk className="w-4 h-4 text-[#FEE500]" />}
-                                      {userData?.provider?.includes('naver') && <SiNaver className="w-4 h-4 text-[#03C75A]" />}
-                                    </>
-                                  )}
-                                </div>
-                              </div>
-
-                              <div className="space-y-2">
-                                {/* Only show phone number if it exists (Main user usually has it, friends don't) */}
-                                {(selectedProfile || userData)?.phoneNumber && (
-                                  <div className="flex items-center gap-3 text-[13px]">
-                                    <span className="text-slate-400 dark:text-white/40 font-bold w-12 text-[10px]">
-                                      {isKo ? '연락처' : 'Contact'}
-                                    </span>
-                                    <span className="font-semibold text-slate-700 dark:text-white/90">
-                                      {(selectedProfile || userData)?.phoneNumber}
-                                    </span>
-                                  </div>
-                                )}
-                                <div className="flex items-center gap-3 text-[13px]">
-                                  <span className="text-slate-400 dark:text-white/40 font-bold w-12">
-                                    {isKo ? '성별' : 'Gender'}
-                                  </span>
-                                  <span className="font-semibold text-slate-700 dark:text-white/90">
-                                    {(selectedProfile || userData)?.gender === 'male'
-                                      ? isKo ? '남성' : 'Male'
-                                      : isKo ? '여성' : 'Female'}
-                                  </span>
-                                </div>
-
-                                <div className="w-full h-[1px] bg-slate-100 dark:bg-white/10" />
-
-                                <div className="flex items-center gap-3 text-[13px]">
-                                  <span className="text-slate-400 dark:text-white/40 font-bold w-12">
-                                    {isKo ? '생일' : 'Birth'}
-                                  </span>
-                                  <span className="font-semibold text-slate-700 dark:text-white/90">
-                                    {(selectedProfile || userData)?.isTimeUnknown ? (
-                                      formatBirth((selectedProfile || userData)?.birthDate).slice(0, -10)
-                                    ) : (
-                                      <div
-                                        dangerouslySetInnerHTML={{
-                                          __html: formatBirth(
-                                            (selectedProfile || userData)?.birthTime
-                                              ? `${(selectedProfile || userData)?.birthDate}T${(selectedProfile || userData)?.birthTime}`
-                                              : (selectedProfile || userData)?.birthDate
-                                          ),
-                                        }}
-                                      />
-                                    )}
-                                  </span>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
+                          {/* Secondary: Switch/Manage Profile */}
+                          <button
+                            onClick={() => {
+                              setActiveMenu(null);
+                              router.push('/profile/manage');
+                            }}
+                            className="mt-4 text-xs font-bold text-slate-400 hover:text-indigo-500 transition-colors uppercase tracking-widest px-4 py-2"
+                          >
+                            {isKo ? '프로필 전환 / 관리' : 'Manage Profiles'}
+                          </button>
                         </div>
                       </div>
                     </>
@@ -585,7 +525,7 @@ export default function MenuBar() {
                         {isKo ? '당신의 운명을 그려보세요' : 'Discover Your Destiny'}
                       </h2>
 
-                      <p className="text-[13px] text-slate-400 dark:text-slate-500 mb-6 leading-relaxed break-keep">
+                      <p className="text-sm text-slate-400 dark:text-slate-500 mb-6 leading-relaxed break-keep">
                         {isKo
                           ? '로그인 한 번으로 정밀한 사주 분석과 매일 새로운 운세를 경험하세요.'
                           : 'Sign in to unlock personalized Saju insights and daily updates.'}
@@ -596,7 +536,7 @@ export default function MenuBar() {
                           openLoginModal();
                           setActiveMenu(null);
                         }}
-                        className="w-full py-3.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl font-bold text-[14px] transition-all active:scale-95 shadow-lg shadow-indigo-500/20"
+                        className="w-full py-3.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl font-bold text-md transition-all active:scale-95 shadow-lg shadow-indigo-500/20"
                       >
                         {isKo ? '로그인 / 시작하기' : 'Get Started Now'}
                       </button>
@@ -611,7 +551,7 @@ export default function MenuBar() {
                     <div key={sIdx} className="space-y-3">
                       <div className="flex items-center gap-2 px-2">
                         <div className="w-1 h-3 bg-indigo-500 rounded-full"></div>
-                        <h3 className="text-[11px] font-black text-slate-500 uppercase tracking-widest">
+                        <h3 className="text-sm font-black text-slate-500 uppercase tracking-widest">
                           {section.subtitle}
                         </h3>
                       </div>
@@ -640,35 +580,40 @@ export default function MenuBar() {
             className={`flex flex-col items-center gap-1 ${!activeMenu ? 'text-indigo-600' : 'text-slate-400'}`}
           >
             <HomeIcon className="w-6 h-6" />
-            <span className="text-[10px] font-black">{isKo ? '홈' : 'Home'}</span>
+            <span className="text-xs font-black">{isKo ? '홈' : 'Home'}</span>
           </button>
           <button
             onClick={() => setActiveMenu('fortune')}
             className={`flex flex-col items-center gap-1 ${activeMenu === 'fortune' ? 'text-indigo-600' : 'text-slate-400'}`}
           >
             <SparklesIcon className="w-6 h-6" />
-            <span className="text-[10px] font-black">{isKo ? '운세보기' : 'Fortune'}</span>
+            <span className="text-xs font-black">{isKo ? '운세보기' : 'Fortune'}</span>
           </button>
           <button
             onClick={() => setActiveMenu('credits')}
             className={`flex flex-col items-center gap-1 ${activeMenu === 'credits' ? 'text-indigo-600' : 'text-slate-400'}`}
           >
             <CircleStackIcon className="w-6 h-6" />
-            <span className="text-[10px] font-black">{isKo ? '크레딧' : 'Credits'}</span>
+            <span className="text-xs font-black">{isKo ? '크레딧' : 'Credits'}</span>
           </button>
           <button
-            onClick={() => setActiveMenu('profile')}
-            className={`flex flex-col items-center gap-1 ${activeMenu === 'profile' ? 'text-indigo-600' : 'text-slate-400'}`}
+            onClick={() => {
+              if (!user) {
+                openLoginModal();
+              } else {
+                setActiveMenu(null);
+                router.push('/mypage');
+              }
+            }}
+            className={`flex flex-col items-center gap-1 ${activeMenu === 'profile' || pathname === '/mypage' ? 'text-indigo-600' : 'text-slate-400'}`}
           >
-
-
             <div className="relative">
               <UserCircleIcon className="w-6 h-6" />
               {user && selectedProfile && (
                 <span className="absolute -top-0.5 -right-0.5 w-2.5 h-2.5 bg-sky-500 rounded-full border-2 border-white dark:border-slate-900" />
               )}
             </div>
-            <span className="text-[10px] font-black max-w-[4rem] truncate">
+            <span className="text-xs font-black max-w-[4rem] truncate">
               {user && selectedProfile
                 ? selectedProfile.displayName
                 : (user ? (isKo ? '내 정보' : 'Profile') : (isKo ? '마이 페이지' : 'My Page'))

@@ -66,7 +66,7 @@ export default function ViewTarotResult({ cardPicked, loading, data }) {
         <div className="report-container space-y-14 mt-6 animate-in fade-in slide-in-from-bottom-10 duration-1000">
           {/* 헤더 섹션 */}
           <header className="text-center space-y-4">
-            <div className="inline-block px-4 py-1.5 bg-gradient-to-r from-purple-50 to-pink-50 text-purple-800 rounded-full text-[11px] font-bold uppercase tracking-widest shadow-sm border border-purple-100/50 mb-2">
+            <div className="inline-block px-4 py-1.5 bg-gradient-to-r from-purple-50 to-pink-50 text-purple-800 rounded-full text-sm font-bold uppercase tracking-widest shadow-sm border border-purple-100/50 mb-2">
               Tarot Report
             </div>
             <h2 className="section-title-h2 text-[2.2rem] font-extrabold text-stone-900 leading-tight">
@@ -99,14 +99,14 @@ export default function ViewTarotResult({ cardPicked, loading, data }) {
                 {fortune?.tags?.map((tag, i) => (
                   <span
                     key={i}
-                    className="px-3 py-1.5 bg-purple-50/50 text-purple-500 rounded-xl font-bold text-[11px] border border-purple-100/50 tracking-wider shadow-sm"
+                    className="px-3 py-1.5 bg-purple-50/50 text-purple-500 rounded-xl font-bold text-sm border border-purple-100/50 tracking-wider shadow-sm"
                   >
                     {tag}
                   </span>
                 ))}
               </div>
 
-              <p className="report-text leading-[1.8] text-stone-600 text-[16px] whitespace-pre-wrap font-medium">
+              <p className="report-text leading-[1.8] text-stone-600 text-base whitespace-pre-wrap font-medium">
                 {fortune?.description}
               </p>
             </div>
@@ -130,7 +130,7 @@ export default function ViewTarotResult({ cardPicked, loading, data }) {
                   className="report-text p-6 bg-gradient-to-r from-stone-50/80 to-transparent rounded-[1.5rem] text-stone-700 leading-relaxed shadow-sm border border-stone-100/50 flex gap-4 transition-transform hover:translate-x-1 duration-300"
                 >
                   <span className="text-purple-300 font-serif italic text-xl mt-0.5">0{i + 1}</span>
-                  <span className="font-medium text-[15px]">{text}</span>
+                  <span className="font-medium text-sm">{text}</span>
                 </div>
               ))}
             </div>
@@ -153,9 +153,9 @@ export default function ViewTarotResult({ cardPicked, loading, data }) {
               {fortune?.adviceList?.map((action, i) => (
                 <li key={i} className="flex items-start gap-5 group">
                   <span className="flex-shrink-0 w-6 h-6 rounded-full bg-purple-500/30 flex items-center justify-center text-purple-300 ring-1 ring-purple-400/40 group-hover:bg-purple-500 group-hover:text-white transition-all duration-300 mt-1 shadow-[0_0_15px_rgba(168,85,247,0.4)]">
-                    <span className="text-[10px]">✦</span>
+                    <span className="text-xs">✦</span>
                   </span>
-                  <span className="text-[16px] leading-relaxed text-purple-50/90 font-light tracking-wide">
+                  <span className="text-base leading-relaxed text-purple-50/90 font-light tracking-wide">
                     {action}
                   </span>
                 </li>
@@ -167,7 +167,7 @@ export default function ViewTarotResult({ cardPicked, loading, data }) {
               {fortune?.footerTags?.map((tag, i) => (
                 <span
                   key={i}
-                  className="keyword-tag backdrop-blur-md bg-white/5 border border-white/10 px-4 py-2 rounded-2xl text-[11px] text-purple-100 font-bold tracking-wider hover:bg-white/10 transition-all cursor-default shadow-sm ring-1 ring-white/5"
+                  className="keyword-tag backdrop-blur-md bg-white/5 border border-white/10 px-4 py-2 rounded-2xl text-sm text-purple-100 font-bold tracking-wider hover:bg-white/10 transition-all cursor-default shadow-sm ring-1 ring-white/5"
                 >
                   {tag}
                 </span>

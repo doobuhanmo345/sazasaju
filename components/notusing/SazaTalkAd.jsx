@@ -592,7 +592,7 @@ const SazaTalkAd = () => {
               <div>
                 <div className="flex items-center gap-1.5 animate-pulse">
                   <ChatBubbleLeftRightIcon className="w-4 h-4 text-indigo-500" />
-                  <span className="text-[18px] font-black text-indigo-600 ">
+                  <span className="text-lg font-black text-indigo-600 ">
                     {language === 'ko'
                       ? !gender
                         ? guideMessages.ko.putGender
@@ -626,7 +626,7 @@ const SazaTalkAd = () => {
               <div className="flex justify-between items-center px-1">
                 <div className="flex items-center gap-1">
                   <CakeIcon className="w-4 h-4 text-indigo-500" />
-                  <span className="text-[10px] font-black text-slate-400 uppercase tracking-tighter">
+                  <span className="text-xs font-black text-slate-400 uppercase tracking-tighter">
                     Progress
                   </span>
                 </div>
@@ -682,7 +682,7 @@ const SazaTalkAd = () => {
                   <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-violet-400 opacity-75"></span>
                   <span className="relative inline-flex rounded-full h-2 w-2 bg-violet-500"></span>
                 </div>
-                <span className="text-[10px] font-bold tracking-wider text-violet-600  uppercase">
+                <span className="text-xs font-bold tracking-wider text-violet-600  uppercase">
                   AI Intelligence Analysis
                 </span>
               </div>

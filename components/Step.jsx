@@ -10,7 +10,7 @@ const Step = ({ step, totalStep, title, onBack }) => {
     <div className="w-full mb-8 px-1 relative">
       <div className="flex items-end justify-between mb-3">
         <div className="flex flex-col gap-1">
-          <span className="text-[10px] font-bold text-indigo-500 dark:text-indigo-400 tracking-widest uppercase">
+          <span className="text-xs font-bold text-indigo-500 dark:text-indigo-400 tracking-widest uppercase">
             STEP {step.toString().padStart(2, '0')}
           </span>
           <div className="flex">
@@ -27,7 +27,7 @@ const Step = ({ step, totalStep, title, onBack }) => {
         text-slate-500 hover:text-indigo-600 dark:text-slate-400 dark:hover:text-indigo-400
       "
                 >
-                  <ChevronLeftIcon className="w-4 h-4 group-hover:-translate-x-1 transition-transform duration-300" />  
+                  <ChevronLeftIcon className="w-4 h-4 group-hover:-translate-x-1 transition-transform duration-300" />
                 </button>
               )}
             </div>
@@ -51,11 +51,10 @@ const Step = ({ step, totalStep, title, onBack }) => {
               key={index}
               className={`h-full flex-1 transition-all duration-500 ease-out 
             ${index !== 0 ? 'border-l-2 border-white dark:border-slate-800' : ''} 
-            ${
-              isActive
-                ? 'bg-gradient-to-r from-indigo-500 to-indigo-400 shadow-sm'
-                : 'bg-transparent'
-            }
+            ${isActive
+                  ? 'bg-gradient-to-r from-indigo-500 to-indigo-400 shadow-sm'
+                  : 'bg-transparent'
+                }
           `}
             />
           );

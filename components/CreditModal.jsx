@@ -78,12 +78,12 @@ const CreditModal = ({ isOpen, onClose, onWatchAd, language = 'ko' }) => {
             {t.title}
           </h3>
 
-          <p className="text-slate-500 dark:text-slate-400 text-[15px] leading-relaxed mb-6 break-keep font-medium">
+          <p className="text-slate-500 dark:text-slate-400 text-sm leading-relaxed mb-6 break-keep font-medium">
             {t.body}
           </p>
 
           <div className="mb-8 px-6 py-2.5 inline-flex items-center gap-2 bg-slate-50 dark:bg-slate-800/50 rounded-full border border-slate-100 dark:border-slate-700">
-            <span className="text-[11px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider">
+            <span className="text-sm font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider">
               {t.refillText}
             </span>
             <span className="text-sm font-black text-indigo-500 dark:text-indigo-400 font-mono">{localTimeLeft}</span>

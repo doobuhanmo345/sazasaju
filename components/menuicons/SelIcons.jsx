@@ -62,11 +62,11 @@ const SelIcons = () => {
 
           {/* 텍스트 영역 */}
           <div className="flex flex-col items-start sm:items-center overflow-hidden">
-            <span className="text-[15px] sm:text-[12px] font-bold text-slate-800 transition-colors group-hover:text-indigo-600">
+            <span className="text-sm sm:text-sm font-bold text-slate-800 transition-colors group-hover:text-indigo-600">
               {item.label}
             </span>
             {/* 모바일에서만 보이는 설명 */}
-            <span className="sm:hidden text-[12px] text-slate-400 font-medium truncate w-full">
+            <span className="sm:hidden text-sm text-slate-400 font-medium truncate w-full">
               {item.desc}
             </span>
           </div>

@@ -219,7 +219,7 @@ const EditPrompt = () => {
             placeholder="Search commands..."
             className="px-4 py-2 bg-transparent outline-none text-sm w-48 md:w-64"
           />
-          <div className="px-3 py-1 bg-slate-100 dark:bg-slate-800 rounded-xl text-[10px] font-black text-slate-400 flex items-center">
+          <div className="px-3 py-1 bg-slate-100 dark:bg-slate-800 rounded-xl text-xs font-black text-slate-400 flex items-center">
             {filteredPrompts.length} ITEMS
           </div>
         </div>
@@ -249,7 +249,7 @@ const EditPrompt = () => {
                 </svg>
               </div>
               <div className="text-left">
-                <div className="text-[10px] font-black text-slate-400 uppercase tracking-widest leading-none mb-1">
+                <div className="text-xs font-black text-slate-400 uppercase tracking-widest leading-none mb-1">
                   Current Command
                 </div>
                 <div className="text-sm font-black text-blue-600 truncate max-w-[180px]">
@@ -257,7 +257,7 @@ const EditPrompt = () => {
                 </div>
               </div>
             </div>
-            <div className="px-4 py-2 bg-slate-900 dark:bg-white text-white dark:text-slate-900 rounded-xl text-[10px] font-black uppercase tracking-widest shadow-lg">
+            <div className="px-4 py-2 bg-slate-900 dark:bg-white text-white dark:text-slate-900 rounded-xl text-xs font-black uppercase tracking-widest shadow-lg">
               {isNavOpen ? 'Close Menu' : 'Browse Files'}
             </div>
           </button>
@@ -270,7 +270,7 @@ const EditPrompt = () => {
           {/* Global Instruction (Featured) */}
           {hasGlobalInstruction && (
             <div className="mb-2">
-              <h3 className="text-[11px] font-black text-amber-500 uppercase tracking-[0.2em] mb-4 px-2 flex items-center gap-2">
+              <h3 className="text-sm font-black text-amber-500 uppercase tracking-[0.2em] mb-4 px-2 flex items-center gap-2">
                 <span className="w-1 h-3 bg-amber-500 rounded-full"></span>
                 System Global
               </h3>
@@ -300,7 +300,7 @@ const EditPrompt = () => {
                   onClick={() => toggleGroup(groupName)}
                   className="w-full flex items-center justify-between px-4 py-3 hover:bg-white dark:hover:bg-slate-800 transition-colors"
                 >
-                  <span className="text-[11px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest flex items-center gap-2">
+                  <span className="text-sm font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest flex items-center gap-2">
                     <span
                       className={`w-1 h-3 rounded-full ${groupName === 'core' ? 'bg-blue-600' : 'bg-slate-400'}`}
                     ></span>
@@ -374,7 +374,7 @@ const EditPrompt = () => {
           {/* Quick Create Section */}
           <div className="pt-6">
             <div className="p-5 bg-emerald-50/50 dark:bg-emerald-900/10 rounded-2xl border border-emerald-100/50 dark:border-emerald-500/20 shadow-sm shadow-emerald-500/5">
-              <label className="block text-[10px] font-black text-emerald-600 dark:text-emerald-500 uppercase tracking-widest mb-3">
+              <label className="block text-xs font-black text-emerald-600 dark:text-emerald-500 uppercase tracking-widest mb-3">
                 Quick Create
               </label>
               <input
@@ -386,7 +386,7 @@ const EditPrompt = () => {
               />
               <button
                 onClick={handleAddPath}
-                className="w-full py-3 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-[11px] font-black uppercase tracking-widest transition-all active:scale-95 shadow-lg shadow-emerald-500/20"
+                className="w-full py-3 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-sm font-black uppercase tracking-widest transition-all active:scale-95 shadow-lg shadow-emerald-500/20"
               >
                 Confirm Addition
               </button>
@@ -397,7 +397,7 @@ const EditPrompt = () => {
           {/* Danger Zone (High Visibility, Isolated) */}
           <div className="pt-8 border-t border-slate-200 dark:border-slate-800">
             <div className="p-5 bg-rose-50/50 dark:bg-rose-900/10 rounded-2xl border border-rose-100 dark:border-rose-500/20">
-              <label className="block text-[10px] font-black text-rose-600 dark:text-rose-500 uppercase tracking-widest mb-3 flex items-center gap-2">
+              <label className="block text-xs font-black text-rose-600 dark:text-rose-500 uppercase tracking-widest mb-3 flex items-center gap-2">
                 <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
                 </svg>
@@ -405,7 +405,7 @@ const EditPrompt = () => {
               </label>
               <button
                 onClick={handleDeletePath}
-                className="w-full py-3 bg-white dark:bg-slate-900 border border-rose-200 dark:border-rose-500/30 text-rose-600 dark:text-rose-400 hover:bg-rose-600 hover:text-white rounded-xl text-[11px] font-black uppercase tracking-widest transition-all active:scale-95 shadow-sm"
+                className="w-full py-3 bg-white dark:bg-slate-900 border border-rose-200 dark:border-rose-500/30 text-rose-600 dark:text-rose-400 hover:bg-rose-600 hover:text-white rounded-xl text-sm font-black uppercase tracking-widest transition-all active:scale-95 shadow-sm"
               >
                 Delete This File
               </button>
@@ -427,7 +427,7 @@ const EditPrompt = () => {
             </div>
             {message.text && (
               <div
-                className={`text-[11px] font-black uppercase tracking-widest animate-in fade-in slide-in-from-right-2 ${message.type === 'success' ? 'text-emerald-500' : 'text-rose-500'}`}
+                className={`text-sm font-black uppercase tracking-widest animate-in fade-in slide-in-from-right-2 ${message.type === 'success' ? 'text-emerald-500' : 'text-rose-500'}`}
               >
                 {message.text}
               </div>
@@ -444,7 +444,7 @@ const EditPrompt = () => {
               >
                 <div className="flex items-center gap-2 ml-1">
                   <span className="w-1 h-3 bg-blue-600 rounded-full"></span>
-                  <span className="text-[11px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest">
+                  <span className="text-sm font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest">
                     Insert Variables
                   </span>
                   <span className="ml-2 px-1.5 py-0.5 bg-slate-100 dark:bg-slate-800 rounded text-[9px] font-bold text-slate-400">
@@ -477,10 +477,10 @@ const EditPrompt = () => {
                       onClick={() => insertVariable(item.key)}
                       className="text-left p-3 bg-slate-50 dark:bg-slate-800/50 hover:bg-blue-50 dark:hover:bg-blue-900/10 border border-slate-100 dark:border-slate-700 rounded-xl transition-all group active:scale-95"
                     >
-                      <div className="text-[11px] text-blue-600 dark:text-blue-400 font-black mb-0.5 truncate group-hover:text-blue-700">
+                      <div className="text-sm text-blue-600 dark:text-blue-400 font-black mb-0.5 truncate group-hover:text-blue-700">
                         {item.key}
                       </div>
-                      <div className="text-[10px] text-slate-400 font-medium truncate">
+                      <div className="text-xs text-slate-400 font-medium truncate">
                         {item.label}
                       </div>
                     </button>

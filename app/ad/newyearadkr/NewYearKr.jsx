@@ -42,7 +42,7 @@ export default function NewYearKr({ setStep }) {
                 <br />
                 당신의 한 해를 분석해 드립니다.
               </h1>
-              <p className="text-[15px] text-slate-600 font-medium leading-relaxed break-keep px-4">
+              <p className="text-sm text-slate-600 font-medium leading-relaxed break-keep px-4">
                 2026년 당신의 운세를
                 <br />
                 사자사주에서 무료로 봐드려요!
@@ -59,7 +59,7 @@ export default function NewYearKr({ setStep }) {
               <button
                 type="submit"
                 onClick={handleSubmit}
-                className="w-full bg-indigo-600 text-white font-bold py-5 rounded-full text-[18px] shadow-lg flex items-center justify-center gap-1 active:scale-[0.98] transition-all hover:bg-indigo-700"
+                className="w-full bg-indigo-600 text-white font-bold py-5 rounded-full text-lg shadow-lg flex items-center justify-center gap-1 active:scale-[0.98] transition-all hover:bg-indigo-700"
               >
                 2026년 전체 흐름 보기 <ChevronRight size={22} strokeWidth={3} />
               </button>
@@ -68,7 +68,7 @@ export default function NewYearKr({ setStep }) {
             <div className="w-full flex items-center mt-12 px-2 py-4 border-t border-indigo-100">
               <div className="flex-1 flex flex-col items-center gap-1.5 opacity-70">
                 <Users size={18} className="text-indigo-600" />
-                <span className="text-[10px] font-black text-slate-500 leading-tight text-center">
+                <span className="text-xs font-black text-slate-500 leading-tight text-center">
                   27명 명리학자 참여
                   <br />
                   <span className="font-medium text-[9px]">직접 검증 데이터 기반</span>
@@ -79,7 +79,7 @@ export default function NewYearKr({ setStep }) {
 
               <div className="flex-1 flex flex-col items-center gap-1.5 opacity-70">
                 <Database size={18} className="text-indigo-600" />
-                <span className="text-[10px] font-black text-slate-500 leading-tight text-center">
+                <span className="text-xs font-black text-slate-500 leading-tight text-center">
                   수만 건 해석 데이터 구조화
                   <br />
                   <span className="font-medium text-[9px]">방대한 DB 활용 분석</span>
@@ -90,7 +90,7 @@ export default function NewYearKr({ setStep }) {
 
               <div className="flex-1 flex flex-col items-center gap-1.5 opacity-70">
                 <Brain size={18} className="text-indigo-600" />
-                <span className="text-[10px] font-black text-slate-500 leading-tight text-center">
+                <span className="text-xs font-black text-slate-500 leading-tight text-center">
                   질문 맞춤
                   <br />
                   <span className="font-bold">AI 분석</span>
@@ -110,7 +110,7 @@ export default function NewYearKr({ setStep }) {
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-indigo-400 opacity-75"></span>
               <span className="relative inline-flex rounded-full h-2 w-2 bg-indigo-500"></span>
             </span>
-            <span className="text-[11px] font-bold text-indigo-600 tracking-tight uppercase">
+            <span className="text-sm font-bold text-indigo-600 tracking-tight uppercase">
               Preview Mode
             </span>
           </div>
@@ -128,7 +128,7 @@ export default function NewYearKr({ setStep }) {
 
               <div className="flex items-center justify-center gap-3">
                 <div className="h-[1px] w-8 bg-slate-200"></div>
-                <p className="text-[13px] font-medium text-indigo-600 bg-indigo-50 px-3 py-1 rounded-md">
+                <p className="text-sm font-medium text-indigo-600 bg-indigo-50 px-3 py-1 rounded-md">
                   본 페이지에서 신청하는 신년 운세는 맛보기 버전입니다. <br />
                   월별 운세와 놓치기 아쉬운 디테일 등 정식 리포트는
                   <br />
@@ -147,7 +147,7 @@ export default function NewYearKr({ setStep }) {
           <header className="pt-12 pb-8 px-4 text-center bg-gradient-to-b from-indigo-50/50 to-transparent rounded-t-3xl">
             <h1 className="text-2xl font-black mb-2 tracking-tight text-slate-900">2026년 병오년 종합 리포트</h1>
 
-            <p className="text-[13px] text-slate-500 my-6 leading-relaxed px-4 break-keep">
+            <p className="text-sm text-slate-500 my-6 leading-relaxed px-4 break-keep">
               병오년은 불의 기운이 강하게 작동하는 해로, 선택과 속도가 삶의 흐름을 좌우하는
               시기입니다. 본 페이지는 실제 개인 맞춤 리포트의 일부 흐름을 체험할 수 있는 무료 맛보기
               리포트입니다.
@@ -158,7 +158,7 @@ export default function NewYearKr({ setStep }) {
           <section className="relative mb-12 px-6 max-w-3xl mx-auto">
             <div className="text-center mb-8">
               <h2 className="text-xl font-bold text-indigo-900 mb-2">책임과 도전 속에서 빛나는 성장과 변화의 해</h2>
-              <p className="text-[15px] font-bold text-slate-700 leading-snug break-keep">
+              <p className="text-sm font-bold text-slate-700 leading-snug break-keep">
                 열정적인 불꽃이 두부한모삼님을 단련하여 새로운 가치를 창조하는 한 해가 될 것입니다.
               </p>
             </div>
@@ -277,10 +277,10 @@ export default function NewYearKr({ setStep }) {
                     <div className="flex items-center text-sm font-bold mb-3 text-slate-800">⚠️ 주의할 요소</div>
                     <ul className="list-none p-0 m-0 text-sm text-slate-600 space-y-2">
                       <li className="flex items-center">
-                        <span className="text-amber-500 mr-1.5 text-[10px]">▲</span> 과도한 확장
+                        <span className="text-amber-500 mr-1.5 text-xs">▲</span> 과도한 확장
                       </li>
                       <li className="flex items-center">
-                        <span className="text-amber-500 mr-1.5 text-[10px]">▲</span> 감정적 결정
+                        <span className="text-amber-500 mr-1.5 text-xs">▲</span> 감정적 결정
                       </li>
                     </ul>
                   </div>
@@ -288,7 +288,7 @@ export default function NewYearKr({ setStep }) {
               </div>
 
               <div>
-                <p className="text-[15px] text-slate-600 my-8 leading-relaxed break-keep px-2">
+                <p className="text-sm text-slate-600 my-8 leading-relaxed break-keep px-2">
                   이 요약은 병오년의 전체적인 분위기와 흐름만을 담고 있습니다. 실제 리포트에서는
                   개인의 사주 구조에 따라 작용 시점과 강도가 달라집니다. 지금 느껴지는 공기감이
                   있다면, 그것이 올해의 핵심 신호입니다.
@@ -314,23 +314,23 @@ export default function NewYearKr({ setStep }) {
               <div className="mt-16 relative">
                 <div className="px-6 select-none pointer-events-none opacity-40 grayscale contrast-75">
                   <div className="text-center mb-6">
-                    <h2 className="text-[20px] font-bold text-[#a68b7c] mb-1">테마별 상세 분석</h2>
+                    <h2 className="text-xl font-bold text-[#a68b7c] mb-1">테마별 상세 분석</h2>
                   </div>
                   <div className="space-y-4 mb-6">
                     <div>
-                      <h3 className="text-[18px] text-[#8c7a70] mb-3 border-l-4 border-indigo-600 pl-2.5 font-bold mt-6">재물/투자운</h3>
+                      <h3 className="text-lg text-[#8c7a70] mb-3 border-l-4 border-indigo-600 pl-2.5 font-bold mt-6">재물/투자운</h3>
                       <p className="text-sm text-slate-600 leading-relaxed break-keep">
                         올해 당신의 재물운은 큰 흐름에서 상승곡선을 그리고 있습니다. 특히 상반기보다는 하반기에 투자의 결실이 맺힐 가능성이 높으며...
                       </p>
                     </div>
                     <div>
-                      <h3 className="text-[18px] text-[#8c7a70] mb-3 border-l-4 border-indigo-600 pl-2.5 font-bold mt-6">직장/사업운</h3>
+                      <h3 className="text-lg text-[#8c7a70] mb-3 border-l-4 border-indigo-600 pl-2.5 font-bold mt-6">직장/사업운</h3>
                       <p className="text-sm text-slate-600 leading-relaxed break-keep">
                         승진의 기회, 이직의 타이밍, 혹은 새로운 사업을 시작하기에 적합한 달을 짚어드립니다. 사회적 위치가 한 단계 격상될 수 있는 핵심적인 처세술을 사주 기반으로 제안합니다...
                       </p>
                     </div>
                     <div>
-                      <h3 className="text-[18px] text-[#8c7a70] mb-3 border-l-4 border-indigo-600 pl-2.5 font-bold mt-6">건강/웰니스</h3>
+                      <h3 className="text-lg text-[#8c7a70] mb-3 border-l-4 border-indigo-600 pl-2.5 font-bold mt-6">건강/웰니스</h3>
                       <p className="text-sm text-slate-600 leading-relaxed break-keep">
                         사주 오행상 취약해지기 쉬운 신체 부위를 사전에 예방하고, 한 해 동안 최상의 컨디션을 유지하기 위한 맞춤형 생활 습관과 운동법을 추천해 드립니다...
                       </p>
@@ -358,7 +358,7 @@ export default function NewYearKr({ setStep }) {
               <div className="mt-16 relative">
                 <div className="px-6 select-none pointer-events-none opacity-40 grayscale contrast-75">
                   <div className="text-center mb-6">
-                    <h2 className="text-[20px] font-bold text-[#a68b7c] mb-1">특별히 주의해야 할 기간</h2>
+                    <h2 className="text-xl font-bold text-[#a68b7c] mb-1">특별히 주의해야 할 기간</h2>
                   </div>
                   <div className="grid grid-cols-2 gap-3 mb-6">
                     <div className="bg-[#eef2ff] p-4 rounded-xl border border-indigo-100">
@@ -400,7 +400,7 @@ export default function NewYearKr({ setStep }) {
         <button
           type="submit"
           onClick={handleSubmit}
-          className="w-full bg-indigo-600 text-white font-bold py-5 rounded-full text-[18px] shadow-lg flex items-center justify-center gap-1 active:scale-[0.98] transition-all hover:bg-indigo-700"
+          className="w-full bg-indigo-600 text-white font-bold py-5 rounded-full text-lg shadow-lg flex items-center justify-center gap-1 active:scale-[0.98] transition-all hover:bg-indigo-700"
         >
           2026년 전체 흐름 보기 <ChevronRight size={22} strokeWidth={3} />
         </button>

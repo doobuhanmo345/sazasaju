@@ -45,7 +45,6 @@ const ReportTemplateBasic = ({ shareData }) => {
     }
 
     if (!userData) return; // Wait for load
-    console.log(data)
     // DB에 저장된 결과가 있으면 로드
     const savedResult = userData?.usageHistory?.ZApiAnalysis?.result;
     if (savedResult) {
@@ -78,7 +77,6 @@ const ReportTemplateBasic = ({ shareData }) => {
   const iljuInfo = isEn ? ILJU_DATA_EN[iljuKey] || {} : ILJU_DATA[iljuKey] || {};
   const iljuTitle = iljuInfo?.title?.[gender]?.title || iljuKey;
   const iljuDescText = iljuInfo?.title?.[gender]?.desc || '';
-  // console.log(daewoonList?.slice(1,10));
 
   const getBarColor = (type) =>
     ({
@@ -233,7 +231,7 @@ const ReportTemplateBasic = ({ shareData }) => {
         className="w-full bg-white dark:bg-slate-800 rounded-xl shadow-lg p-6 mb-6 text-center border border-indigo-50 dark:border-slate-700"
       >
         <div className="mb-4">
-          <span className="text-[10px] font-black tracking-[0.3em] text-indigo-400 uppercase">
+          <span className="text-xs font-black tracking-[0.3em] text-indigo-400 uppercase">
             WHO AM I?
           </span>
           <h1 className="text-2xl font-extrabold text-slate-800 dark:text-white mt-1">

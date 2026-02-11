@@ -47,7 +47,7 @@ export default function NewYearEn({ setStep }) {
                 <br />
                 Year of Transformation
               </h1>
-              <p className="text-[16px] text-[#A08B82] font-light leading-relaxed break-keep">
+              <p className="text-base text-[#A08B82] font-light leading-relaxed break-keep">
                 Discover what the stars have aligned
                 <br />
                 for your journey ahead ✨
@@ -67,7 +67,7 @@ export default function NewYearEn({ setStep }) {
               <button
                 type="submit"
                 onClick={handleSubmit}
-                className="w-full bg-gradient-to-r from-[#E8B4A0] to-[#D4A088] text-white font-semibold py-6 rounded-full text-[17px] shadow-xl shadow-orange-200/40 flex items-center justify-center gap-2 active:scale-[0.97] transition-all hover:shadow-2xl hover:shadow-orange-200/50"
+                className="w-full bg-gradient-to-r from-[#E8B4A0] to-[#D4A088] text-white font-semibold py-6 rounded-full text-lg shadow-xl shadow-orange-200/40 flex items-center justify-center gap-2 active:scale-[0.97] transition-all hover:shadow-2xl hover:shadow-orange-200/50"
                 style={{ fontFamily: 'Georgia, serif' }}
               >
                 Unlock Your 2026 Reading <Heart size={20} className="fill-white" />
@@ -77,10 +77,10 @@ export default function NewYearEn({ setStep }) {
             <div className="w-full flex items-center mt-16 px-6 py-6 border-t border-[#F5E6DD] bg-gradient-to-r from-[#FFF9F5] to-[#FFF5F0]">
               <div className="flex-1 flex flex-col items-center gap-2 opacity-80">
                 <Users size={20} className="text-[#D4A088]" strokeWidth={1.5} />
-                <span className="text-[11px] font-medium text-[#8B7B73] leading-tight text-center">
+                <span className="text-sm font-medium text-[#8B7B73] leading-tight text-center">
                   Expert Astrologers
                   <br />
-                  <span className="font-light text-[10px] text-[#A69188]">Verified insights</span>
+                  <span className="font-light text-xs text-[#A69188]">Verified insights</span>
                 </span>
               </div>
 
@@ -88,10 +88,10 @@ export default function NewYearEn({ setStep }) {
 
               <div className="flex-1 flex flex-col items-center gap-2 opacity-80">
                 <Database size={20} className="text-[#D4A088]" strokeWidth={1.5} />
-                <span className="text-[11px] font-medium text-[#8B7B73] leading-tight text-center">
+                <span className="text-sm font-medium text-[#8B7B73] leading-tight text-center">
                   Thousands of Readings
                   <br />
-                  <span className="font-light text-[10px] text-[#A69188]">
+                  <span className="font-light text-xs text-[#A69188]">
                     Data-backed analysis
                   </span>
                 </span>
@@ -101,7 +101,7 @@ export default function NewYearEn({ setStep }) {
 
               <div className="flex-1 flex flex-col items-center gap-2 opacity-80">
                 <Sparkles size={20} className="text-[#D4A088]" strokeWidth={1.5} />
-                <span className="text-[11px] font-medium text-[#8B7B73] leading-tight text-center">
+                <span className="text-sm font-medium text-[#8B7B73] leading-tight text-center">
                   Personalized
                   <br />
                   <span className="font-semibold text-[#7A5C52]">AI Insights</span>
@@ -121,7 +121,7 @@ export default function NewYearEn({ setStep }) {
               <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-[#D4A088]"></span>
             </span>
             <span
-              className="text-[12px] font-semibold text-[#C49B87] tracking-wide uppercase"
+              className="text-sm font-semibold text-[#C49B87] tracking-wide uppercase"
               style={{ fontFamily: 'Georgia, serif' }}
             >
               Preview Edition
@@ -144,7 +144,7 @@ export default function NewYearEn({ setStep }) {
 
               <div className="flex items-center justify-center gap-3">
                 <div className="h-[1px] w-10 bg-gradient-to-r from-transparent to-[#E8D4C8]"></div>
-                <p className="text-[13px] font-light text-[#9B8B82] bg-gradient-to-r from-[#FFF9F5] to-[#FFF5F0] px-4 py-2 rounded-xl border border-[#F5E6DD]">
+                <p className="text-sm font-light text-[#9B8B82] bg-gradient-to-r from-[#FFF9F5] to-[#FFF5F0] px-4 py-2 rounded-xl border border-[#F5E6DD]">
                   This is a sample reading. <br />
                   For your complete monthly insights & personalized details,
                   <br />
@@ -165,7 +165,7 @@ export default function NewYearEn({ setStep }) {
               2026 Cosmic Report
             </h1>
 
-            <p className="text-[15px] text-[#9B8B82] leading-relaxed font-light">
+            <p className="text-sm text-[#9B8B82] leading-relaxed font-light">
               2026 brings powerful transformative energy, where choices and timing shape your
               destiny. This preview offers a taste of what your personalized reading reveals.
             </p>
@@ -182,7 +182,7 @@ export default function NewYearEn({ setStep }) {
               >
                 Growth Through Challenge & Beautiful Change
               </h2>
-              <p className="text-[15px] text-[#9B8B82] font-light leading-relaxed">
+              <p className="text-sm text-[#9B8B82] font-light leading-relaxed">
                 Passionate energy will refine you, creating new value and meaning throughout this
                 transformative year.
               </p>
@@ -339,7 +339,7 @@ export default function NewYearEn({ setStep }) {
               </div>
 
               <div>
-                <p className="text-[15px] text-[#9B8B82] leading-relaxed font-light p-6 bg-gradient-to-br from-[#FFF9F5] to-white rounded-2xl border border-[#F5E6DD]">
+                <p className="text-sm text-[#9B8B82] leading-relaxed font-light p-6 bg-gradient-to-br from-[#FFF9F5] to-white rounded-2xl border border-[#F5E6DD]">
                   This overview captures the general atmosphere and flow of 2026. In your complete
                   reading, timing and intensity vary based on your unique chart. If you're sensing a
                   particular energy now, that's your key signal for the year.
@@ -371,7 +371,7 @@ export default function NewYearEn({ setStep }) {
         <button
           type="submit"
           onClick={handleSubmit}
-          className="w-full bg-gradient-to-r from-[#E8B4A0] to-[#D4A088] text-white font-semibold py-6 rounded-full text-[17px] shadow-xl shadow-orange-200/40 flex items-center justify-center gap-2 active:scale-[0.97] transition-all hover:shadow-2xl hover:shadow-orange-200/50"
+          className="w-full bg-gradient-to-r from-[#E8B4A0] to-[#D4A088] text-white font-semibold py-6 rounded-full text-lg shadow-xl shadow-orange-200/40 flex items-center justify-center gap-2 active:scale-[0.97] transition-all hover:shadow-2xl hover:shadow-orange-200/50"
           style={{ fontFamily: 'Georgia, serif' }}
         >
           Discover Your Complete 2026 Journey <Heart size={20} className="fill-white" />

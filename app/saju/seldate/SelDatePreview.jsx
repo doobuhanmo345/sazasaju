@@ -135,7 +135,7 @@ export default function SelDatePreview({ onStart, isDisabled }) {
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
               <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
             </span>
-            <span className="text-[11px] font-bold text-emerald-600 dark:text-emerald-400 tracking-tight uppercase">
+            <span className="text-sm font-bold text-emerald-600 dark:text-emerald-400 tracking-tight uppercase">
               Preview Mode
             </span>
           </div>
@@ -233,12 +233,12 @@ export default function SelDatePreview({ onStart, isDisabled }) {
                     <div key={idx} className="bg-slate-50 dark:bg-slate-800/50 p-4 rounded-xl border border-slate-100 dark:border-slate-700 flex flex-col gap-2">
                       <div className="flex items-center justify-between">
                         <span className="text-base font-bold text-rose-500">{item.date}</span>
-                        <span className="text-[10px] font-bold px-2 py-0.5 bg-white dark:bg-slate-700 rounded shadow-sm border border-slate-200 dark:border-slate-600">
+                        <span className="text-xs font-bold px-2 py-0.5 bg-white dark:bg-slate-700 rounded shadow-sm border border-slate-200 dark:border-slate-600">
                           {item.rank}
                         </span>
                       </div>
                       <p className="text-xs text-slate-700 dark:text-slate-300"><span className="font-bold mr-2">Why?</span>{item.why}</p>
-                      <p className="text-[10px] text-slate-500 font-medium"><span className="font-bold mr-2 text-indigo-500">Tip</span>{item.tip}</p>
+                      <p className="text-xs text-slate-500 font-medium"><span className="font-bold mr-2 text-indigo-500">Tip</span>{item.tip}</p>
                     </div>
                   ))}
                 </div>

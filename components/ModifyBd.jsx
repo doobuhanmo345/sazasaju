@@ -20,7 +20,7 @@ export default function ModifyBd({
   const { user } = useAuthContext();
   const { language } = useLanguage();
   const t = (char) => (language === 'en' ? getEng(char) : char);
-const [inputValue, setInputValue] = useState(() => {
+  const [inputValue, setInputValue] = useState(() => {
     // 1. 외부에서 받아온 값이 있으면 우선 사용
     if (inputDate) return inputDate;
 
@@ -37,7 +37,7 @@ const [inputValue, setInputValue] = useState(() => {
   const [timeUnknown, setTimeUnknown] = useState(() => {
     // 1. 외부에서 받아온 값이 있으면 우선 사용
     if (isTimeUnknown) return isTimeUnknown;
-    else {return false}
+    else { return false }
   });
 
   // props가 변경될 때 내부 상태 업데이트
@@ -63,7 +63,7 @@ const [inputValue, setInputValue] = useState(() => {
 
         {gender === 'male' ? '👨' : '👩'}
         {timeUnknown && (
-          <span className="px-1.5 py-0.5 text-[10px] bg-gray-100 dark:bg-gray-700 rounded text-gray-400">
+          <span className="px-1.5 py-0.5 text-xs bg-gray-100 dark:bg-gray-700 rounded text-gray-400">
             {UI_TEXT.unknownTime[language]}
           </span>
         )}
@@ -101,7 +101,7 @@ const [inputValue, setInputValue] = useState(() => {
                 <input
                   type="checkbox"
                   checked={timeUnknown}
-                  onChange={(e) => {setTimeUnknown(e.target.checked);setIsTimeUnknown(e.target.checked)}}
+                  onChange={(e) => { setTimeUnknown(e.target.checked); setIsTimeUnknown(e.target.checked) }}
                   className="w-4 h-4 text-indigo-600 rounded focus:ring-indigo-500 dark:bg-slate-700"
                 />
                 <span className="text-xs font-bold text-gray-500 dark:text-gray-400">
@@ -111,18 +111,18 @@ const [inputValue, setInputValue] = useState(() => {
 
             </div>
             <div className="relative w-full p-1">
-             <input
-      type={timeUnknown ? 'date' : 'datetime-local'}
-      value={timeUnknown ? inputValue.split('T')[0] : inputValue}
-      onChange={(e) => {
-        let val = e.target.value;
-        if (timeUnknown) val += 'T00:00';
-        setInputValue(val);
-        setInputDate(val);
-      }}
-      className="w-full p-2 bg-gray-50 dark:bg-slate-900/50 border rounded-xl outline-none focus:ring-2 focus:ring-indigo-500 dark:text-white dark:[color-scheme:dark]"
-    />
-              
+              <input
+                type={timeUnknown ? 'date' : 'datetime-local'}
+                value={timeUnknown ? inputValue.split('T')[0] : inputValue}
+                onChange={(e) => {
+                  let val = e.target.value;
+                  if (timeUnknown) val += 'T00:00';
+                  setInputValue(val);
+                  setInputDate(val);
+                }}
+                className="w-full p-2 bg-gray-50 dark:bg-slate-900/50 border rounded-xl outline-none focus:ring-2 focus:ring-indigo-500 dark:text-white dark:[color-scheme:dark]"
+              />
+
             </div>
           </div>
           <button
@@ -131,7 +131,7 @@ const [inputValue, setInputValue] = useState(() => {
           >
             {BD_EDIT_UI.complete[language]}
           </button>
-          
+
         </div>
       </div>
 

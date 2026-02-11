@@ -95,7 +95,7 @@ export default function DayLuckPage() {
     return (
       <div className="w-full max-w-xl mx-auto py-8">
         <div className="mb-6">
-          <label className="text-[11px] font-black uppercase tracking-[0.2em] text-slate-400 dark:text-slate-500 block mb-4">
+          <label className="text-sm font-black uppercase tracking-[0.2em] text-slate-400 dark:text-slate-500 block mb-4">
             {language === 'ko' ? '01. 날짜 선택' : '01. Select Date'}
           </label>
 
@@ -104,11 +104,11 @@ export default function DayLuckPage() {
 
         <div className="mt-10 pt-10 border-t border-slate-100 dark:border-slate-800">
           <div className="flex justify-between items-end mb-4">
-            <label className="text-[11px] font-black uppercase tracking-[0.2em] text-slate-400 dark:text-slate-500">
+            <label className="text-sm font-black uppercase tracking-[0.2em] text-slate-400 dark:text-slate-500">
               {language === 'ko' ? '02. 질문' : '02. Question'}
             </label>
             {selectedDate && (
-              <span className="text-[11px] font-medium text-slate-900 dark:text-white border-b border-slate-900 dark:border-white pb-0.5">
+              <span className="text-sm font-medium text-slate-900 dark:text-white border-b border-slate-900 dark:border-white pb-0.5">
                 {selectedDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
               </span>
             )}
@@ -132,7 +132,7 @@ export default function DayLuckPage() {
     return (
       <div className="max-w-md mx-auto px-6 py-12 animate-in fade-in slide-in-from-bottom-3 duration-1000">
         <header className=" text-right">
-          <div className="inline-block px-2 py-1 mb-4 bg-slate-50 dark:bg-slate-800 rounded text-[10px] font-black tracking-[0.2em] text-slate-400 dark:text-slate-500 uppercase">
+          <div className="inline-block px-2 py-1 mb-4 bg-slate-50 dark:bg-slate-800 rounded text-xs font-black tracking-[0.2em] text-slate-400 dark:text-slate-500 uppercase">
             Initial Spark
           </div>
           <h2 className="text-4xl font-light text-slate-900 dark:text-white leading-[1.1] tracking-tight">
@@ -142,7 +142,7 @@ export default function DayLuckPage() {
             </span>
           </h2>
 
-          <p className="mt-6 text-[13px] text-slate-400 dark:text-slate-500 leading-relaxed w-full">
+          <p className="mt-6 text-sm text-slate-400 dark:text-slate-500 leading-relaxed w-full">
             {language === 'ko' ? (
               <>
                 새로운 인연이 기다리는 날, <br />
@@ -187,7 +187,7 @@ export default function DayLuckPage() {
               {language === 'ko' ? '운세 확인하기' : 'Check Fortune'}
 
               {false ? (
-                <span className="text-[10px] px-2 py-0.5 border border-white/30 rounded text-white/70 font-medium">
+                <span className="text-xs px-2 py-0.5 border border-white/30 rounded text-white/70 font-medium">
                   FREE
                 </span>
               ) : isLocked ? (

@@ -54,28 +54,28 @@ const AdMyInfo = ({ birthData, isTimeUnknown, gender, saju }) => {
 
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end gap-6 sm:gap-0">
           <ul className="space-y-3 w-full sm:w-auto">
-            <li className="flex items-center gap-3 text-[15px] font-medium text-[#6F4E37]">
+            <li className="flex items-center gap-3 text-sm font-medium text-[#6F4E37]">
               <span className="w-1 h-1 bg-orange-300 rounded-full" />
-              <span className="w-16 text-orange-400 text-[13px] font-bold">{t.birthDate}</span>
+              <span className="w-16 text-orange-400 text-sm font-bold">{t.birthDate}</span>
               <span className="font-bold">
-                {language === 'ko' 
+                {language === 'ko'
                   ? `${year}년 ${month}월 ${day}일`
                   : `${month}/${day}/${year}`
                 }
               </span>
             </li>
 
-            <li className="flex items-center gap-3 text-[15px] font-medium text-[#6F4E37]">
+            <li className="flex items-center gap-3 text-sm font-medium text-[#6F4E37]">
               <span className="w-1 h-1 bg-orange-300 rounded-full" />
-              <span className="w-16 text-orange-400 text-[13px] font-bold">{t.birthTime}</span>
+              <span className="w-16 text-orange-400 text-sm font-bold">{t.birthTime}</span>
               <span className="font-bold">
                 {isTimeUnknown ? t.unknown : `${hour}:${minute}`}
               </span>
             </li>
 
-            <li className="flex items-center gap-3 text-[15px] font-medium text-[#6F4E37]">
+            <li className="flex items-center gap-3 text-sm font-medium text-[#6F4E37]">
               <span className="w-1 h-1 bg-orange-300 rounded-full" />
-              <span className="w-16 text-orange-400 text-[13px] font-bold">{t.genderLabel}</span>
+              <span className="w-16 text-orange-400 text-sm font-bold">{t.genderLabel}</span>
               <span className="font-bold">{gender === 'female' ? t.female : t.male}</span>
             </li>
           </ul>
@@ -83,20 +83,18 @@ const AdMyInfo = ({ birthData, isTimeUnknown, gender, saju }) => {
           <button
             onClick={() => setOpenFourPillar(!openFourPillar)}
             className={`
-              flex items-center gap-1 transition-all duration-200 px-4 py-2 rounded-full text-[13px] font-bold shadow-sm border w-full sm:w-auto justify-center
-              ${
-                openFourPillar
-                  ? 'bg-[#FF7F50] text-white border-[#FF7F50]'
-                  : 'bg-[#FFF0E0] text-[#FF7F50] border-orange-100 hover:bg-[#FFE4C4]'
+              flex items-center gap-1 transition-all duration-200 px-4 py-2 rounded-full text-sm font-bold shadow-sm border w-full sm:w-auto justify-center
+              ${openFourPillar
+                ? 'bg-[#FF7F50] text-white border-[#FF7F50]'
+                : 'bg-[#FFF0E0] text-[#FF7F50] border-orange-100 hover:bg-[#FFE4C4]'
               }
             `}
           >
             {openFourPillar ? t.fold : t.view}
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              className={`h-4 w-4 transition-transform duration-200 ${
-                openFourPillar ? 'rotate-180' : 'rotate-0'
-              }`}
+              className={`h-4 w-4 transition-transform duration-200 ${openFourPillar ? 'rotate-180' : 'rotate-0'
+                }`}
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
@@ -121,8 +119,8 @@ const AdMyInfo = ({ birthData, isTimeUnknown, gender, saju }) => {
           <div className="flex flex-col items-center mb-8">
             <div className="w-10 h-1 bg-orange-100 rounded-full mb-4" />
             <div className="flex items-center gap-2">
-              <h4 className="text-[15px] font-black text-[#A0522D]">{t.pillarTitle}</h4>
-              <span className="px-2 py-0.5 bg-orange-50 text-orange-400 text-[10px] font-bold rounded-md border border-orange-100">
+              <h4 className="text-sm font-black text-[#A0522D]">{t.pillarTitle}</h4>
+              <span className="px-2 py-0.5 bg-orange-50 text-orange-400 text-xs font-bold rounded-md border border-orange-100">
                 EIGHT CHARACTERS
               </span>
             </div>

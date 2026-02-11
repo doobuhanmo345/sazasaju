@@ -89,7 +89,7 @@ const DateInput = forwardRef(
     };
 
     const handleNextMonth = (e) => {
-       e.stopPropagation();
+      e.stopPropagation();
       setViewDate(new Date(currentYear, currentMonth + 1, 1));
     };
 
@@ -109,7 +109,7 @@ const DateInput = forwardRef(
     const isDateDisabled = (day) => {
       const checkDate = new Date(currentYear, currentMonth, day);
       checkDate.setHours(0, 0, 0, 0);
-      
+
       if (min) {
         const minDate = new Date(min);
         minDate.setHours(0, 0, 0, 0);
@@ -141,11 +141,11 @@ const DateInput = forwardRef(
         const weekday = date.toLocaleDateString('ko-KR', { weekday: 'short' });
         return `${year}년 ${month}월 ${day}일 (${weekday})`;
       } else {
-        return date.toLocaleDateString('en-US', { 
-          year: 'numeric', 
-          month: 'short', 
-          day: 'numeric', 
-          weekday: 'short' 
+        return date.toLocaleDateString('en-US', {
+          year: 'numeric',
+          month: 'short',
+          day: 'numeric',
+          weekday: 'short'
         });
       }
     })() : '';
@@ -156,48 +156,46 @@ const DateInput = forwardRef(
     return (
       <div className={`flex flex-col gap-2 ${className}`} ref={containerRef}>
         {label && (
-          <label className="text-[11px] font-bold text-slate-400 uppercase tracking-widest ml-1">
+          <label className="text-sm font-bold text-slate-400 uppercase tracking-widest ml-1">
             {label}
             {required && <span className={`${theme.text} ml-1`}>*</span>}
           </label>
         )}
         <div className="relative group">
-          <div 
+          <div
             onClick={() => !disabled && setIsOpen(!isOpen)}
             className={`
               relative flex items-center justify-between w-full px-5 py-3.5
               bg-white dark:bg-slate-800 
               border rounded-xl shadow-sm
               transition-all duration-300
-              ${isOpen 
-                ? `${theme.border} ring-2 ${theme.ring}` 
+              ${isOpen
+                ? `${theme.border} ring-2 ${theme.ring}`
                 : `border-slate-200 dark:border-slate-700 ${theme.borderHover} dark:hover:border-slate-500 hover:shadow-md`
               }
               ${disabled ? 'opacity-50 cursor-not-allowed bg-slate-50' : 'cursor-pointer'}
             `}
           >
-             <div className="flex items-center gap-3">
-               <CalendarDaysIcon className={`h-5 w-5 transition-colors duration-300 ${
-                 isOpen ? theme.text : `text-slate-400 ${theme.groupHoverText}`
-               }`} />
-               <span className={`text-[15px] ${
-                 value 
-                   ? 'text-slate-800 dark:text-slate-100 font-serif font-bold tracking-tight' 
-                   : 'text-slate-400 font-light'
-               }`}>
-                 {formattedValue || (language === 'ko' ? '날짜 선택' : 'Select Date')}
-               </span>
-             </div>
-             
-             <div className={`text-xs text-slate-300 transition-transform duration-300 ${isOpen ? 'rotate-180' : ''}`}>
-               ▼
-             </div>
+            <div className="flex items-center gap-3">
+              <CalendarDaysIcon className={`h-5 w-5 transition-colors duration-300 ${isOpen ? theme.text : `text-slate-400 ${theme.groupHoverText}`
+                }`} />
+              <span className={`text-sm ${value
+                ? 'text-slate-800 dark:text-slate-100 font-serif font-bold tracking-tight'
+                : 'text-slate-400 font-light'
+                }`}>
+                {formattedValue || (language === 'ko' ? '날짜 선택' : 'Select Date')}
+              </span>
+            </div>
+
+            <div className={`text-xs text-slate-300 transition-transform duration-300 ${isOpen ? 'rotate-180' : ''}`}>
+              ▼
+            </div>
           </div>
 
           {isOpen && (
             <div className="absolute top-full left-0 z-50 mt-2 w-72 bg-white dark:bg-slate-800 rounded-xl shadow-xl border border-slate-100 dark:border-slate-700 p-4 animate-in fade-in zoom-in-95 duration-200">
               <div className="flex items-center justify-between mb-4">
-                <button 
+                <button
                   onClick={handlePrevMonth}
                   className="p-1 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-full text-slate-500 transition-colors"
                 >
@@ -206,7 +204,7 @@ const DateInput = forwardRef(
                 <span className="text-sm font-bold text-slate-900 dark:text-white font-serif">
                   {monthYearLabel}
                 </span>
-                <button 
+                <button
                   onClick={handleNextMonth}
                   className="p-1 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-full text-slate-500 transition-colors"
                 >
@@ -221,7 +219,7 @@ const DateInput = forwardRef(
                   </div>
                 ))}
               </div>
-              
+
               <div className="grid grid-cols-7 gap-1">
                 {Array.from({ length: firstDay }).map((_, i) => (
                   <div key={`empty-${i}`} />
@@ -239,8 +237,8 @@ const DateInput = forwardRef(
                       disabled={isDisabledDay}
                       className={`
                         h-9 w-9 rounded-full flex items-center justify-center text-sm transition-all font-serif
-                        ${isSelected 
-                          ? `${theme.bg} text-white font-bold shadow-md` 
+                        ${isSelected
+                          ? `${theme.bg} text-white font-bold shadow-md`
                           : isDisabledDay
                             ? 'text-slate-300 cursor-not-allowed'
                             : `text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-700 ${theme.textHover}`

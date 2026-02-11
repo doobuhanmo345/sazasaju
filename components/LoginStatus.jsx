@@ -9,14 +9,13 @@ export default function LoginStatus() {
     const isKo = language === 'ko';
 
     return (
-        <div>
-            {!!user &&
-                <div className="w-full max-w-lg mx-auto mb-4 px-1"><MyInfoBar /></div>
-            }
-            {!user && <div className="w-full max-w-lg mx-auto mb-4 px-1">
-                <div className="bg-white/70 dark:bg-slate-800/60 rounded-xl border border-indigo-50 dark:border-indigo-500/20 shadow-sm backdrop-blur-md p-2 px-4 h-[44px] flex items-center">
+        <div className="w-full max-w-lg mx-auto my-auto mb-4 px-1">
 
-                    <button
+
+            <div className="bg-white/70 dark:bg-slate-800/60 rounded-xl border border-indigo-50 dark:border-indigo-500/20 shadow-sm backdrop-blur-md p-2 px-4 h-[44px] flex items-center">
+                {!!user ?
+                    <MyInfoBar />
+                    : <button
                         onClick={openLoginModal}
                         className="w-full h-full flex items-center justify-between group"
                     >
@@ -39,10 +38,11 @@ export default function LoginStatus() {
                             <span>{isKo ? '시작' : 'Start'}</span>
                             <ChevronRightIcon className="w-4 h-4 font-bold" />
                         </div>
-                    </button>
+                    </button>}
 
-                </div>
-            </div>}
+
+
+            </div>
 
 
         </div>

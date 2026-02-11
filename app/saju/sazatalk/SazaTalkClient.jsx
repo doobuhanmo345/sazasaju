@@ -56,7 +56,7 @@ const Loading = ({ language, progress, msgIdx, loadingMessages }) => {
             <div className="absolute inset-0 w-[200%] h-full bg-[linear-gradient(90deg,transparent_25%,rgba(255,255,255,0.3)_50%,transparent_75%)] animate-[shimmer_3s_infinite] will-change-transform"></div>
           </div>
         </div>
-        <p className="text-[10px] font-black text-indigo-500 dark:text-indigo-400 mb-6 tracking-[0.2em] uppercase">
+        <p className="text-xs font-black text-indigo-500 dark:text-indigo-400 mb-6 tracking-[0.2em] uppercase">
           {language === 'ko' ? '분석 중' : 'Analyzing'} {Math.round(progress)}%
         </p>
 
@@ -76,7 +76,7 @@ const Loading = ({ language, progress, msgIdx, loadingMessages }) => {
           </div>
         </div>
 
-        <div className="mt-8 flex items-center justify-center gap-2 text-rose-500 font-black text-[10px] tracking-widest uppercase opacity-60">
+        <div className="mt-8 flex items-center justify-center gap-2 text-rose-500 font-black text-xs tracking-widest uppercase opacity-60">
           <span className="animate-pulse">⚠️</span>
           <span>{language === 'ko' ? '페이지를 나가지 마세요' : 'Do not leave this page'}</span>
         </div>
@@ -357,7 +357,7 @@ function SazaTalkContent() {
                   <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-violet-400 opacity-75"></span>
                   <span className="relative inline-flex rounded-full h-2 w-2 bg-violet-500"></span>
                 </div>
-                <span className="text-[10px] font-bold tracking-wider text-violet-600 dark:text-violet-400 uppercase">
+                <span className="text-xs font-bold tracking-wider text-violet-600 dark:text-violet-400 uppercase">
                   Expert Intelligence Analysis
                 </span>
               </div>
@@ -410,7 +410,7 @@ function SazaTalkContent() {
                 {language === 'ko' ? '크레딧이 부족합니다..' : 'not Enough credit'}
               </p>
             ) : (
-              <p className="mt-4 text-[11px] text-slate-400">
+              <p className="mt-4 text-sm text-slate-400">
                 {language === 'ko'
                   ? '이미 분석된 운세는 크래딧을 재소모하지 않습니다.'
                   : 'Fortunes that have already been analyzed do not use credits.'}
@@ -431,7 +431,7 @@ function SazaTalkContent() {
                       <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-violet-400 opacity-75"></span>
                       <span className="relative inline-flex rounded-full h-2 w-2 bg-violet-500"></span>
                     </div>
-                    <span className="text-[10px] font-bold tracking-wider text-violet-600 dark:text-violet-400 uppercase">
+                    <span className="text-xs font-bold tracking-wider text-violet-600 dark:text-violet-400 uppercase">
                       Expert Intelligence Analysis
                     </span>
                   </div>
@@ -471,7 +471,7 @@ function SazaTalkContent() {
                 {latestSazaTalk && (
                   <button
                     onClick={() => setIsHistoryOpen(true)}
-                    className="px-3 py-1.5 rounded-full bg-violet-50 dark:bg-violet-900/30 border border-violet-100 dark:border-violet-800 text-violet-600 dark:text-violet-400 text-[10px] font-bold flex items-center gap-1 hover:bg-violet-100 transition-colors shadow-sm"
+                    className="px-3 py-1.5 rounded-full bg-violet-50 dark:bg-violet-900/30 border border-violet-100 dark:border-violet-800 text-violet-600 dark:text-violet-400 text-xs font-bold flex items-center gap-1 hover:bg-violet-100 transition-colors shadow-sm"
                   >
                     <ClockIcon className="w-3 h-3" />
                     {language === 'ko' ? '최근 결과' : 'Recent Result'}
@@ -523,7 +523,7 @@ function SazaTalkContent() {
 
                   <div ref={historyContentRef} className="p-6 max-h-[70vh] overflow-y-auto space-y-6">
                     <div>
-                      <div className="text-[10px] font-black text-violet-500 uppercase mb-2 tracking-widest">
+                      <div className="text-xs font-black text-violet-500 uppercase mb-2 tracking-widest">
                         {language === 'ko' ? '기존 질문' : 'Previous Question'}
                       </div>
                       <div className="bg-slate-50 dark:bg-slate-800/50 p-4 rounded-2xl border border-slate-100 dark:border-slate-800">
@@ -534,7 +534,7 @@ function SazaTalkContent() {
                     </div>
 
                     <div>
-                      <div className="text-[10px] font-black text-violet-500 uppercase mb-2 tracking-widest">
+                      <div className="text-xs font-black text-violet-500 uppercase mb-2 tracking-widest">
                         {language === 'ko' ? '사자의 답변' : "Saza's Answer"}
                       </div>
                       <div className="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-violet-100/50 dark:border-violet-900/20 shadow-sm overflow-hidden text-sm leading-relaxed text-slate-600 dark:text-slate-400">
@@ -564,7 +564,7 @@ function SazaTalkContent() {
                                 {typeof parsedHistoryData.saza === 'object' ? (
                                   <div className="text-sm">
                                     {parsedHistoryData.saza.category && (
-                                      <span className="inline-block px-2 py-0.5 bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 rounded text-[10px] font-bold mr-2">
+                                      <span className="inline-block px-2 py-0.5 bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 rounded text-xs font-bold mr-2">
                                         {parsedHistoryData.saza.category}
                                       </span>
                                     )}
@@ -589,14 +589,14 @@ function SazaTalkContent() {
                   <div className="px-6 py-2 flex justify-end gap-2 bg-white dark:bg-slate-900 border-t border-slate-50 dark:border-slate-800">
                     <button
                       onClick={handleHistoryCopy}
-                      className="flex items-center gap-1 text-[10px] sm:text-xs text-slate-400 hover:text-slate-600 transition-colors px-2 py-1 rounded-md hover:bg-slate-50 dark:hover:bg-slate-800"
+                      className="flex items-center gap-1 text-xs sm:text-xs text-slate-400 hover:text-slate-600 transition-colors px-2 py-1 rounded-md hover:bg-slate-50 dark:hover:bg-slate-800"
                     >
                       <ClipboardDocumentIcon className="w-3 h-3 sm:w-4 sm:h-4" />
                       {language === 'ko' ? '텍스트 복사' : 'Copy Text'}
                     </button>
                     <button
                       onClick={handleHistoryCapture}
-                      className="flex items-center gap-1 text-[10px] sm:text-xs text-slate-400 hover:text-slate-600 transition-colors px-2 py-1 rounded-md hover:bg-slate-50 dark:hover:bg-slate-800"
+                      className="flex items-center gap-1 text-xs sm:text-xs text-slate-400 hover:text-slate-600 transition-colors px-2 py-1 rounded-md hover:bg-slate-50 dark:hover:bg-slate-800"
                     >
                       <CameraIcon className="w-3 h-3 sm:w-4 sm:h-4" />
                       {language === 'ko' ? '이미지 저장' : 'Save Image'}
@@ -604,7 +604,7 @@ function SazaTalkContent() {
                   </div>
 
                   <div className="p-6 bg-slate-50/50 dark:bg-slate-800/20 text-center">
-                    <p className="text-[11px] text-slate-400 break-keep leading-relaxed font-medium">
+                    <p className="text-sm text-slate-400 break-keep leading-relaxed font-medium">
                       {language === 'ko'
                         ? '최근 1건의 내역만 저장되며,\n새로운 질문 시 이전 답변은 사라집니다.'
                         : 'Only the last session is saved and will be\noverwritten by a new question.'}

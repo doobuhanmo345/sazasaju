@@ -95,10 +95,10 @@ export default function TarotLoading({ cardPicked }) {
           />
         </div>
         <div className="mt-2 flex justify-between px-1">
-          <span className="text-[10px] text-amber-600/40 font-mono uppercase tracking-tighter">
+          <span className="text-xs text-amber-600/40 font-mono uppercase tracking-tighter">
             {globalProgress !== undefined ? 'Synchronized' : 'Simulating'}
           </span>
-          <span className="text-[10px] text-amber-600/40 font-mono">{Math.round(progress)}%</span>
+          <span className="text-xs text-amber-600/40 font-mono">{Math.round(progress)}%</span>
         </div>
       </div>
 

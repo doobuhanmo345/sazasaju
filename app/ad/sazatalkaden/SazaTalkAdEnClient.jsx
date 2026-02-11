@@ -219,11 +219,11 @@ export default function SazaTalkAdEnPage() {
         <div className="relative flex flex-col items-center z-10">
           <div className="absolute inset-0 bg-orange-400/20 blur-3xl rounded-full scale-150"></div>
           <span className="text-8xl select-none drop-shadow-lg mb-2">🦁</span>
-          <div className="bg-[#F47521] text-white text-[10px] font-black px-3 py-1 rounded-full tracking-widest animate-pulse">ANALYZING</div>
+          <div className="bg-[#F47521] text-white text-xs font-black px-3 py-1 rounded-full tracking-widest animate-pulse">ANALYZING</div>
         </div>
       </div>
       <h2 className="text-2xl font-black text-[#4A3428] mt-8">Saza is Analyzing...</h2>
-      <p className="text-[15px] text-[#8B6E5E] font-bold mt-2">Saza and 27 Saju masters are analyzing together</p>
+      <p className="text-sm text-[#8B6E5E] font-bold mt-2">Saza and 27 Saju masters are analyzing together</p>
     </div>
   );
 

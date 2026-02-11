@@ -62,7 +62,7 @@ const Footer = () => {
         </div>
 
         {/* Company Info */}
-        <div className="space-y-1.5 text-[11px] leading-relaxed text-slate-400 dark:text-slate-500 font-light">
+        <div className="space-y-1.5 text-xs leading-relaxed text-slate-400 dark:text-slate-500 font-light">
           <div className="flex flex-wrap gap-x-2">
             <span>{t.ceo}</span>
             <span className="text-slate-200 dark:text-slate-700">|</span>
@@ -76,7 +76,7 @@ const Footer = () => {
         </div>
 
         {/* Links */}
-        <div className="flex items-center space-x-3 text-[11px] text-slate-500 dark:text-slate-400 font-medium">
+        <div className="flex items-center space-x-3 text-xs text-slate-500 dark:text-slate-400 font-medium">
           <button
             onClick={() => openModal('terms')}
             className="hover:text-slate-700 dark:hover:text-slate-200 transition-colors"
@@ -93,7 +93,7 @@ const Footer = () => {
         </div>
 
         {/* Copyright */}
-        <div className="text-[10px] text-slate-300 dark:text-slate-600 font-light pt-2">
+        <div className="text-xs text-slate-300 dark:text-slate-600 font-light pt-2">
           © {new Date().getFullYear()} {language === 'ko' ? '사자사주' : 'Saza Saju'}. All rights reserved.
         </div>
       </div>

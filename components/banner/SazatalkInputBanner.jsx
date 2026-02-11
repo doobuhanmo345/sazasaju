@@ -149,9 +149,9 @@ const SazatalkInputBanner = () => {
                                 <button onClick={() => setIsOpen(false)} className="p-1 text-slate-500 dark:text-slate-400">
                                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M15 18l-6-6 6-6" /></svg>
                                 </button>
-                                <span className="font-bold text-[17px] text-slate-800 dark:text-white">SazaTalk</span>
+                                <span className="font-bold text-lg text-slate-800 dark:text-white">SazaTalk</span>
                             </div>
-                            <button onClick={() => setIsOpen(false)} className="text-[14px] font-bold text-slate-500 dark:text-slate-500">
+                            <button onClick={() => setIsOpen(false)} className="text-sm font-bold text-slate-500 dark:text-slate-500">
                                 {isKo ? '닫기' : 'Close'}
                             </button>
                         </div>
@@ -168,10 +168,10 @@ const SazatalkInputBanner = () => {
                                     )}
                                     <div className={classNames("flex flex-col", msg.role === 'user' ? "items-end" : "items-start")}>
                                         {msg.role === 'saza' && (
-                                            <span className="text-[11px] text-slate-500 dark:text-slate-400 mb-1 ml-1 font-bold">{isKo ? '사자' : 'Saza'}</span>
+                                            <span className="text-sm text-slate-500 dark:text-slate-400 mb-1 ml-1 font-bold">{isKo ? '사자' : 'Saza'}</span>
                                         )}
                                         <div className={classNames(
-                                            "relative p-3.5 px-4 rounded-[16px] shadow-sm max-w-[280px] text-[15px] leading-snug font-medium",
+                                            "relative p-3.5 px-4 rounded-[16px] shadow-sm max-w-[280px] text-sm leading-snug font-medium",
                                             msg.role === 'user'
                                                 ? "bg-indigo-600 text-white rounded-tr-none"
                                                 : "bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 rounded-tl-none"
@@ -187,7 +187,7 @@ const SazatalkInputBanner = () => {
                                 <div className="flex items-start">
                                     <div className="w-10 h-10 bg-indigo-500 rounded-[15px] flex items-center justify-center text-xl mr-2 flex-shrink-0 shadow-sm text-white animate-pulse">🦁</div>
                                     <div className="flex flex-col">
-                                        <span className="text-[11px] text-slate-500 dark:text-slate-400 mb-1 ml-1 font-bold">{isKo ? '사자' : 'Saza'}</span>
+                                        <span className="text-sm text-slate-500 dark:text-slate-400 mb-1 ml-1 font-bold">{isKo ? '사자' : 'Saza'}</span>
                                         <div className="bg-white dark:bg-slate-800 p-3.5 px-5 rounded-[16px] rounded-tl-none shadow-sm flex items-center gap-1.5">
                                             <div className="w-1.5 h-1.5 bg-indigo-400 rounded-full animate-bounce [animation-delay:0s]"></div>
                                             <div className="w-1.5 h-1.5 bg-indigo-400 rounded-full animate-bounce [animation-delay:0.2s]"></div>
@@ -200,14 +200,14 @@ const SazatalkInputBanner = () => {
                             {/* 추천 질문 (제일 아래에 노출하거나 초기 환영인사 뒤에만 노출) */}
                             {messages.length === 1 && !isAnalyzing && (
                                 <div className="flex flex-col items-end space-y-3 pt-4">
-                                    <div className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1 pr-1">
+                                    <div className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-1 pr-1">
                                         {isKo ? '추천 고민' : 'Suggestions'}
                                     </div>
                                     {suggestions.map((text, index) => (
                                         <button
                                             key={index}
                                             onClick={() => setInputValue(text)}
-                                            className="bg-indigo-600 text-white px-4 py-3 rounded-[18px] rounded-tr-[2px] text-[14px] font-bold shadow-sm active:bg-indigo-700 max-w-[85%] animate-in slide-in-from-right-5"
+                                            className="bg-indigo-600 text-white px-4 py-3 rounded-[18px] rounded-tr-[2px] text-sm font-bold shadow-sm active:bg-indigo-700 max-w-[85%] animate-in slide-in-from-right-5"
                                             style={{ animationDelay: `${index * 100}ms` }}
                                         >
                                             {text}
@@ -230,7 +230,7 @@ const SazatalkInputBanner = () => {
                             <textarea
                                 value={inputValue}
                                 onChange={(e) => setInputValue(e.target.value)}
-                                className="w-full min-h-[140px] max-h-[300px] py-2 text-[19px] font-black text-slate-900 dark:text-white outline-none resize-none leading-relaxed placeholder:font-normal placeholder:text-slate-300 dark:placeholder:text-slate-500 bg-transparent"
+                                className="w-full min-h-[140px] max-h-[300px] py-2 text-base font-black text-slate-900 dark:text-white outline-none resize-none leading-relaxed placeholder:font-normal placeholder:text-slate-300 dark:placeholder:text-slate-500 bg-transparent"
                                 placeholder={isKo ? "고민을 무엇이든 물어보세요!\n(ex. 작년에 헤어진 인연과 재회할 수 있을까요?)" : "Ask anything"}
                             />
                             <div className="flex justify-end mt-2">
@@ -362,7 +362,7 @@ const SazatalkInputBanner = () => {
                                     className={`w-16 h-11 rounded-[14px] flex items-center justify-center transition-all ${inputValue.trim() && !isAnalyzing ? 'bg-indigo-600 text-white shadow-md active:scale-95' : 'bg-slate-100 dark:bg-slate-700 text-slate-300 dark:text-slate-500 font-normal'
                                         }`}
                                 >
-                                    <span className="text-[15px] font-bold">{isKo ? '전송' : 'Send'}</span>
+                                    <span className="text-sm font-bold">{isKo ? '전송' : 'Send'}</span>
                                 </button>
                             </div>
                         </div>

@@ -188,7 +188,7 @@ export default function NoBirthdayPage() {
         <div className={containerClass}>
           <header className="text-right sm:pr-8 space-y-12">
             <div className={`${lineClass} ${getVisible(1)}`}>
-              <div className="inline-block px-4 py-1.5 bg-slate-50 dark:bg-slate-900/50 backdrop-blur-md border border-slate-100 dark:border-white/5 rounded-full text-[10px] font-black tracking-[0.4em] text-indigo-500 dark:text-indigo-400 uppercase">
+              <div className="inline-block px-4 py-1.5 bg-slate-50 dark:bg-slate-900/50 backdrop-blur-md border border-slate-100 dark:border-white/5 rounded-full text-xs font-black tracking-[0.4em] text-indigo-500 dark:text-indigo-400 uppercase">
                 Initial Registration
               </div>
             </div>
@@ -289,7 +289,7 @@ export default function NoBirthdayPage() {
               {getStepDirection()}
             </span>
           </div>
-          <span className="text-[10px] font-black text-slate-400 dark:text-slate-500 tracking-[0.2em] uppercase">
+          <span className="text-xs font-black text-slate-400 dark:text-slate-500 tracking-[0.2em] uppercase">
             {Math.round(progress)}% COMPLETE — {step} / 6
           </span>
         </div>
@@ -313,7 +313,7 @@ export default function NoBirthdayPage() {
               </div>
             </header>
             <div className="space-y-3">
-              <label className="text-[10px] font-black text-slate-400 dark:text-slate-600 uppercase tracking-widest ml-1">NAME</label>
+              <label className="text-xs font-black text-slate-400 dark:text-slate-600 uppercase tracking-widest ml-1">NAME</label>
               <div className="flex items-center gap-4">
                 <input
                   type="text"
@@ -361,7 +361,7 @@ export default function NoBirthdayPage() {
                 </div>
               </header>
               <div className="space-y-3">
-                <label className="text-[10px] font-black text-slate-400 dark:text-slate-600 uppercase tracking-widest ml-1">GENDER</label>
+                <label className="text-xs font-black text-slate-400 dark:text-slate-600 uppercase tracking-widest ml-1">GENDER</label>
                 <div className="flex gap-4 pt-1">
                   {['male', 'female'].map((g) => (
                     <button
@@ -398,7 +398,7 @@ export default function NoBirthdayPage() {
                 </div>
               </header>
               <div className="space-y-3">
-                <label className="text-[10px] font-black text-slate-400 dark:text-slate-600 uppercase tracking-widest ml-1">BIRTH DATE</label>
+                <label className="text-xs font-black text-slate-400 dark:text-slate-600 uppercase tracking-widest ml-1">BIRTH DATE</label>
                 <input
                   type="date"
                   name="birthDate"
@@ -425,7 +425,7 @@ export default function NoBirthdayPage() {
               </header>
               <div className="space-y-3">
                 <div className="flex justify-between items-center">
-                  <label className="text-[10px] font-black text-slate-400 dark:text-slate-600 uppercase tracking-widest ml-1">BIRTH TIME</label>
+                  <label className="text-xs font-black text-slate-400 dark:text-slate-600 uppercase tracking-widest ml-1">BIRTH TIME</label>
                   <label className="flex items-center gap-2 cursor-pointer group">
                     <input
                       type="checkbox"
@@ -433,7 +433,7 @@ export default function NoBirthdayPage() {
                       onChange={(e) => setFormData(p => ({ ...p, isTimeUnknown: e.target.checked }))}
                       className="w-4 h-4 rounded border-slate-300 dark:border-slate-700 text-indigo-500 focus:ring-indigo-500 cursor-pointer"
                     />
-                    <span className="text-[10px] font-bold text-slate-400 dark:text-slate-600 uppercase tracking-tighter">
+                    <span className="text-xs font-bold text-slate-400 dark:text-slate-600 uppercase tracking-tighter">
                       {language === 'ko' ? '모름' : 'Unknown'}
                     </span>
                   </label>
@@ -467,7 +467,7 @@ export default function NoBirthdayPage() {
                 </div>
               </header>
               <div className="space-y-3">
-                <label className="text-[10px] font-black text-slate-400 dark:text-slate-600 uppercase tracking-widest ml-1">BIRTH CITY</label>
+                <label className="text-xs font-black text-slate-400 dark:text-slate-600 uppercase tracking-widest ml-1">BIRTH CITY</label>
                 <div className="relative group">
                   <CityInput
                     name="birthCity"
@@ -484,7 +484,7 @@ export default function NoBirthdayPage() {
           <div className={`transition-all duration-500 ease-in-out ${step >= 6 ? 'opacity-100 h-auto' : 'opacity-0 h-0 overflow-hidden'}`}>
             <div className="pb-12">
               <div className="bg-slate-50/50 dark:bg-slate-900/30 p-10 rounded-[2.5rem] border border-slate-100 dark:border-white/5 text-center space-y-8 backdrop-blur-sm shadow-sm">
-                <p className="text-[10px] font-black text-indigo-500/60 dark:text-indigo-400/60 uppercase tracking-[0.4em]">
+                <p className="text-xs font-black text-indigo-500/60 dark:text-indigo-400/60 uppercase tracking-[0.4em]">
                   {language === 'ko' ? '생 년 월 일 시' : 'Energy Pattern'}
                 </p>
                 <div className="flex justify-center scale-100 sm:scale-110">
@@ -515,7 +515,7 @@ export default function NoBirthdayPage() {
                   <button
                     type="button"
                     onClick={logout}
-                    className="text-[10px] font-black text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 transition-all uppercase tracking-[0.2em] border-b border-slate-200 dark:border-slate-800 pb-1"
+                    className="text-xs font-black text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 transition-all uppercase tracking-[0.2em] border-b border-slate-200 dark:border-slate-800 pb-1"
                   >
                     {language === 'ko' ? '처음으로 돌아가기' : 'Return home'}
                   </button>

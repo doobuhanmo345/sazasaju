@@ -98,7 +98,7 @@ export default function AdReviewEn() {
           <div className="inline-flex items-center gap-6 bg-white px-8 py-4 rounded-full shadow-[0_8px_30px_rgba(212,160,136,0.15)] border-2 border-[#F5E6DD] mb-8">
             <div className="text-center">
               <p
-                className="text-[10px] text-[#C4B5A9] font-semibold tracking-widest uppercase mb-0.5"
+                className="text-xs text-[#C4B5A9] font-semibold tracking-widest uppercase mb-0.5"
                 style={{ fontFamily: 'Georgia, serif' }}
               >
                 Total Readings
@@ -115,7 +115,7 @@ export default function AdReviewEn() {
 
             <div className="text-center">
               <p
-                className="text-[10px] text-[#C4B5A9] font-semibold tracking-widest uppercase mb-0.5"
+                className="text-xs text-[#C4B5A9] font-semibold tracking-widest uppercase mb-0.5"
                 style={{ fontFamily: 'Georgia, serif' }}
               >
                 Generated Today
@@ -143,7 +143,7 @@ export default function AdReviewEn() {
             Through word-of-mouth alone, <br />
             <span className="text-[#D4A088]">4,800+ souls</span> have discovered their cosmic path
           </h2>
-          <p className="mt-4 text-[15px] text-[#9B8B82] font-light leading-relaxed">
+          <p className="mt-4 text-sm text-[#9B8B82] font-light leading-relaxed">
             No advertising, just authentic experiences. <br className="sm:hidden" />
             See why so many trust their journey with us.
           </p>
@@ -156,18 +156,18 @@ export default function AdReviewEn() {
               key={`row1-${i}`}
               className="inline-block w-[320px] bg-gradient-to-br from-white to-[#FFF9F5] p-6 rounded-3xl border-2 border-[#F5E6DD] shadow-lg hover:shadow-xl transition-shadow"
             >
-              <div className="flex text-[#D4A088] text-[10px] mb-2">
+              <div className="flex text-[#D4A088] text-xs mb-2">
                 {'⭐'.repeat(review.stars)}
               </div>
               <p
-                className="text-[14px] text-[#5C4B51] font-light whitespace-normal break-keep leading-relaxed"
+                className="text-sm text-[#5C4B51] font-light whitespace-normal break-keep leading-relaxed"
                 style={{ fontFamily: 'Georgia, serif' }}
               >
                 "{review.text}"
               </p>
               <div className="mt-4 flex justify-between items-center">
-                <p className="text-[11px] text-[#C4B5A9] font-semibold">{review.user}</p>
-                <span className="text-[10px] font-semibold text-[#D4A088] bg-gradient-to-r from-[#FFE8DD] to-[#FFE0D0] px-2.5 py-1 rounded-full">
+                <p className="text-sm text-[#C4B5A9] font-semibold">{review.user}</p>
+                <span className="text-xs font-semibold text-[#D4A088] bg-gradient-to-r from-[#FFE8DD] to-[#FFE0D0] px-2.5 py-1 rounded-full">
                   {review.tag}
                 </span>
               </div>
@@ -185,18 +185,18 @@ export default function AdReviewEn() {
                 key={`row2-${i}`}
                 className="inline-block w-[320px] bg-gradient-to-br from-white to-[#FFF9F5] p-6 rounded-3xl border-2 border-[#F5E6DD] shadow-lg hover:shadow-xl transition-shadow"
               >
-                <div className="flex text-[#D4A088] text-[10px] mb-2">
+                <div className="flex text-[#D4A088] text-xs mb-2">
                   {'⭐'.repeat(review.stars)}
                 </div>
                 <p
-                  className="text-[14px] text-[#5C4B51] font-light whitespace-normal break-keep leading-relaxed"
+                  className="text-sm text-[#5C4B51] font-light whitespace-normal break-keep leading-relaxed"
                   style={{ fontFamily: 'Georgia, serif' }}
                 >
                   "{review.text}"
                 </p>
                 <div className="mt-4 flex justify-between items-center">
-                  <p className="text-[11px] text-[#C4B5A9] font-semibold">{review.user}</p>
-                  <span className="text-[10px] font-semibold text-[#D4A088] bg-gradient-to-r from-[#FFE8DD] to-[#FFE0D0] px-2.5 py-1 rounded-full">
+                  <p className="text-sm text-[#C4B5A9] font-semibold">{review.user}</p>
+                  <span className="text-xs font-semibold text-[#D4A088] bg-gradient-to-r from-[#FFE8DD] to-[#FFE0D0] px-2.5 py-1 rounded-full">
                     {review.tag}
                   </span>
                 </div>

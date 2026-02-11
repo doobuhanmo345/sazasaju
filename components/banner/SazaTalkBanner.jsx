@@ -22,7 +22,7 @@ const SazaTalkBanner = () => {
       <div className="relative h-full flex flex-col justify-center px-7 sm:px-10 z-10">
         <div className="animate-in fade-in slide-in-from-left-5 duration-1000 max-w-[65%] sm:max-w-full">
           {/* 상단 메뉴명 */}
-          <span className="text-[10px] font-black uppercase tracking-[0.3em] text-indigo-400/80 mb-1.5 block">
+          <span className="text-xs font-black uppercase tracking-[0.3em] text-indigo-400/80 mb-1.5 block">
             {/* {isKo ? '사자톡' : 'SAZA TALK'} */}
           </span>
 
@@ -35,7 +35,7 @@ const SazaTalkBanner = () => {
           </h2>
 
           {/* 부제 */}
-          <p className="mt-2 text-[11px] sm:text-xs font-medium text-slate-500 tracking-tight leading-snug break-keep">
+          <p className="mt-2 text-sm sm:text-xs font-medium text-slate-500 tracking-tight leading-snug break-keep">
             {isKo ? '명리학자 27인의 지혜를 담은 AI 상담' : 'AI with the wisdom of 27 Saju masters'}
           </p>
         </div>

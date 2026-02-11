@@ -30,8 +30,8 @@ const SazaTalkBanner = () => {
         <div className="w-full max-w-lg mx-auto my-4 px-4" ref={containerRef}>
             <div
                 className={`relative w-full overflow-hidden rounded-[2.5rem] transition-all duration-500 ease-[cubic-bezier(0.23,1,0.32,1)] ${isExpanded
-                        ? 'h-[580px] bg-[#abc1d1] shadow-2xl p-5'
-                        : 'h-[230px] sm:h-[250px] bg-[#EEF0FF] shadow-md border border-indigo-100/50'
+                    ? 'h-[580px] bg-[#abc1d1] shadow-2xl p-5'
+                    : 'h-[230px] sm:h-[250px] bg-[#EEF0FF] shadow-md border border-indigo-100/50'
                     }`}
             >
                 {/* --- [1. 닫힌 상태: 기존 배너] --- */}
@@ -58,9 +58,9 @@ const SazaTalkBanner = () => {
                         <div className="flex items-start mb-6 mt-2">
                             <div className="w-11 h-11 bg-[#f9e000] rounded-[18px] flex items-center justify-center text-2xl mr-2 flex-shrink-0">🦁</div>
                             <div className="flex flex-col">
-                                <span className="text-[12px] text-black/50 mb-1 ml-1">사자 사주</span>
+                                <span className="text-sm text-black/50 mb-1 ml-1">사자 사주</span>
                                 <div className="relative bg-white p-3 px-4 rounded-[16px] rounded-tl-none shadow-sm max-w-[240px]">
-                                    <p className="text-[14px] text-black leading-snug">
+                                    <p className="text-sm text-black leading-snug">
                                         {isKo ? '반가워요! 어떤 고민이 있나요? 편하게 말씀해 주세요.' : 'Welcome! Tell me your worries.'}
                                     </p>
                                     {/* 말풍선 꼬리 디테일 */}
@@ -76,7 +76,7 @@ const SazaTalkBanner = () => {
                                 autoFocus
                                 value={inputValue}
                                 onChange={(e) => setInputValue(e.target.value)}
-                                className="w-full min-h-[200px] p-5 text-[18px] font-black text-black outline-none resize-none leading-relaxed placeholder:font-normal placeholder:text-black/20"
+                                className="w-full min-h-[200px] p-5 text-lg font-black text-black outline-none resize-none leading-relaxed placeholder:font-normal placeholder:text-black/20"
                                 placeholder={isKo ? "내용을 입력하세요" : "Enter message"}
                             />
                             {/* 카카오톡 전송 버튼 스타일 */}
@@ -85,7 +85,7 @@ const SazaTalkBanner = () => {
                                     className={`w-12 h-10 rounded-[12px] flex items-center justify-center transition-all ${inputValue.trim() ? 'bg-[#f9e000] text-black' : 'bg-[#f5f5f5] text-black/20'
                                         }`}
                                 >
-                                    <span className="text-[13px] font-bold">{isKo ? '전송' : 'Send'}</span>
+                                    <span className="text-sm font-bold">{isKo ? '전송' : 'Send'}</span>
                                 </button>
                             </div>
                         </div>
@@ -96,7 +96,7 @@ const SazaTalkBanner = () => {
                                 <button
                                     key={index}
                                     onClick={() => setInputValue(text)}
-                                    className="bg-[#f9e000] text-black px-4 py-2.5 rounded-[16px] rounded-tr-[2px] text-[13px] font-medium shadow-sm active:bg-[#edd400]"
+                                    className="bg-[#f9e000] text-black px-4 py-2.5 rounded-[16px] rounded-tr-[2px] text-sm font-medium shadow-sm active:bg-[#edd400]"
                                 >
                                     {text}
                                 </button>
@@ -112,7 +112,7 @@ const SazaTalkBanner = () => {
                             onClick={() => setIsExpanded(true)}
                             className="w-full py-3.5 px-6 bg-white rounded-full shadow-sm flex items-center justify-between cursor-text border border-indigo-50"
                         >
-                            <span className="text-[14px] text-slate-400 font-medium">
+                            <span className="text-sm text-slate-400 font-medium">
                                 {isKo ? '고민을 입력해보세요...' : 'Type your worries...'}
                             </span>
                             <div className="bg-[#f9e000] w-7 h-7 rounded-full flex items-center justify-center text-black">

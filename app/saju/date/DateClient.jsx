@@ -251,7 +251,7 @@ export default function FirstDatePage() {
               {language === 'ko' ? '운명의 날 선택' : 'The Encounter Date'}
             </span>
           </h2>
-          <p className="mt-4 text-[11px] text-slate-400 font-bold uppercase tracking-[0.2em]">
+          <p className="mt-4 text-sm text-slate-400 font-bold uppercase tracking-[0.2em]">
             {language === 'ko' ? '설레는 첫 만남이 언제인가요?' : 'When is your first meeting?'}
           </p>
         </header>
@@ -270,7 +270,7 @@ export default function FirstDatePage() {
                   {language === 'ko' ? '디테일 정보 (선택)' : 'Context (Optional)'}
                 </span>
               </h2>
-              <p className="mt-4 text-[11px] text-slate-400 font-bold uppercase tracking-[0.2em]">
+              <p className="mt-4 text-sm text-slate-400 font-bold uppercase tracking-[0.2em]">
                 {language === 'ko' ? '더 로맨틱한 분석을 위해' : 'For more romantic analysis'}
               </p>
             </header>
@@ -280,11 +280,11 @@ export default function FirstDatePage() {
               {FIRST_DATE_OPTIONS.map((group, index) => (
                 <div key={group.id} className="relative pl-12">
                   <div className="absolute left-0 top-0 w-7 h-7 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-full flex items-center justify-center z-10 shadow-sm">
-                    <span className="text-[10px] font-black text-rose-500">
+                    <span className="text-xs font-black text-rose-500">
                       {index + 1}
                     </span>
                   </div>
-                  <label className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-400 block mb-6 px-1">
+                  <label className="text-xs font-black uppercase tracking-[0.3em] text-slate-400 block mb-6 px-1">
                     {language === 'ko' ? group.label.ko : group.label.en}
                   </label>
                   <div className="flex flex-wrap gap-2">
@@ -292,7 +292,7 @@ export default function FirstDatePage() {
                       <button
                         key={opt.id}
                         onClick={() => handleSelect(group.id, opt.id, opt.prompt)}
-                        className={`px-5 py-2.5 text-[12px] font-medium border transition-all duration-300
+                        className={`px-5 py-2.5 text-sm font-medium border transition-all duration-300
                         ${selections[group.id] === opt.id
                             ? 'bg-slate-900 dark:bg-white text-white dark:text-slate-900 border-slate-900 dark:border-white shadow-xl -translate-y-1'
                             : 'bg-white dark:bg-slate-800/30 text-slate-400 border-slate-100 dark:border-slate-800 hover:border-slate-300'
@@ -320,7 +320,7 @@ export default function FirstDatePage() {
         <div className="mx-auto px-6 py-12 animate-in fade-in slide-in-from-bottom-3 duration-1000">
           <div className="max-w-lg mx-auto">
             <header className="text-center">
-              <div className="inline-block px-2 py-1 mb-4 bg-rose-50 dark:bg-rose-900/20 rounded text-[10px] font-black tracking-[0.2em] text-rose-500 uppercase">
+              <div className="inline-block px-2 py-1 mb-4 bg-rose-50 dark:bg-rose-900/20 rounded text-xs font-black tracking-[0.2em] text-rose-500 uppercase">
                 First Encounter
               </div>
               <h2 className="text-3xl font-black text-slate-800 dark:text-white leading-[1.2] tracking-tight">
@@ -352,7 +352,7 @@ export default function FirstDatePage() {
                   {language === 'ko' ? '크레딧이 부족합니다..' : 'Not Enough credit'}
                 </p>
               ) : (
-                <p className="mt-4 text-[11px] text-slate-400 text-center">
+                <p className="mt-4 text-sm text-slate-400 text-center">
                   {language === 'ko'
                     ? '이미 분석된 운세는 크래딧을 재소모하지 않습니다.'
                     : 'Fortunes already analyzed do not use credits.'}
@@ -388,7 +388,7 @@ export default function FirstDatePage() {
                   {language === 'ko' ? '크레딧이 부족합니다..' : 'Not Enough credit'}
                 </p>
               ) : (
-                <p className="mt-4 text-[11px] text-slate-400 text-center">
+                <p className="mt-4 text-sm text-slate-400 text-center">
                   {language === 'ko'
                     ? '이미 분석된 운세는 크래딧을 재소모하지 않습니다.'
                     : 'Fortunes already analyzed do not use credits.'}

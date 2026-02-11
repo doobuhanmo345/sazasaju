@@ -102,7 +102,7 @@ export default function ViewSazaResult({
               {typeof data.saza === 'object' ? (
                 <div className="text-sm">
                   {data.saza.category && (
-                    <span className="inline-block px-2 py-0.5 bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 rounded text-[10px] font-bold mr-2">
+                    <span className="inline-block px-2 py-0.5 bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 rounded text-xs font-bold mr-2">
                       {data.saza.category}
                     </span>
                   )}
@@ -119,14 +119,14 @@ export default function ViewSazaResult({
         <div className="flex items-center gap-2 mt-2 ml-1">
           <button
             onClick={handleCopy}
-            className="flex items-center gap-1 text-[10px] sm:text-xs text-slate-400 hover:text-slate-600 transition-colors px-2 py-1 rounded-md hover:bg-slate-100 dark:hover:bg-slate-800"
+            className="flex items-center gap-1 text-xs sm:text-xs text-slate-400 hover:text-slate-600 transition-colors px-2 py-1 rounded-md hover:bg-slate-100 dark:hover:bg-slate-800"
           >
             <ClipboardDocumentIcon className="w-3 h-3 sm:w-4 sm:h-4" />
             {language === 'ko' ? '텍스트 복사' : 'Copy Text'}
           </button>
           <button
             onClick={handleCapture}
-            className="flex items-center gap-1 text-[10px] sm:text-xs text-slate-400 hover:text-slate-600 transition-colors px-2 py-1 rounded-md hover:bg-slate-100 dark:hover:bg-slate-800"
+            className="flex items-center gap-1 text-xs sm:text-xs text-slate-400 hover:text-slate-600 transition-colors px-2 py-1 rounded-md hover:bg-slate-100 dark:hover:bg-slate-800"
           >
             <CameraIcon className="w-3 h-3 sm:w-4 sm:h-4" />
             {language === 'ko' ? '이미지 저장' : 'Save Image'}
@@ -150,7 +150,7 @@ export default function ViewSazaResult({
             {language === 'en' ? 'Ask another question' : '다른 질문하기'}
           </button>
 
-          <p className="text-[11px] text-slate-400 text-center font-medium">
+          <p className="text-sm text-slate-400 text-center font-medium">
             {language === 'en'
               ? 'Enter a new question to restart the Saju analysis.'
               : '새로운 질문을 입력하면 사주 분석을 다시 시작합니다.'}

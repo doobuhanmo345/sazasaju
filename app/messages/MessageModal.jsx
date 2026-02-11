@@ -106,7 +106,7 @@ export default function MessageModal({ isOpen, onClose, receiverId = 'admin', re
             <h3 className="text-xl font-black text-slate-900 dark:text-white uppercase tracking-tighter">
               {language === 'ko' ? '문의하기' : 'Send Message'}
             </h3>
-            <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-0.5">
+            <p className="text-xs font-bold text-slate-400 uppercase tracking-widest mt-0.5">
               {language === 'ko' ? '수신자: ' : 'To: '} <span className="text-blue-600 font-black">{receiverName}</span>
             </p>
           </div>
@@ -145,7 +145,7 @@ export default function MessageModal({ isOpen, onClose, receiverId = 'admin', re
             )}
           </button>
 
-          <p className="text-center text-[10px] text-slate-400 font-bold uppercase tracking-widest">
+          <p className="text-center text-xs text-slate-400 font-bold uppercase tracking-widest">
             {language === 'ko'
               ? '관리자 확인 후 답변해 드립니다'
               : 'Admin will reply after review'}

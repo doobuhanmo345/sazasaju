@@ -18,7 +18,7 @@ export default function BasicAnaPreview({ onStart, isDisabled, isDisabled2, load
             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-indigo-400 opacity-75"></span>
             <span className="relative inline-flex rounded-full h-2 w-2 bg-indigo-500"></span>
           </span>
-          <span className="text-[11px] font-bold text-indigo-600 tracking-tight uppercase">
+          <span className="text-sm font-bold text-indigo-600 tracking-tight uppercase">
             Preview Mode
           </span>
         </div>
@@ -63,7 +63,7 @@ export default function BasicAnaPreview({ onStart, isDisabled, isDisabled2, load
               </div>
 
               <div className="text-center mb-6">
-                <span className="text-[10px] font-black tracking-[0.3em] text-indigo-400 uppercase">WHO AM I?</span>
+                <span className="text-xs font-black tracking-[0.3em] text-indigo-400 uppercase">WHO AM I?</span>
                 <h1 className="text-2xl font-extrabold text-slate-800 dark:text-white mt-1">
                   {language === 'ko' ? '청량한 숲속의 나무' : 'Tree in a Refreshing Forest'}
                 </h1>

@@ -23,8 +23,10 @@ import {
     UserGroupIcon,
     ShieldExclamationIcon,
     MagnifyingGlassIcon,
-    UserMinusIcon
+    UserMinusIcon,
+    ArrowLeftIcon
 } from '@heroicons/react/24/outline';
+import BackButton from '@/ui/BackButton';
 
 const TYPE_CONFIG = {
     // 전통 사주
@@ -258,12 +260,15 @@ export default function HistoryClient() {
     return (
         <div className="min-h-screen bg-white dark:bg-slate-950">
             {/* Hero Section - Tutorial Style */}
-            <div className="relative overflow-hidden bg-white dark:bg-slate-900 pt-6 pb-12 sm:pt-16 sm:pb-24 px-6 border-b border-slate-100 dark:border-slate-800">
+            <div className="relative overflow-hidden bg-white dark:bg-slate-900 pt-6 pb-12 sm:pt-12 sm:pb-20 px-6 border-b border-slate-100 dark:border-slate-800">
                 <div className="absolute bottom-0 right-0 -mr-20 -mb-20 w-80 h-80 bg-indigo-500/10 dark:bg-indigo-500/20 rounded-full blur-[80px]" />
                 <div className="absolute bottom-0 left-0 -ml-20 -mb-20 w-80 h-80 bg-purple-500/10 dark:bg-purple-500/20 rounded-full blur-[80px]" />
 
+                {/* Glassy Back Button */}
+                <BackButton />
+
                 <div className="relative z-10 max-w-lg mx-auto text-center flex flex-col items-center">
-                    <div className="relative w-28 h-28 sm:w-40 sm:h-40 overflow-hidden rounded-full border-4 border-white shadow-2xl mb-4 bg-white dark:bg-slate-800 flex items-center justify-center">
+                    <div className="relative w-20 h-20 sm:w-28 sm:h-28 overflow-hidden rounded-full border-4 border-white shadow-2xl mb-4 bg-white dark:bg-slate-800 flex items-center justify-center">
                         <img
                             src="/images/history/clay_history_bg.png"
                             alt="Consultation Records"
@@ -309,7 +314,7 @@ export default function HistoryClient() {
                                             <div className="w-8 h-[2px] bg-indigo-500" />
                                             {isKo ? `총 ${group.items.length}건의 기록` : `Total ${group.items.length} records`}
                                         </div>
-                                        <h2 className="text-3xl font-black text-slate-900 dark:text-white tracking-tight">
+                                        <h2 className="text-2xl font-black text-slate-900 dark:text-white tracking-tight">
                                             <span className="font-serif italic text-indigo-600 dark:text-indigo-400"> {group.label === 'Others' ? '기타' : group.label}</span>  내역
                                         </h2>
                                     </div>
@@ -333,19 +338,19 @@ export default function HistoryClient() {
 
                                                     <div className="flex-1 min-w-0">
                                                         <div className="flex items-center gap-2 mb-1">
-                                                            <h3 className="font-black text-[15px] sm:text-[16px] text-slate-900 dark:text-white">
+                                                            <h3 className="font-black text-sm sm:text-base text-slate-900 dark:text-white">
                                                                 {item.label}
                                                             </h3>
-                                                            <span className="hidden sm:block text-[10px] font-black text-slate-400 dark:text-slate-600 px-2 py-0.5 bg-slate-100 dark:bg-slate-800/50 rounded-full uppercase tracking-tighter shrink-0">
+                                                            <span className="hidden sm:block text-xs font-black text-slate-400 dark:text-slate-600 px-2 py-0.5 bg-slate-100 dark:bg-slate-800/50 rounded-full uppercase tracking-tighter shrink-0">
                                                                 {item.displayDate}
                                                             </span>
                                                         </div>
                                                         {item.title ? (
-                                                            <p className="text-[13px] text-slate-500 dark:text-slate-400 font-medium line-clamp-1 break-all pr-2">
+                                                            <p className="text-sm text-slate-500 dark:text-slate-400 font-medium line-clamp-1 break-all pr-2">
                                                                 {item.title}
                                                             </p>
                                                         ) : (
-                                                            <p className="text-[11px] text-slate-350 dark:text-slate-600 font-bold uppercase tracking-tight">
+                                                            <p className="text-sm text-slate-350 dark:text-slate-600 font-bold uppercase tracking-tight">
                                                                 {isKo ? '분석 완료' : 'Analysis Completed'}
                                                             </p>
                                                         )}
@@ -376,7 +381,7 @@ export default function HistoryClient() {
 
                         {/* Bottom CTA - Tutorial Style */}
                         <div className="text-center py-6">
-                            <p className="text-[11px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-[0.2em] mb-4">
+                            <p className="text-sm font-black text-slate-400 dark:text-slate-500 uppercase tracking-[0.2em] mb-4">
                                 Looking for more guidance?
                             </p>
                             <button

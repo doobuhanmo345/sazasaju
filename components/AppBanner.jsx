@@ -62,11 +62,11 @@ export default function AppBanner() {
 
                     <div className="min-w-0">
                         <div className="flex items-center gap-2 mb-0.5">
-                            <span className="text-[10px] font-black uppercase tracking-widest text-indigo-500 dark:text-indigo-400">
+                            <span className="text-xs font-black uppercase tracking-widest text-indigo-500 dark:text-indigo-400">
                                 {isBackground ? (queueDoc.analysisTitle || 'Background Analysis') : 'Direct Analysis'}
                             </span>
                             <span className="w-1 h-1 bg-slate-300 dark:bg-slate-600 rounded-full" />
-                            <span className="text-[10px] font-bold text-slate-500 tabular-nums">
+                            <span className="text-xs font-bold text-slate-500 tabular-nums">
                                 {formatTime(displayTime)}
                             </span>
                         </div>
@@ -78,7 +78,7 @@ export default function AppBanner() {
 
                 <div className="flex items-center gap-3 flex-shrink-0">
                     <div className="hidden sm:flex flex-col items-end mr-2">
-                        <span className="text-[11px] font-black text-indigo-600 dark:text-indigo-400">
+                        <span className="text-sm font-black text-indigo-600 dark:text-indigo-400">
                             {Math.round(displayProgress)}%
                         </span>
                     </div>

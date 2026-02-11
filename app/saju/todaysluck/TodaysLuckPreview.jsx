@@ -16,7 +16,7 @@ export default function TodaysLuckPreview({ onStart, isDisabled, isDisabled2, lo
             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75"></span>
             <span className="relative inline-flex rounded-full h-2 w-2 bg-amber-500"></span>
           </span>
-          <span className="text-[11px] font-bold text-amber-600 tracking-tight uppercase">
+          <span className="text-sm font-bold text-amber-600 tracking-tight uppercase">
             Preview Mode
           </span>
         </div>

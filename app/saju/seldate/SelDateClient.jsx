@@ -287,7 +287,7 @@ export default function SelDatePage() {
         <div className="mx-auto px-6 py-12 animate-in fade-in slide-in-from-bottom-3 duration-1000">
           <div className="max-w-lg mx-auto">
             <header className="text-right mb-12">
-              <div className="inline-block px-2 py-1 mb-4 bg-slate-50 dark:bg-slate-800 rounded text-[10px] font-black tracking-[0.2em] text-slate-400 dark:text-slate-500 uppercase">
+              <div className="inline-block px-2 py-1 mb-4 bg-slate-50 dark:bg-slate-800 rounded text-xs font-black tracking-[0.2em] text-slate-400 dark:text-slate-500 uppercase">
                 Auspicious Day
               </div>
               <h2 className="text-4xl font-light text-slate-900 dark:text-white leading-[1.1] tracking-tight">
@@ -296,7 +296,7 @@ export default function SelDatePage() {
                   {language === 'ko' ? '최고의 날' : 'Best Days'}
                 </span>
               </h2>
-              <p className="mt-6 text-[13px] text-slate-400 dark:text-slate-500 leading-relaxed w-full">
+              <p className="mt-6 text-sm text-slate-400 dark:text-slate-500 leading-relaxed w-full">
                 {language === 'ko' ? (
                   <>
                     중요한 시작을 앞두고 계신가요?<br />
@@ -355,7 +355,7 @@ export default function SelDatePage() {
                   {language === 'ko' ? '크레딧이 부족합니다..' : 'Not Enough credit'}
                 </p>
               ) : (
-                <p className="mt-4 text-[11px] text-slate-400 text-center">
+                <p className="mt-4 text-sm text-slate-400 text-center">
                   {language === 'ko'
                     ? '이미 분석된 운세는 크래딧을 재소모하지 않습니다.'
                     : 'Fortunes already analyzed do not use credits.'}

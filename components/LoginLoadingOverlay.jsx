@@ -22,12 +22,12 @@ export default function LoginLoadingOverlay({ onCancel }) {
 
       <div className="text-center">
         <h2 className="text-xl font-black text-slate-900 dark:text-white tracking-tight mb-2">
-            로그인 진행 중
+          로그인 진행 중
         </h2>
         <div className="w-48 h-1 bg-slate-200 dark:bg-slate-800 rounded-full overflow-hidden mx-auto">
           <div className="h-full bg-indigo-600 animate-loading-bar-fast"></div>
         </div>
-        <p className="mt-4 text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-[0.3em] mb-8">
+        <p className="mt-4 text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-[0.3em] mb-8">
           Verifying Destiny...
         </p>
 

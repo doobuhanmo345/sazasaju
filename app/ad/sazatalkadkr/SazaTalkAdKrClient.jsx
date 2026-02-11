@@ -300,7 +300,7 @@ export default function SazaTalkAdKrPage() {
           <div className="relative flex flex-col items-center z-10">
             <div className="absolute inset-0 bg-indigo-400/20 blur-3xl rounded-full scale-150"></div>
             <span className="text-8xl select-none drop-shadow-lg mb-2">🦁</span>
-            <div className="bg-indigo-600 text-white text-[10px] font-black px-3 py-1 rounded-full tracking-widest animate-pulse">ANALYZING</div>
+            <div className="bg-indigo-600 text-white text-xs font-black px-3 py-1 rounded-full tracking-widest animate-pulse">ANALYZING</div>
           </div>
         </div>
         <h2 className="text-2xl font-black text-slate-800 mt-8 mb-4">사자가 분석 중...</h2>
@@ -314,7 +314,7 @@ export default function SazaTalkAdKrPage() {
         </div>
         <p className="text-sm text-indigo-500 font-bold mb-6">{Math.round(progress)}%</p>
 
-        <p className="text-[15px] text-slate-500 font-bold mt-2 text-center break-keep">
+        <p className="text-sm text-slate-500 font-bold mt-2 text-center break-keep">
           사자와 27명의 명리학자가 함께 당신의 사주를 풀고 있어요
         </p>
         <p className="text-sm text-rose-500 font-bold mt-4 animate-pulse text-center break-keep">
@@ -390,7 +390,7 @@ export default function SazaTalkAdKrPage() {
             <div className="mt-8 mb-4">
               <div className="flex items-center justify-center gap-2 animate-pulse">
                 <div className="w-2 h-2 bg-indigo-300 rounded-full" />
-                <span className="text-[16px] font-bold text-indigo-600">
+                <span className="text-base font-bold text-indigo-600">
                   {!gender
                     ? guideMessages.ko.putGender
                     : !isYearDone
@@ -428,7 +428,7 @@ export default function SazaTalkAdKrPage() {
               <button className="p-1 text-slate-500 dark:text-slate-400">
                 <ChevronLeftIcon className="w-6 h-6" />
               </button>
-              <span className="font-bold text-[17px] text-slate-800 dark:text-white">SazaTalk</span>
+              <span className="font-bold text-lg text-slate-800 dark:text-white">SazaTalk</span>
             </div>
           </div>
 
@@ -439,7 +439,7 @@ export default function SazaTalkAdKrPage() {
               {userQuestion && (
                 <div className="flex justify-end animate-in slide-in-from-right-5 duration-500">
                   <div className="max-w-[85%] bg-indigo-600 text-white px-4 py-3 rounded-[18px] rounded-tr-[2px] shadow-sm">
-                    <p className="text-[14px] font-bold leading-relaxed">{userQuestion}</p>
+                    <p className="text-sm font-bold leading-relaxed">{userQuestion}</p>
                   </div>
                 </div>
               )}
@@ -448,9 +448,9 @@ export default function SazaTalkAdKrPage() {
               <div className="flex items-start animate-in slide-in-from-left-5 duration-500 delay-150">
                 <div className="w-11 h-11 bg-indigo-500 rounded-[18px] flex items-center justify-center text-2xl mr-2 flex-shrink-0 shadow-sm text-white">🦁</div>
                 <div className="flex flex-col max-w-[90%]">
-                  <span className="text-[12px] text-slate-500 dark:text-slate-400 mb-1 ml-1 font-bold">사자</span>
+                  <span className="text-sm text-slate-500 dark:text-slate-400 mb-1 ml-1 font-bold">사자</span>
                   <div className="relative bg-white dark:bg-slate-800 p-4 rounded-[16px] rounded-tl-none shadow-sm">
-                    <div className="space-y-3 text-[15px] text-slate-800 dark:text-slate-100 leading-relaxed font-medium">
+                    <div className="space-y-3 text-sm text-slate-800 dark:text-slate-100 leading-relaxed font-medium">
                       {data.contents?.map((paragraph, idx) => (
                         <p key={idx}>{paragraph}</p>
                       ))}

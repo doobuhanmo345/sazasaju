@@ -168,7 +168,7 @@ export default function TodaysLuckPage() {
               {language === 'ko' ? '크레딧이 부족합니다..' : 'not Enough credit'}
             </p>
           ) : (
-            <p className="mt-4 text-[11px] text-slate-400">
+            <p className="mt-4 text-sm text-slate-400">
               {language === 'ko'
                 ? '이미 분석된 운세는 크래딧을 재소모하지 않습니다.'
                 : 'Fortunes that have already been analyzed do not use credits.'}
@@ -209,7 +209,7 @@ export default function TodaysLuckPage() {
                 {language === 'ko' ? '크레딧이 부족합니다..' : 'not Enough credit'}
               </p>
             ) : (
-              <p className="mt-4 text-[11px] text-slate-400">
+              <p className="mt-4 text-sm text-slate-400">
                 {language === 'ko'
                   ? '이미 분석된 운세는 크래딧을 재소모하지 않습니다.'
                   : 'Fortunes that have already been analyzed do not use credits.'}

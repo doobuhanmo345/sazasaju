@@ -363,7 +363,7 @@ export function AuthContextProvider({ children }) {
     // 0도 유효한 값이므로 undefined/null 체크
     const userDataEditCount = userData.editCount ?? 0;
     const userDataCredits = userData.credits ?? 0;
-
+    const userRole = userData.role ?? 'user';
     const needsSync =
       selectedProfile.editCount !== userDataEditCount ||
       selectedProfile.credits !== userDataCredits;
@@ -374,8 +374,10 @@ export function AuthContextProvider({ children }) {
         ...prev,
         editCount: userDataEditCount,
         credits: userDataCredits,
+        userRole: userRole,
         dailyUsage: userData.dailyUsage || {},
         lastEditDate: userData.lastEditDate || '',
+
       }));
     }
   }, [selectedProfile?.id, userData?.editCount, userData?.credits]);

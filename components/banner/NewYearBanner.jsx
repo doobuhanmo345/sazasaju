@@ -22,7 +22,7 @@ const NewYearBanner = () => {
       <div className="relative h-full flex flex-col justify-center items-end px-3 xs:px-6 z-10 text-right">
         <div className="animate-in fade-in slide-in-from-right-5 duration-1000 max-w-[70%] sm:max-w-full">
           {/* 상단 메뉴명 */}
-          <span className="text-[10px] font-black uppercase tracking-[0.3em] text-red-400 mb-1.5 block">
+          <span className="text-xs font-black uppercase tracking-[0.3em] text-red-400 mb-1.5 block">
             {/* {isKo ? '2026 신년운세' : '2026 FORTUNE'} */}
           </span>
 
@@ -41,7 +41,7 @@ const NewYearBanner = () => {
           </h2>
 
           {/* 부제 */}
-          <p className="mt-2 text-[11px] sm:text-xs font-medium text-slate-500 tracking-tight leading-snug break-keep">
+          <p className="mt-2 text-sm sm:text-xs font-medium text-slate-500 tracking-tight leading-snug break-keep">
             {isKo ? '명리학자들이 분석한 2026년 대운' : 'Full analysis of your upcoming year'}
           </p>
         </div>

@@ -195,13 +195,13 @@ export default function SelBirthPage() {
     return (
       <div className="w-full px-6 py-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
         <header className="max-w-lg mx-auto mb-8 text-center sm:text-left">
-          <div className="inline-block px-2 py-1 mb-4 bg-emerald-50 dark:bg-emerald-900/20 rounded text-[10px] font-black tracking-[0.2em] text-emerald-600 dark:text-emerald-400 uppercase">
+          <div className="inline-block px-2 py-1 mb-4 bg-emerald-50 dark:bg-emerald-900/20 rounded text-xs font-black tracking-[0.2em] text-emerald-600 dark:text-emerald-400 uppercase">
             Step 01. 정보 입력
           </div>
           <h2 className="text-3xl font-black text-slate-800 dark:text-white leading-tight">
             {language === 'ko' ? '최고의 순간을 위한' : 'For the Best Moment'} <br />
             <span className="text-emerald-600 dark:text-emerald-400">
-              {language === 'ko' ? '정보를 들려주세요' : 'Please Enter Info'}
+              {language === 'ko' ? '정보를 알려주세요' : 'Please Enter Info'}
             </span>
           </h2>
         </header>
@@ -236,7 +236,7 @@ export default function SelBirthPage() {
 
             {/* 3. 출산 방식 */}
             <div className="pt-6 border-t border-slate-50 dark:border-slate-700/50">
-              <p className="mb-3 text-[11px] font-black text-slate-400 uppercase tracking-[0.3em] ml-1">
+              <p className="mb-3 text-sm font-black text-slate-400 uppercase tracking-[0.3em] ml-1">
                 {language === 'ko' ? '출산 방식' : 'BIRTH METHOD'}
               </p>
               <div className="flex gap-2">
@@ -260,7 +260,7 @@ export default function SelBirthPage() {
 
             {/* 4. 아이 성별 */}
             <div className="pt-6 border-t border-slate-50 dark:border-slate-700/50">
-              <p className="mb-3 text-[11px] font-black text-slate-400 uppercase tracking-[0.3em] ml-1">
+              <p className="mb-3 text-sm font-black text-slate-400 uppercase tracking-[0.3em] ml-1">
                 {language === 'ko' ? '아이 성별' : "BABY'S GENDER"}
               </p>
               <div className="flex gap-2">
@@ -285,7 +285,7 @@ export default function SelBirthPage() {
 
             {/* 5. 기간 선택 */}
             <div className="pt-6 border-t border-slate-50 dark:border-slate-700/50">
-              <p className="mb-3 text-[11px] font-black text-slate-400 uppercase tracking-[0.3em] ml-1">
+              <p className="mb-3 text-sm font-black text-slate-400 uppercase tracking-[0.3em] ml-1">
                 {language === 'ko' ? '택일 범위 (예정일 기준)' : 'RANGE BEFORE DUE DATE'}
               </p>
               <div className="grid grid-cols-3 gap-2">
@@ -307,7 +307,7 @@ export default function SelBirthPage() {
               </div>
               <div className="mt-4 flex items-center justify-end gap-2 px-1">
                 <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
-                <p className="text-[11px] font-bold text-emerald-600/60 font-serif lowercase tracking-tighter">
+                <p className="text-sm font-bold text-emerald-600/60 font-serif lowercase tracking-tighter">
                   {startDate} ~ {endDate}
                 </p>
               </div>
@@ -325,7 +325,7 @@ export default function SelBirthPage() {
               cost={-1}
             />
             {isLocked && (
-              <p className="mt-2 text-rose-500 text-[11px] font-bold text-center animate-pulse">
+              <p className="mt-2 text-rose-500 text-sm font-bold text-center animate-pulse">
                 {language === 'ko' ? '크레딧이 부족합니다' : 'Not enough energy'}
               </p>
             )}
@@ -354,11 +354,11 @@ export default function SelBirthPage() {
               cost={-1}
             />
             {isLocked && (
-              <p className="mt-2 text-rose-500 text-[11px] font-bold text-center animate-pulse">
+              <p className="mt-2 text-rose-500 text-sm font-bold text-center animate-pulse">
                 {language === 'ko' ? '크레딧이 부족합니다' : 'Not enough energy'}
               </p>
             )}
-            <p className="mt-4 text-[11px] text-slate-400 text-center">
+            <p className="mt-4 text-sm text-slate-400 text-center">
               {language === 'ko'
                 ? '이미 분석된 운세는 크래딧을 재소모하지 않습니다.'
                 : 'Fortunes already analyzed do not use credits.'}
@@ -379,7 +379,7 @@ export default function SelBirthPage() {
         return (
           <div className="w-full px-6 py-12 animate-in fade-in slide-in-from-bottom-3 duration-1000 text-center">
             <header className="mb-12">
-              <div className="inline-block px-2 py-1 mb-4 bg-emerald-50 dark:bg-emerald-900/20 rounded text-[10px] font-black tracking-[0.2em] text-emerald-600 dark:text-emerald-400 uppercase">
+              <div className="inline-block px-2 py-1 mb-4 bg-emerald-50 dark:bg-emerald-900/20 rounded text-xs font-black tracking-[0.2em] text-emerald-600 dark:text-emerald-400 uppercase">
                 Childbirth Selection
               </div>
               <h2 className="text-4xl font-extrabold text-slate-900 dark:text-white leading-[1.1] tracking-tight">
@@ -388,7 +388,7 @@ export default function SelBirthPage() {
                   {language === 'ko' ? '첫 순간의 기록' : 'The First Moment'}
                 </span>
               </h2>
-              <p className="mt-6 text-[15px] text-slate-500 dark:text-slate-400 leading-relaxed max-w-sm mx-auto">
+              <p className="mt-6 text-sm text-slate-500 dark:text-slate-400 leading-relaxed max-w-sm mx-auto">
                 {language === 'ko' ? (
                   <>
                     소중한 아이가 세상에 나오는 날,<br />

@@ -54,7 +54,7 @@ export default function SazaTalkMessageItem({ message, onClick, onSave, onDelete
                     </p>
 
                     {/* Timestamp */}
-                    <p className="text-[10px] text-slate-400 dark:text-slate-500">
+                    <p className="text-xs text-slate-400 dark:text-slate-500">
                         {formatTimestamp(message.createdAt)}
                     </p>
                 </div>

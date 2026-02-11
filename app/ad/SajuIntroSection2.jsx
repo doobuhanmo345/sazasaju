@@ -39,7 +39,7 @@ const SajuIntroSection2 = ({ language, setStep }) => {
         className={`scroll-item transition-all duration-1000 transform ${visibleItems.item1 ? 'translate-y-0 opacity-100' : 'translate-y-20 opacity-0'
           }`}
       >
-        <p className="text-indigo-600 font-black text-[11px] tracking-[0.3em] uppercase mb-4">
+        <p className="text-indigo-600 font-black text-sm tracking-[0.3em] uppercase mb-4">
           Ancient Logic meets Modern Tech
         </p>
 

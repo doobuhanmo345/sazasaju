@@ -163,7 +163,7 @@ export default function NotificationList() {
               {unreadCount > 0 && (
                 <button
                   onClick={handleMarkAllAsRead}
-                  className="flex items-center gap-1 text-[10px] font-black text-purple-600 hover:text-purple-700 transition-colors"
+                  className="flex items-center gap-1 text-xs font-black text-purple-600 hover:text-purple-700 transition-colors"
                   title={language === 'ko' ? '모두 읽음' : 'Mark all read'}
                 >
                   <CheckIcon className="w-3 h-3 stroke-[3px]" />
@@ -191,7 +191,7 @@ export default function NotificationList() {
                   <div className="flex justify-between items-start gap-2">
                     <div className="flex-grow">
                       <p
-                        className={`text-[11px] font-bold leading-snug ${note.isRead ? 'text-gray-400 dark:text-gray-500' : 'text-gray-900 dark:text-white'
+                        className={`text-sm font-bold leading-snug ${note.isRead ? 'text-gray-400 dark:text-gray-500' : 'text-gray-900 dark:text-white'
                           }`}
                       >
                         {note.message}
@@ -229,7 +229,7 @@ export default function NotificationList() {
             ) : (
               <div className="py-8 flex flex-col items-center justify-center text-center">
                 <InboxIcon className="w-8 h-8 text-gray-200 mb-2" />
-                <p className="text-[11px] font-bold text-gray-400">
+                <p className="text-sm font-bold text-gray-400">
                   {language === 'ko' ? '새로운 메시지가 없습니다.' : 'No new messages.'}
                 </p>
               </div>

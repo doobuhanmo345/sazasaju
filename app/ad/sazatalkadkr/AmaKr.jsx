@@ -127,7 +127,7 @@ export default function AmaKr({ question, setQuestion, setStep }) {
           <div className="w-full flex items-center mt-12 px-2 py-4 border-t border-slate-100">
             <div className="flex-1 flex flex-col items-center gap-1.5 opacity-70">
               <Users size={18} className="text-indigo-500" />
-              <span className="text-[10px] font-black text-slate-500 leading-tight text-center">
+              <span className="text-xs font-black text-slate-500 leading-tight text-center">
                 27명 명리학자 참여
                 <br />
                 <span className="font-medium text-[9px]">직접 검증 데이터 기반</span>
@@ -138,7 +138,7 @@ export default function AmaKr({ question, setQuestion, setStep }) {
 
             <div className="flex-1 flex flex-col items-center gap-1.5 opacity-70">
               <Database size={18} className="text-indigo-500" />
-              <span className="text-[10px] font-black text-slate-500 leading-tight text-center">
+              <span className="text-xs font-black text-slate-500 leading-tight text-center">
                 수만 건 해석 데이터 구조화
                 <br />
                 <span className="font-medium text-[9px]">방대한 DB 활용 분석</span>
@@ -149,7 +149,7 @@ export default function AmaKr({ question, setQuestion, setStep }) {
 
             <div className="flex-1 flex flex-col items-center gap-1.5 opacity-70">
               <Brain size={18} className="text-indigo-500" />
-              <span className="text-[10px] font-black text-slate-500 leading-tight text-center">
+              <span className="text-xs font-black text-slate-500 leading-tight text-center">
                 질문 맞춤
                 <br />
                 <span className="font-bold">AI 분석</span>

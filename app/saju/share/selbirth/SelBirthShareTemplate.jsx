@@ -122,7 +122,7 @@ export default function SelBirthShareTemplate({ shareData: propShareData }) {
                                 <div key={idx} className="bg-slate-50 p-5 rounded-xl border border-emerald-100 relative overflow-hidden">
                                     <div className="flex items-center justify-between mb-3">
                                         <span className="text-xl font-black text-emerald-600 tracking-tight">{item.date}</span>
-                                        <span className="text-[10px] font-bold px-2 py-1 bg-emerald-100 text-emerald-700 rounded shadow-sm">
+                                        <span className="text-xs font-bold px-2 py-1 bg-emerald-100 text-emerald-700 rounded shadow-sm">
                                             TOP {idx + 1}
                                         </span>
                                     </div>

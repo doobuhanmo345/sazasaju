@@ -137,7 +137,7 @@ export default function WealthLandingPage() {
                       {labelText}
                     </span>
                     {language !== 'en' && (
-                      <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400">
+                      <span className="text-xs font-bold uppercase tracking-wider text-slate-400">
                         {category.sub}
                       </span>
                     )}

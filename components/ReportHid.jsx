@@ -46,12 +46,12 @@ export default function ReportHid({
             </div>
 
             {/* 메인 타이틀 */}
-            <h3 className="text-[22px] font-black text-slate-800 dark:text-white mb-3 break-keep leading-tight">
+            <h3 className="text-xl font-black text-slate-800 dark:text-white mb-3 break-keep leading-tight">
               {title}
             </h3>
 
             {/* 설명 문구 */}
-            <p className="text-[14px] text-slate-600 dark:text-slate-400 mb-8 leading-relaxed break-keep font-medium">
+            <p className="text-sm text-slate-600 dark:text-slate-400 mb-8 leading-relaxed break-keep font-medium">
               {des}
             </p>
 

@@ -471,7 +471,7 @@ export default function MatchPage() {
                   <ExclamationTriangleIcon className="w-4 h-4" /> {language === 'ko' ? '크레딧이 부족합니다..' : 'not Enough credit'}
                 </p>
               ) : (
-                <p className="text-center mt-4 text-[11px] text-slate-400">
+                <p className="text-center mt-4 text-sm text-slate-400">
                   {language === 'ko' ? '이미 분석된 운세는 크래딧을 재소모하지 않습니다.' : 'Fortunes that have already been analyzed do not use credits.'}
                 </p>
               )}
@@ -485,7 +485,7 @@ export default function MatchPage() {
             <div className="bg-white dark:bg-slate-800 rounded-2xl border border-slate-100 dark:border-slate-700 shadow-sm p-4 mb-4 relative overflow-hidden">
               <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-indigo-500 via-purple-500 to-emerald-500"></div>
               <div className="flex justify-between items-start mb-3">
-                <span className="text-[10px] font-black tracking-tighter text-slate-400 uppercase">MATCH ANALYSIS</span>
+                <span className="text-xs font-black tracking-tighter text-slate-400 uppercase">MATCH ANALYSIS</span>
                 <div className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-md bg-slate-50 dark:bg-slate-700/50 border border-slate-100 dark:border-slate-600">
                   <span className="text-sm font-bold text-slate-400 uppercase tracking-tight">RELATION</span>
                   <span className="text-xs font-bold text-indigo-600 dark:text-indigo-400">
@@ -506,7 +506,7 @@ export default function MatchPage() {
                 </div>
                 <div className="px-3 flex flex-col items-center justify-center">
                   <div className="w-8 h-8 rounded-full border border-slate-100 dark:border-slate-700 flex items-center justify-center bg-slate-50 dark:bg-slate-900/50 shadow-inner">
-                    <span className="text-[10px] font-black text-slate-300">VS</span>
+                    <span className="text-xs font-black text-slate-300">VS</span>
                   </div>
                 </div>
                 <div className="flex flex-col items-center text-center">
@@ -537,49 +537,49 @@ export default function MatchPage() {
                     </div>
                   </section>
                   <section className="border-t border-slate-100 dark:border-slate-800 pt-6 text-center">
-                    <p className="text-[14px] leading-relaxed text-slate-600 dark:text-slate-400 italic mb-4">"{data.vibe}"</p>
+                    <p className="text-sm leading-relaxed text-slate-600 dark:text-slate-400 italic mb-4">"{data.vibe}"</p>
                     <div className="flex flex-wrap justify-center gap-2">
-                      {data.keywords.map((word, i) => <span key={i} className="text-[10px] font-medium text-slate-400">#{word}</span>)}
+                      {data.keywords.map((word, i) => <span key={i} className="text-xs font-medium text-slate-400">#{word}</span>)}
                     </div>
                   </section>
                   <section className="grid grid-cols-1 sm:grid-cols-2 gap-x-10 gap-y-6 border-t border-slate-100 dark:border-slate-800 pt-6">
                     <div>
                       <h4 className="font-xs font-black text-indigo-500 uppercase tracking-widest mb-2">Analysis: Me</h4>
-                      <p className="text-[13px] leading-relaxed text-slate-500 dark:text-slate-400">{data.insights.me}</p>
+                      <p className="text-sm leading-relaxed text-slate-500 dark:text-slate-400">{data.insights.me}</p>
                     </div>
                     <div>
                       <h4 className="font-xs font-black text-indigo-500 uppercase tracking-widest mb-2">Analysis: Target</h4>
-                      <p className="text-[13px] leading-relaxed text-slate-500 dark:text-slate-400">{data.insights.target}</p>
+                      <p className="text-sm leading-relaxed text-slate-500 dark:text-slate-400">{data.insights.target}</p>
                     </div>
                   </section>
                   <section className="space-y-6 border-t border-slate-100 dark:border-slate-800 pt-6">
                     <div>
                       <h4 className="font-xs font-black text-slate-800 uppercase tracking-widest mb-2">{language === 'en' ? 'Synergy' : '관계 시너지'}</h4>
-                      <p className="text-[13px] leading-relaxed text-slate-500 dark:text-slate-400">{data.insights.synergyPros}</p>
+                      <p className="text-sm leading-relaxed text-slate-500 dark:text-slate-400">{data.insights.synergyPros}</p>
                     </div>
                     <div>
                       <h4 className="font-xs font-black text-slate-800 uppercase tracking-widest mb-2">{language === 'en' ? 'Points of Friction' : '주의할 지점'}</h4>
-                      <p className="text-[13px] leading-relaxed text-slate-500 dark:text-slate-400">{data.insights.synergyCons}</p>
+                      <p className="text-sm leading-relaxed text-slate-500 dark:text-slate-400">{data.insights.synergyCons}</p>
                     </div>
                   </section>
                   <section className="grid grid-cols-1 sm:grid-cols-2 gap-6 border-t border-slate-100 dark:border-slate-800 pt-6">
                     <div>
                       <h4 className="font-xs font-black text-slate-400 uppercase tracking-widest mb-3">Strengths</h4>
                       <ul className="space-y-1.5">
-                        {data.pros.map((item, i) => <li key={i} className="text-[13px] text-slate-500 flex gap-2"><span className="text-indigo-300">·</span> {item}</li>)}
+                        {data.pros.map((item, i) => <li key={i} className="text-sm text-slate-500 flex gap-2"><span className="text-indigo-300">·</span> {item}</li>)}
                       </ul>
                     </div>
                     <div>
                       <h4 className="font-xs font-black text-slate-400 uppercase tracking-widest mb-3">Cautions</h4>
                       <ul className="space-y-1.5">
-                        {data.cons.map((item, i) => <li key={i} className="text-[13px] text-slate-500 flex gap-2"><span className="text-indigo-300">·</span> {item}</li>)}
+                        {data.cons.map((item, i) => <li key={i} className="text-sm text-slate-500 flex gap-2"><span className="text-indigo-300">·</span> {item}</li>)}
                       </ul>
                     </div>
                   </section>
                   <section className="border-t border-slate-100 dark:border-slate-800 pt-6 pb-4">
                     <h4 className="font-xs font-black text-indigo-500 uppercase tracking-widest mb-3 text-center">Master's Conclusion</h4>
-                    <p className="text-[14px] font-medium text-slate-700 dark:text-slate-200 leading-relaxed text-center max-w-md mx-auto mb-4">{data.advice}</p>
-                    <p className="text-[13px] leading-relaxed text-slate-500 dark:text-slate-400 text-center">{data.insights.solution}</p>
+                    <p className="text-sm font-medium text-slate-700 dark:text-slate-200 leading-relaxed text-center max-w-md mx-auto mb-4">{data.advice}</p>
+                    <p className="text-sm leading-relaxed text-slate-500 dark:text-slate-400 text-center">{data.insights.solution}</p>
                     <div className="mt-8 pt-6 border-t border-slate-50 dark:border-slate-900 text-center">
                       <span className="text-xs text-slate-800 font-bold italic">{data.insights.ctaChat}</span>
                     </div>

@@ -511,7 +511,7 @@ const BasicAna = ({ inputDate, saju, inputGender, isTimeUnknown, handleSetViewMo
                   <div key={i} className={`p-4 rounded-xl border ${['합', '천간합', '육합', 'Harmony'].includes(rel[language]?.type) ? 'bg-indigo-50/50 border-indigo-100 dark:bg-indigo-900/5 dark:border-indigo-900/30' : 'bg-amber-50/50 border-amber-100 dark:bg-amber-900/5 dark:border-amber-900/30'}`}>
                     <div className="flex justify-between items-start mb-1">
                       <span className="font-bold text-slate-800 dark:text-slate-200">{rel[language].name}</span>
-                      <span className={`text-[10px] font-black px-2 py-0.5 rounded shadow-sm ${['합', '천간합', '육합', 'Harmony'].includes(rel[language]?.type) ? 'bg-indigo-500 text-white' : 'bg-amber-500 text-white'}`}>
+                      <span className={`text-xs font-black px-2 py-0.5 rounded shadow-sm ${['합', '천간합', '육합', 'Harmony'].includes(rel[language]?.type) ? 'bg-indigo-500 text-white' : 'bg-amber-500 text-white'}`}>
                         {rel[language].type}
                       </span>
                     </div>
@@ -538,9 +538,9 @@ const BasicAna = ({ inputDate, saju, inputGender, isTimeUnknown, handleSetViewMo
                   <div key={i} className="p-4 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800/30">
                     <div className="flex items-center gap-2 mb-1">
                       <span className="font-bold text-slate-800 dark:text-slate-200 text-sm">{sal.name}</span>
-                      <span className="text-[10px] bg-slate-100 dark:bg-slate-700 text-slate-500 px-1.5 py-0.5 rounded">{sal.type}</span>
+                      <span className="text-xs bg-slate-100 dark:bg-slate-700 text-slate-500 px-1.5 py-0.5 rounded">{sal.type}</span>
                     </div>
-                    <p className="text-[11px] text-slate-500 dark:text-slate-400 line-clamp-2">{sal.desc}</p>
+                    <p className="text-xs text-slate-500 dark:text-slate-400 line-clamp-2">{sal.desc}</p>
                   </div>
                 ))}
               </div>
@@ -566,11 +566,11 @@ const BasicAna = ({ inputDate, saju, inputGender, isTimeUnknown, handleSetViewMo
                       key={i}
                       onClick={() => handleDaeClick(dae)}
                       className={`flex flex-col items-center justify-center w-16 h-20 rounded-xl border transition-all cursor-pointer ${(selectedDae && selectedDae.startAge === dae.startAge)
-                          ? 'bg-blue-600 border-blue-600 text-white shadow-lg transform scale-110'
-                          : 'bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-400 hover:border-blue-400'
+                        ? 'bg-blue-600 border-blue-600 text-white shadow-lg transform scale-110'
+                        : 'bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-400 hover:border-blue-400'
                         }`}
                     >
-                      <span className="text-[10px] opacity-80 mb-1">{dae.startAge}세</span>
+                      <span className="text-xs opacity-80 mb-1">{dae.startAge}세</span>
                       <span className="font-bold text-sm">
                         {language === 'en' ? `${getEng(dae.name[0])} ${getEng(dae.name[1])}` : dae.name}
                       </span>
@@ -592,7 +592,7 @@ const BasicAna = ({ inputDate, saju, inputGender, isTimeUnknown, handleSetViewMo
                       <h4 className="font-bold text-slate-800 dark:text-slate-200">
                         {language === 'en' ? `${getEng(selectedDae.name[0])} ${getEng(selectedDae.name[1])}` : selectedDae.name} {language === 'en' ? 'Luck Cycle' : '대운'}
                       </h4>
-                      <p className="text-[10px] text-blue-500 font-black tracking-widest uppercase">
+                      <p className="text-xs text-blue-500 font-black tracking-widest uppercase">
                         {selectedDae.startAge} - {selectedDae.endAge} {language === 'en' ? 'AGE' : '세'}
                       </p>
                     </div>

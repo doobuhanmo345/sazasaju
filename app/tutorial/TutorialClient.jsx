@@ -89,9 +89,9 @@ export default function TutorialClient() {
                                 <BoltIcon className="w-8 h-8 text-amber-500" />
                             </div>
                             <h3 className="text-xl font-black text-slate-800 dark:text-slate-100 mb-3 flex items-center gap-2">
-                                번개 <span className="text-[12px] text-slate-400 font-bold uppercase tracking-widest">(Daily)</span>
+                                번개 <span className="text-sm text-slate-400 font-bold uppercase tracking-widest">(Daily)</span>
                             </h3>
-                            <p className="text-[15px] text-slate-500 dark:text-slate-400 font-medium leading-relaxed break-keep">
+                            <p className="text-sm text-slate-500 dark:text-slate-400 font-medium leading-relaxed break-keep">
                                 <span className="text-slate-900 dark:text-white font-black underline decoration-amber-200/50 decoration-4 underline-offset-4">매일 낮 12시에 3개씩</span> 정성껏 준비해 둬요. <br />
                                 당일 소진이 원칙이니, 사자에게 궁금한 걸 아낌없이 물어보세요!
                             </p>
@@ -103,9 +103,9 @@ export default function TutorialClient() {
                                 <CircleStackIcon className="w-8 h-8 text-indigo-500" />
                             </div>
                             <h3 className="text-xl font-black text-slate-800 dark:text-slate-100 mb-3 flex items-center gap-2">
-                                크레딧 <span className="text-[12px] text-slate-400 font-bold uppercase tracking-widest">(Permanent)</span>
+                                크레딧 <span className="text-sm text-slate-400 font-bold uppercase tracking-widest">(Permanent)</span>
                             </h3>
-                            <p className="text-[15px] text-slate-500 dark:text-slate-400 font-medium leading-relaxed break-keep">
+                            <p className="text-sm text-slate-500 dark:text-slate-400 font-medium leading-relaxed break-keep">
                                 번개를 다 쓰면 사용되는 유료 재화예요. <br />
                                 <span className="text-slate-900 dark:text-white font-black underline decoration-indigo-200/50 decoration-4 underline-offset-4">사용 전까지 영구히</span> 사라지지 않고 안전하게 보관됩니다.
                             </p>
@@ -133,7 +133,7 @@ export default function TutorialClient() {
                             </div>
                             <div className="text-center sm:text-left">
                                 <h4 className="font-black text-slate-900 dark:text-white text-xl mb-3">자동 삭제 정책</h4>
-                                <p className="text-[15px] text-slate-500 dark:text-slate-400 font-medium leading-relaxed break-keep">
+                                <p className="text-sm text-slate-500 dark:text-slate-400 font-medium leading-relaxed break-keep">
                                     서버 부하를 줄이기 위해 오래된 내역은 사자가 직접 비워요. <br />
                                     최신 분석 결과 위주로 보관되는 점 참고해 주세요.
                                 </p>
@@ -147,7 +147,7 @@ export default function TutorialClient() {
                             </div>
                             <div className="text-center sm:text-left">
                                 <h4 className="font-black text-slate-900 dark:text-white text-xl mb-3">사자톡 영구 저장</h4>
-                                <p className="text-[15px] text-slate-500 dark:text-slate-400 font-medium leading-relaxed break-keep">
+                                <p className="text-sm text-slate-500 dark:text-slate-400 font-medium leading-relaxed break-keep">
                                     상담 도중 마음에 드는 답변을 발견했다면? <br />
                                     <span className="text-indigo-600 dark:text-indigo-400 font-black decoration-indigo-200 decoration-2 underline-offset-4 underline">최대 3개까지 영구 보관함</span>에 쏙 넣어서 소장할 수 있어요.
                                 </p>
@@ -161,7 +161,7 @@ export default function TutorialClient() {
                             </div>
                             <div className="text-center sm:text-left">
                                 <h4 className="font-black text-slate-900 dark:text-white text-xl mb-3">공유 보너스</h4>
-                                <p className="text-[15px] text-slate-500 dark:text-slate-400 font-medium leading-relaxed break-keep">
+                                <p className="text-sm text-slate-500 dark:text-slate-400 font-medium leading-relaxed break-keep">
                                     분석 결과를 친구와 공유하면, <br />
                                     해당 내역의 온라인 보관 기간이 <span className="text-sky-600 dark:text-sky-400 font-black decoration-sky-200 decoration-2 underline-offset-4 underline">공유 시점부터 7일간</span> 더 늘어납니다!
                                 </p>
@@ -200,7 +200,7 @@ export default function TutorialClient() {
                                     )}
                                 </button>
                                 {openFaq === idx && (
-                                    <div className="pb-6 text-[15px] font-medium text-slate-500 dark:text-slate-400 leading-relaxed animate-in fade-in slide-in-from-top-2 duration-300 break-keep">
+                                    <div className="pb-6 text-sm font-medium text-slate-500 dark:text-slate-400 leading-relaxed animate-in fade-in slide-in-from-top-2 duration-300 break-keep">
                                         {faq.a}
                                     </div>
                                 )}
@@ -211,7 +211,7 @@ export default function TutorialClient() {
 
                 {/* Bottom CTA */}
                 <div className="text-center py-6">
-                    <p className="text-[11px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-[0.2em] mb-4">
+                    <p className="text-sm font-black text-slate-400 dark:text-slate-500 uppercase tracking-[0.2em] mb-4">
                         Still have questions?
                     </p>
                     <button

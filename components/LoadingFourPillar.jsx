@@ -164,7 +164,7 @@ export default function LoadingFourPillar({ isTimeUnknown, saju, isAnalysisDone 
         <div className="relative inline-block">
           <div className="flex flex-col items-center">
             <span
-              className={`text-[10px] tracking-[0.4em] mb-2 uppercase transition-all ${isDeepAnalyzing ? 'text-sky-500 font-bold' : 'text-slate-400 font-light'}`}
+              className={`text-xs tracking-[0.4em] mb-2 uppercase transition-all ${isDeepAnalyzing ? 'text-sky-500 font-bold' : 'text-slate-400 font-light'}`}
             >
               {isDeepAnalyzing ? 'Final Synthesis' : 'Scanning Destiny'}
             </span>
@@ -188,7 +188,7 @@ export default function LoadingFourPillar({ isTimeUnknown, saju, isAnalysisDone 
               {globalStatusText || (language === 'en' ? statusMessagesEn[analysisStep] : statusMessages[analysisStep])}
               <span className="not-italic font-normal">”</span>
             </h3>
-            <p className="text-[11px] font-mono text-slate-400 dark:text-slate-500 transition-opacity duration-1000">
+            <p className="text-sm font-mono text-slate-400 dark:text-slate-500 transition-opacity duration-1000">
               {language === 'en' ? (
                 <>{subLog || 'Discovering your unique inner radiance'}</>
               ) : (
@@ -198,7 +198,7 @@ export default function LoadingFourPillar({ isTimeUnknown, saju, isAnalysisDone 
             {/* 페이지 이탈 방지 경고 추가 */}
             <div className="mt-4 animate-pulse flex items-center justify-center gap-1.5">
               <span className="text-amber-500 dark:text-amber-400 text-xs">⚠️</span>
-              <p className="text-[12px] font-bold text-rose-500/90 dark:text-rose-400/90 tracking-tight">
+              <p className="text-sm font-bold text-rose-500/90 dark:text-rose-400/90 tracking-tight">
                 {language === 'en'
                   ? 'Analysis in progress. Please do not leave this page.'
                   : '분석 중입니다. 페이지를 나가지 마세요.'}
@@ -231,12 +231,12 @@ export default function LoadingFourPillar({ isTimeUnknown, saju, isAnalysisDone 
           <div className="flex flex-col max-xs:hidden items-end pt-[10px] opacity-40">
             <div className="h-4" />
             <div className="h-[90px] flex items-center pr-2 border-r border-sky-700/30">
-              <span className="text-[10px] font-bold text-sky-700 dark:text-cyan-600 uppercase">
+              <span className="text-xs font-bold text-sky-700 dark:text-cyan-600 uppercase">
                 {language === 'en' ? 'Stem' : '천간'}
               </span>
             </div>
             <div className="h-[110px] flex items-center pr-2 border-r border-stone-400/20">
-              <span className="text-[10px] font-bold text-stone-500 dark:text-yellow-600 uppercase">
+              <span className="text-xs font-bold text-stone-500 dark:text-yellow-600 uppercase">
                 {language === 'en' ? 'Branch' : '지지'}
               </span>
             </div>
@@ -257,7 +257,7 @@ export default function LoadingFourPillar({ isTimeUnknown, saju, isAnalysisDone 
                   >
                     <div className="text-3xl mb-1">{getIcon(saju.sky0, 'sky')}</div>
                     {!!saju.sky0 && (
-                      <div className="text-[10px] font-bold">{getHanja(saju.sky0, 'sky')}</div>
+                      <div className="text-xs font-bold">{getHanja(saju.sky0, 'sky')}</div>
                     )}
                   </div>
                   <div
@@ -269,7 +269,7 @@ export default function LoadingFourPillar({ isTimeUnknown, saju, isAnalysisDone 
                   >
                     <div className="text-3xl mb-1">{getIcon(saju.grd0, 'grd')}</div>
                     {!!saju.grd0 && (
-                      <div className="text-[10px] font-bold">{getHanja(saju.grd0, 'grd')}</div>
+                      <div className="text-xs font-bold">{getHanja(saju.grd0, 'grd')}</div>
                     )}
                     <div className="flex w-full opacity-50">
                       {sijiji.map((i, idx) => (
@@ -302,7 +302,7 @@ export default function LoadingFourPillar({ isTimeUnknown, saju, isAnalysisDone 
                 >
                   <div className="text-3xl mb-1">{getIcon(saju.sky1, 'sky')}</div>
                   {!!saju.sky1 && (
-                    <div className="text-[10px] font-bold">{getHanja(saju.sky1, 'sky')}</div>
+                    <div className="text-xs font-bold">{getHanja(saju.sky1, 'sky')}</div>
                   )}
                 </div>
                 <div
@@ -314,7 +314,7 @@ export default function LoadingFourPillar({ isTimeUnknown, saju, isAnalysisDone 
                 >
                   <div className="text-3xl mb-1">{getIcon(saju.grd1, 'grd')}</div>
                   {!!saju.grd1 && (
-                    <div className="text-[10px] font-bold">{getHanja(saju.grd1, 'grd')}</div>
+                    <div className="text-xs font-bold">{getHanja(saju.grd1, 'grd')}</div>
                   )}
                   <div className="flex w-full opacity-50">
                     {iljiji.map((i, idx) => (
@@ -341,7 +341,7 @@ export default function LoadingFourPillar({ isTimeUnknown, saju, isAnalysisDone 
                 >
                   <div className="text-3xl mb-1">{getIcon(saju.sky2, 'sky')}</div>
                   {!!saju.sky2 && (
-                    <div className="text-[10px] font-bold">{getHanja(saju.sky2, 'sky')}</div>
+                    <div className="text-xs font-bold">{getHanja(saju.sky2, 'sky')}</div>
                   )}
                 </div>
                 <div
@@ -353,7 +353,7 @@ export default function LoadingFourPillar({ isTimeUnknown, saju, isAnalysisDone 
                 >
                   <div className="text-3xl mb-1">{getIcon(saju.grd2, 'grd')}</div>
                   {!!saju.grd2 && (
-                    <div className="text-[10px] font-bold">{getHanja(saju.grd2, 'grd')}</div>
+                    <div className="text-xs font-bold">{getHanja(saju.grd2, 'grd')}</div>
                   )}
                   <div className="flex w-full opacity-50">
                     {woljiji.map((i, idx) => (
@@ -380,7 +380,7 @@ export default function LoadingFourPillar({ isTimeUnknown, saju, isAnalysisDone 
                 >
                   <div className="text-3xl mb-1">{getIcon(saju.sky3, 'sky')}</div>
                   {!!saju.sky3 && (
-                    <div className="text-[10px] font-bold">{getHanja(saju.sky3, 'sky')}</div>
+                    <div className="text-xs font-bold">{getHanja(saju.sky3, 'sky')}</div>
                   )}
                 </div>
                 <div
@@ -392,7 +392,7 @@ export default function LoadingFourPillar({ isTimeUnknown, saju, isAnalysisDone 
                 >
                   <div className="text-3xl mb-1">{getIcon(saju.grd3, 'grd')}</div>
                   {!!saju.grd3 && (
-                    <div className="text-[10px] font-bold">{getHanja(saju.grd3, 'grd')}</div>
+                    <div className="text-xs font-bold">{getHanja(saju.grd3, 'grd')}</div>
                   )}
                   <div className="flex w-full opacity-50">
                     {yeonjiji.map((i, idx) => (

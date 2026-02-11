@@ -25,12 +25,12 @@ export default function AdHid({ badge, title, des, hClass = 'h-[500px]', mClass 
             </div>
 
             {/* 메인 타이틀 */}
-            <h3 className="text-[22px] font-black text-slate-900 mb-3 break-keep leading-tight">
+            <h3 className="text-xl font-black text-slate-900 mb-3 break-keep leading-tight">
               {title}
             </h3>
 
             {/* 설명 문구 */}
-            <p className="text-[14px] text-slate-500 mb-8 leading-relaxed break-keep font-medium">
+            <p className="text-sm text-slate-500 mb-8 leading-relaxed break-keep font-medium">
               {des}
             </p>
 

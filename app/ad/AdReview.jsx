@@ -98,7 +98,7 @@ export default function AdReview() {
           {/* 통계 배지: 신생 사이트의 '폭발적 성장'을 강조 */}
           <div className="inline-flex items-center gap-6 bg-white px-8 py-4 rounded-full shadow-[0_4px_20px_rgba(99,102,241,0.08)] border border-indigo-100 mb-8">
             <div className="text-center">
-              <p className="text-[10px] text-slate-400 font-bold tracking-widest uppercase mb-0.5">
+              <p className="text-xs text-slate-400 font-bold tracking-widest uppercase mb-0.5">
                 최근 누적 분석
               </p>
               <p className="text-xl font-black text-slate-800">4,832건</p>
@@ -107,7 +107,7 @@ export default function AdReview() {
             <div className="w-[1px] h-8 bg-slate-100"></div>
 
             <div className="text-center">
-              <p className="text-[10px] text-slate-400 font-bold tracking-widest uppercase mb-0.5">
+              <p className="text-xs text-slate-400 font-bold tracking-widest uppercase mb-0.5">
                 오늘 생성된 리포트
               </p>
               <div className="flex items-center justify-center gap-1.5">
@@ -122,7 +122,7 @@ export default function AdReview() {
             입소문만으로 벌써 <br />
             <span className="text-indigo-600">4,800여 명</span>이 사자사주를 다녀갔습니다.
           </h2>
-          <p className="mt-4 text-[15px] text-slate-500 font-medium">
+          <p className="mt-4 text-sm text-slate-500 font-medium">
             광고 없이도 많은 분들이 선택한 이유, <br className="sm:hidden" /> 직접 분석 결과로
             확인해보세요.
           </p>
@@ -135,15 +135,15 @@ export default function AdReview() {
               key={`row1-${i}`}
               className="inline-block w-[320px] bg-white p-6 rounded-[28px] border border-slate-100 shadow-sm"
             >
-              <div className="flex text-indigo-500 text-[10px] mb-2">
+              <div className="flex text-indigo-500 text-xs mb-2">
                 {'⭐'.repeat(review.stars)}
               </div>
-              <p className="text-[14px] text-slate-800 font-medium whitespace-normal break-keep leading-snug">
+              <p className="text-sm text-slate-800 font-medium whitespace-normal break-keep leading-snug">
                 "{review.text}"
               </p>
               <div className="mt-4 flex justify-between items-center">
-                <p className="text-[11px] text-slate-400 font-bold">{review.user}</p>
-                <span className="text-[10px] font-bold text-indigo-500 bg-indigo-50 px-2 py-0.5 rounded">
+                <p className="text-sm text-slate-400 font-bold">{review.user}</p>
+                <span className="text-xs font-bold text-indigo-500 bg-indigo-50 px-2 py-0.5 rounded">
                   {review.tag}
                 </span>
               </div>
@@ -161,15 +161,15 @@ export default function AdReview() {
                 key={`row2-${i}`}
                 className="inline-block w-[320px] bg-white p-6 rounded-[28px] border border-slate-100 shadow-sm"
               >
-                <div className="flex text-indigo-500 text-[10px] mb-2">
+                <div className="flex text-indigo-500 text-xs mb-2">
                   {'⭐'.repeat(review.stars)}
                 </div>
-                <p className="text-[14px] text-slate-800 font-medium whitespace-normal break-keep leading-snug">
+                <p className="text-sm text-slate-800 font-medium whitespace-normal break-keep leading-snug">
                   "{review.text}"
                 </p>
                 <div className="mt-4 flex justify-between items-center">
-                  <p className="text-[11px] text-slate-400 font-bold">{review.user}</p>
-                  <span className="text-[10px] font-bold text-indigo-500 bg-indigo-50 px-2 py-0.5 rounded">
+                  <p className="text-sm text-slate-400 font-bold">{review.user}</p>
+                  <span className="text-xs font-bold text-indigo-500 bg-indigo-50 px-2 py-0.5 rounded">
                     {review.tag}
                   </span>
                 </div>

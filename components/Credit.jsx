@@ -17,7 +17,7 @@ export default function Credit() {
                     {/* Credits Display */}
                     <div className="flex items-center gap-0.5 border-r border-slate-300 dark:border-slate-600 pr-1.5 mr-1.5">
                         <CurrencyDollarIcon className="w-3.5 h-3.5 text-indigo-500" />
-                        <span className="text-[10px] font-black font-mono text-slate-700 dark:text-slate-200 min-w-[12px] text-center">
+                        <span className="text-xs font-black font-mono text-slate-700 dark:text-slate-200 min-w-[12px] text-center">
                             {userData?.credits || 0}
                         </span>
                     </div>
@@ -28,7 +28,7 @@ export default function Credit() {
                             className={`w-3.5 h-3.5 ${MAX_EDIT_COUNT - editCount === 0 ? 'text-red-500' : 'text-amber-500'} fill-current`}
                         />
                         <span
-                            className={`text-[10px] font-black font-mono ${MAX_EDIT_COUNT - editCount === 0 ? 'text-red-500' : 'text-slate-700 dark:text-slate-200'}`}
+                            className={`text-xs font-black font-mono ${MAX_EDIT_COUNT - editCount === 0 ? 'text-red-500' : 'text-slate-700 dark:text-slate-200'}`}
                         >
                             {MAX_EDIT_COUNT - editCount}
                         </span>

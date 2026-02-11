@@ -15,7 +15,7 @@ export default function SelBirthPreview({ onStart, isDisabled }) {
             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
             <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
           </span>
-          <span className="text-[11px] font-bold text-emerald-600 tracking-tight uppercase">
+          <span className="text-sm font-bold text-emerald-600 tracking-tight uppercase">
             Preview Mode
           </span>
         </div>
@@ -47,11 +47,11 @@ export default function SelBirthPreview({ onStart, isDisabled }) {
                 </div>
                 <div className="grid grid-cols-2 gap-4 pb-4 border-b border-slate-50 dark:border-white/5 opacity-60">
                   <div className="flex flex-col gap-1">
-                    <span className="text-[10px] text-slate-400 font-bold uppercase">{language === 'ko' ? '출산 예정일' : 'DUE DATE'}</span>
+                    <span className="text-xs text-slate-400 font-bold uppercase">{language === 'ko' ? '출산 예정일' : 'DUE DATE'}</span>
                     <span className="text-sm font-black text-emerald-600">2026.05.12</span>
                   </div>
                   <div className="flex flex-col gap-1 text-right">
-                    <span className="text-[10px] text-slate-400 font-bold uppercase self-end">{language === 'ko' ? '아이 성별' : "BABY'S GENDER"}</span>
+                    <span className="text-xs text-slate-400 font-bold uppercase self-end">{language === 'ko' ? '아이 성별' : "BABY'S GENDER"}</span>
                     <span className="text-sm font-black text-slate-800 dark:text-slate-200 self-end uppercase">BOY</span>
                   </div>
                 </div>
@@ -98,7 +98,7 @@ export default function SelBirthPreview({ onStart, isDisabled }) {
                     </div>
                     <div className="flex items-center justify-between mb-3">
                       <span className="text-xl font-black text-emerald-600 dark:text-emerald-400 tracking-tight">{item.date}</span>
-                      <span className="text-[10px] font-bold px-2 py-1 bg-emerald-100 dark:bg-emerald-900 text-emerald-700 dark:text-emerald-300 rounded shadow-sm">
+                      <span className="text-xs font-bold px-2 py-1 bg-emerald-100 dark:bg-emerald-900 text-emerald-700 dark:text-emerald-300 rounded shadow-sm">
                         TOP {idx + 1}
                       </span>
                     </div>

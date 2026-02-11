@@ -123,7 +123,7 @@ export default function AmaEn({ question, setQuestion, setStep }) {
           <div className="w-full flex items-center mt-12 px-2 py-4 border-t border-[#E8DCCF]">
             <div className="flex-1 flex flex-col items-center gap-1.5 opacity-70">
               <Users size={18} className="text-[#F47521]" />
-              <span className="text-[10px] font-black text-gray-500 leading-tight text-center">
+              <span className="text-xs font-black text-gray-500 leading-tight text-center">
                 27 Saju Masters
                 <br />
                 <span className="font-medium text-[9px]">Verified Data Base</span>
@@ -134,7 +134,7 @@ export default function AmaEn({ question, setQuestion, setStep }) {
 
             <div className="flex-1 flex flex-col items-center gap-1.5 opacity-70">
               <Database size={18} className="text-[#F47521]" />
-              <span className="text-[10px] font-black text-gray-500 leading-tight text-center">
+              <span className="text-xs font-black text-gray-500 leading-tight text-center">
                 Thousands of Cases
                 <br />
                 <span className="font-medium text-[9px]">Vast DB Analysis</span>
@@ -145,7 +145,7 @@ export default function AmaEn({ question, setQuestion, setStep }) {
 
             <div className="flex-1 flex flex-col items-center gap-1.5 opacity-70">
               <Brain size={18} className="text-[#F47521]" />
-              <span className="text-[10px] font-black text-gray-500 leading-tight text-center">
+              <span className="text-xs font-black text-gray-500 leading-tight text-center">
                 Customized
                 <br />
                 <span className="font-bold">AI Analysis</span>

@@ -123,7 +123,7 @@ const LoveIcons = () => {
                         )}
 
                         {!item.isReady && (
-                            <span className="absolute -top-1 flex items-center justify-center bg-slate-500 px-1.5 py-0.5 text-[7px] font-bold text-white ring-1 ring-white rounded-md z-10">
+                            <span className="absolute -top-1 flex items-center justify-center bg-slate-500 px-1.5 py-0.5 text-xs font-bold text-white ring-1 ring-white rounded-md z-10">
                                 준비중
                             </span>
                         )}
@@ -151,7 +151,7 @@ const LoveIcons = () => {
                         <span className="text-sm sm:text-xs font-bold text-slate-800 transition-colors group-hover:text-rose-600">
                             {item.label}
                         </span>
-                        <span className="sm:hidden text-[12px] text-slate-400 font-medium truncate w-full">
+                        <span className="sm:hidden text-sm text-slate-400 font-medium truncate w-full">
                             {item.desc}
                         </span>
                     </div>

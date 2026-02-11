@@ -37,11 +37,10 @@ export default function FourPillarVis({ isTimeUnknown, saju }) {
         {/* 1. 하늘 (Sky) 영역 */}
         <div
           className={`h-1/2 w-full relative bg-gradient-to-b overflow-hidden transition-colors duration-700 ease-in-out
-              ${
-                theme === 'dark'
-                  ? 'from-indigo-950/80 via-slate-900/70 to-blue-900/60' // 🌙 밤 배경
-                  : 'from-sky-400/40 via-sky-200/40 to-white/5' // ☀️ 낮 배경
-              }`}
+              ${theme === 'dark'
+              ? 'from-indigo-950/80 via-slate-900/70 to-blue-900/60' // 🌙 밤 배경
+              : 'from-sky-400/40 via-sky-200/40 to-white/5' // ☀️ 낮 배경
+            }`}
         >
           {theme === 'dark' ? (
             // ================= [ 🌙 밤 디자인 ] =================
@@ -143,20 +142,18 @@ export default function FourPillarVis({ isTimeUnknown, saju }) {
         {/* 2. 땅 (Earth) 영역 */}
         <div
           className={`h-1/2 w-full relative bg-gradient-to-b transition-colors duration-700 ease-in-out border-t
-              ${
-                theme === 'dark'
-                  ? 'from-slate-800/50 to-gray-900/70 border-slate-700/30' // 🌙 밤 땅
-                  : 'from-stone-300/40 to-amber-100/60 border-stone-400/20' // ☀️ 낮 땅
-              }`}
+              ${theme === 'dark'
+              ? 'from-slate-800/50 to-gray-900/70 border-slate-700/30' // 🌙 밤 땅
+              : 'from-stone-300/40 to-amber-100/60 border-stone-400/20' // ☀️ 낮 땅
+            }`}
         >
           {/* 지평선 그림자 */}
           <div
             className={`absolute top-0 left-0 w-full h-8 bg-gradient-to-b transition-colors duration-700
-                ${
-                  theme === 'dark'
-                    ? 'from-slate-900/20 to-transparent'
-                    : 'from-stone-500/5 to-transparent'
-                }`}
+                ${theme === 'dark'
+                ? 'from-slate-900/20 to-transparent'
+                : 'from-stone-500/5 to-transparent'
+              }`}
           />
           {/* 바닥 질감 패턴 */}
           <div className="w-full h-full opacity-10 bg-[radial-gradient(#a8a29e_1px,transparent_1px)] [background-size:16px_16px]"></div>
@@ -168,20 +165,20 @@ export default function FourPillarVis({ isTimeUnknown, saju }) {
           <div className="h-4" />
           <div className="h-[90px] flex items-center pr-2 border-r border-sky-700/30">
             <div className="text-right">
-              <span className="block text-[10px] font-bold text-sky-700 uppercase tracking-widest opacity-80 dark:text-cyan-600">
+              <span className="block text-xs font-bold text-sky-700 uppercase tracking-widest opacity-80 dark:text-cyan-600">
                 {language === 'en' ? 'Heavenly' : '천간'}
               </span>
-              <span className="block text-[10px] font-serif font-bold text-gray-700 drop-shadow-sm dark:text-gray-400">
+              <span className="block text-xs font-serif font-bold text-gray-700 drop-shadow-sm dark:text-gray-400">
                 {language === 'en' ? 'Stem' : ''}
               </span>
             </div>
           </div>
           <div className="h-[110px] flex items-center pr-2 border-r border-stone-400/20">
             <div className="text-right">
-              <span className="block text-[10px] font-bold text-stone-500 uppercase tracking-widest opacity-70 dark:text-yellow-600">
+              <span className="block text-xs font-bold text-stone-500 uppercase tracking-widest opacity-70 dark:text-yellow-600">
                 {language === 'en' ? 'Earthly' : '지지'}
               </span>
-              <span className="block text-[10px] font-serif font-bold text-stone-700 drop-shadow-sm dark:text-gray-400">
+              <span className="block text-xs font-serif font-bold text-stone-700 drop-shadow-sm dark:text-gray-400">
                 {language === 'en' ? 'Branch' : ''}
               </span>
             </div>
@@ -201,7 +198,7 @@ export default function FourPillarVis({ isTimeUnknown, saju }) {
               <div className="text-3xl mb-1">{getIcon(saju.sky0, 'sky')}</div>
               {!!saju.sky0 && (
                 <>
-                  <div className="text-[10px] font-bold">{getHanja(saju.sky0, 'sky')}</div>
+                  <div className="text-xs font-bold">{getHanja(saju.sky0, 'sky')}</div>
                   <div className="text-[8px] uppercase tracking-tighter">{t(saju.sky0)}</div>
                 </>
               )}
@@ -216,7 +213,7 @@ export default function FourPillarVis({ isTimeUnknown, saju }) {
               <div className="text-3xl mb-1">{getIcon(saju.grd0, 'grd')}</div>
               {!!saju.grd0 && (
                 <>
-                  <div className="text-[10px] font-bold">{getHanja(saju.grd0, 'grd')}</div>
+                  <div className="text-xs font-bold">{getHanja(saju.grd0, 'grd')}</div>
                   <div className="text-[8px] uppercase tracking-tighter">{t(saju.grd0)}</div>
                 </>
               )}
@@ -251,7 +248,7 @@ export default function FourPillarVis({ isTimeUnknown, saju }) {
             <div className="text-3xl mb-1">{getIcon(saju.sky1, 'sky')}</div>
             {!!saju.sky1 && (
               <>
-                <div className="text-[10px] font-bold">{getHanja(saju.sky1, 'sky')}</div>
+                <div className="text-xs font-bold">{getHanja(saju.sky1, 'sky')}</div>
                 <div className="text-[8px] uppercase tracking-tighter">{t(saju.sky1)}</div>
               </>
             )}
@@ -266,7 +263,7 @@ export default function FourPillarVis({ isTimeUnknown, saju }) {
             <div className="text-3xl mb-1">{getIcon(saju.grd1, 'grd')}</div>
             {!!saju.grd1 && (
               <>
-                <div className="text-[10px] font-bold">{getHanja(saju.grd1, 'grd')}</div>
+                <div className="text-xs font-bold">{getHanja(saju.grd1, 'grd')}</div>
                 <div className="text-[8px] uppercase tracking-tighter">{t(saju.grd1)}</div>
               </>
             )}
@@ -293,7 +290,7 @@ export default function FourPillarVis({ isTimeUnknown, saju }) {
             <div className="text-3xl mb-1">{getIcon(saju.sky2, 'sky')}</div>
             {!!saju.sky2 && (
               <>
-                <div className="text-[10px] font-bold">{getHanja(saju.sky2, 'sky')}</div>
+                <div className="text-xs font-bold">{getHanja(saju.sky2, 'sky')}</div>
                 <div className="text-[8px] uppercase tracking-tighter">{t(saju.sky2)}</div>
               </>
             )}
@@ -308,7 +305,7 @@ export default function FourPillarVis({ isTimeUnknown, saju }) {
             <div className="text-3xl mb-1">{getIcon(saju.grd2, 'grd')}</div>
             {!!saju.grd2 && (
               <>
-                <div className="text-[10px] font-bold">{getHanja(saju.grd2, 'grd')}</div>
+                <div className="text-xs font-bold">{getHanja(saju.grd2, 'grd')}</div>
                 <div className="text-[8px] uppercase tracking-tighter">{t(saju.grd2)}</div>
               </>
             )}
@@ -335,7 +332,7 @@ export default function FourPillarVis({ isTimeUnknown, saju }) {
             <div className="text-3xl mb-1">{getIcon(saju.sky3, 'sky')}</div>
             {!!saju.sky3 && (
               <>
-                <div className="text-[10px] font-bold">{getHanja(saju.sky3, 'sky')}</div>
+                <div className="text-xs font-bold">{getHanja(saju.sky3, 'sky')}</div>
                 <div className="text-[8px] uppercase tracking-tighter">{t(saju.sky3)}</div>
               </>
             )}
@@ -350,7 +347,7 @@ export default function FourPillarVis({ isTimeUnknown, saju }) {
             <div className="text-3xl mb-1">{getIcon(saju.grd3, 'grd')}</div>
             {!!saju.grd3 && (
               <>
-                <div className="text-[10px] font-bold">{getHanja(saju.grd3, 'grd')}</div>
+                <div className="text-xs font-bold">{getHanja(saju.grd3, 'grd')}</div>
                 <div className="text-[8px] uppercase tracking-tighter">{t(saju.grd3)}</div>
               </>
             )}

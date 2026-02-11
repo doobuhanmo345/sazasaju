@@ -44,7 +44,7 @@ export default function CopyUrl2({ saju, from }) {
 
     return (
         <div className="mt-4 bg-white dark:bg-slate-800 p-4 rounded-2xl shadow-sm border border-indigo-100 dark:border-slate-700">
-            <p className="text-[14px] text-slate-600 dark:text-slate-300 mb-3 font-medium leading-relaxed">
+            <p className="text-sm text-slate-600 dark:text-slate-300 mb-3 font-medium leading-relaxed">
                 {isKo
                     ? '더 많은 운세와 맞춤 상담이 필요하신가요? 사자사주에 로그인하고 무료로 확인해보세요!'
                     : 'Need more insights? Login to Saza Saju for full readings!'}
@@ -57,7 +57,7 @@ export default function CopyUrl2({ saju, from }) {
                     className="w-full flex items-center justify-center gap-2 p-3 bg-[#FEE500] hover:bg-[#FDD835] text-[#191919] rounded-xl font-bold transition-all active:scale-[0.98] shadow-sm"
                 >
                     <SiKakaotalk className="w-5 h-5" />
-                    <span className="text-[14px]">{isKo ? '카카오로 3초 만에 시작하기' : 'Continue with Kakao'}</span>
+                    <span className="text-sm">{isKo ? '카카오로 3초 만에 시작하기' : 'Continue with Kakao'}</span>
                 </button>
 
                 {/* Copy Link Button */}
@@ -65,10 +65,10 @@ export default function CopyUrl2({ saju, from }) {
                     onClick={handleCopy}
                     className="w-full flex items-center justify-between p-3 bg-indigo-50 dark:bg-slate-700 rounded-xl border border-indigo-100 dark:border-slate-600 active:scale-[0.98] transition-all group"
                 >
-                    <span className="text-[13px] text-indigo-600 dark:text-indigo-300 font-bold font-mono truncate px-2">
+                    <span className="text-sm text-indigo-600 dark:text-indigo-300 font-bold font-mono truncate px-2">
                         {typeof window !== 'undefined' ? window.location.host : 'sazasaju.com'}
                     </span>
-                    <span className="shrink-0 bg-indigo-600 text-white text-[12px] font-bold px-3 py-1.5 rounded-lg shadow-sm group-hover:bg-indigo-700">
+                    <span className="shrink-0 bg-indigo-600 text-white text-sm font-bold px-3 py-1.5 rounded-lg shadow-sm group-hover:bg-indigo-700">
                         {isKo ? '복사' : 'Copy'}
                     </span>
                 </button>

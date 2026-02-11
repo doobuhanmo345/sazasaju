@@ -363,7 +363,7 @@ function MessagesContent() {
           <h1 className="text-3xl font-black tracking-tighter text-slate-900 dark:text-white uppercase">
             Message <span className="text-purple-600">Box</span>
           </h1>
-          <p className="text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest flex items-center gap-2">
+          <p className="text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest flex items-center gap-2">
             <span className="w-1.5 h-1.5 rounded-full bg-purple-500 animate-pulse"></span>
             Direct Communications
           </p>
@@ -371,7 +371,7 @@ function MessagesContent() {
 
         <button
           onClick={handleNewInquiry}
-          className="px-6 py-3 bg-slate-900 dark:bg-white text-white dark:text-slate-900 rounded-2xl font-black text-[10px] uppercase tracking-widest shadow-lg hover:scale-105 transition-all active:scale-95 flex items-center gap-2"
+          className="px-6 py-3 bg-slate-900 dark:bg-white text-white dark:text-slate-900 rounded-2xl font-black text-xs uppercase tracking-widest shadow-lg hover:scale-105 transition-all active:scale-95 flex items-center gap-2"
         >
           <ChatBubbleLeftRightIcon className="w-4 h-4" />
           {language === 'ko' ? '새 문의하기' : 'New Inquiry'}
@@ -388,7 +388,7 @@ function MessagesContent() {
           <button
             key={tab.id}
             onClick={() => setActiveTab(tab.id)}
-            className={`flex-1 min-w-[100px] py-3 px-4 rounded-[1.2rem] text-[10px] font-black uppercase tracking-widest transition-all flex items-center justify-center gap-2 whitespace-nowrap ${activeTab === tab.id
+            className={`flex-1 min-w-[100px] py-3 px-4 rounded-[1.2rem] text-xs font-black uppercase tracking-widest transition-all flex items-center justify-center gap-2 whitespace-nowrap ${activeTab === tab.id
               ? 'bg-white dark:bg-slate-900 text-purple-600 shadow-sm'
               : 'text-slate-400 hover:text-slate-600'
               }`}
@@ -406,7 +406,7 @@ function MessagesContent() {
       {/* 사자톡 보관 안내 문구 */}
       {activeTab === 'sazatalk' && (
         <div className="mb-6 px-6 py-4 bg-purple-50/50 dark:bg-purple-900/10 rounded-2xl border border-purple-100/50 dark:border-purple-800/30">
-          <p className="text-[10px] font-bold text-purple-600 dark:text-purple-400 leading-relaxed uppercase tracking-wider">
+          <p className="text-xs font-bold text-purple-600 dark:text-purple-400 leading-relaxed uppercase tracking-wider">
             {language === 'ko'
               ? '💡 저장된 상담(최대 3개)은 안전하게 보관되며, 최근 상담(최대 3개)은 새로운 상담 시 자동으로 업데이트됩니다.'
               : '💡 Saved consults (max 3) are kept safe, while recent consults (max 3) are auto-updated with new sessions.'}
@@ -466,7 +466,7 @@ function MessagesContent() {
                               <span className="px-1.5 py-0.5 rounded text-[8px] font-black uppercase tracking-widest bg-blue-100 text-blue-600">
                                 {language === 'ko' ? '리포트' : 'Report'}
                               </span>
-                              <span className="text-[10px] font-black text-slate-900 dark:text-white truncate">
+                              <span className="text-xs font-black text-slate-900 dark:text-white truncate">
                                 {language === 'ko' ? '분석 리포트' : 'Analysis Report'}
                               </span>
                             </div>
@@ -507,7 +507,7 @@ function MessagesContent() {
                               <span className={`px-1.5 py-0.5 rounded text-[8px] font-black uppercase tracking-widest ${msg.type === 'sent' ? 'bg-slate-100 text-slate-500' : 'bg-purple-100 text-purple-600'}`}>
                                 {msg.type === 'sent' ? 'Sent' : 'Received'}
                               </span>
-                              <span className="text-[10px] font-black text-slate-900 dark:text-white truncate">
+                              <span className="text-xs font-black text-slate-900 dark:text-white truncate">
                                 {msg.type === 'sent' ? msg.receiverName : msg.senderName}
                               </span>
                               {msg.type === 'received' && !msg.isRead && (
@@ -579,7 +579,7 @@ function MessagesContent() {
             <button
               onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
               disabled={currentPage === 1}
-              className="px-3 py-1 text-[10px] font-black text-slate-400 hover:text-purple-600 disabled:opacity-30 uppercase tracking-widest transition-all"
+              className="px-3 py-1 text-xs font-black text-slate-400 hover:text-purple-600 disabled:opacity-30 uppercase tracking-widest transition-all"
             >
               Prev
             </button>
@@ -598,7 +598,7 @@ function MessagesContent() {
                     <button
                       key={p}
                       onClick={() => setCurrentPage(p)}
-                      className={`w-6 h-6 rounded-lg text-[10px] font-black transition-all ${currentPage === p
+                      className={`w-6 h-6 rounded-lg text-xs font-black transition-all ${currentPage === p
                         ? 'bg-purple-600 text-white shadow-md shadow-purple-500/30'
                         : 'text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800'
                         }`}
@@ -612,7 +612,7 @@ function MessagesContent() {
             <button
               onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
               disabled={currentPage === totalPages}
-              className="px-3 py-1 text-[10px] font-black text-slate-400 hover:text-purple-600 disabled:opacity-30 uppercase tracking-widest transition-all"
+              className="px-3 py-1 text-xs font-black text-slate-400 hover:text-purple-600 disabled:opacity-30 uppercase tracking-widest transition-all"
             >
               Next
             </button>

@@ -92,7 +92,7 @@ export default function SazaTalkResultModal({ question, answer, onClose, message
                 {/* Modal Content */}
                 <div ref={contentRef} className="p-6 max-h-[70vh] overflow-y-auto space-y-6">
                     <div>
-                        <div className="text-[10px] font-black text-violet-500 uppercase mb-2 tracking-widest">
+                        <div className="text-xs font-black text-violet-500 uppercase mb-2 tracking-widest">
                             {language === 'ko' ? '질문' : 'Question'}
                         </div>
                         <div className="bg-slate-50 dark:bg-slate-800/50 p-4 rounded-2xl border border-slate-100 dark:border-slate-800">
@@ -103,7 +103,7 @@ export default function SazaTalkResultModal({ question, answer, onClose, message
                     </div>
 
                     <div>
-                        <div className="text-[10px] font-black text-violet-500 uppercase mb-2 tracking-widest">
+                        <div className="text-xs font-black text-violet-500 uppercase mb-2 tracking-widest">
                             {language === 'ko' ? '사자의 답변' : "Saza's Answer"}
                         </div>
                         <div className="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-violet-100/50 dark:border-violet-900/20 shadow-sm overflow-hidden text-sm leading-relaxed text-slate-600 dark:text-slate-400">
@@ -134,7 +134,7 @@ export default function SazaTalkResultModal({ question, answer, onClose, message
                                             {typeof parsedData.saza === 'object' ? (
                                                 <div className="text-sm">
                                                     {parsedData.saza.category && (
-                                                        <span className="inline-block px-2 py-0.5 bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 rounded text-[10px] font-bold mr-2">
+                                                        <span className="inline-block px-2 py-0.5 bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 rounded text-xs font-bold mr-2">
                                                             {parsedData.saza.category}
                                                         </span>
                                                     )}
@@ -161,14 +161,14 @@ export default function SazaTalkResultModal({ question, answer, onClose, message
                     <div className="flex gap-2">
                         <button
                             onClick={handleCopy}
-                            className="flex items-center gap-1 text-[10px] sm:text-xs text-slate-400 hover:text-slate-600 transition-colors px-2 py-1 rounded-md hover:bg-slate-50 dark:hover:bg-slate-800"
+                            className="flex items-center gap-1 text-xs sm:text-xs text-slate-400 hover:text-slate-600 transition-colors px-2 py-1 rounded-md hover:bg-slate-50 dark:hover:bg-slate-800"
                         >
                             <ClipboardDocumentIcon className="w-3 h-3 sm:w-4 sm:h-4" />
                             {language === 'ko' ? '복사' : 'Copy'}
                         </button>
                         <button
                             onClick={handleCapture}
-                            className="flex items-center gap-1 text-[10px] sm:text-xs text-slate-400 hover:text-slate-600 transition-colors px-2 py-1 rounded-md hover:bg-slate-50 dark:hover:bg-slate-800"
+                            className="flex items-center gap-1 text-xs sm:text-xs text-slate-400 hover:text-slate-600 transition-colors px-2 py-1 rounded-md hover:bg-slate-50 dark:hover:bg-slate-800"
                         >
                             <CameraIcon className="w-3 h-3 sm:w-4 sm:h-4" />
                             {language === 'ko' ? '저장' : 'Save'}
@@ -180,7 +180,7 @@ export default function SazaTalkResultModal({ question, answer, onClose, message
                             {onSave && (
                                 <button
                                     onClick={() => onSave(messageId)}
-                                    className={`px-4 py-2 text-[10px] font-black uppercase tracking-widest rounded-xl transition-all shadow-sm ${isSaved
+                                    className={`px-4 py-2 text-xs font-black uppercase tracking-widest rounded-xl transition-all shadow-sm ${isSaved
                                         ? 'bg-amber-100 text-amber-600 border border-amber-200'
                                         : 'bg-violet-600 text-white hover:bg-violet-700'
                                         }`}
@@ -191,7 +191,7 @@ export default function SazaTalkResultModal({ question, answer, onClose, message
                             {onDelete && (
                                 <button
                                     onClick={() => onDelete(messageId)}
-                                    className="px-4 py-2 bg-red-50 text-red-500 hover:bg-red-100 text-[10px] font-black uppercase tracking-widest rounded-xl transition-all border border-red-100"
+                                    className="px-4 py-2 bg-red-50 text-red-500 hover:bg-red-100 text-xs font-black uppercase tracking-widest rounded-xl transition-all border border-red-100"
                                 >
                                     {language === 'ko' ? '삭제' : 'Delete'}
                                 </button>
@@ -203,7 +203,7 @@ export default function SazaTalkResultModal({ question, answer, onClose, message
                 {/* Footer Note */}
                 {!isSaved && (
                     <div className="p-4 bg-slate-50/50 dark:bg-slate-800/20 text-center">
-                        <p className="text-[11px] text-slate-400 break-keep leading-relaxed font-medium">
+                        <p className="text-sm text-slate-400 break-keep leading-relaxed font-medium">
                             {language === 'ko'
                                 ? '저장하지 않으면 최근 3개만 자동 보관되며,\n새로운 상담 시 오래된 내역은 삭제됩니다.'
                                 : 'Only the last 3 unsaved consultations are kept.\nOlder ones will be deleted when new consultations are created.'}

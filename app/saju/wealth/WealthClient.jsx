@@ -397,7 +397,7 @@ export default function Wealth({ }) {
                           {labelText}
                         </span>
                         {language !== 'en' && (
-                          <span className={`text-[10px] font-bold uppercase tracking-wider ${isSelected ? 'opacity-70 dark:text-slate-600' : 'text-slate-400'}`}>
+                          <span className={`text-xs font-bold uppercase tracking-wider ${isSelected ? 'opacity-70 dark:text-slate-600' : 'text-slate-400'}`}>
                             {type.sub}
                           </span>
                         )}
@@ -495,7 +495,7 @@ export default function Wealth({ }) {
                     <RelIcon className="w-5 h-5 sm:w-6 sm:h-6" />
                   </div>
                   <div className="flex flex-col text-left">
-                    <span className="text-[10px] uppercase font-bold text-slate-400 tracking-wider">Topic</span>
+                    <span className="text-xs uppercase font-bold text-slate-400 tracking-wider">Topic</span>
                     <span className={`text-base sm:text-lg font-bold ${qData?.color ? 'text-slate-700 dark:text-slate-200' : 'text-slate-700 dark:text-slate-200'}`}>
                       {qLabel}
                     </span>
@@ -519,7 +519,7 @@ export default function Wealth({ }) {
                     <SparklesIcon className="w-5 h-5 sm:w-6 sm:h-6" />
                   </div>
                   <div className="flex flex-col text-left">
-                    <span className="text-[10px] uppercase font-bold text-indigo-400 tracking-wider">Detail</span>
+                    <span className="text-xs uppercase font-bold text-indigo-400 tracking-wider">Detail</span>
                     <span className="text-base sm:text-lg font-bold text-indigo-900 dark:text-indigo-100">{subLabel}</span>
                   </div>
                 </div>
@@ -561,7 +561,7 @@ export default function Wealth({ }) {
               {language === 'ko' ? '크레딧이 부족합니다..' : 'not Enough credit'}
             </p>
           ) : (
-            <p className="text-center mt-4 text-[11px] text-slate-400">
+            <p className="text-center mt-4 text-sm text-slate-400">
               {language === 'ko' ? '이미 분석된 운세는 크래딧을 재소모하지 않습니다.' : 'Fortunes that have already been analyzed do not use credits.'}
             </p>
           )}

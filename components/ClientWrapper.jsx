@@ -50,7 +50,7 @@ export default function ClientWrapper({ children }) {
   );
 
   // Special logic for Credit page: Hide Navbar (it has its own) but show MenuBar
-  const isNoNavbarPath = isSpecialPath || pathname === '/credit' || pathname.startsWith('/credit/');
+  const isNoNavbarPath = isSpecialPath || pathname === '/credit' || pathname.startsWith('/credit/') || pathname === '/mypage' || pathname.startsWith('/mypage/');
 
   // 2. Redirection logic for missing birthDate
   useEffect(() => {
@@ -129,7 +129,7 @@ export default function ClientWrapper({ children }) {
           <AppBanner />
         </div>
 
-        <div className="mt-3">{children}</div>
+        <div className="">{children}</div>
 
       </main>
 

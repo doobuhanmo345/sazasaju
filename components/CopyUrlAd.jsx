@@ -41,14 +41,14 @@ export default function CopyUrlAd({ saju, from }) {
           className="block sm:flex  items-center justify-between bg-white p-4 rounded-2xl border border-[#E8DCCF] cursor-pointer hover:border-[#F47521] transition-all group active:scale-[0.98]"
         >
           <div className="text-[#F47521] font-mono text-sm font-bold">{window.location.origin}</div>
-          <div className="text-[13px] bg-[#F47521] text-white px-3 py-1.5 sm:my-0 my-2 rounded-full font-black shadow-sm group-hover:bg-orange-800 transition-colors">
+          <div className="text-sm bg-[#F47521] text-white px-3 py-1.5 sm:my-0 my-2 rounded-full font-black shadow-sm group-hover:bg-orange-800 transition-colors">
             {language === 'ko' ? '링크 복사하기' : 'Copy Url'}
           </div>
         </div>
 
         <div className="flex items-start space-x-2 text-left bg-orange-50/50 p-4 rounded-2xl border border-orange-100/50">
           <span className="text-[#F47521] text-sm mt-0.5">💡</span>
-          <p className="text-[12px] text-orange-800/80 font-medium leading-normal break-keep">
+          <p className="text-sm text-orange-800/80 font-medium leading-normal break-keep">
             {language === 'ko'
               ? '위 주소를 복사한 뒤, 브라우저 주소창에 붙여넣어 접속해주세요.'
               : 'Please copy the link above and paste it into your browser to continue.'}

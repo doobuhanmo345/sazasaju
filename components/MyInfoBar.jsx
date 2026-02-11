@@ -61,7 +61,7 @@ export default function MyInfoBar() {
 
         {/* Gender Badge */}
         <div
-          className={`px-1.5 py-0.5 rounded text-[10px] font-bold uppercase shrink-0 ${target.gender === 'male'
+          className={`px-1.5 py-0.5 rounded text-xs font-bold uppercase shrink-0 ${target.gender === 'male'
             ? 'bg-blue-50 text-blue-500 dark:bg-blue-900/30'
             : 'bg-rose-50 text-rose-500 dark:bg-rose-900/30'
             }`}

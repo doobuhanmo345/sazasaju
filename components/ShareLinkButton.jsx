@@ -58,7 +58,6 @@ export default function ShareLinkButton({ fortuneType = 'basic', storageKey }) {
                 aiResult: aiResult,
                 userQuestion: question || historyItem,
             };
-            console.log(historyItem)
 
             // Compress using LZString for client-side legacy support
             const jsonStr = JSON.stringify(shareData);
@@ -138,8 +137,6 @@ export default function ShareLinkButton({ fortuneType = 'basic', storageKey }) {
         }
     };
 
-
-    console.log(isCopied)
 
     return (
         <button

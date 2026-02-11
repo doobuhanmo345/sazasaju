@@ -183,15 +183,15 @@ const PayWall = () => {
     const texts =
       language === 'ko'
         ? [
-            '천간과 지지를 분석 중입니다...',
-            '오행의 기운을 계산하고 있습니다...',
-            '운명의 흐름을 읽어내는 중...',
-          ]
+          '천간과 지지를 분석 중입니다...',
+          '오행의 기운을 계산하고 있습니다...',
+          '운명의 흐름을 읽어내는 중...',
+        ]
         : [
-            'Analyzing Heavenly Stems...',
-            'Calculating Five Elements...',
-            'Reading the flow of destiny...',
-          ];
+          'Analyzing Heavenly Stems...',
+          'Calculating Five Elements...',
+          'Reading the flow of destiny...',
+        ];
 
     setLoadingText(texts[0]);
     setTimeout(() => setLoadingText(texts[1]), 1000);
@@ -313,15 +313,15 @@ const PayWall = () => {
     const texts =
       language === 'ko'
         ? [
-            '천간과 지지를 분석 중입니다...',
-            '오행의 기운을 계산하고 있습니다...',
-            '운명의 흐름을 읽어내는 중...',
-          ]
+          '천간과 지지를 분석 중입니다...',
+          '오행의 기운을 계산하고 있습니다...',
+          '운명의 흐름을 읽어내는 중...',
+        ]
         : [
-            'Analyzing Heavenly Stems...',
-            'Calculating Five Elements...',
-            'Reading the flow of destiny...',
-          ];
+          'Analyzing Heavenly Stems...',
+          'Calculating Five Elements...',
+          'Reading the flow of destiny...',
+        ];
 
     setLoadingText(texts[0]);
     setTimeout(() => setLoadingText(texts[1]), 1000);
@@ -501,7 +501,7 @@ const PayWall = () => {
               <div>
                 <div className="flex items-center gap-1.5 animate-pulse">
                   <ChatBubbleLeftRightIcon className="w-4 h-4 text-indigo-500" />
-                  <span className="text-[18px] font-black text-indigo-600 ">
+                  <span className="text-lg font-black text-indigo-600 ">
                     {language === 'ko'
                       ? !gender
                         ? guideMessages.ko.putGender
@@ -535,7 +535,7 @@ const PayWall = () => {
               <div className="flex justify-between items-center px-1">
                 <div className="flex items-center gap-1">
                   <CakeIcon className="w-4 h-4 text-indigo-500" />
-                  <span className="text-[10px] font-black text-slate-400 uppercase tracking-tighter">
+                  <span className="text-xs font-black text-slate-400 uppercase tracking-tighter">
                     Progress
                   </span>
                 </div>
@@ -560,11 +560,10 @@ const PayWall = () => {
                       <div
                         key={report.id}
                         onClick={() => setSelectedReport(report.id)} // 클릭 시 해당 ID로 교체
-                        className={`flex items-center p-4 rounded-xl border-2 cursor-pointer transition-all ${
-                          selectedReport === report.id
-                            ? 'border-indigo-500 bg-indigo-50 shadow-md'
-                            : 'border-gray-100 opacity-60 hover:opacity-100'
-                        }`}
+                        className={`flex items-center p-4 rounded-xl border-2 cursor-pointer transition-all ${selectedReport === report.id
+                          ? 'border-indigo-500 bg-indigo-50 shadow-md'
+                          : 'border-gray-100 opacity-60 hover:opacity-100'
+                          }`}
                       >
                         <span className="text-2xl mr-4">{report.icon}</span>
                         <div className="flex-1">
@@ -577,11 +576,10 @@ const PayWall = () => {
 
                         {/* 선택 표시 동그라미 (Radio 스타일) */}
                         <div
-                          className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${
-                            selectedReport === report.id
-                              ? 'border-indigo-500 bg-indigo-500'
-                              : 'border-gray-300'
-                          }`}
+                          className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${selectedReport === report.id
+                            ? 'border-indigo-500 bg-indigo-500'
+                            : 'border-gray-300'
+                            }`}
                         >
                           {selectedReport === report.id && (
                             <div className="w-2 h-2 bg-white rounded-full" />
@@ -670,7 +668,7 @@ const PayWall = () => {
                     ? me_exp.full_text_en.slice(0, 600) + '...'
                     : me_exp?.full_text_en || 'Loading...'}
                 </div>
-                <div className="text-[10px] text-gray-400 mt-1 font-mono tracking-widest text-center">
+                <div className="text-xs text-gray-400 mt-1 font-mono tracking-widest text-center">
                   --- FULL ANALYSIS LOCKED ---
                 </div>
               </div>
@@ -697,7 +695,7 @@ const PayWall = () => {
                     : me_exp_g?.full_text_en || 'Loading...'}
                 </div>
               </div>
-              <div className="text-[10px] text-gray-400 mt-1 font-mono tracking-widest text-center">
+              <div className="text-xs text-gray-400 mt-1 font-mono tracking-widest text-center">
                 --- FULL ANALYSIS LOCKED ---
               </div>
             </section>
@@ -793,7 +791,7 @@ const PayWall = () => {
                       </p>
                     </div>
                   )}
-                  <p className="mt-6 text-[10px] text-slate-400 uppercase tracking-widest font-semibold">
+                  <p className="mt-6 text-xs text-slate-400 uppercase tracking-widest font-semibold">
                     Trusted by 5,000+ Seekers
                   </p>
                 </div>

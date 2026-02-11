@@ -28,7 +28,7 @@ export default function LoginStatus() {
           </div>
           <div className="flex flex-col justify-center">
             {/* [추가] 너의 오늘 크레딧 제목 */}
-            <span className="text-[11px] font-bold text-gray-500 dark:text-gray-400 mb-0.5 whitespace-nowrap">
+            <span className="text-xs font-bold text-gray-500 dark:text-gray-400 mb-0.5 whitespace-nowrap">
               {language === 'ko' ? '오늘의 크레딧' : "Today's Credit"}
             </span>
 
@@ -38,7 +38,7 @@ export default function LoginStatus() {
               >
                 {remainingCredit}
               </span>
-              <span className="text-[10px] font-bold text-gray-400">/ {MAX_EDIT_COUNT}</span>
+              <span className="text-xs font-bold text-gray-400">/ {MAX_EDIT_COUNT}</span>
             </div>
             {/* 다음 충전 타이머 */}
             {remainingCredit < MAX_EDIT_COUNT && timeLeft && (
@@ -55,7 +55,7 @@ export default function LoginStatus() {
           <div className="text-4xl">🥠</div>
           <div className="flex flex-col items-end mr-1">
             <div className="flex flex-col items-center gap-0.5">
-              <span className="text-[12px] font-bold text-slate-700 dark:text-white whitespace-nowrap">
+              <span className="text-sm font-bold text-slate-700 dark:text-white whitespace-nowrap">
                 {language === 'ko' ? '포춘쿠키(1일 1회)' : 'Fortune(once a day)'}
               </span>
               <span className="text-[9px] font-medium text-indigo-500 dark:text-indigo-400 whitespace-nowrap">
@@ -63,23 +63,23 @@ export default function LoginStatus() {
               </span>
             </div>
             <button
-              className={`w-full text-[11px] font-extrabold px-3 py-1 my-2 rounded-lg shadow-sm transition-all 
+              className={`w-full text-sm font-extrabold px-3 py-1 my-2 rounded-lg shadow-sm transition-all 
     ${
-      // isCookieDone
-      true
-        ? 'bg-gray-200 dark:bg-slate-700 text-gray-400 cursor-not-allowed opacity-60' // 비활성화 스타일
-        : 'bg-yellow-500 hover:bg-yellow-400 text-slate-950 active:scale-95' // 활성화 스타일
-    }`}
+                // isCookieDone
+                true
+                  ? 'bg-gray-200 dark:bg-slate-700 text-gray-400 cursor-not-allowed opacity-60' // 비활성화 스타일
+                  : 'bg-yellow-500 hover:bg-yellow-400 text-slate-950 active:scale-95' // 활성화 스타일
+                }`}
             >
               {
-              // isCookieDone 
-              true
-                ? language === 'ko'
-                  ? '완료'
-                  : 'Done'
-                : language === 'ko'
-                  ? '받기'
-                  : 'Open'}
+                // isCookieDone 
+                true
+                  ? language === 'ko'
+                    ? '완료'
+                    : 'Done'
+                  : language === 'ko'
+                    ? '받기'
+                    : 'Open'}
             </button>
           </div>
         </div>

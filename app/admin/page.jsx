@@ -273,7 +273,7 @@ export default function AdminPage() {
               </button>
             </div>
             <div className="flex items-center justify-between px-1">
-              <span className="text-[10px] text-gray-500 uppercase font-bold tracking-wider">
+              <span className="text-xs text-gray-500 uppercase font-bold tracking-wider">
                 Current Value
               </span>
               <span className="text-sm font-bold text-blue-600 bg-blue-50 dark:bg-blue-900/30 px-3 py-1 rounded-full">
@@ -304,7 +304,7 @@ export default function AdminPage() {
               </button>
             </div>
             <div className="flex items-center justify-between px-1">
-              <span className="text-[10px] text-gray-500 uppercase font-bold tracking-wider">
+              <span className="text-xs text-gray-500 uppercase font-bold tracking-wider">
                 Current Credits
               </span>
               <span className="text-sm font-bold text-green-600 bg-green-50 dark:bg-green-900/30 px-3 py-1 rounded-full">
@@ -356,7 +356,7 @@ export default function AdminPage() {
                         >
                           {item.label}
                         </p>
-                        <p className="text-[10px] text-gray-400 font-medium">
+                        <p className="text-xs text-gray-400 font-medium">
                           {hasData ? '데이터 저장됨' : '비어있음'}
                         </p>
                       </div>
@@ -414,7 +414,7 @@ export default function AdminPage() {
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 bg-gray-50 dark:bg-slate-800/50 p-5 rounded-[1.5rem]">
                         <div className="space-y-4">
                           <div>
-                            <p className="text-[10px] font-black text-purple-500 uppercase tracking-widest mb-1">
+                            <p className="text-xs font-black text-purple-500 uppercase tracking-widest mb-1">
                               소개 및 포부
                             </p>
                             <p className="text-sm text-gray-700 dark:text-gray-300 font-medium leading-relaxed italic line-clamp-2">
@@ -422,7 +422,7 @@ export default function AdminPage() {
                             </p>
                           </div>
                           <div>
-                            <p className="text-[10px] font-black text-purple-500 uppercase tracking-widest mb-1">
+                            <p className="text-xs font-black text-purple-500 uppercase tracking-widest mb-1">
                               전문 경력
                             </p>
                             <p className="text-sm font-bold text-gray-900 dark:text-gray-100 line-clamp-1">
@@ -431,14 +431,14 @@ export default function AdminPage() {
                           </div>
                         </div>
                         <div className="flex flex-col">
-                          <p className="text-[10px] font-black text-purple-500 uppercase tracking-widest mb-3">
+                          <p className="text-xs font-black text-purple-500 uppercase tracking-widest mb-3">
                             상담 방식
                           </p>
                           <div className="flex flex-wrap gap-2">
                             {(app.consultationMethods || []).map((method) => (
                               <span
                                 key={method}
-                                className="px-3 py-1 bg-white dark:bg-slate-900 rounded-full text-[11px] font-bold text-gray-600 dark:text-gray-400 border border-gray-100 dark:border-slate-700 shadow-sm"
+                                className="px-3 py-1 bg-white dark:bg-slate-900 rounded-full text-sm font-bold text-gray-600 dark:text-gray-400 border border-gray-100 dark:border-slate-700 shadow-sm"
                               >
                                 {method === 'text' && '💬 채팅'}
                                 {method === 'video' && '📹 화상'}
@@ -499,7 +499,7 @@ export default function AdminPage() {
                 if (filtered.length === 0) {
                   return (
                     <div className="py-16 text-center text-slate-400">
-                      <p className="text-[11px] font-bold uppercase tracking-widest">No inquiries found in this view</p>
+                      <p className="text-sm font-bold uppercase tracking-widest">No inquiries found in this view</p>
                     </div>
                   );
                 }
@@ -517,7 +517,7 @@ export default function AdminPage() {
                         <div className="flex-grow min-w-0">
                           <div className="flex items-center gap-2 mb-1">
                             <span className={`w-1.5 h-1.5 rounded-full ${msg.isProcessed ? 'bg-slate-300' : 'bg-blue-500'}`}></span>
-                            <span className="text-[10px] font-black text-slate-900 dark:text-white uppercase truncate max-w-[120px]">
+                            <span className="text-xs font-black text-slate-900 dark:text-white uppercase truncate max-w-[120px]">
                               {msg.senderName}
                             </span>
                             <span className="text-[9px] font-bold text-slate-400 dark:text-slate-600">
@@ -564,7 +564,7 @@ export default function AdminPage() {
                         <button
                           onClick={() => setAdminPage(p => Math.max(1, p - 1))}
                           disabled={adminPage === 1}
-                          className="px-3 py-1 text-[10px] font-black text-slate-400 hover:text-blue-600 disabled:opacity-30 uppercase tracking-widest"
+                          className="px-3 py-1 text-xs font-black text-slate-400 hover:text-blue-600 disabled:opacity-30 uppercase tracking-widest"
                         >
                           Prev
                         </button>
@@ -573,7 +573,7 @@ export default function AdminPage() {
                             <button
                               key={i}
                               onClick={() => setAdminPage(i + 1)}
-                              className={`w-6 h-6 rounded-lg text-[10px] font-black transition-all ${adminPage === i + 1
+                              className={`w-6 h-6 rounded-lg text-xs font-black transition-all ${adminPage === i + 1
                                 ? 'bg-blue-600 text-white shadow-md shadow-blue-500/30'
                                 : 'text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800'
                                 }`}
@@ -585,7 +585,7 @@ export default function AdminPage() {
                         <button
                           onClick={() => setAdminPage(p => Math.min(totalPages, p + 1))}
                           disabled={adminPage === totalPages}
-                          className="px-3 py-1 text-[10px] font-black text-slate-400 hover:text-blue-600 disabled:opacity-30 uppercase tracking-widest"
+                          className="px-3 py-1 text-xs font-black text-slate-400 hover:text-blue-600 disabled:opacity-30 uppercase tracking-widest"
                         >
                           Next
                         </button>
@@ -652,7 +652,7 @@ export default function AdminPage() {
         </div>
 
         <footer className="pt-10 border-t border-gray-100 dark:border-gray-800 text-center">
-          <p className="text-[11px] text-gray-400 dark:text-gray-500 uppercase tracking-widest font-semibold">
+          <p className="text-sm text-gray-400 dark:text-gray-500 uppercase tracking-widest font-semibold">
             Administrator Access Only
           </p>
         </footer>

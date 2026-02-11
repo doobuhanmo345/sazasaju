@@ -125,7 +125,7 @@ export default function NavBar() {
           ) : (
             <div className="flex items-center gap-1 pl-1 py-1">
               <ArrowLeftIcon className="w-5 h-5 text-slate-800 dark:text-white stroke-2" />
-              <span className="text-[15px] font-bold text-slate-800 dark:text-white">{language === 'ko' ? '뒤로' : 'Back'}</span>
+              <span className="text-sn font-bold text-slate-800 dark:text-white">{language === 'ko' ? '뒤로' : 'Back'}</span>
             </div>
           )}
         </div>
@@ -154,7 +154,7 @@ export default function NavBar() {
               <div className="absolute right-0 mt-3 w-64 origin-top-right bg-white dark:bg-slate-800 rounded-2xl shadow-xl ring-1 ring-black ring-opacity-5 z-50 overflow-hidden border border-gray-100 dark:border-gray-700 animate-in fade-in zoom-in-95 duration-200">
                 <div className="p-2 space-y-1">
                   {/* Menu List */}
-                  <p className="px-3 py-2 text-[10px] font-bold text-gray-400 uppercase tracking-wider">
+                  <p className="px-3 py-2 text-xs font-bold text-gray-400 uppercase tracking-wider">
                     Menu
                   </p>
                   {MAIN_MENUS.map((menu) => (
@@ -171,7 +171,7 @@ export default function NavBar() {
                   <div className="h-px bg-gray-100 dark:bg-gray-700 my-2 mx-2" />
 
                   {/* Settings Section */}
-                  <p className="px-3 py-2 text-[10px] font-bold text-gray-400 uppercase tracking-wider">
+                  <p className="px-3 py-2 text-xs font-bold text-gray-400 uppercase tracking-wider">
                     Settings
                   </p>
 
@@ -184,7 +184,7 @@ export default function NavBar() {
                     <div className="flex-1 font-medium">
                       {language === 'ko' ? '언어 변경' : 'Language'}
                     </div>
-                    <div className="flex gap-1 text-[10px] font-black">
+                    <div className="flex gap-1 text-xs font-black">
                       <span className={language === 'ko' ? 'text-indigo-600' : 'text-gray-400'}>
                         KO
                       </span>
@@ -203,16 +203,16 @@ export default function NavBar() {
                         className={`flex-1 flex flex-col items-center justify-center py-2 px-1 rounded-lg transition-all ${analysisMode === 'direct' ? 'bg-white dark:bg-slate-700 shadow-sm text-indigo-600' : 'text-gray-400 hover:text-gray-600'}`}
                       >
                         <BoltIcon className={`w-4 h-4 mb-0.5 ${analysisMode === 'direct' ? 'text-indigo-500' : ''}`} />
-                        <span className="text-[10px] font-black tracking-tighter">DIRECT</span>
-                        <span className="text-[8px] opacity-60 leading-tight">{language === 'ko' ? '빠른 결과' : 'Fast Result'}</span>
+                        <span className="text-xs font-black tracking-tighter">DIRECT</span>
+                        <span className="text-xs opacity-60 leading-tight">{language === 'ko' ? '빠른 결과' : 'Fast Result'}</span>
                       </button>
                       <button
                         onClick={() => setAnalysisMode('background')}
                         className={`flex-1 flex flex-col items-center justify-center py-2 px-1 rounded-lg transition-all ${analysisMode === 'background' ? 'bg-white dark:bg-slate-700 shadow-sm text-indigo-600' : 'text-gray-400 hover:text-gray-600'}`}
                       >
                         <ClockIcon className={`w-4 h-4 mb-0.5 ${analysisMode === 'background' ? 'text-indigo-500' : ''}`} />
-                        <span className="text-[10px] font-black tracking-tighter">BACKEND</span>
-                        <span className="text-[8px] opacity-60 leading-tight">{language === 'ko' ? '자동 저장' : 'Auto Save'}</span>
+                        <span className="text-xs font-black tracking-tighter">BACKEND</span>
+                        <span className="text-xs opacity-60 leading-tight">{language === 'ko' ? '자동 저장' : 'Auto Save'}</span>
                       </button>
                     </div>
                   </div>

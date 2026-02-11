@@ -82,7 +82,7 @@ const SajuResult = ({ aiResult }) => {
     }
   }, []);
 
-  const isEn = language  !== 'ko';
+  const isEn = language !== 'ko';
   const t = (char) => (isEn ? ENG_MAP[char] || char : char);
 
   if (!userData) return <div className="p-10 text-center">유저 정보를 불러오는 중입니다...</div>;
@@ -195,7 +195,7 @@ const SajuResult = ({ aiResult }) => {
         className="w-full bg-white dark:bg-slate-800 rounded-xl shadow-lg p-6 text-center border border-indigo-50 dark:border-slate-700"
       >
         <div className="mb-4">
-          <span className="text-[10px] font-black tracking-[0.3em] text-indigo-400 uppercase">
+          <span className="text-xs font-black tracking-[0.3em] text-indigo-400 uppercase">
             WHO AM I?
           </span>
           <h1 className="text-2xl font-extrabold text-slate-800 dark:text-white mt-1">

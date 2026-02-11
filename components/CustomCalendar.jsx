@@ -49,7 +49,7 @@ const CustomCalendar = ({ selectedDate, setSelectedDate, theme = 'rose' }) => {
         {days.map((day, i) => (
           <div
             key={i}
-            className="text-center text-[10px] font-black text-slate-300 uppercase tracking-[0.4em]"
+            className="text-center text-xs font-black text-slate-300 uppercase tracking-[0.4em]"
           >
             {day}
           </div>
@@ -71,7 +71,7 @@ const CustomCalendar = ({ selectedDate, setSelectedDate, theme = 'rose' }) => {
                 <div className="absolute -top-6 left-1/2 -translate-x-1/2 flex flex-col items-center">
                   <div className={`w-[1px] h-2 ${activeTheme.light} mb-1`} />
                   <span
-                    className={`text-[10px] font-black ${activeTheme.text} tracking-tighter uppercase whitespace-nowrap bg-white dark:bg-slate-900 px-1`}
+                    className={`text-xs font-black ${activeTheme.text} tracking-tighter uppercase whitespace-nowrap bg-white dark:bg-slate-900 px-1`}
                   >
                     {date.toLocaleString('en-US', { month: 'short' })}
                   </span>
@@ -83,13 +83,12 @@ const CustomCalendar = ({ selectedDate, setSelectedDate, theme = 'rose' }) => {
                 disabled={isPast}
                 onClick={() => setSelectedDate(date)}
                 className={`
-                  relative z-10 w-10 h-10 text-[13px] flex items-center justify-center rounded-full transition-all duration-300
-                  ${
-                    isSelected
-                      ? `${activeTheme.point} text-white dark:text-slate-900 shadow-xl scale-110`
-                      : isPast
-                        ? 'text-slate-100 dark:text-slate-800 opacity-40 cursor-default'
-                        : 'text-slate-600 dark:text-slate-400 hover:text-slate-900'
+                  relative z-10 w-10 h-10 text-sm flex items-center justify-center rounded-full transition-all duration-300
+                  ${isSelected
+                    ? `${activeTheme.point} text-white dark:text-slate-900 shadow-xl scale-110`
+                    : isPast
+                      ? 'text-slate-100 dark:text-slate-800 opacity-40 cursor-default'
+                      : 'text-slate-600 dark:text-slate-400 hover:text-slate-900'
                   }
                 `}
               >

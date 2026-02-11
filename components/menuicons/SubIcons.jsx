@@ -135,7 +135,7 @@ const SubIcons = () => {
             <span className="text-sm sm:text-xs font-bold text-slate-800 transition-colors group-hover:text-rose-600">
               {item.label}
             </span>
-            <span className="sm:hidden text-[12px] text-slate-400 font-medium truncate w-full">
+            <span className="sm:hidden text-sm text-slate-400 font-medium truncate w-full">
               {item.desc}
             </span>
           </div>

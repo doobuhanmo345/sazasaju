@@ -24,12 +24,12 @@ export default function SplashScreen() {
 
       <div className="text-center">
         <h1 className="text-2xl font-black text-slate-900 dark:text-white tracking-tight mb-2">
-            사자사주
+          사자사주
         </h1>
         <div className="w-48 h-1 bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden mx-auto">
           <div className="h-full bg-indigo-600 animate-loading-bar-fast"></div>
         </div>
-        <p className="mt-4 text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-[0.3em]">
+        <p className="mt-4 text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-[0.3em]">
           Reading the constellations...
         </p>
       </div>

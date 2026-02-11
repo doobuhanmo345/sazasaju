@@ -109,7 +109,7 @@ const ImageBanner = () => {
   }, [isPaused, activeIndex, isDragging]); // isDragging 의존성 추가
 
   const handlePrev = (e) => {
-    e?.stopPropagation(); 
+    e?.stopPropagation();
     setActiveIndex((prev) => (prev === 0 ? bannerData.length - 1 : prev - 1));
   };
 
@@ -192,7 +192,7 @@ const ImageBanner = () => {
 
           <div className="mt-5 flex items-center">
             <span
-              className="text-[11px] font-extrabold py-2 px-5 rounded-full text-white shadow-md transform transition-all group-hover:scale-110"
+              className="text-sm font-extrabold py-2 px-5 rounded-full text-white shadow-md transform transition-all group-hover:scale-110"
               style={{ backgroundColor: current.accentColor }}
             >
               {isKo ? '지금 확인하기' : 'Check now'}
@@ -215,8 +215,8 @@ const ImageBanner = () => {
         </div>
       </div>
 
-       {/* 모바일 전용 네비게이션 버튼 (Left/Right) */}
-      <button 
+      {/* 모바일 전용 네비게이션 버튼 (Left/Right) */}
+      <button
         onClick={handlePrev}
         className="md:hidden absolute left-1 top-1/2 -translate-y-1/2 z-10 p-2 bg-white/40 hover:bg-white/60 backdrop-blur-sm rounded-full text-slate-600 shadow-sm transition-all active:scale-95"
       >
@@ -225,7 +225,7 @@ const ImageBanner = () => {
         </svg>
       </button>
 
-      <button 
+      <button
         onClick={handleNext}
         className="md:hidden absolute right-1 top-1/2 -translate-y-1/2 z-10 p-2 bg-white/40 hover:bg-white/60 backdrop-blur-sm rounded-full text-slate-600 shadow-sm transition-all active:scale-95"
       >
@@ -250,9 +250,8 @@ const ImageBanner = () => {
           <button
             key={item.id}
             onClick={() => setActiveIndex(index)}
-            className={`flex-1 flex flex-col items-center justify-center px-2 transition-all duration-500 relative ${
-              activeIndex === index ? 'bg-white/70 shadow-inner' : 'hover:bg-white/30'
-            }`}
+            className={`flex-1 flex flex-col items-center justify-center px-2 transition-all duration-500 relative ${activeIndex === index ? 'bg-white/70 shadow-inner' : 'hover:bg-white/30'
+              }`}
           >
             <span
               className={`text-sm font-black tracking-tighter text-center leading-tight transition-all ${activeIndex === index ? 'text-slate-900 scale-105' : 'text-slate-400'}`}

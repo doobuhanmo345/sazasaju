@@ -378,10 +378,10 @@ export default function BeforeLoginPage() {
             <div className="p-5 bg-slate-50 dark:bg-slate-800/50 rounded-[2rem] border-2 border-dashed border-indigo-200 dark:border-indigo-900">
               <div className="bg-slate-50 dark:bg-slate-800/50 rounded-2xl p-4 border border-slate-100 dark:border-slate-800 shadow-sm">
                 <div className="grid grid-cols-2 gap-y-4 gap-x-2 text-left">
-                  <div className="space-y-1"><p className="text-[10px] font-black text-slate-400 uppercase">{language === 'en' ? 'Gender' : '성별'}</p><p className="text-sm font-black dark:text-white">{gender === 'male' ? (language === 'ko' ? '남성 ♂' : 'Male ♂') : (language === 'ko' ? '여성 ♀' : 'Female ♀')}</p></div>
-                  <div className="space-y-1"><p className="text-[10px] font-black text-slate-400 uppercase">{language === 'en' ? 'Birth Date' : '생년월일'}</p><p className="text-sm font-black dark:text-white">{birthData.year}.{birthData.month}.{birthData.day}</p></div>
-                  <div className="space-y-1"><p className="text-[10px] font-black text-slate-400 uppercase">{language === 'en' ? 'Birth Time' : '시분'}</p><p className="text-sm font-black dark:text-white">{timeUnknown ? (language === 'ko' ? '시간 모름' : 'Unknown') : `${birthData.hour}:${birthData.minute}`}</p></div>
-                  <div className="flex items-end justify-end"><button onClick={handleEdit} className="px-3 py-1.5 bg-white dark:bg-slate-700 rounded-lg text-[11px] font-black text-indigo-600 dark:text-indigo-400 shadow-sm border border-slate-100 dark:border-slate-600 active:scale-95 transition-all">{language === 'ko' ? '정보 수정' : 'Edit Info'}</button></div>
+                  <div className="space-y-1"><p className="text-xs font-black text-slate-400 uppercase">{language === 'en' ? 'Gender' : '성별'}</p><p className="text-sm font-black dark:text-white">{gender === 'male' ? (language === 'ko' ? '남성 ♂' : 'Male ♂') : (language === 'ko' ? '여성 ♀' : 'Female ♀')}</p></div>
+                  <div className="space-y-1"><p className="text-xs font-black text-slate-400 uppercase">{language === 'en' ? 'Birth Date' : '생년월일'}</p><p className="text-sm font-black dark:text-white">{birthData.year}.{birthData.month}.{birthData.day}</p></div>
+                  <div className="space-y-1"><p className="text-xs font-black text-slate-400 uppercase">{language === 'en' ? 'Birth Time' : '시분'}</p><p className="text-sm font-black dark:text-white">{timeUnknown ? (language === 'ko' ? '시간 모름' : 'Unknown') : `${birthData.hour}:${birthData.minute}`}</p></div>
+                  <div className="flex items-end justify-end"><button onClick={handleEdit} className="px-3 py-1.5 bg-white dark:bg-slate-700 rounded-lg text-sm font-black text-indigo-600 dark:text-indigo-400 shadow-sm border border-slate-100 dark:border-slate-600 active:scale-95 transition-all">{language === 'ko' ? '정보 수정' : 'Edit Info'}</button></div>
                 </div>
               </div>
 
@@ -390,21 +390,21 @@ export default function BeforeLoginPage() {
 
             <div className="mt-3 bg-slate-50 text-sm dark:bg-slate-800/50 rounded-2xl p-6 border border-slate-100 dark:border-slate-800 shadow-sm text-left">
               <div className="py-2 space-y-6 animate-in fade-in slide-in-from-bottom-3 duration-1000">
-                <section><div className="flex items-center gap-2 mb-3"><span className="flex items-center justify-center w-8 h-8 rounded-full bg-slate-100 dark:bg-slate-800 text-lg">{preview.coreEmoji}</span><h3 className="text-[10px] font-black text-slate-400 uppercase tracking-widest">{language === 'ko' ? 'Identity' : 'Identity'}</h3></div><p className="text-lg font-black dark:text-white leading-snug break-keep">{preview.coreText}</p></section>
+                <section><div className="flex items-center gap-2 mb-3"><span className="flex items-center justify-center w-8 h-8 rounded-full bg-slate-100 dark:bg-slate-800 text-lg">{preview.coreEmoji}</span><h3 className="text-xs font-black text-slate-400 uppercase tracking-widest">{language === 'ko' ? 'Identity' : 'Identity'}</h3></div><p className="text-lg font-black dark:text-white leading-snug break-keep">{preview.coreText}</p></section>
                 <div className="space-y-6 border-l-2 border-slate-100 dark:border-slate-800 ml-4 pl-6">
-                  <section className="relative"><div className="absolute -left-[31px] top-1 w-2 h-2 rounded-full bg-indigo-500 shadow-[0_0_8px_rgba(99,102,241,0.6)]" /><h4 className="text-[10px] font-black text-indigo-500 uppercase tracking-widest mb-1">Dominant Energy</h4><p className="text-[15px] font-bold text-slate-700 dark:text-slate-200">{preview.dominantText}</p></section>
-                  <section className="relative"><div className="absolute -left-[31px] top-1 w-2 h-2 rounded-full bg-emerald-500" /><h4 className="text-[10px] font-black text-emerald-600 uppercase tracking-widest mb-1">Hidden Talents</h4><div className="text-[14px] font-semibold text-slate-600 dark:text-slate-300 leading-relaxed">{preview.talentText}</div></section>
+                  <section className="relative"><div className="absolute -left-[31px] top-1 w-2 h-2 rounded-full bg-indigo-500 shadow-[0_0_8px_rgba(99,102,241,0.6)]" /><h4 className="text-xs font-black text-indigo-500 uppercase tracking-widest mb-1">Dominant Energy</h4><p className="text-sm font-bold text-slate-700 dark:text-slate-200">{preview.dominantText}</p></section>
+                  <section className="relative"><div className="absolute -left-[31px] top-1 w-2 h-2 rounded-full bg-emerald-500" /><h4 className="text-xs font-black text-emerald-600 uppercase tracking-widest mb-1">Hidden Talents</h4><div className="text-sm font-semibold text-slate-600 dark:text-slate-300 leading-relaxed">{preview.talentText}</div></section>
                 </div>
               </div>
             </div>
 
             <div className="pt-4 space-y-4">
               <div>
-                <p className="text-[11px] font-black text-slate-400 uppercase tracking-widest mb-2">{language === 'ko' ? '태어난 장소 (선택)' : 'Birth Place (Optional)'}</p>
+                <p className="text-sm font-black text-slate-400 uppercase tracking-widest mb-2">{language === 'ko' ? '태어난 장소 (선택)' : 'Birth Place (Optional)'}</p>
                 <CityInput value={birthCity} onChange={(e) => setBirthCity(e.target.value)} language={language} className="!p-4 !rounded-xl !border-2 !border-slate-100 dark:!border-slate-800 !bg-slate-50 dark:!bg-slate-800 !text-sm !font-bold" />
               </div>
               <div>
-                <p className="text-[11px] font-black text-slate-400 uppercase tracking-widest mb-2">{language === 'ko' ? '휴대폰 번호 (선택)' : 'Phone Number (Optional)'}</p>
+                <p className="text-sm font-black text-slate-400 uppercase tracking-widest mb-2">{language === 'ko' ? '휴대폰 번호 (선택)' : 'Phone Number (Optional)'}</p>
                 <input
                   type="tel"
                   placeholder="010-0000-0000"
