@@ -45,7 +45,6 @@ export default function ShareLinkButton({ fortuneType = 'basic', storageKey }) {
                 };
                 targetStorageKey = typeToKeyMap[fortuneType];
             }
-            console.log()
             const historyItem = userData?.usageHistory?.[targetStorageKey];
             const aiResult = historyItem?.result;
             const question = historyItem?.question;

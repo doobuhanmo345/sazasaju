@@ -448,7 +448,7 @@ function MessagesContent() {
                     <div
                       onClick={() => {
                         let url = msg.targetPath;
-                        console.log(url);
+
                         if (typeof url === 'object' && url?.path) {
                           url = url.path;
                         }

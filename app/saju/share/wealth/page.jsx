@@ -27,7 +27,6 @@ function ShareContent() {
             setError('공유 데이터가 없습니다.');
         }
     }, [searchParams]);
-    console.log(shareData);
     if (error) {
         return (
             <div className="min-h-screen flex items-center justify-center bg-gray-50 p-4">

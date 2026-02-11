@@ -22,7 +22,6 @@ export default function ViewSazaResult({
   const { language } = useLanguage();
   const question = userData?.usageHistory?.Zsazatalk?.question;
   const result = userData?.usageHistory?.Zsazatalk?.result;
-  console.log(result)
   useEffect(() => {
     if (result) {
       const parsedData = parseAiResponse(result);

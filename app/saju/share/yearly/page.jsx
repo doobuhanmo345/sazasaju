@@ -39,7 +39,6 @@ function ShareContent() {
             </div>
         );
     }
-    console.log(shareData)
 
     if (!shareData) {
         return (

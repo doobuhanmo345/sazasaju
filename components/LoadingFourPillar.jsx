@@ -128,12 +128,12 @@ export default function LoadingFourPillar({ isTimeUnknown, saju, isAnalysisDone 
       : 'Final Synthesis: Harmonizing the overall energy flow (5/5)',
   };
   if (!userData?.isAnalyzing && !isAnalysisDone) {
-    console.log('아날리시스 중이 아니고 던도 아님')
+
     return
   }
 
   if (!userData?.isAnalyzing && isAnalysisDone) {
-    console.log('아날리시스 중이 아니고 던도 맞음')
+
 
     return (
       <div className="flex flex-col items-center justify-center min-h-[50vh] space-y-4">
