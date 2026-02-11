@@ -22,7 +22,7 @@ import BasicAnaPreview from '@/app/saju/basic/BasicAnaPreview';
 export default function BasicAnaPage() {
   const router = useRouter();
   const [sajuData, setSajuData] = useState(null);
-  const { loading, setLoading, setLoadingType, setAiResult, aiResult } = useLoading();
+  const { loading, setLoading, setLoadingType, setAiResult, aiResult, handleCancelHelper } = useLoading();
   const { userData, user, selectedProfile } = useAuthContext(); // selectedProfile 추가
 
   // 컨텍스트 스위칭: 선택된 프로필이 있으면 그것을 사용, 없으면 본인 정보
@@ -78,6 +78,7 @@ export default function BasicAnaPage() {
         setEditCount,
         setLoading,
         setAiResult,
+        handleCancelHelper: handleCancelHelper,
       }),
     [user, targetProfile, language, MAX_EDIT_COUNT, setEditCount, setLoading, setAiResult], // 의존성 변경
   );

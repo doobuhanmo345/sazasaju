@@ -21,7 +21,7 @@ export default function FeelingsPage() {
     const router = useRouter();
     const { user, userData, selectedProfile, savedProfiles } = useAuthContext();
     const { MAX_EDIT_COUNT, isLocked, setEditCount } = useUsageLimit();
-    const { loading, setLoading, setAiResult } = useLoading();
+    const { loading, setLoading, setAiResult, handleCancelHelper } = useLoading();
     const targetProfile = selectedProfile || userData;
     const { gender, saju, isTimeUnknown } = targetProfile || {};
     const loveEnergy = useConsumeEnergy();
@@ -90,6 +90,7 @@ export default function FeelingsPage() {
         setEditCount,
         setLoading,
         setAiResult,
+        handleCancelHelper,
     });
 
     const prevData = userData?.usageHistory?.ZLoveFeelings;

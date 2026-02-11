@@ -39,7 +39,7 @@ export default function Wealth({ }) {
   const router = useRouter();
   const { user, userData, selectedProfile } = useAuthContext();
   const { MAX_EDIT_COUNT, isLocked, setEditCount, editCount } = useUsageLimit();
-  const { setLoading, setAiResult } = useLoading();
+  const { setLoading, setAiResult, handleCancelHelper } = useLoading();
   // 컨텍스트 스위칭
   const targetProfile = selectedProfile || userData;
   const { birthDate: inputDate, isTimeUnknown, gender, saju } = targetProfile || {};
@@ -250,6 +250,7 @@ export default function Wealth({ }) {
     setEditCount,
     setLoading,
     setAiResult,
+    handleCancelHelper
   });
 
   const handleWealthAnalysis = async () => {

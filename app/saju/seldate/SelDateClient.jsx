@@ -30,7 +30,7 @@ const PURPOSE_OPTIONS = [
 ];
 
 export default function SelDatePage() {
-  const { loading, setLoading, setLoadingType, setAiResult, aiResult } = useLoading(); // aiResult added
+  const { loading, setLoading, setLoadingType, setAiResult, aiResult, handleCancelHelper } = useLoading(); // aiResult added
 
   const { userData, user, selectedProfile } = useAuthContext();
   const router = useRouter();
@@ -120,6 +120,7 @@ export default function SelDatePage() {
         setEditCount,
         setLoading,
         setAiResult,
+        handleCancelHelper,
       }),
     [user, userData, language, MAX_EDIT_COUNT, setEditCount, setLoading, setAiResult],
   );

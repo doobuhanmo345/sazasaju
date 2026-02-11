@@ -29,7 +29,7 @@ function ChatClientContent() {
     const searchParams = useSearchParams();
     const initialQuery = searchParams.get('q');
 
-    const { loading, setLoading, setLoadingType, setAiResult, aiResult } = useLoading();
+    const { loading, setLoading, setLoadingType, setAiResult, aiResult, handleCancelHelper } = useLoading();
     const { userData, user, selectedProfile } = useAuthContext();
 
     const targetProfile = selectedProfile || userData;
@@ -151,6 +151,7 @@ function ChatClientContent() {
         setLoading,
         setAiResult,
         setStep,
+        handleCancelHelper,
     });
 
     const handleSazaTest = async (onstart) => {

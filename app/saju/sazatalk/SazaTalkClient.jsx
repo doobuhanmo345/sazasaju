@@ -96,7 +96,7 @@ function SazaTalkContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const initialQuery = searchParams.get('q');
-  const { loading, setLoading, setLoadingType, aiResult, setAiResult } = useLoading();
+  const { loading, setLoading, setLoadingType, aiResult, setAiResult, handleCancelHelper } = useLoading();
   const { userData, user, selectedProfile } = useAuthContext();
 
   const targetProfile = selectedProfile || userData;
@@ -291,6 +291,7 @@ function SazaTalkContent() {
     setLoading,
     setAiResult,
     setStep,
+    handleCancelHelper,
   });
 
   const handleSazaTest = async (onstart) => {

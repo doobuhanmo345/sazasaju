@@ -119,6 +119,7 @@ export default function SelBirthPage() {
         setLoading,
         setAiResult,
         setLastParams,
+        handleCancelHelper,
       }),
     [user, userData, language, MAX_EDIT_COUNT, setEditCount, setLoading, setAiResult, setLastParams],
   );

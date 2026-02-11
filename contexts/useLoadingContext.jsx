@@ -1,6 +1,10 @@
 'use client';
 
 import React, { createContext, useContext, useState, useEffect } from 'react';
+import { db } from '../lib/firebase';
+import { collection, query, where, orderBy, limit, onSnapshot, doc, updateDoc, deleteDoc } from 'firebase/firestore';
+import { useRouter } from 'next/navigation';
+import { useAuthContext } from '@/contexts/useAuthContext';
 
 const LoadingContext = createContext();
 
@@ -13,8 +17,77 @@ export function LoadingProvider({ children }) {
   const [progress, setProgress] = useState(0);
   const [elapsedTime, setElapsedTime] = useState(0); // [NEW] Track analysis time
   const [statusText, setStatusText] = useState(''); // [NEW] Track detailed status (e.g. "Mapping Saju...")
-
+  const [queueDoc, setQueueDoc] = useState(null);
+  const [localStatusText, setLocalStatusText] = useState('');
+  const { user, userData } = useAuthContext();
+  const router = useRouter();
   // Timer for elapsedTime
+  const onCancel = () => {
+    // Dispatch global event for services to catch
+    if (typeof window !== 'undefined') {
+      console.log('[LoadingContext] Dispatching cancellation event');
+      window.dispatchEvent(new CustomEvent('sazasaju-analysis-cancel'));
+    }
+    setLoading(false);
+  };
+  const handleCancelHelper = async () => {
+
+
+    const docId = queueDoc?.id;
+    const uid = user?.uid;
+
+    // [UI] Update local state immediately for instant dismissal
+    onCancel();
+    setQueueDoc(null);
+    setLocalStatusText('');
+
+
+    try {
+      // [Background] Cleanup Firestore resources
+      if (docId) {
+        await deleteDoc(doc(db, 'analysis_queue', docId));
+      }
+
+      // [Global] Release analysis lock
+      if (uid) {
+        await updateDoc(doc(db, 'users', uid), { isAnalyzing: false });
+      }
+      console.log('Analysis cancelled');
+    } catch (error) {
+      console.error('Failed to cancel analysis:', error);
+    }
+    router.push('/');
+  };
+  const handleCancel = async () => {
+    const confirmCancel = confirm('분석을 취소하시겠습니까?');
+    if (!confirmCancel) return;
+
+    const docId = queueDoc?.id;
+    const uid = user?.uid;
+
+    // [UI] Update local state immediately for instant dismissal
+    onCancel();
+    setQueueDoc(null);
+    setLocalStatusText('');
+
+
+    try {
+      // [Background] Cleanup Firestore resources
+      if (docId) {
+        await deleteDoc(doc(db, 'analysis_queue', docId));
+      }
+
+      // [Global] Release analysis lock
+      if (uid) {
+        await updateDoc(doc(db, 'users', uid), { isAnalyzing: false });
+      }
+      console.log('Analysis cancelled');
+    } catch (error) {
+      console.error('Failed to cancel analysis:', error);
+    }
+    router.push('/');
+  };
+
   useEffect(() => {
     let timer;
     if (loading) {
@@ -49,16 +122,80 @@ export function LoadingProvider({ children }) {
     return () => clearInterval(interval);
   }, [loading, isCachedLoading]);
 
-  const onCancel = () => {
-    // Dispatch global event for services to catch
-    if (typeof window !== 'undefined') {
-      console.log('[LoadingContext] Dispatching cancellation event');
-      window.dispatchEvent(new CustomEvent('sazasaju-analysis-cancel'));
+  useEffect(() => {
+    if (!user?.uid) {
+      setQueueDoc(null);
+      return;
     }
-    setLoading(false);
-  };
+
+    const q = query(
+      collection(db, 'analysis_queue'),
+      where('userId', '==', user.uid),
+      orderBy('createdAt', 'desc'),
+      limit(1)
+    );
+
+    const unsubscribe = onSnapshot(q, (snapshot) => {
+      if (snapshot.empty) {
+        setQueueDoc(null);
+        if (userData?.isAnalyzing && !loading) {
+          // Stale flag detection
+          const startAt = userData.analysisStartedAt?.toMillis ? userData.analysisStartedAt.toMillis() : (userData.analysisStartedAt ? new Date(userData.analysisStartedAt).getTime() : 0);
+          const updateAt = userData.updatedAt?.toMillis ? userData.updatedAt.toMillis() : (userData.updatedAt ? new Date(userData.updatedAt).getTime() : 0);
+          const lastActive = Math.max(startAt, updateAt);
+          const fiveMinsAgo = Date.now() - 5 * 60 * 1000;
+
+          if (lastActive && lastActive < fiveMinsAgo) {
+            updateDoc(doc(db, 'users', user.uid), { isAnalyzing: false }).catch(console.error);
+          } else {
+            setLocalStatusText('분석 준비 중...');
+          }
+        }
+        return;
+      }
+
+      const docData = snapshot.docs[0];
+      const data = docData.data();
+
+      if (data.status === 'pending' || data.status === 'processing') {
+        setQueueDoc({ id: docData.id, ...data });
+        if (data.status === 'pending') {
+          setLocalStatusText('대기 중...');
+        } else if (data.status === 'processing') {
+          setLocalStatusText(data.progressMessage || '분석 중...');
+        }
+      } else {
+        setQueueDoc(null);
+      }
+    }, (error) => {
+      setQueueDoc(null);
+    });
+
+    return () => unsubscribe();
+  }, [user?.uid, userData?.isAnalyzing, userData?.updatedAt, loading]);
+
+
+
+  const isBackground = !!queueDoc;
+  const isDirect = loading;
+  const isStaleFlag = (() => {
+    if (!userData?.isAnalyzing || loading || isBackground) return false;
+    const startAt = userData.analysisStartedAt?.toMillis ? userData.analysisStartedAt.toMillis() : (userData.analysisStartedAt ? new Date(userData.analysisStartedAt).getTime() : 0);
+    const updateAt = userData.updatedAt?.toMillis ? userData.updatedAt.toMillis() : (userData.updatedAt ? new Date(userData.updatedAt).getTime() : 0);
+    const lastActive = Math.max(startAt, updateAt);
+    if (!lastActive) return false;
+    return Date.now() - lastActive > 5 * 60 * 1000;
+  })();
+
+
 
   const value = {
+    handleCancelHelper,
+    handleCancel,
+    queueDoc,
+    setQueueDoc,
+    localStatusText,
+    setLocalStatusText,
     loading,
     setLoading,
     loadingType,
@@ -75,6 +212,9 @@ export function LoadingProvider({ children }) {
     onCancel,
     statusText,
     setStatusText,
+    isBackground,
+    isDirect,
+    isStaleFlag,
   };
 
   return <LoadingContext.Provider value={value}>{children}</LoadingContext.Provider>;

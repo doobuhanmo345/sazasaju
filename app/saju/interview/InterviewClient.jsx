@@ -106,7 +106,7 @@ const INTERVIEW_GROUPS = [
 
 export default function InterviewPage() {
   const activeTheme = { text: 'text-blue-500' };
-  const { loading, setLoading, aiResult, setAiResult } = useLoading();
+  const { loading, setLoading, aiResult, setAiResult, handleCancelHelper } = useLoading();
   const [selectedDate, setSelectedDate] = useState(null);
   const selDate = useMemo(() => {
     if (!selectedDate) return '';
@@ -204,6 +204,7 @@ export default function InterviewPage() {
         setEditCount,
         setLoading,
         setAiResult,
+        handleCancelHelper: handleCancelHelper,
       }),
     [user, userData, language, MAX_EDIT_COUNT, setEditCount, setLoading, setAiResult],
   );

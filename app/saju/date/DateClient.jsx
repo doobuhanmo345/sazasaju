@@ -86,7 +86,7 @@ const GET_FIRST_DATE_OPTIONS = (gender = 'female') => {
 };
 
 export default function FirstDatePage() {
-  const { loading, setLoading, setLoadingType, setAiResult, aiResult } = useLoading();
+  const { loading, setLoading, setLoadingType, setAiResult, aiResult, handleCancelHelper } = useLoading();
   const [selectedDate, setSelectedDate] = useState(null);
   const detailSectionRef = useRef(null);
   const { userData, user, selectedProfile } = useAuthContext();
@@ -179,6 +179,7 @@ export default function FirstDatePage() {
         setEditCount,
         setLoading,
         setAiResult,
+        handleCancelHelper: handleCancelHelper,
       }),
     [user, userData, language, MAX_EDIT_COUNT, setEditCount, setLoading, setAiResult],
   );

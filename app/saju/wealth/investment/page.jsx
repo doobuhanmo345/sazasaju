@@ -17,7 +17,7 @@ export default function InvestmentPage() {
     const router = useRouter();
     const { user, userData, selectedProfile } = useAuthContext();
     const { MAX_EDIT_COUNT, isLocked, setEditCount } = useUsageLimit();
-    const { loading, setLoading, setAiResult } = useLoading();
+    const { loading, setLoading, setAiResult, handleCancelHelper } = useLoading();
     const targetProfile = selectedProfile || userData;
     const { gender, saju, isTimeUnknown } = targetProfile || {};
     const wealthEnergy = useConsumeEnergy();
@@ -70,6 +70,7 @@ export default function InvestmentPage() {
         setEditCount,
         setLoading,
         setAiResult,
+        handleCancelHelper
     });
 
     const prevData = userData?.usageHistory?.ZWealthInvestment;

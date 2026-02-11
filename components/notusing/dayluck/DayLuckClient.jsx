@@ -16,7 +16,7 @@ import ReportTemplateToday from '@/app/saju/dayluck/ReportTemplateToday';
 
 
 export default function DayLuckPage() {
-  const { setLoadingType, aiResult, setAiResult } = useLoading();
+  const { setLoadingType, aiResult, setAiResult, handleCancelHelper } = useLoading();
   const [selectedDate, setSelectedDate] = useState(null);
   const [loading, setLoading] = useState(false);
   const [question, setQuestion] = useState('');
@@ -65,6 +65,7 @@ export default function DayLuckPage() {
     setEditCount,
     setLoading,
     setAiResult,
+    handleCancelHelper
   });
 
   const handleStartClick = async (onstart) => {

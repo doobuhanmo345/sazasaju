@@ -21,7 +21,7 @@ import { getEng } from '@/utils/helpers';
 export default function MatchClient() {
   const router = useRouter();
   const { user, userData, selectedProfile, savedProfiles } = useAuthContext()
-  const { setAiResult, aiResult, loading, setLoading } = useLoading()
+  const { setAiResult, aiResult, loading, setLoading, handleCancelHelper } = useLoading()
   const targetProfile = selectedProfile || userData;
   // [FIX] birthTime이 별도로 있는 경우 합쳐서 ISO 포맷으로 만듦
   const rawDate = targetProfile?.birthDate;
@@ -218,6 +218,7 @@ export default function MatchClient() {
     setEditCount,
     setLoading,
     setAiResult,
+    handleCancelHelper,
   }), [user, userData, language, MAX_EDIT_COUNT, setEditCount, setLoading, setAiResult]);
   const handleSaveMyInfo = (inputDate, gender, isTimeUnknown) => {
     setInputDate2(inputDate);

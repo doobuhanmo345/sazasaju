@@ -60,10 +60,10 @@ export default function AnalyzeButton({
   const { user, userData, login } = useAuthContext();
   const { isLocked } = useUsageLimit();
 
-  const { loading: contextLoading } = useLoading(); // [NEW] Global loading state
+  const { loading: contextLoading, isStaleflag } = useLoading(); // [NEW] Global loading state
 
   // Combine local loading prop with global loading context and user analyzing state
-  const isAnalyzing = loading || contextLoading || userData?.isAnalyzing;
+  const isAnalyzing = isStaleflag
 
   const lockCheck = () => {
     if (isAnalyzing) return true; // [NEW] Lock if analyzing
@@ -149,7 +149,7 @@ export default function AnalyzeButton({
       ) : (
         user && (
           <div className="relative scale-90">
-            <EnergyBadge active={userData?.birthDate} consuming={loading} cost={cost} />
+            <EnergyBadge active={userData?.birthDate} consuming={isStaleflag} cost={cost} />
           </div>
         )
       )}

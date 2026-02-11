@@ -102,7 +102,7 @@ export function AuthContextProvider({ children }) {
       console.error("Failed to save selected profile:", e);
     }
   };
-  console.log(selectedProfile)
+
   // [NEW] Firestore 및 localStorage 기반의 프로필 복원 로직 통합
   useEffect(() => {
     if (!userData || !savedProfiles || savedProfiles.length === 0) return;

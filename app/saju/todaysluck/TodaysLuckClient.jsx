@@ -20,7 +20,7 @@ import { reportStyle } from '@/data/aiResultConstants';
 import TodaysLuckPreview from '@/app/saju/todaysluck/TodaysLuckPreview';
 
 export default function TodaysLuckPage() {
-  const { loading, setLoading, setLoadingType, aiResult, setAiResult } = useLoading();
+  const { loading, setLoading, setLoadingType, aiResult, setAiResult, handleCancelHelper } = useLoading();
 
   const [sajuData, setSajuData] = useState(null);
   const { userData, user, selectedProfile } = useAuthContext(); // selectedProfile 추가
@@ -83,6 +83,7 @@ export default function TodaysLuckPage() {
     setEditCount,
     setLoading,
     setAiResult,
+    handleCancelHelper
   });
 
   const handleStartClick = async (onstart) => {

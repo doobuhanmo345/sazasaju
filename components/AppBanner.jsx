@@ -6,118 +6,20 @@ import { useLoading } from '@/contexts/useLoadingContext';
 import { db } from '@/lib/firebase';
 import { collection, query, where, orderBy, limit, onSnapshot, doc, updateDoc, deleteDoc } from 'firebase/firestore';
 import { XMarkIcon, SparklesIcon } from '@heroicons/react/24/outline';
-import { useRouter } from 'next/navigation';
+
+
 export default function AppBanner() {
     const { user, userData } = useAuthContext();
-    const { loading, progress, elapsedTime, onCancel, statusText: globalStatusText } = useLoading();
-    const [queueDoc, setQueueDoc] = useState(null);
-    const [localStatusText, setLocalStatusText] = useState('');
-    const router = useRouter();
-    // Listen to queue documents (Background Analysis)
-    useEffect(() => {
-        if (!user?.uid) {
-            setQueueDoc(null);
-            return;
-        }
+    const { progress, elapsedTime, statusText: globalStatusText, queueDoc, localStatusText, isBackground, isDirect, isStaleFlag, handleCancel } = useLoading();
+    const shouldShow = isBackground || isDirect || (userData?.isAnalyzing && !isStaleFlag);
 
-        const q = query(
-            collection(db, 'analysis_queue'),
-            where('userId', '==', user.uid),
-            orderBy('createdAt', 'desc'),
-            limit(1)
-        );
-
-        const unsubscribe = onSnapshot(q, (snapshot) => {
-            if (snapshot.empty) {
-                setQueueDoc(null);
-                if (userData?.isAnalyzing && !loading) {
-                    // Stale flag detection
-                    const startAt = userData.analysisStartedAt?.toMillis ? userData.analysisStartedAt.toMillis() : (userData.analysisStartedAt ? new Date(userData.analysisStartedAt).getTime() : 0);
-                    const updateAt = userData.updatedAt?.toMillis ? userData.updatedAt.toMillis() : (userData.updatedAt ? new Date(userData.updatedAt).getTime() : 0);
-                    const lastActive = Math.max(startAt, updateAt);
-                    const fiveMinsAgo = Date.now() - 5 * 60 * 1000;
-
-                    if (lastActive && lastActive < fiveMinsAgo) {
-                        updateDoc(doc(db, 'users', user.uid), { isAnalyzing: false }).catch(console.error);
-                    } else {
-                        setLocalStatusText('분석 준비 중...');
-                    }
-                }
-                return;
-            }
-
-            const docData = snapshot.docs[0];
-            const data = docData.data();
-
-            if (data.status === 'pending' || data.status === 'processing') {
-                setQueueDoc({ id: docData.id, ...data });
-                if (data.status === 'pending') {
-                    setLocalStatusText('대기 중...');
-                } else if (data.status === 'processing') {
-                    setLocalStatusText(data.progressMessage || '분석 중...');
-                }
-            } else {
-                setQueueDoc(null);
-            }
-        }, (error) => {
-            setQueueDoc(null);
-        });
-
-        return () => unsubscribe();
-    }, [user?.uid, userData?.isAnalyzing, userData?.updatedAt, loading]);
-
-    const handleCancel = async () => {
-        // if (!loading && !queueDoc) return;
-        // console.log(loading, queueDoc)
-        const confirmCancel = confirm('분석을 취소하시겠습니까?');
-        if (!confirmCancel) return;
-
-        const docId = queueDoc?.id;
-        const uid = user?.uid;
-
-        // [UI] Update local state immediately for instant dismissal
-        onCancel();
-        setQueueDoc(null);
-        setLocalStatusText('');
-
-
-        try {
-            // [Background] Cleanup Firestore resources
-            if (docId) {
-                await deleteDoc(doc(db, 'analysis_queue', docId));
-            }
-
-            // [Global] Release analysis lock
-            if (uid) {
-                await updateDoc(doc(db, 'users', uid), { isAnalyzing: false });
-            }
-            console.log('Analysis cancelled');
-        } catch (error) {
-            console.error('Failed to cancel analysis:', error);
-        }
-        router.push('/');
-    };
+    if (!shouldShow) return null;
 
     const formatTime = (seconds) => {
         const mins = Math.floor(seconds / 60);
         const secs = seconds % 60;
         return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
     };
-
-    const isBackground = !!queueDoc;
-    const isDirect = loading;
-    const isStaleFlag = (() => {
-        if (!userData?.isAnalyzing || loading || isBackground) return false;
-        const startAt = userData.analysisStartedAt?.toMillis ? userData.analysisStartedAt.toMillis() : (userData.analysisStartedAt ? new Date(userData.analysisStartedAt).getTime() : 0);
-        const updateAt = userData.updatedAt?.toMillis ? userData.updatedAt.toMillis() : (userData.updatedAt ? new Date(userData.updatedAt).getTime() : 0);
-        const lastActive = Math.max(startAt, updateAt);
-        if (!lastActive) return false;
-        return Date.now() - lastActive > 5 * 60 * 1000;
-    })();
-
-    const shouldShow = isBackground || isDirect || (userData?.isAnalyzing && !isStaleFlag);
-    if (!shouldShow) return null;
-
     // Enhanced Progress Logic:
     // 1. Direct: Use context's simulated progress
     // 2. Background - Pending: Stall at 5%
