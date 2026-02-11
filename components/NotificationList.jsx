@@ -66,7 +66,13 @@ export default function NotificationList() {
       const q_role = query(collection(db, 'notifications'), where('targetRole', '==', 'admin'));
       unsub_role = onSnapshot(q_role, (snap) => {
         setRoleNotifications(snap.docs.map(d => ({ id: d.id, ...d.data() })));
-      }, err => console.error('Role notif error:', err));
+      }, err => {
+        if (err.code === 'permission-denied') {
+          console.warn('Role notification permission denied (normal for non-admins).');
+        } else {
+          console.error('Role notif error:', err);
+        }
+      });
     } else {
       setRoleNotifications([]);
     }
