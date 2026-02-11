@@ -64,7 +64,7 @@ export default function AnalyzeButton({
   const noCredit = isLocked && !isDone
   const isAna = isAnalyzing && !isDone
   const disable = noCredit || isAna;
-  console.log(isLocked, isAna, isDone, 1)
+
   // Combine local loading prop with global loading context and user analyzing state
 
   const lockCheck = () => {

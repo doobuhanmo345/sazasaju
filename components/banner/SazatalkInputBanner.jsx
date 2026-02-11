@@ -3,19 +3,50 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useLanguage } from '@/contexts/useLanguageContext';
 import { useRouter } from 'next/navigation';
+import { useAuthContext } from '@/contexts/useAuthContext';
+import { useLoading } from '@/contexts/useLoadingContext';
+import { useUsageLimit } from '@/contexts/useUsageLimit';
+import { SajuAnalysisService, AnalysisPresets } from '@/lib/SajuAnalysisService';
+import { UI_TEXT, langPrompt, hanja } from '@/data/constants';
+import { classNames, parseAiResponse } from '@/utils/helpers';
 
 const SazatalkInputBanner = () => {
     const router = useRouter();
     const { language } = useLanguage();
+    const { user, userData, selectedProfile } = useAuthContext();
+    const { setLoading, setAiResult, handleCancelHelper } = useLoading();
+    const { setEditCount, MAX_EDIT_COUNT } = useUsageLimit();
     const [isOpen, setIsOpen] = useState(false);
     const [inputValue, setInputValue] = useState("");
+    const [isAnalyzing, setIsAnalyzing] = useState(false);
+    const scrollRef = useRef(null);
+
     const isKo = language === 'ko';
+
+    const [messages, setMessages] = useState([
+        {
+            id: 'welcome',
+            role: 'saza',
+            text: isKo
+                ? '안녕하세요! 오늘 어떤 고민이 있으신가요? 사자가 정성껏 사주를 풀이해 드릴게요.'
+                : 'Hello! What worries do you have today? I will interpret your Saju with care.'
+        }
+    ]);
 
     const suggestions = [
         isKo ? "이번 달 나에게 찾아올 행운은?" : "What luck will find me this month?",
         isKo ? "지금 이직을 고민 중인데 괜찮을까요?" : "Is it a good time for a job change?",
         isKo ? "그 사람과 나의 인연이 궁금해요" : "Tell me about my connection with them",
     ];
+
+    const targetProfile = selectedProfile || userData;
+
+    // 자동 스크롤
+    useEffect(() => {
+        if (scrollRef.current) {
+            scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
+        }
+    }, [messages, isAnalyzing]);
 
     // 모달 열릴 때 스크롤 방지
     useEffect(() => {
@@ -93,32 +124,64 @@ const SazatalkInputBanner = () => {
                         </div>
 
                         {/* 채팅창 내부 */}
-                        <div className="flex-1 overflow-y-auto p-5 space-y-6 scrollbar-hide bg-indigo-50 dark:bg-slate-900">
-                            <div className="flex items-start">
-                                <div className="w-11 h-11 bg-indigo-500 rounded-[18px] flex items-center justify-center text-2xl mr-2 flex-shrink-0 shadow-sm text-white">🦁</div>
-                                <div className="flex flex-col">
-                                    <span className="text-[12px] text-slate-500 dark:text-slate-400 mb-1 ml-1 font-bold">{isKo ? '사자' : 'Saza'}</span>
-                                    <div className="relative bg-white dark:bg-slate-800 p-3.5 px-4 rounded-[16px] rounded-tl-none shadow-sm max-w-[260px]">
-                                        <p className="text-[15px] text-slate-900 dark:text-slate-100 leading-snug font-medium">
-                                            {isKo ? '안녕하세요! 오늘 어떤 고민이 있으신가요? 사자가 정성껏 사주를 풀이해 드릴게요.' : 'Hello! What worries do you have today? I will interpret your Saju with care.'}
-                                        </p>
+                        <div
+                            ref={scrollRef}
+                            className="flex-1 overflow-y-auto p-5 space-y-6 scrollbar-hide bg-indigo-50 dark:bg-slate-900 scroll-smooth"
+                        >
+                            {messages.map((msg, idx) => (
+                                <div key={msg.id || idx} className={classNames("flex items-start", msg.role === 'user' ? "justify-end" : "justify-start")}>
+                                    {msg.role === 'saza' && (
+                                        <div className="w-10 h-10 bg-indigo-500 rounded-[15px] flex items-center justify-center text-xl mr-2 flex-shrink-0 shadow-sm text-white">🦁</div>
+                                    )}
+                                    <div className={classNames("flex flex-col", msg.role === 'user' ? "items-end" : "items-start")}>
+                                        {msg.role === 'saza' && (
+                                            <span className="text-[11px] text-slate-500 dark:text-slate-400 mb-1 ml-1 font-bold">{isKo ? '사자' : 'Saza'}</span>
+                                        )}
+                                        <div className={classNames(
+                                            "relative p-3.5 px-4 rounded-[16px] shadow-sm max-w-[280px] text-[15px] leading-snug font-medium",
+                                            msg.role === 'user'
+                                                ? "bg-indigo-600 text-white rounded-tr-none"
+                                                : "bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 rounded-tl-none"
+                                        )}>
+                                            <p className="whitespace-pre-wrap">{msg.text}</p>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
+                            ))}
 
-                            {/* 추천 질문 (유저 말풍선) */}
-                            <div className="flex flex-col items-end space-y-3">
-                                {suggestions.map((text, index) => (
-                                    <button
-                                        key={index}
-                                        onClick={() => setInputValue(text)}
-                                        className="bg-indigo-600 text-white px-4 py-3 rounded-[18px] rounded-tr-[2px] text-[14px] font-bold shadow-sm active:bg-indigo-700 max-w-[85%] animate-in slide-in-from-right-5"
-                                        style={{ animationDelay: `${index * 100}ms` }}
-                                    >
-                                        {text}
-                                    </button>
-                                ))}
-                            </div>
+                            {/* 분석 중 애니메이션 */}
+                            {isAnalyzing && (
+                                <div className="flex items-start">
+                                    <div className="w-10 h-10 bg-indigo-500 rounded-[15px] flex items-center justify-center text-xl mr-2 flex-shrink-0 shadow-sm text-white animate-pulse">🦁</div>
+                                    <div className="flex flex-col">
+                                        <span className="text-[11px] text-slate-500 dark:text-slate-400 mb-1 ml-1 font-bold">{isKo ? '사자' : 'Saza'}</span>
+                                        <div className="bg-white dark:bg-slate-800 p-3.5 px-5 rounded-[16px] rounded-tl-none shadow-sm flex items-center gap-1.5">
+                                            <div className="w-1.5 h-1.5 bg-indigo-400 rounded-full animate-bounce [animation-delay:0s]"></div>
+                                            <div className="w-1.5 h-1.5 bg-indigo-400 rounded-full animate-bounce [animation-delay:0.2s]"></div>
+                                            <div className="w-1.5 h-1.5 bg-indigo-400 rounded-full animate-bounce [animation-delay:0.4s]"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            )}
+
+                            {/* 추천 질문 (제일 아래에 노출하거나 초기 환영인사 뒤에만 노출) */}
+                            {messages.length === 1 && !isAnalyzing && (
+                                <div className="flex flex-col items-end space-y-3 pt-4">
+                                    <div className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1 pr-1">
+                                        {isKo ? '추천 고민' : 'Suggestions'}
+                                    </div>
+                                    {suggestions.map((text, index) => (
+                                        <button
+                                            key={index}
+                                            onClick={() => setInputValue(text)}
+                                            className="bg-indigo-600 text-white px-4 py-3 rounded-[18px] rounded-tr-[2px] text-[14px] font-bold shadow-sm active:bg-indigo-700 max-w-[85%] animate-in slide-in-from-right-5"
+                                            style={{ animationDelay: `${index * 100}ms` }}
+                                        >
+                                            {text}
+                                        </button>
+                                    ))}
+                                </div>
+                            )}
                         </div>
 
                         {/* 하단 텍스트 에어리어 */}
@@ -131,12 +194,123 @@ const SazatalkInputBanner = () => {
                             />
                             <div className="flex justify-end mt-2">
                                 <button
-                                    onClick={() => {
-                                        if (inputValue.trim()) {
-                                            router.push(`/saju/sazatalk?q=${encodeURIComponent(inputValue)}`);
+                                    disabled={!inputValue.trim() || isAnalyzing}
+                                    onClick={async () => {
+                                        if (!inputValue.trim() || isAnalyzing) return;
+
+                                        const question = inputValue.trim();
+                                        setInputValue("");
+
+                                        // 1. 유저 메시지 추가
+                                        const userMsg = { id: Date.now().toString(), role: 'user', text: question };
+                                        setMessages(prev => [...prev, userMsg]);
+
+                                        // 2. 비로그인 처리
+                                        if (!user) {
+                                            setTimeout(() => {
+                                                setMessages(prev => [...prev, {
+                                                    id: 'login-req',
+                                                    role: 'saza',
+                                                    text: isKo
+                                                        ? '상담을 진행하려면 로그인이 필요해요. 로그인 후 사자에게 다시 물어봐 주세요!'
+                                                        : 'Please log in to proceed with the consultation.'
+                                                }]);
+                                            }, 800);
+                                            return;
+                                        }
+
+                                        // 3. 사주 정보 확인
+                                        if (!targetProfile?.birthDate) {
+                                            setTimeout(() => {
+                                                setMessages(prev => [...prev, {
+                                                    id: 'saju-req',
+                                                    role: 'saza',
+                                                    text: isKo
+                                                        ? '정확한 상담을 위해 사주 정보(생년월일)를 먼저 등록해 주세요.'
+                                                        : 'Please register your Saju info first for an accurate reading.'
+                                                }]);
+                                            }, 800);
+                                            return;
+                                        }
+
+                                        // 4. 분석 시작
+                                        setIsAnalyzing(true);
+                                        try {
+                                            const service = new SajuAnalysisService({
+                                                user,
+                                                userData: targetProfile,
+                                                language,
+                                                maxEditCount: MAX_EDIT_COUNT,
+                                                uiText: UI_TEXT,
+                                                langPrompt,
+                                                hanja,
+                                                setEditCount,
+                                                setLoading,
+                                                setAiResult,
+                                                handleCancelHelper,
+                                            });
+
+                                            const result = await service.analyze(
+                                                AnalysisPresets.saza({
+                                                    saju: targetProfile.saju,
+                                                    gender: targetProfile.gender,
+                                                    inputDate: targetProfile.birthDate,
+                                                    question: question,
+                                                })
+                                            );
+
+                                            if (result) {
+                                                const parsed = parseAiResponse(result);
+
+                                                if (parsed && (parsed.contents || parsed.saza)) {
+                                                    // 하나씩 순차적으로 추가 (약간의 딜레이)
+                                                    const parts = [];
+                                                    if (Array.isArray(parsed.contents)) {
+                                                        parsed.contents.forEach(c => {
+                                                            if (typeof c === 'string') parts.push(c);
+                                                            else if (c.detail) parts.push(c.detail);
+                                                        });
+                                                    } else if (typeof parsed.contents === 'string') {
+                                                        parts.push(parsed.contents);
+                                                    }
+
+                                                    if (parsed.saza) {
+                                                        const sazaAdvice = typeof parsed.saza === 'object' ? parsed.saza.advice : parsed.saza;
+                                                        parts.push(sazaAdvice);
+                                                    }
+
+                                                    // 순차적으로 메시지 추가
+                                                    for (let i = 0; i < parts.length; i++) {
+                                                        // 각 메시지 전에 1초의 간격 (로딩 점이 보이도록)
+                                                        await new Promise(r => setTimeout(r, 1000));
+
+                                                        setMessages(prev => [...prev, {
+                                                            id: `${Date.now()}-${i}`,
+                                                            role: 'saza',
+                                                            text: parts[i]
+                                                        }]);
+                                                    }
+                                                } else {
+                                                    // 파싱 실패 시 통짜 전송
+                                                    setMessages(prev => [...prev, {
+                                                        id: Date.now().toString(),
+                                                        role: 'saza',
+                                                        text: result
+                                                    }]);
+                                                }
+                                            }
+                                        } catch (error) {
+                                            console.error("Banner SazaTalk Error:", error);
+                                            setMessages(prev => [...prev, {
+                                                id: 'error',
+                                                role: 'saza',
+                                                text: isKo ? '죄송해요. 상담 중에 오류가 발생했어요. 다시 시도해 주세요.' : 'Sorry, an error occurred. Please try again.'
+                                            }]);
+                                        } finally {
+                                            setIsAnalyzing(false);
                                         }
                                     }}
-                                    className={`w-16 h-11 rounded-[14px] flex items-center justify-center transition-all ${inputValue.trim() ? 'bg-indigo-600 text-white shadow-md' : 'bg-slate-100 dark:bg-slate-700 text-slate-300 dark:text-slate-500 font-normal'
+                                    className={`w-16 h-11 rounded-[14px] flex items-center justify-center transition-all ${inputValue.trim() && !isAnalyzing ? 'bg-indigo-600 text-white shadow-md active:scale-95' : 'bg-slate-100 dark:bg-slate-700 text-slate-300 dark:text-slate-500 font-normal'
                                         }`}
                                 >
                                     <span className="text-[15px] font-bold">{isKo ? '전송' : 'Send'}</span>

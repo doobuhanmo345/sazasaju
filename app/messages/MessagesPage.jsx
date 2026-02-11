@@ -64,15 +64,24 @@ function MessagesContent() {
       try {
         const oldMsgQuery = query(
           collection(db, 'sazatalk_messages'),
-          where('userId', '==', user.uid),
-          where('createdAt', '<', sevenDaysAgo)
+          where('userId', '==', user.uid)
         );
         const oldSnap = await getDocs(oldMsgQuery);
         if (!oldSnap.empty) {
           const batch = writeBatch(db);
-          oldSnap.docs.forEach((doc) => batch.delete(doc.ref));
-          await batch.commit();
-          console.log(`[Cleanup] Deleted ${oldSnap.size} old messages.`);
+          let count = 0;
+          oldSnap.docs.forEach((doc) => {
+            const data = doc.data();
+            // 클라이언트 사이드에서 날짜 필터링 수행 (인덱스 에러 방지)
+            if (data.createdAt && data.createdAt.toDate() < sevenDaysAgo) {
+              batch.delete(doc.ref);
+              count++;
+            }
+          });
+          if (count > 0) {
+            await batch.commit();
+            console.log(`[Cleanup] Deleted ${count} old messages.`);
+          }
         }
       } catch (e) {
         console.error('Failed to cleanup old messages:', e);
@@ -80,20 +89,16 @@ function MessagesContent() {
     };
     cleanupOldMessages();
 
-    // Query for display (only recent 7 days)
+    // Query for display (Broader query to avoid index errors)
     const q_sazatalk = query(
       collection(db, 'sazatalk_messages'),
-      where('userId', '==', user.uid),
-      where('createdAt', '>=', sevenDaysAgo),
-      orderBy('createdAt', 'desc')
+      where('userId', '==', user.uid)
     );
 
     const q_analysis = query(
       collection(db, 'notifications'),
       where('userId', '==', user.uid),
-      where('type', '==', 'analysis'),
-      where('createdAt', '>=', sevenDaysAgo),
-      orderBy('createdAt', 'desc')
+      where('type', '==', 'analysis')
     );
 
     const unsubscribeSent = onSnapshot(q_sent, (snap) => {
@@ -111,14 +116,20 @@ function MessagesContent() {
     });
 
     const unsubscribeSazaTalk = onSnapshot(q_sazatalk, (snap) => {
-      const sazaTalkMsgs = snap.docs.map(doc => ({ id: doc.id, type: 'sazatalk', messageType: 'sazatalk', ...doc.data() }));
+      // 인덱스 에러 방지를 위해 클라이언트에서 7일치 필터링
+      const sazaTalkMsgs = snap.docs
+        .map(doc => ({ id: doc.id, type: 'sazatalk', messageType: 'sazatalk', ...doc.data() }))
+        .filter(m => m.createdAt && m.createdAt.toDate() >= sevenDaysAgo);
       updateMessages(sazaTalkMsgs, 'sazatalk');
     }, (error) => {
       console.error('Error fetching SazaTalk logs:', error);
     });
 
     const unsubscribeAnalysis = onSnapshot(q_analysis, (snap) => {
-      const analysisLogs = snap.docs.map(doc => ({ id: doc.id, type: 'analysis_log', messageType: 'analysis', ...doc.data() }));
+      // 인덱스 에러 방지를 위해 클라이언트에서 7일치 필터링
+      const analysisLogs = snap.docs
+        .map(doc => ({ id: doc.id, type: 'analysis_log', messageType: 'analysis', ...doc.data() }))
+        .filter(m => m.createdAt && m.createdAt.toDate() >= sevenDaysAgo);
       updateMessages(analysisLogs, 'analysis');
     }, (error) => {
       console.error('Error fetching analysis logs:', error);
