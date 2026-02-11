@@ -126,10 +126,10 @@ export default function FortuneCookieClient() {
     <main className="min-h-screen">
       <div className="w-full max-w-2xl mx-auto p-4">
         <style jsx>{`
-          .cookie-emoji {
+          .cookie-emoji-container {
             transition: transform 0.3s ease;
           }
-          .cookie-item:hover .cookie-emoji {
+          .cookie-item:hover .cookie-emoji-container {
             transform: scale(1.1) translateY(-10px);
           }
           .flying-coin-animation {
@@ -267,11 +267,15 @@ export default function FortuneCookieClient() {
                           `}
                         >
                           <div
-                            className={`text-[72px] drop-shadow-lg cookie-emoji ${selectedId === idx && loading ? 'animate-pulse' : ''}`}
+                            className={`w-24 h-24 flex items-center justify-center transition-all duration-300 cookie-emoji-container ${selectedId === idx && loading ? 'animate-pulse' : ''}`}
                           >
-                            🥠
+                            <img
+                              src="/images/fortunecookie/clay_fortune_cookie.png"
+                              alt="fortune cookie"
+                              className="w-full h-auto mix-blend-multiply dark:mix-blend-normal"
+                            />
                           </div>
-                          <div className="w-[40px] h-[8px] bg-black/5 dark:bg-white/10 rounded-[50%] mt-2"></div>
+                          <div className="w-[40px] h-[6px] bg-black/5 dark:bg-white/10 rounded-[50%] mt-1 blur-[1px]"></div>
                         </div>
                       ))}
                     </div>

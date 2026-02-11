@@ -7,8 +7,8 @@ import { useAuthContext } from "@/contexts/useAuthContext";
 export default function Credit() {
     const { editCount, MAX_EDIT_COUNT } = useUsageLimit();
     const router = useRouter();
-    const { isCookieDone } = useLoading();
-    const { userData } = useAuthContext();
+
+    const { userData, isCookieDone } = useAuthContext();
 
     return (
         <div className="flex items-center">

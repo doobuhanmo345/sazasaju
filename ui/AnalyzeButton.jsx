@@ -97,7 +97,7 @@ export default function AnalyzeButton({
   // 1. Guest View: User is not logged in
   if (!user) {
     return (
-      <>
+      <div className="max-w-sm mx-auto">
         <button
           onClick={() => setIsLoginModalOpen(true)}
           className="w-full relative group px-10 py-5 font-bold rounded-[2rem] shadow-2xl shadow-indigo-100/50 dark:shadow-none transform transition-all flex items-center justify-center gap-3 bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 hover:-translate-y-1 active:scale-[0.98] overflow-hidden"
@@ -119,17 +119,17 @@ export default function AnalyzeButton({
           isOpen={isLoginModalOpen}
           onClose={() => setIsLoginModalOpen(false)}
         />
-      </>
+      </div>
     );
   }
 
   // 2. Auth View: User is logged in
   return (
-    <button
+    <div className="max-w-sm mx-auto"> <button
       onClick={buttonClicked}
       disabled={disable}
       className={classNames(
-        'w-full px-10 py-4 font-bold rounded-xl shadow-lg dark:shadow-none transform transition-all flex items-center justify-center gap-2',
+        'w-full text-lg px-10 py-4 font-bold rounded-xl shadow-lg dark:shadow-none transform transition-all flex items-center justify-center gap-2',
         disable
           ? DISABLED_STYLE
           : `${theme.classes} text-white hover:-translate-y-1`
@@ -139,12 +139,12 @@ export default function AnalyzeButton({
 
       {isDone ? (
         <div className="flex items-center backdrop-blur-md bg-white/20 px-2 py-0.5 rounded-full border border-white/30">
-          <span className="text-[9px] font-bold text-white uppercase">Free</span>
+          <span className="text-xs font-bold text-white uppercase">Free</span>
           <TicketIcon className="w-3 h-3 text-white" />
         </div>
       ) : isLocked ? (
         <div className="mt-1 flex items-center gap-1 backdrop-blur-sm px-2 py-0.5 rounded-full border shadow-sm relative z-10 border-gray-500/50 bg-gray-400/40">
-          <span className="text-[9px] font-bold text-white tracking-wide uppercase">
+          <span className="text-xs font-bold text-white tracking-wide uppercase">
             <LockClosedIcon className={`w-4 h-4 ${theme.text}`} />
           </span>
         </div>
@@ -155,6 +155,7 @@ export default function AnalyzeButton({
           </div>
         )
       )}
-    </button>
+    </button></div>
+
   );
 }

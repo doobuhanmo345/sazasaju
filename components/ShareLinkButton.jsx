@@ -45,15 +45,11 @@ export default function ShareLinkButton({ fortuneType = 'basic', storageKey }) {
                 };
                 targetStorageKey = typeToKeyMap[fortuneType];
             }
-
-            const historyItem = targetProfile?.usageHistory?.[targetStorageKey];
+            console.log()
+            const historyItem = userData?.usageHistory?.[targetStorageKey];
             const aiResult = historyItem?.result;
             const question = historyItem?.question;
 
-            if (!aiResult) {
-                alert(language === 'ko' ? '공유할 분석 결과가 없습니다.' : 'No analysis result to share.');
-                return;
-            }
 
             const shareData = {
                 displayName: targetProfile.displayName,
@@ -61,8 +57,9 @@ export default function ShareLinkButton({ fortuneType = 'basic', storageKey }) {
                 isTimeUnknown: targetProfile.isTimeUnknown,
                 gender: targetProfile.gender,
                 aiResult: aiResult,
-                userQuestion: question,
+                userQuestion: question || historyItem,
             };
+            console.log(historyItem)
 
             // Compress using LZString for client-side legacy support
             const jsonStr = JSON.stringify(shareData);
@@ -142,9 +139,8 @@ export default function ShareLinkButton({ fortuneType = 'basic', storageKey }) {
         }
     };
 
-    const handleShare = async () => {
 
-    };
+    console.log(isCopied)
 
     return (
         <button
