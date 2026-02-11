@@ -7,7 +7,7 @@ import { collection, query, where, onSnapshot, updateDoc, doc, getFirestore } fr
 import { useAuthContext } from '@/contexts/useAuthContext';
 import { BellIcon, CheckIcon, XMarkIcon, InboxIcon, ChatBubbleLeftEllipsisIcon } from '@heroicons/react/24/outline';
 import { useLanguage } from '@/contexts/useLanguageContext';
-import MessageModal from '@/app/messages/MessageModal';
+
 
 export default function NotificationList() {
   const { user, userData, openMessageModal } = useAuthContext();
@@ -199,7 +199,7 @@ export default function NotificationList() {
             </button>
             <button
               onClick={() => {
-                window.location.href = '/messages';
+                router.push('/messages')
                 setIsOpen(false);
               }}
               className="w-full mt-2 py-1.5 text-[9px] font-bold text-gray-400 hover:text-gray-600 dark:hover:text-white transition-colors"

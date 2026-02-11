@@ -94,35 +94,40 @@ const SazatalkInputBanner = () => {
     return (
         <>
             {/* 1. 메인 배너 (하단에 인풋 바 내장) */}
-            <div className="relative w-full max-w-lg  mx-auto  my-4 rounded-[2rem] border border-indigo-100/50 shadow-md transition-all duration-300 active:scale-[0.98] cursor-pointer group">
+            <div className="relative w-full max-w-lg  mx-auto  my-4 rounded-[1rem] border border-indigo-100/50 shadow-md transition-all duration-300 active:scale-[0.98] cursor-pointer group">
                 <div
-                    className="relative w-full h-[240px] sm:h-[260px] bg-[#EEF0FF] rounded-[2.5rem] shadow-md border border-indigo-100/50 overflow-hidden flex flex-col"
+                    className="relative w-full h-[240px] sm:h-[260px] bg-[#EEF0FF] rounded-[1rem] shadow-md border border-indigo-100/50 overflow-hidden flex flex-col"
                 >
                     {/* 상단: 배너 콘텐츠 */}
-                    <div className="relative h-[160px] flex flex-col justify-center px-8 pt-4 cursor-pointer" onClick={() => setIsOpen(true)}>
+                    <div className="relative h-[160px] flex flex-col justify-center px-6 pt-4 cursor-pointer" onClick={() => setIsOpen(true)}>
                         <div className="absolute -left-10 -bottom-10 w-40 h-40 bg-indigo-200/40 blur-3xl rounded-full z-0" />
                         <div className="relative z-10">
-                            <h2 className="text-xl sm:text-2xl font-light text-slate-900 leading-[1.3] tracking-tight">
+                            <h2 className="text-2xl sm:text-3xl font-light text-slate-900 leading-[1.3] tracking-tight">
                                 {isKo ? '답답한 고민,' : 'Tricky problems,'} <br />
-                                <span className="font-serif italic font-medium text-indigo-700">
-                                    {isKo ? '무엇이든 물어보사자' : 'Ask Saza Anything'}
-                                </span>
+                                <div className="flex sm:flex-row flex-col gap-2 py-3">
+                                    <div className="font-serif italic font-medium text-indigo-700">
+                                        {isKo ? '무엇이든 ' : 'Ask Saza'}
+                                    </div>
+                                    <div className="font-serif italic font-medium text-indigo-700">
+                                        {isKo ? '물어보사자' : 'Anything'}
+                                    </div>
+                                </div>
                             </h2>
                         </div>
                         <img
                             src="/images/banner/ama.webp"
-                            className="absolute bottom-0 right-2 h-[110%] w-auto object-contain pointer-events-none z-20"
+                            className="absolute bottom-[-40px] xs:right-12 right-[-10px] xs:h-[150%] h-[130%] w-auto object-contain pointer-events-none z-10"
                             alt="mascot"
                         />
                     </div>
 
                     {/* 하단: 클릭 유도 인풋 바 (시인성 강화) */}
-                    <div className="px-6 pb-6 mt-auto">
+                    <div className="px-3 pb-3 mt-auto z-20">
                         <div
                             onClick={() => setIsOpen(true)}
-                            className="w-full py-3.5 px-6 bg-white/90 rounded-full shadow-sm flex items-center justify-between cursor-text border border-indigo-50 hover:border-indigo-200 transition-all group"
+                            className="w-full py-3.5 px-3 bg-white/90 rounded-2xl shadow-sm flex items-center justify-between cursor-text border border-indigo-50 hover:border-indigo-200 transition-all group"
                         >
-                            <span className="text-[14px] text-slate-500 font-medium">
+                            <span className="text-md text-slate-500 font-medium">
                                 {isKo ? '사자에게 고민을 털어놓으세요...' : 'Share your worries with Saza...'}
                             </span>
                             <div className="bg-[#f9e000] w-8 h-8 rounded-full flex items-center justify-center text-black shadow-sm group-hover:scale-110 transition-transform">

@@ -150,7 +150,7 @@ export default function MenuBar() {
           name: isKo ? '상담 내역' : 'History',
           desc: isKo ? '내가 본 운세 기록 확인' : 'Check Fortune Records',
           icon: <PresentationChartLineIcon className="w-6 h-6" />,
-          path: null,
+          path: '/profile/history',
         },
       );
     }
@@ -442,7 +442,6 @@ export default function MenuBar() {
                                 // For now, simpler approach: if selectedProfile is friend, iljuImagePath is friend's.
                                 // So we need to recalculate or store user's path.
                                 // Since we can't easily import helper here without verify, let's use a simple fallback or just user icon.
-                                // Actually, let's try to trust the context or just show initials/icon if image fails.
                                 // Better: use a default avatar if calculation is complex, but user wants image.
                                 // Let's rely on standard path format if possible: /images/ilju/[ilju]_[gender].png
 
@@ -631,8 +630,8 @@ export default function MenuBar() {
           )}
       </div>
 
-      <nav className="fixed bottom-0 left-0 right-0 z-[70] px-6 pt-4 bg-white/90 dark:bg-slate-900/95 backdrop-blur-xl border-t border-slate-100 dark:border-slate-800 pb-[calc(2rem+env(safe-area-inset-bottom))]">
-        <div className="max-w-md mx-auto flex justify-between items-center">
+      <nav className="fixed -bottom-14 left-0 right-0 z-[70] bg-white/90 dark:bg-slate-900/95 backdrop-blur-xl border-t border-slate-100 dark:border-slate-800 pt-4 pb-[calc(2.5rem+env(safe-area-inset-bottom,0px)+40px)]">
+        <div className="max-w-md mx-auto flex justify-between items-center px-6">
           <button
             onClick={() => {
               setActiveMenu(null);

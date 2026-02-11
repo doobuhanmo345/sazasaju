@@ -10,7 +10,7 @@ import { InboxStackIcon, ChatBubbleLeftRightIcon, UserCircleIcon, DocumentTextIc
 import MessageModal from '@/app/messages/MessageModal';
 import SazaTalkResultModal from '@/components/SazaTalkResultModal';
 import SazaTalkMessageItem from '@/components/SazaTalkMessageItem';
-
+import { useRouter } from 'next/navigation';
 export default function MessagesPage() {
   return (
     <Suspense fallback={<div>Loading...</div>}>
@@ -32,7 +32,7 @@ function MessagesContent() {
   const [selectedSazaTalk, setSelectedSazaTalk] = useState(null);
   const [replyTo, setReplyTo] = useState(null); // { id, name }
   const [activeTab, setActiveTab] = useState('direct'); // 'direct' | 'sazatalk' | 'analysis'
-
+  const router = useRouter()
   // URL 파라미터로 탭 제어 (?tab=sazatalk)
   useEffect(() => {
     const tab = searchParams.get('tab');
@@ -452,7 +452,7 @@ function MessagesContent() {
                         if (typeof url === 'object' && url?.path) {
                           url = url.path;
                         }
-                        if (url) window.location.href = url;
+                        if (url) router.push(url);
                       }}
                       className="group px-6 py-4 hover:bg-blue-50/50 dark:hover:bg-blue-900/10 cursor-pointer transition-colors"
                     >

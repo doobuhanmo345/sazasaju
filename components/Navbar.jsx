@@ -28,7 +28,7 @@ import AppBanner from '@/components/AppBanner';
 
 const MAIN_MENUS = [
   { id: 'home', ko: '홈', en: 'Home', path: '/', icon: HomeIcon },
-  { id: 'fortune', ko: '사주란?', en: 'Saju?', path: '/sajuexp', icon: SparklesIcon },
+  { id: 'fortune', ko: '자주묻는 질문', en: 'FAQ', path: '/tutorial', icon: SparklesIcon },
 ];
 
 const UTILITY_ITEMS = [
@@ -105,7 +105,7 @@ export default function NavBar() {
 
     <div className='w-full fixed top-0 left-0 right-0 z-50 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md transition-all border-b border-transparent data-[scrolled=true]:border-slate-100 select-none'>
       <div style={{ paddingTop: 'env(safe-area-inset-top)' }} />
-      <div className="flex w-full items-center p-4 justify-between py-3 max-w-xl m-auto ">
+      <div className="flex w-full items-center pt-5 pb-2 px-3 justify-between py-3 max-w-xl m-auto ">
 
         {/* [Left] Logo or Back Button */}
         <div

@@ -19,7 +19,7 @@ export default function MyInfoBar() {
 
   const isMe = !selectedProfile || (selectedProfile.uid === userData?.uid && !selectedProfile.id);
 
-  console.lo
+
   // Display Name logic
   const displayName = isMe
     ? (userData?.displayName || (language === 'ko' ? '나의 운세' : 'My Fortune'))
@@ -32,6 +32,7 @@ export default function MyInfoBar() {
     : (target?.birthDate && target.birthDate.split('T')[1] ? target.birthDate.split('T')[1] : '');
 
   return (
+
     <button
       onClick={() => router.push('/profile/manage')}
       className="w-full flex items-center justify-between group"
@@ -61,8 +62,8 @@ export default function MyInfoBar() {
         {/* Gender Badge */}
         <div
           className={`px-1.5 py-0.5 rounded text-[10px] font-bold uppercase shrink-0 ${target.gender === 'male'
-              ? 'bg-blue-50 text-blue-500 dark:bg-blue-900/30'
-              : 'bg-rose-50 text-rose-500 dark:bg-rose-900/30'
+            ? 'bg-blue-50 text-blue-500 dark:bg-blue-900/30'
+            : 'bg-rose-50 text-rose-500 dark:bg-rose-900/30'
             }`}
         >
           {target.gender === 'male' ? 'M' : 'F'}
@@ -72,7 +73,7 @@ export default function MyInfoBar() {
       {/* Action Text/Icon */}
       <div className="flex items-center gap-1 text-xs font-bold text-indigo-500 dark:text-indigo-400 opacity-60 group-hover:opacity-100 transition-opacity whitespace-nowrap ml-2">
         <span className="hidden sm:inline">{language === 'ko' ? '변경' : 'Change'}</span>
-        <ChevronRightIcon className="w-3 h-3" />
+        <ChevronRightIcon className="w-4 h-4 font-bold " />
       </div>
     </button>
   );

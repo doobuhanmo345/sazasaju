@@ -4,15 +4,13 @@ import { useState, useEffect } from 'react';
 import { useAuthContext } from '@/contexts/useAuthContext';
 import { useLanguage } from '@/contexts/useLanguageContext';
 import { useUsageLimit } from '@/contexts/useUsageLimit';
-
+import LoginStatus from '@/components/LoginStatus';
 import MainIcons from '@/components/menuicons/MainIcons';
 import SubIcons from '@/components/menuicons/SubIcons';
 import SelIcons from '@/components/menuicons/SelIcons';
 import WealthIcons from '@/components/menuicons/WealthIcons';
 import SazaTalkBanner from '@/components/banner/SazaTalkBanner';
 import NewYearBanner from '@/components/banner/NewYearBanner';
-import MyInfoBar from '@/components/MyInfoBar';
-import ImageBanner from '@/components/banner/ImageBanner';
 import BasicAnaBanner from '@/components/banner/BasicAnaBanner';
 import IconWrapper from '@/components/menuicons/IconWrapper';
 import SazaTalkInputBanner from '@/components/banner/SazatalkInputBanner';
@@ -70,17 +68,10 @@ export default function HomeClient() {
   return (
     <div className="pb-24 px-3 max-w-full overflow-x-hidden overscroll-behavior-y-none">
       {/* MyInfo Bar - Conditional Render */}
-      {!!user && (
-        <div className="w-full max-w-lg bg-white/70 dark:bg-slate-800/60 rounded-lg border border-indigo-50 dark:border-indigo-500/30 shadow-sm backdrop-blur-md mx-auto mb-2 p-2 px-4 dark:text-white flex items-center justify-between">
-          {userData?.birthDate ? (
-            <MyInfoBar />
-          ) : (
-            <span className="text-xs text-slate-400 mx-auto">
-              {language === 'ko' ? '데이터가 없습니다.' : 'No Data'}
-            </span>
-          )}
-        </div>
-      )}
+
+      <LoginStatus />
+
+
 
       {/* Banners */}
 

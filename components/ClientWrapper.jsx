@@ -125,19 +125,24 @@ export default function ClientWrapper({ children }) {
 
 
       <main className={!isNoNavbarPath ? "relative min-h-screen pt-[calc(64px+env(safe-area-inset-top))]" : "min-h-screen"}>
-        <div className="w-full mb-5 fixed top-16 z-50 s">
+        <div className="w-full mb-8 fixed top-16 z-50 ">
           <AppBanner />
         </div>
-        {children}
+
+        <div className="mt-3">{children}</div>
+
       </main>
 
       {/* Conditional Footer & MenuBar */}
       {!isSpecialPath && (
-        <>
-          <Footer />
 
-          <MenuBar />
-        </>
+        <Footer />
+
+      )}
+      {!isSpecialPath && (
+
+        <MenuBar />
+
       )}
 
       {/* Kakao SDK v1 (for popup login support on Web) */}

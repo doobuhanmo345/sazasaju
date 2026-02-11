@@ -149,7 +149,7 @@ export default function BasicAnaBanner({ inputDate, isTimeUnknown, gender }) {
       {/* 2. 실제 배너 */}
       <div
         onClick={() => router.push('/saju/basic')}
-        className="cursor-pointer relative w-full h-[200px] rounded-[2rem] border border-gray-100 shadow-md overflow-hidden group transition-all duration-300 mx-auto bg-white"
+        className="cursor-pointer relative w-full h-[200px] rounded-[0.5rem] border border-gray-100 shadow-md overflow-hidden group transition-all duration-300 mx-auto bg-white"
       >
         {/* 배경 대형 텍스트 (한자 일주) */}
         <div className="absolute left-[30%] top-[10%] text-[90px] font-black opacity-[0.05] italic select-none pointer-events-none text-gray-900 whitespace-nowrap">
