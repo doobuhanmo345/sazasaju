@@ -40,6 +40,7 @@ const SazatalkInputBanner = () => {
     ];
 
     const targetProfile = selectedProfile || userData;
+    const [progress, setProgress] = useState(0);
 
     // 자동 스크롤
     useEffect(() => {
@@ -47,6 +48,33 @@ const SazatalkInputBanner = () => {
             scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
         }
     }, [messages, isAnalyzing]);
+
+    // 로딩바 진행 로직 (40초 기준)
+    useEffect(() => {
+        let interval;
+        if (isAnalyzing) {
+            setProgress(0);
+            const startTime = Date.now();
+            const duration = 40000; // 40초
+
+            interval = setInterval(() => {
+                const elapsed = Date.now() - startTime;
+                const newProgress = Math.min(98, (elapsed / duration) * 100);
+                setProgress(newProgress);
+            }, 100);
+        } else {
+            if (progress > 0) {
+                setProgress(100);
+                const timer = setTimeout(() => {
+                    setProgress(0);
+                }, 500);
+                return () => clearTimeout(timer);
+            }
+        }
+        return () => {
+            if (interval) clearInterval(interval);
+        };
+    }, [isAnalyzing]);
 
     // 모달 열릴 때 스크롤 방지
     useEffect(() => {
@@ -185,7 +213,15 @@ const SazatalkInputBanner = () => {
                         </div>
 
                         {/* 하단 텍스트 에어리어 */}
-                        <div className="bg-white dark:bg-slate-800 p-4 pb-10 sm:pb-6 border-t border-slate-100 dark:border-slate-700 flex flex-col">
+                        <div className="relative bg-white dark:bg-slate-800 p-4 pb-10 sm:pb-6 border-t border-slate-100 dark:border-slate-700 flex flex-col">
+                            {(isAnalyzing || progress > 0) && (
+                                <div className="absolute top-0 left-0 w-full h-1 bg-indigo-50 dark:bg-slate-700 overflow-hidden">
+                                    <div
+                                        className="h-full bg-indigo-500 transition-all duration-300 ease-out"
+                                        style={{ width: `${progress}%` }}
+                                    ></div>
+                                </div>
+                            )}
                             <textarea
                                 value={inputValue}
                                 onChange={(e) => setInputValue(e.target.value)}
@@ -250,12 +286,20 @@ const SazatalkInputBanner = () => {
                                                 handleCancelHelper,
                                             });
 
+                                            // 4. 이전 대화 기록 추출 (최근 10개 메시지 = 약 5회 분량)
+                                            const chatHistory = messages
+                                                .slice(1) // 환영 인사 제외
+                                                .map(m => `${m.role === 'user' ? 'User' : 'Saza'}: ${m.text}`)
+                                                .slice(-20)
+                                                .join('\n');
+
                                             const result = await service.analyze(
                                                 AnalysisPresets.saza({
                                                     saju: targetProfile.saju,
                                                     gender: targetProfile.gender,
                                                     inputDate: targetProfile.birthDate,
                                                     question: question,
+                                                    history: chatHistory, // [NEW] 히스토리 전달
                                                 })
                                             );
 
