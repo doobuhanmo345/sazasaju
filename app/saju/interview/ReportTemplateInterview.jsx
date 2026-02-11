@@ -295,7 +295,7 @@ const reusableStyle = `
 
   .rt-main-content { max-width: 440px; margin: 0 auto; padding: 0 20px; }
   .rt-card {
-    background: #fff; border-radius: 32px; padding: 12px; margin-bottom: 24px;
+    background: #fff; border-radius: 32px; padding: 15px; margin-bottom: 24px;
     box-shadow: 0 10px 30px rgba(37, 99, 235, 0.04);
     border: 1px solid rgba(37, 99, 235, 0.08);
   }

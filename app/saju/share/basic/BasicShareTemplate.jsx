@@ -126,16 +126,16 @@ export default function BasicShareTemplate({ shareData, language = 'ko' }) {
 
                     <div className="mt-4 gap-3">
                         <div className="rt-card">
-                            <h4 className="font-bold text-sm mb-2">{isEn ? 'Strengths' : '강점'}</h4>
-                            <ul className="text-sm space-y-1">
+                            <h4 className="font-bold text-md mb-2">{isEn ? 'Strengths' : '강점'}</h4>
+                            <ul className="text-md space-y-1">
                                 {data?.corePersonality?.strengths?.map((item, idx) => (
                                     <li key={idx}>• {item}</li>
                                 ))}
                             </ul>
                         </div>
                         <div className="rt-card">
-                            <h4 className="font-bold text-sm mb-2">{isEn ? 'Risks' : '약점'}</h4>
-                            <ul className="text-sm space-y-1">
+                            <h4 className="font-bold text-md mb-2">{isEn ? 'Risks' : '약점'}</h4>
+                            <ul className="text-md space-y-1">
                                 {data?.corePersonality?.risks?.map((item, idx) => (
                                     <li key={idx}>• {item}</li>
                                 ))}
@@ -231,7 +231,7 @@ export default function BasicShareTemplate({ shareData, language = 'ko' }) {
                 <section className="my-9">
                     <h2 className="rt-card__title">{isEn ? 'Optimal Environment' : '최적의 환경'}</h2>
                     <div className="rt-card">
-                        <h3 className="font-bold mb-2">{data?.environmentGuide?.summary}</h3>
+                        <h3 className="font-bold mb-2 text-lg">{data?.environmentGuide?.summary}</h3>
                         <p className="rt-card__text text-left">{data?.environmentGuide?.desc}</p>
                     </div>
                 </section>
