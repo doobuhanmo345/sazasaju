@@ -550,18 +550,30 @@ function MessagesContent() {
               Prev
             </button>
             <div className="flex gap-1">
-              {[...Array(totalPages)].map((_, i) => (
-                <button
-                  key={i}
-                  onClick={() => setCurrentPage(i + 1)}
-                  className={`w-6 h-6 rounded-lg text-[10px] font-black transition-all ${currentPage === i + 1
-                    ? 'bg-purple-600 text-white shadow-md shadow-purple-500/30'
-                    : 'text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800'
-                    }`}
-                >
-                  {i + 1}
-                </button>
-              ))}
+              {(() => {
+                let startPage = Math.max(1, currentPage - 1);
+                let endPage = Math.min(totalPages, startPage + 2);
+
+                if (endPage - startPage < 2) {
+                  startPage = Math.max(1, endPage - 2);
+                }
+
+                return [...Array(endPage - startPage + 1)].map((_, i) => {
+                  const p = startPage + i;
+                  return (
+                    <button
+                      key={p}
+                      onClick={() => setCurrentPage(p)}
+                      className={`w-6 h-6 rounded-lg text-[10px] font-black transition-all ${currentPage === p
+                        ? 'bg-purple-600 text-white shadow-md shadow-purple-500/30'
+                        : 'text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800'
+                        }`}
+                    >
+                      {p}
+                    </button>
+                  );
+                });
+              })()}
             </div>
             <button
               onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}

@@ -15,6 +15,8 @@ import { DateService } from '@/utils/dateService';
 import CityInput from '@/ui/CityInput';
 import FourPillarVis from '@/components/FourPillarVis';
 
+
+
 export default function NoBirthdayPage() {
   const router = useRouter();
   const { user, userData, updateProfileData, logout } = useAuthContext();
@@ -48,8 +50,11 @@ export default function NoBirthdayPage() {
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
+    if (!!userData?.birthDate && !formData.birthDate) {
+      router.push('/')
+    };
     setMounted(true);
-  }, []);
+  }, [userData?.birthDate]);
 
 
 
