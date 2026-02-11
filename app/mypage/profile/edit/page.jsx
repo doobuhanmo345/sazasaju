@@ -120,7 +120,7 @@ export default function EditProfilePage() {
       <div className="relative overflow-hidden bg-white dark:bg-slate-900 pt-6 pb-16 sm:pt-12 sm:pb-20 px-6 border-b border-slate-100 dark:border-slate-800">
         <div className="absolute bottom-0 right-0 -mr-20 -mb-20 w-80 h-80 bg-indigo-500/10 dark:bg-indigo-500/20 rounded-full blur-[80px]" />
         <div className="absolute bottom-0 left-0 -ml-20 -mb-20 w-80 h-80 bg-purple-500/10 dark:bg-purple-500/20 rounded-full blur-[80px]" />
-        <BackButton />
+        <BackButton title={language === 'ko' ? '내 정보 수정' : 'Edit Profile'} />
         <div className="relative z-10 max-w-lg mx-auto text-center flex flex-col items-center">
           {/* Back Button integrated into Hero */}
 

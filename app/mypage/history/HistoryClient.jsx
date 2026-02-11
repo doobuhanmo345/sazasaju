@@ -265,7 +265,7 @@ export default function HistoryClient() {
                 <div className="absolute bottom-0 left-0 -ml-20 -mb-20 w-80 h-80 bg-purple-500/10 dark:bg-purple-500/20 rounded-full blur-[80px]" />
 
                 {/* Glassy Back Button */}
-                <BackButton />
+                <BackButton title={isKo ? '상담 기록' : 'Consultation History'} />
 
                 <div className="relative z-10 max-w-lg mx-auto text-center flex flex-col items-center">
                     <div className="relative w-20 h-20 sm:w-28 sm:h-28 overflow-hidden rounded-full border-4 border-white shadow-2xl mb-4 bg-white dark:bg-slate-800 flex items-center justify-center">

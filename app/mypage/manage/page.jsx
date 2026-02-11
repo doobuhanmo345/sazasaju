@@ -67,7 +67,7 @@ export default function ProfileManagePage() {
       <div className="relative overflow-hidden bg-white dark:bg-slate-900 pt-6 pb-12 sm:pt-12 sm:pb-20 px-6 border-b border-slate-100 dark:border-slate-800">
         <div className="absolute bottom-0 right-0 -mr-20 -mb-20 w-80 h-80 bg-indigo-500/10 dark:bg-indigo-500/20 rounded-full blur-[80px]" />
         <div className="absolute bottom-0 left-0 -ml-20 -mb-20 w-80 h-80 bg-purple-500/10 dark:bg-purple-500/20 rounded-full blur-[80px]" />
-        <BackButton />
+        <BackButton title={language === 'ko' ? '프로필 전환' : 'Profile Management'} />
         <div className="relative z-10 max-w-lg mx-auto text-center flex flex-col items-center">
           <div className="relative w-20 h-20 sm:w-28 sm:h-28 overflow-hidden rounded-full border-4 border-white dark:border-slate-800 shadow-2xl mb-4 bg-white dark:bg-slate-800 flex items-center justify-center">
             <img
@@ -126,7 +126,7 @@ export default function ProfileManagePage() {
 
               <div className="flex items-center gap-2 shrink-0">
                 <button
-                  onClick={(e) => { e.stopPropagation(); router.push('/profile/edit'); }}
+                  onClick={(e) => { e.stopPropagation(); router.push('mypage/profile/edit'); }}
                   className="p-3 hover:bg-white dark:hover:bg-slate-800 rounded-xl transition-all active:scale-90"
                   title={language === "ko" ? '수정' : 'Edit'}
                 >

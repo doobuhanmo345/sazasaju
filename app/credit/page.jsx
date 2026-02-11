@@ -12,7 +12,7 @@ import {
 } from '@heroicons/react/24/outline';
 import { useLanguage } from '@/contexts/useLanguageContext';
 import { useUsageLimit } from '@/contexts/useUsageLimit';
-
+import BackButton from '@/ui/BackButton';
 export default function CreditInfoPage() {
     const router = useRouter();
     const { language } = useLanguage();
@@ -67,14 +67,8 @@ export default function CreditInfoPage() {
             <div className="sticky top-0 z-30 bg-white/90 dark:bg-slate-950/90 backdrop-blur-sm">
                 <div style={{ paddingTop: 'env(safe-area-inset-top)' }} />
                 <div className="max-w-xl mx-auto px-6 h-14 flex items-center justify-between">
-                    <button
-                        onClick={() => router.back()}
-                        className="p-1 -ml-1 hover:opacity-60 transition-opacity"
-                    >
-                        <ChevronLeftIcon className="w-6 h-6 stroke-2" />
-                    </button>
-                    <h1 className="text-xl font-bold tracking-tight">{isKo ? '크레딧 구매' : 'Get Credits'}</h1>
-                    <div className="w-8" /> {/* Spacer for balance */}
+                    <BackButton title={isKo ? '크레딧 구매' : 'Get Credits'} />
+
                 </div>
             </div>
 

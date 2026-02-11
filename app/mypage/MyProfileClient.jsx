@@ -48,7 +48,6 @@ export default function MyProfileClient() {
             </div>
         );
     }
-    console.log(selectedProfile)
     const handleLogout = async () => {
         if (confirm(isKo ? '로그아웃 하시겠습니까?' : 'Are you sure you want to log out?')) {
             await logout();
@@ -65,7 +64,7 @@ export default function MyProfileClient() {
                 <div className="absolute top-0 right-0 -mr-40 -mt-20 w-[800px] h-[800px] bg-indigo-500/[0.04] dark:bg-indigo-500/[0.08] rounded-full blur-[160px] pointer-events-none" />
                 <div className="absolute bottom-[-20%] left-[-10%] w-[600px] h-[600px] bg-purple-500/[0.04] dark:bg-purple-500/[0.08] rounded-full blur-[160px] pointer-events-none" />
 
-                <BackButton />
+                <BackButton title={isKo ? '마이페이지' : 'My Page'} />
 
                 <div className="relative z-10 max-w-lg mx-auto flex flex-col items-center">
                     {/* Floating Avatar - Pure visual, no container box */}
@@ -130,8 +129,8 @@ export default function MyProfileClient() {
                         <MyCredit />
                     </div>
 
-                    {/* Quick Access Icons - Pure Glyphs, Spaced with Whitespace */}
-                    <div className="grid grid-cols-4 gap-8 w-full pt-9 pb-6">
+                    {/* Quick Access Icons - Responsive Grid for Mobile */}
+                    <div className="grid grid-cols-4 gap-2.5 sm:gap-6 w-full pt-9 pb-6">
                         {[
                             { label: isKo ? '분석 기록' : 'History', icon: <PresentationChartLineIcon />, path: '/mypage/history', color: 'text-rose-500' },
                             { label: isKo ? '메시지' : 'Messages', icon: <EnvelopeIcon />, path: '/messages', color: 'text-slate-500' },
@@ -141,15 +140,15 @@ export default function MyProfileClient() {
                             <button
                                 key={idx}
                                 onClick={() => router.push(item.path)}
-                                className="relative flex flex-col items-center gap-4 p-4 rounded-3xl bg-white/40 dark:bg-slate-900/40 border border-white/60 dark:border-white/[0.03] shadow-[0_8px_32px_rgba(0,0,0,0.04)] dark:shadow-[0_8px_32px_rgba(0,0,0,0.2)] backdrop-blur-md hover:scale-105 active:scale-95 transition-all duration-300 group overflow-hidden"
+                                className="relative w-full flex flex-col items-center gap-2 sm:gap-4 p-3 sm:p-5 rounded-2xl sm:rounded-3xl bg-white/40 dark:bg-slate-900/40 border border-white/60 dark:border-white/[0.03] shadow-[0_4px_20px_rgba(0,0,0,0.03)] dark:shadow-[0_8px_32px_rgba(0,0,0,0.2)] backdrop-blur-md hover:scale-105 active:scale-95 transition-all duration-300 group overflow-hidden"
                             >
                                 {/* Subtle inner glow effect */}
                                 <div className={`absolute inset-0 bg-gradient-to-br ${item.color.replace('text-', 'from-')}/[0.02] to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500`} />
 
-                                <div className={`w-9 h-9 ${item.color} group-hover:scale-110 transition-all duration-500 drop-shadow-[0_0_15px_rgba(79,70,229,0.15)] relative z-10`}>
+                                <div className={`w-7 h-7 sm:w-9 sm:h-9 ${item.color} group-hover:scale-110 transition-all duration-500 drop-shadow-[0_0_15px_rgba(79,70,229,0.15)] relative z-10`}>
                                     {React.cloneElement(item.icon, { className: 'w-full h-full stroke-[1.2]' })}
                                 </div>
-                                <span className="text-[11px] font-black text-slate-500 dark:text-slate-400 uppercase tracking-widest group-hover:text-slate-900 dark:group-hover:text-white transition-colors relative z-10">
+                                <span className="text-[10px] sm:text-[11px] font-black text-slate-500 dark:text-slate-400 uppercase tracking-tighter sm:tracking-widest group-hover:text-slate-900 dark:group-hover:text-white transition-colors relative z-10 text-center line-clamp-1">
                                     {item.label}
                                 </span>
                             </button>
@@ -172,14 +171,14 @@ export default function MyProfileClient() {
                             { label: isKo ? '내 정보 수정하기' : 'Modify Core Info', exp: '이름, 생년월일, 성별 등 기본 정보 수정', icon: <UserCircleIcon className="text-indigo-500" />, path: 'mypage/profile/edit' },
                             { label: isKo ? '프로필 전환' : 'Switch Active Soul', exp: '나의 다른 프로필로 전환', icon: <PresentationChartLineIcon className="text-purple-500" />, path: 'mypage/manage/' },
                             { label: isKo ? '상담 기록 관리' : 'Temporal Logs', exp: '과거 상담 기록 확인 및 관리', icon: <PresentationChartLineIcon className="text-purple-500" />, path: 'mypage/history' },
-                            { label: isKo ? '관리자 페이지' : 'Root Access', exp: '관리자 전용 페이지', icon: <PresentationChartLineIcon className="text-purple-500" />, path: '/admin', visible: userData?.role === 'admin' || 'super_admin' },
+                            { label: isKo ? '관리자 페이지' : 'Root Access', exp: '관리자 전용 페이지', icon: <PresentationChartLineIcon className="text-purple-500" />, path: '/admin', visible: userData?.role === 'admin' || userData?.role === 'super_admin' },
                             { label: isKo ? '프롬프트 수정' : 'Oracle Settings', exp: '프롬프트 수정 페이지', icon: <PresentationChartLineIcon className="text-purple-500" />, path: '/admin/editprompt', visible: userData?.role === 'super_admin' },
                             { label: isKo ? '로그아웃' : 'Disconnect Session', exp: '로그아웃', icon: <ArrowRightOnRectangleIcon className="text-rose-500" />, action: handleLogout },
                         ].filter(item => item.visible !== false).map((item, idx) => (
 
                             <button
                                 key={idx}
-                                onClick={() => router.push(item.path)}
+                                onClick={item.action || (() => router.push(item.path))}
                                 className="group flex flex-col items-start gap-6"
                             >
                                 <div className="flex items-center gap-3">

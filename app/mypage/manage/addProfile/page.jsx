@@ -81,7 +81,7 @@ function AddProfileContent() {
             <div className="relative overflow-hidden bg-white dark:bg-slate-900 pt-6 pb-20 sm:pt-12 sm:pb-20 px-6 border-b border-slate-100 dark:border-slate-800">
                 <div className="absolute bottom-0 right-0 -mr-20 -mb-20 w-80 h-80 bg-indigo-500/10 dark:bg-indigo-500/20 rounded-full blur-[80px]" />
                 <div className="absolute bottom-0 left-0 -ml-20 -mb-20 w-80 h-80 bg-purple-500/10 dark:bg-purple-500/20 rounded-full blur-[80px]" />
-                <BackButton />
+                <BackButton title={isKo ? '프로필 추가/수정' : 'Update Profile'} />
                 <div className="relative z-10 max-w-lg mx-auto text-center flex flex-col items-center">
 
                     <div className="relative w-20 h-20 sm:w-28 sm:h-28 overflow-hidden rounded-full border-4 border-white dark:border-slate-800 shadow-2xl mb-4 bg-white dark:bg-slate-800 flex items-center justify-center">
