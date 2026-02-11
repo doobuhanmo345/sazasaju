@@ -60,12 +60,7 @@ export default function NoBirthdayPage() {
 
   // Intro transition timers
   useEffect(() => {
-    // 만약 이미 정보가 있는 상태라면 인트로를 보여주지 않음
-    if (userData?.birthDate) {
-      setIsIntro(false);
-      console.log('Intro skipped');
-      return;
-    }
+
 
     if (isIntro) {
       const timers = [

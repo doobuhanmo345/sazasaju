@@ -45,7 +45,7 @@ const ReportTemplateBasic = ({ shareData }) => {
     }
 
     if (!userData) return; // Wait for load
-
+    console.log(data)
     // DB에 저장된 결과가 있으면 로드
     const savedResult = userData?.usageHistory?.ZApiAnalysis?.result;
     if (savedResult) {
@@ -89,44 +89,60 @@ const ReportTemplateBasic = ({ shareData }) => {
       water: 'bg-blue-600',
     })[type];
   // const data = {
-  //   summary: {
-  //     title: '사주를 한 줄로 요약하는 강렬한 제목',
-  //     desc: '당신의 타고난 본질과 기운의 흐름에 대한 심층 요약 설명',
+  //   "corePersonality": {
+  //     "title": "성격을 관통하는 한 문장",
+  //     "metaphor": "이 사람의 기질을 상징하는 비유 (예: 차가운 서리 아래 피어난 꽃)",
+  //     "essence": "타고난 기질과 절대 변하지 않는 성격의 중심축",
+  //     "strengths": ["강점1", "강점2"],
+  //     "risks": ["약점1", "약점2"],
+  //     "keywords": ["#키워드1", "#키워드2", "#키워드3"]
   //   },
-  //   keywords: ['핵심키워드1', '핵심키워드2', '핵심키워드3'],
-  //   overview: {
-  //     desc: '인생 전반의 에너지 흐름과 당신이 가진 잠재력에 대한 개요',
+  //   "personalityOverview": {
+  //     "desc": "이 성격이 인생 전반(사회적/개인적)에서 어떻게 작동하는지에 대한 심층 개요"
   //   },
-  //   wealth: {
-  //     summary: '재물운에 대한 한 줄 요약',
-  //     desc: '타고난 재복과 돈을 모으는 전략, 투자 성향 분석',
+  //   "lensInterpretations": {
+  //     "wealth": {
+  //       "summary": "돈 앞에서 보이는 성격적 특징",
+  //       "desc": "재물을 대하는 태도, 소비 패턴, 투자 시 나타나는 본능적 선택"
+  //     },
+  //     "job": {
+  //       "summary": "사회적 성공과 일에서 보이는 특징",
+  //       "desc": "조직 내에서의 위치, 성취를 얻는 방식, 유리한 직무 환경"
+  //     },
+  //     "love": {
+  //       "summary": "관계와 사랑 앞에서 보이는 특징",
+  //       "desc": "연애 시 나타나는 반복적인 패턴, 파트너에게 원하는 핵심 가치"
+  //     },
+  //     "health": {
+  //       "summary": "에너지 소모와 몸의 반응 특징",
+  //       "desc": "성격적 스트레스가 신체 어디로 가는지, 에너지를 충전하는 방식"
+  //     },
+  //     "conflict": {
+  //       "summary": "갈등과 스트레스 상황에서의 돌발 행동",
+  //       "desc": "위기 시 성격이 어떻게 왜곡되거나 폭발하는지, 그때의 심리 상태"
+  //     },
+  //     "relationship": {
+  //       "summary": "사람을 대하는 기본 필터",
+  //       "desc": "인맥을 맺는 기준, 사람에게 상처받거나 정을 떼는 포인트"
+  //     }
   //   },
-  //   job: {
-  //     summary: '직업/성공운에 대한 한 줄 요약',
-  //     desc: '어울리는 직업군, 조직 내에서의 위치, 사회적 성취의 시기',
+  //   "timingAndFlow": {
+  //     "principle": "이 성격이 운의 흐름을 타는 기본 원리",
+  //     "daewoon": [
+  //       { "name": "현재 시기", "interpretation": "지금 이 성격이 어떤 성장을 위해 시험받고 있는가" },
+  //       { "name": "다음 시기", "interpretation": "미래의 파도를 타기 위해 지금 성격적으로 준비해야 할 것" },
+  //       { "name": "이후 시기", "interpretation": "인생 후반전, 성격이 어떤 완숙한 형태로 변해갈 것인가" }
+  //     ]
   //   },
-  //   love: {
-  //     summary: '애정/인연운에 대한 한 줄 요약',
-  //     desc: '이상적인 배우자상, 연애 스타일, 관계를 유지하는 팁',
+  //   "environmentGuide": {
+  //     "summary": "성격을 살리는 최적의 환경 요약",
+  //     "desc": "공간, 방향, 라이프스타일 중 이 성격을 빛나게 해줄 개운 조건"
   //   },
-  //   health: {
-  //     summary: '건강/에너지에 대한 한 줄 요약',
-  //     desc: '주의해야 할 신체 부위와 오행의 불균형을 맞추는 건강 관리법',
-  //   },
-  //   daewoon: [
-  //     { name: '현재 대운/시기 명칭', interpretation: '해당 시기의 주요 변화와 마음가짐' },
-  //     { name: '다음 대운/시기 명칭', interpretation: '앞으로 다가올 변화의 파도와 준비할 점' },
-  //     { name: '이후 대운 명칭', interpretation: '인생의 중후반기 흐름 분석' },
-  //     { name: '이후 대운 명칭', interpretation: '인생의 흐름 분석' },
-  //     { name: '이후 대운 명칭', interpretation: '인생의 흐름 분석' },
-  //     { name: '이후 대운 명칭', interpretation: '인생의 흐름 분석' },
-  //     { name: '이후 대운 명칭', interpretation: '인생의 흐름 분석' },
-  //   ],
-  //   finalConclusion: {
-  //     title: '당신을 위한 마스터의 최종 제언',
-  //     desc: '리포트를 마무리하며 당신이 지금 즉시 실천해야 할 삶의 태도',
-  //   },
-  // };
+  //   "finalConclusion": {
+  //     "title": "최종 사용 설명서",
+  //     "desc": "성격을 바꾸려 애쓰지 말고, 지금 당장 '이렇게' 활용하라는 마스터의 직언"
+  //   }
+  // }
 
   return (
     <div
@@ -284,65 +300,106 @@ const ReportTemplateBasic = ({ shareData }) => {
             </section>
             <section className="my-9">
               <h2 className="rt-card__title">
-                {isEn ? 'Saju Identity Summary' : '사주 정체성 요약'}
+                {isEn ? 'Core Personality' : '핵심 성격'}
               </h2>
 
-              <div className="rt-card__text text-left">{data?.summary?.desc}</div>
+              <div className="rt-card__text text-left">{data?.corePersonality?.essence}</div>
               <div className="my-3">
-                <p className="rt-timing-grid__item">{data?.summary?.title}</p>
-                <div className="gap-3 flex justify-center">
-                  {data?.keywords.map((keyword, idx) => (
+                <p className="rt-timing-grid__item">{data?.corePersonality?.title}</p>
+                <p className="text-sm text-gray-600 italic my-2">{data?.corePersonality?.metaphor}</p>
+                <div className="gap-3 flex justify-center flex-wrap">
+                  {data?.corePersonality?.keywords?.map((keyword, idx) => (
                     <div key={idx} className="rt-id-card__label">
-                      #{keyword}
+                      {keyword}
                     </div>
                   ))}
+                </div>
+              </div>
+
+              <div className="mt-4 gap-3">
+                <div className="rt-card">
+                  <h4 className="font-bold text-sm mb-2">{isEn ? 'Strengths' : '강점'}</h4>
+                  <ul className="text-sm space-y-1">
+                    {data?.corePersonality?.strengths?.map((item, idx) => (
+                      <li key={idx}>• {item}</li>
+                    ))}
+                  </ul>
+                </div>
+                <div className="rt-card">
+                  <h4 className="font-bold text-sm mb-2">{isEn ? 'Risks' : '약점'}</h4>
+                  <ul className="text-sm space-y-1">
+                    {data?.corePersonality?.risks?.map((item, idx) => (
+                      <li key={idx}>• {item}</li>
+                    ))}
+                  </ul>
                 </div>
               </div>
             </section>
 
             <section className="my-9">
               <h2 className="rt-card__title">
-                {isEn ? 'Overview of Destiny by Topic' : '주제별 개요'}
+                {isEn ? 'Personality Overview' : '성격 개요'}
               </h2>
-              <p className="rt-card__text text-left">{data?.overview?.desc}</p>
+              <p className="rt-card__text text-left">{data?.personalityOverview?.desc}</p>
             </section>
 
             <section className="my-9">
-              <h2 className="rt-card__title">{isEn ? 'Detailed Interpretation' : '상세 해석 섹션'}</h2>
+              <h2 className="rt-card__title">{isEn ? 'Personality Through Different Lenses' : '관점별 성격 해석'}</h2>
 
               <div className="rt-card">
                 <div className="rt-ootd-item">
                   <h3 className="rt-ootd-item__value">{isEn ? 'Wealth & Finance' : '재물운'}</h3>
-                  <p className="rt-ootd-item__label">{data?.wealth?.summary}</p>
+                  <p className="rt-ootd-item__label">{data?.lensInterpretations?.wealth?.summary}</p>
                 </div>
-                <p className="rt-card__text text-left">{data?.wealth?.desc}</p>
+                <p className="rt-card__text text-left">{data?.lensInterpretations?.wealth?.desc}</p>
               </div>
+
               <div className="rt-card">
                 <div className="rt-ootd-item">
                   <h3 className="rt-ootd-item__value">{isEn ? 'Career & Success' : '직업운'}</h3>
-                  <p className="rt-ootd-item__label">{data?.job?.summary}</p>
+                  <p className="rt-ootd-item__label">{data?.lensInterpretations?.job?.summary}</p>
                 </div>
-                <p className="rt-card__text text-left">{data?.job?.desc}</p>
+                <p className="rt-card__text text-left">{data?.lensInterpretations?.job?.desc}</p>
               </div>
+
               <div className="rt-card">
                 <div className="rt-ootd-item">
                   <h3 className="rt-ootd-item__value">{isEn ? 'Love & Romance' : '애정운'}</h3>
-                  <p className="rt-ootd-item__label">{data?.love?.summary}</p>
+                  <p className="rt-ootd-item__label">{data?.lensInterpretations?.love?.summary}</p>
                 </div>
-                <p className="rt-card__text text-left">{data?.love?.desc}</p>
+                <p className="rt-card__text text-left">{data?.lensInterpretations?.love?.desc}</p>
               </div>
+
               <div className="rt-card">
                 <div className="rt-ootd-item">
                   <h3 className="rt-ootd-item__value">{isEn ? 'Health & Wellness' : '건강운'}</h3>
-                  <p className="rt-ootd-item__label">{data?.health?.summary}</p>
+                  <p className="rt-ootd-item__label">{data?.lensInterpretations?.health?.summary}</p>
                 </div>
-                <p className="rt-card__text text-left">{data?.health?.desc}</p>
+                <p className="rt-card__text text-left">{data?.lensInterpretations?.health?.desc}</p>
+              </div>
+
+              <div className="rt-card">
+                <div className="rt-ootd-item">
+                  <h3 className="rt-ootd-item__value">{isEn ? 'Conflict & Stress' : '갈등 대응'}</h3>
+                  <p className="rt-ootd-item__label">{data?.lensInterpretations?.conflict?.summary}</p>
+                </div>
+                <p className="rt-card__text text-left">{data?.lensInterpretations?.conflict?.desc}</p>
+              </div>
+
+              <div className="rt-card">
+                <div className="rt-ootd-item">
+                  <h3 className="rt-ootd-item__value">{isEn ? 'Relationships' : '인간관계'}</h3>
+                  <p className="rt-ootd-item__label">{data?.lensInterpretations?.relationship?.summary}</p>
+                </div>
+                <p className="rt-card__text text-left">{data?.lensInterpretations?.relationship?.desc}</p>
               </div>
             </section>
+
             <section className="my-9">
-              <h2 className="rt-card__title">{isEn ? 'Major Life Cycles' : '대운 해설'}</h2>
+              <h2 className="rt-card__title">{isEn ? 'Timing & Life Flow' : '시기와 흐름'}</h2>
+              <p className="rt-card__text text-left mb-4">{data?.timingAndFlow?.principle}</p>
               <div className="rt-analysis-list__item gap-3">
-                {data?.daewoon?.map((item, idx) => (
+                {data?.timingAndFlow?.daewoon?.map((item, idx) => (
                   <div key={idx} className="rt-gap2">
                     <span className="rt-analysis-list__sub-title">{item?.name}</span>
                     <p className="rt-card__text text-left">{item?.interpretation}</p>
@@ -351,11 +408,19 @@ const ReportTemplateBasic = ({ shareData }) => {
               </div>
             </section>
 
+            <section className="my-9">
+              <h2 className="rt-card__title">{isEn ? 'Optimal Environment' : '최적의 환경'}</h2>
+              <div className="rt-card">
+                <h3 className="font-bold mb-2">{data?.environmentGuide?.summary}</h3>
+                <p className="rt-card__text text-left">{data?.environmentGuide?.desc}</p>
+              </div>
+            </section>
+
             <section className="rt-card">
-              <h2 className="rt-card__title">Final Conclusion</h2>
+              <h2 className="rt-card__title">{isEn ? 'Final User Manual' : '최종 사용 설명서'}</h2>
               <div className="rt-tip-box">
-                <span className="rt-tip-box__label">{data?.finalConclusion.title}</span>
-                <p className="rt-card__text text-left">{data?.finalConclusion.desc}</p>
+                <span className="rt-tip-box__label">{data?.finalConclusion?.title}</span>
+                <p className="rt-card__text text-left">{data?.finalConclusion?.desc}</p>
               </div>
             </section>
           </div>

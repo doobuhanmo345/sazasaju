@@ -552,10 +552,10 @@ function MessagesContent() {
             <div className="flex gap-1">
               {(() => {
                 let startPage = Math.max(1, currentPage - 1);
-                let endPage = Math.min(totalPages, startPage + 2);
+                let endPage = Math.min(totalPages, startPage + 5);
 
-                if (endPage - startPage < 2) {
-                  startPage = Math.max(1, endPage - 2);
+                if (endPage - startPage < 5) {
+                  startPage = Math.max(1, endPage - 5);
                 }
 
                 return [...Array(endPage - startPage + 1)].map((_, i) => {
