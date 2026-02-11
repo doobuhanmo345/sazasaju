@@ -75,8 +75,6 @@ export function AuthContextProvider({ children }) {
   // 프로필 선택 함수 (Firebase 연동)
   // 프로필 선택 함수 (Firebase 연동)
   const selectProfile = async (profile) => {
-    console.log('selectProfile', profile);
-
     if (!user) return;
     const userDocRef = doc(db, 'users', user.uid);
     try {
@@ -104,7 +102,7 @@ export function AuthContextProvider({ children }) {
       console.error("Failed to save selected profile:", e);
     }
   };
-
+  console.log(selectedProfile)
   // [NEW] Firestore 및 localStorage 기반의 프로필 복원 로직 통합
   useEffect(() => {
     if (!userData || !savedProfiles || savedProfiles.length === 0) return;
@@ -346,6 +344,32 @@ export function AuthContextProvider({ children }) {
 
     return () => unsubscribeSnapshot?.();
   }, [user]);
+  // ⭐️ selectedProfile 변경 시 항상 usage 데이터 병합
+  useEffect(() => {
+    if (!selectedProfile || !userData) return;
+
+    const isSelf = selectedProfile.uid === userData.uid && !selectedProfile.id;
+
+    // 본인이면 그냥 패스
+    if (isSelf) return;
+
+    // 친구 프로필이면 usage 데이터 병합
+    const hasUsageData =
+      selectedProfile.editCount !== undefined &&
+      selectedProfile.credits !== undefined;
+
+    // 이미 병합되어 있으면 패스
+    if (hasUsageData) return;
+
+    // 병합 실행
+    setSelectedProfile(prev => ({
+      ...prev,
+      editCount: userData.editCount,
+      credits: userData.credits,
+      dailyUsage: userData.dailyUsage,
+      lastEditDate: userData.lastEditDate,
+    }));
+  }, [selectedProfile, userData]);
 
   const [isLoggingIn, setIsLoggingIn] = useState(false);
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
