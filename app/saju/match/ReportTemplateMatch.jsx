@@ -231,7 +231,7 @@ export default function ReportTemplateMatch({ storageKey }) {
             </div>
 
 
-            <AfterReport fortuneType="match" />
+            <AfterReport fortuneType="match" data={data?.summary} />
         </div>
     );
 }

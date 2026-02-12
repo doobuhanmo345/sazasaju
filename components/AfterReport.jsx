@@ -4,13 +4,24 @@
 import React from 'react';
 import { MessageCircle, Sparkles, Heart, Star, Share2 } from 'lucide-react';
 import { useLanguage } from '@/contexts/useLanguageContext';
+import { useLoading } from '@/contexts/useLoadingContext';
 import { useRouter } from 'next/navigation';
 import ShareButton from './ShareButton';
 import ShareLinkButton from './ShareLinkButton';
 
-export default function AfterReport({ fortuneType = 'basic', storageKey = false }) {
+
+export default function AfterReport({ fortuneType = 'basic', storageKey = false, data }) {
+  const { aiResult } = useLoading();
   const { language } = useLanguage();
   const navigate = useRouter();
+
+  const handleStartSazaTalk = () => {
+    const historyData = data ? (typeof data === 'string' ? data : JSON.stringify(data)) : aiResult;
+    if (historyData) {
+      sessionStorage.setItem('saza_history', historyData);
+    }
+    navigate.push('/saju/sazatalk');
+  };
 
   return (
     <div className="w-full py-20 px-6 bg-gradient-to-b from-white via-blue-50/30 to-white">
@@ -20,7 +31,7 @@ export default function AfterReport({ fortuneType = 'basic', storageKey = false 
           <div className="flex flex-col items-center gap-4">
             <div className="flex items-center gap-2 text-blue-600 font-bold text-sm uppercase tracking-wide">
               <Share2 size={16} />
-              <span>{language === 'en' ? 'Share with Friends' : '친구에게 공유하기'}</span>
+              <span>친구에게 공유하기</span>
             </div>
             <div className="flex items-center justify-center gap-4">
               <div className="transform transition-transform hover:scale-110 duration-200">
@@ -39,7 +50,7 @@ export default function AfterReport({ fortuneType = 'basic', storageKey = false 
           </div>
           <div className="relative flex justify-center text-sm">
             <span className="px-4 bg-gradient-to-b from-white via-blue-50/30 to-white text-slate-400 font-medium">
-              {language === 'en' ? 'Or Ask Saza' : '또는 사자에게 질문하기'}
+              또는 사자에게 질문하기
             </span>
           </div>
         </div>
@@ -63,7 +74,7 @@ export default function AfterReport({ fortuneType = 'basic', storageKey = false 
 
           {/* Primary CTA */}
           <button
-            onClick={() => navigate('/sazatalk')}
+            onClick={handleStartSazaTalk}
             className="w-full sm:w-auto px-10 py-5 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-2xl font-bold text-xl shadow-xl shadow-blue-500/25 hover:shadow-2xl hover:shadow-blue-500/40 hover:-translate-y-1 transition-all duration-300 flex items-center justify-center gap-3 mx-auto group"
           >
             <span>{language === 'en' ? 'Start Chat with Saza' : '사자와 채팅 시작하기'}</span>

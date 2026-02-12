@@ -203,7 +203,7 @@ export default function ReportTemplateSelBirth() {
         )}
 
 
-        <AfterReport fortuneType="selbirth" />
+        <AfterReport fortuneType="selbirth" data={data?.summary} />
       </main>
     </div>
   );

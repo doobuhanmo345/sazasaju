@@ -74,6 +74,7 @@ const ReportTemplateDate = ({ }) => {
   const { displayName, birthDate, isTimeUnknown } = targetProfile;
   const saju = targetProfile.saju || {};
   const bd = toymdt(birthDate);
+  console.log(data)
 
   return (
     <div className={`rt-container ${isLoaded ? 'is-active' : ''}`}>
@@ -250,7 +251,7 @@ const ReportTemplateDate = ({ }) => {
       </footer>
 
 
-      <AfterReport fortuneType="date" />
+      <AfterReport fortuneType="date" data={data?.summary} />
     </div>
   );
 };

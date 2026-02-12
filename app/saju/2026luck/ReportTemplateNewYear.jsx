@@ -234,7 +234,7 @@ const ReportTemplateNewYear = ({ }) => {
         </section>
       </div>
       <div dangerouslySetInnerHTML={{ __html: reportStyleBlue }} />
-      <AfterReport fortuneType="yearly" />
+      <AfterReport fortuneType="yearly" data={data} />
     </div>
   );
 };

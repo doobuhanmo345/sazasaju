@@ -151,7 +151,7 @@ export default function ReportTemplateWealth({ storageKey }) {
                 >
                     ← {language === 'en' ? 'Check Another Topic' : '다른 재물운 보기'}
                 </button>
-                <AfterReport fortuneType="wealth" storageKey={storageKey} />
+                <AfterReport fortuneType="wealth" storageKey={storageKey} data={data?.summary} />
             </div>
         </div>
     );

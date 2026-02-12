@@ -438,7 +438,7 @@ const ReportTemplateBasic = ({ shareData }) => {
           {/* 내용끝 */}
         </div>
       </div>
-      <AfterReport fortuneType="basic" />
+      <AfterReport fortuneType="basic" data={data?.summary} />
     </div>
   );
 };

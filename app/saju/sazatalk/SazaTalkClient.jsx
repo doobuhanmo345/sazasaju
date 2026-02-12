@@ -112,6 +112,17 @@ function SazaTalkContent() {
   const historyContentRef = useRef(null);
   const [autoStarted, setAutoStarted] = useState(false);
   const [isButtonClicked, setIsButtonClicked] = useState(false);
+  const [chatHistory, setChatHistory] = useState("");
+
+  useEffect(() => {
+    const history = sessionStorage.getItem('saza_history');
+    if (history) {
+      setChatHistory(history);
+      // We don't necessarily want to remove it until we've used it in handleSazaTest
+      // but if the user Refreshes, we might want to clear it.
+      // For now, let's keep it until auto-trigger or manual trigger uses it.
+    }
+  }, []);
 
   // [NEW] Check for duplicate query and redirect
   useEffect(() => {
@@ -309,6 +320,7 @@ function SazaTalkContent() {
           gender: gender,
           inputDate: inputDate,
           question: userQuestion,
+          history: chatHistory
         }),
       );
       if (result) {

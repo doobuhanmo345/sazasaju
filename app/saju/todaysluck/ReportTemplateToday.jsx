@@ -135,7 +135,7 @@ const ReportTemplateToday = ({ }) => {
         </div>
       </div>
 
-      <AfterReport fortuneType="todaysluck" />
+      <AfterReport fortuneType="todaysluck" data={data?.summary} />
       <style>{`/* --- 2030 Minimal Line Design System --- */
 
 .fortune-container {

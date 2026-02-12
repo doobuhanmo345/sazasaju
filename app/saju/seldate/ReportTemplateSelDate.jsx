@@ -156,7 +156,7 @@ export default function ReportTemplateSelDate() {
         )}
 
 
-        <AfterReport fortuneType="seldate" />
+        <AfterReport fortuneType="seldate" data={data?.summary} />
       </main>
     </div>
   );

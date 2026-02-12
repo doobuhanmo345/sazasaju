@@ -6,12 +6,19 @@ import { useLoading } from '@/contexts/useLoadingContext';
 import { db } from '@/lib/firebase';
 import { collection, query, where, orderBy, limit, onSnapshot, doc, updateDoc, deleteDoc } from 'firebase/firestore';
 import { XMarkIcon, SparklesIcon } from '@heroicons/react/24/outline';
-
+import { useRouter, usePathname } from 'next/navigation';
 
 export default function AppBanner() {
     const { user, userData } = useAuthContext();
     const { progress, elapsedTime, statusText: globalStatusText, queueDoc, localStatusText, isBackground, isDirect, isStaleFlag, handleCancel } = useLoading();
-    const shouldShow = isBackground || isDirect || (userData?.isAnalyzing && !isStaleFlag);
+    const router = useRouter();
+    const pathname = usePathname();
+
+    const isStaleFlagContext = isStaleFlag; // Rename for clarity if needed, but context provides it.
+
+    // Check if current path should hide the banner
+    const isHiddenPath = pathname?.startsWith('/mypage') || pathname?.startsWith('/credit') || pathname?.startsWith('/tutorial');
+    const shouldShow = (isBackground || isDirect || (userData?.isAnalyzing && !isStaleFlag)) && !isHiddenPath;
 
     if (!shouldShow) return null;
 

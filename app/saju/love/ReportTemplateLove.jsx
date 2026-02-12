@@ -153,7 +153,7 @@ export default function ReportTemplateLove({ storageKey }) {
                 >
                     ← {language === 'en' ? 'Check Another Topic' : '다른 애정운 보기'}
                 </button>
-                <AfterReport fortuneType="love" storageKey={storageKey} />
+                <AfterReport fortuneType="love" storageKey={storageKey} data={data?.summary} />
             </div>
         </div>
     );
