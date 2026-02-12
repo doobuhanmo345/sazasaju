@@ -259,15 +259,16 @@ export default function HistoryClient() {
                 displayDate: timestamp ? new Date(timestamp).toLocaleDateString(language, { year: 'numeric', month: '2-digit', day: '2-digit' }) : '',
                 category: config.category || (key.toLowerCase().startsWith('ztarot') ? 'tarot' : 'saju'),
                 raw: data,
-                sajuText: `${data?.saju?.sky3}${data?.saju?.grd3}년 ${data?.saju?.sky2}${data?.saju?.grd2}월 ${data?.saju?.sky1}${data?.saju?.grd1}일 ${data?.saju?.sky0}${data?.saju?.grd0}${data?.saju?.sky0 ? '시' : ''} ${data?.saju?.gender === 'male' ? '남' : '여'}`
+
             });
         });
 
         return items.sort((a, b) => b.timestamp.getTime() - a.timestamp.getTime());
     }, [userData, isKo, language, savedProfiles]); // Added savedProfiles dependency
+    console.log(allHistoryItems)
     const displayWho = (item) => {
         if (item?.who) return `${item?.who}`;
-        if (item?.saju) return `${item?.sajuText}`;
+        if (item?.raw.saju) return `${item?.raw.saju.sky3}${item?.raw.saju.grd3}년 ${item?.raw.saju.sky2}${item?.raw.saju.grd2}월 ${item?.raw.saju.sky1}${item?.raw.saju.grd1}일 ${item?.raw.saju.sky0}${item?.raw.saju.grd0}${item?.raw.saju.sky0 ? '시' : ''} /${item?.raw.saju.gender === 'male' ? '남' : '여'}`;
         if (!item?.who && !item?.saju) return '-';
     }
     const groupedHistory = useMemo(() => {
@@ -399,9 +400,9 @@ export default function HistoryClient() {
                                                         ) : (
                                                             <></>
                                                         )}
-                                                        <p className="text-sm text-slate-350 dark:text-slate-600 uppercase tracking-tight">
+                                                        <p className="text-xs text-slate-350 dark:text-slate-600 uppercase tracking-tight">
 
-                                                            <span className="font-bold">
+                                                            <span className="">
 
                                                                 {displayWho(item)}
                                                             </span>{item?.who ? '님의 분석 결과' : ''}
