@@ -196,39 +196,7 @@ export default function FortuneClient() {
                 },
             ],
         },
-        {
-            subtitle: isKo ? '신비로운 타로' : 'Mystical Tarot',
-            items: [
-                {
-                    name: isKo ? '타로 오늘의 운세' : 'Tarot Luck',
-                    desc: isKo ? '카드로 보는 오늘 하루' : 'Daily Tarot Reading',
-                    icon: <CalendarDaysIcon />,
-                    path: '/tarot/tarotdaily',
-                    color: 'text-purple-500'
-                },
-                {
-                    name: isKo ? '타로 연애운' : 'Tarot Love',
-                    desc: isKo ? '사랑과 설렘의 향방' : 'Direction of Love',
-                    icon: <SparklesIcon />,
-                    path: '/tarot/tarotlove',
-                    color: 'text-rose-500'
-                },
-                {
-                    name: isKo ? '타로 금전운' : 'Tarot Wealth',
-                    desc: isKo ? '나의 재물과 풍요의 흐름' : 'Flow of Wealth',
-                    icon: <CircleStackIcon />,
-                    path: '/tarot/tarotmoney',
-                    color: 'text-emerald-500'
-                },
-                {
-                    name: isKo ? '타로 고민상담' : 'Tarot Help',
-                    desc: isKo ? '해답이 필요한 순간의 조언' : 'Advice for Difficult Moments',
-                    icon: <PresentationChartLineIcon />,
-                    path: '/tarot/tarotcounseling',
-                    color: 'text-indigo-500'
-                },
-            ],
-        },
+
     ];
 
     return (
@@ -237,8 +205,8 @@ export default function FortuneClient() {
             {/* Hero Header */}
             <div className="relative pt-24 pb-12 px-6 overflow-hidden">
                 {/* Abstract Background Effects */}
-                <div className="absolute top-0 right-0 -mr-40 -mt-20 w-[600px] h-[600px] bg-indigo-500/[0.04] dark:bg-indigo-500/[0.08] rounded-full blur-[120px] pointer-events-none" />
-                <div className="absolute bottom-[-10%] left-[-10%] w-[500px] h-[500px] bg-purple-500/[0.04] dark:bg-purple-500/[0.08] rounded-full blur-[120px] pointer-events-none" />
+                <div className="absolute top-0 right-0 -mr-40 -mt-20 w-[600px] h-[600px] bg-indigo-500/[0.04] dark:bg-indigo-500/[0.08] rounded-full blur-[60px] pointer-events-none transform-gpu" />
+                <div className="absolute bottom-[-10%] left-[-10%] w-[500px] h-[500px] bg-purple-500/[0.04] dark:bg-purple-500/[0.08] rounded-full blur-[60px] pointer-events-none transform-gpu" />
 
                 <div className="relative z-10 max-w-lg mx-auto text-center">
                     <p className="text-[10px] font-black text-indigo-500 dark:text-indigo-400 uppercase tracking-[0.4em] mb-3">

@@ -38,7 +38,7 @@ export default function AppBanner() {
     const displayTime = isDirect ? elapsedTime : (queueDoc?.createdAt ? Math.floor((Date.now() - queueDoc.createdAt.toMillis()) / 1000) : 0);
 
     return (
-        <div className="w-full relative overflow-hidden bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl border-b border-indigo-100/50 dark:border-indigo-900/30">
+        <div className="w-full relative overflow-hidden bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b border-indigo-100/50 dark:border-indigo-900/30">
             {/* Progress Bar Background */}
             <div className="absolute bottom-0 left-0 w-full h-[3px] bg-slate-100 dark:bg-slate-800" />
 

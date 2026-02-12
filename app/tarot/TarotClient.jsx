@@ -10,7 +10,7 @@ import {
     ChevronRightIcon
 } from '@heroicons/react/24/outline';
 import { useLanguage } from '@/contexts/useLanguageContext';
-import BackButton from '@/ui/BackButton';
+
 
 export default function TarotClient() {
     const router = useRouter();
@@ -50,13 +50,13 @@ export default function TarotClient() {
 
     return (
         <div className="min-h-screen bg-white dark:bg-slate-950 font-pretendard pb-40">
-            <BackButton title={isKo ? '타로 허브' : 'Tarot Hub'} />
+
 
             {/* Hero Header */}
             <div className="relative pt-24 pb-12 px-6 overflow-hidden">
                 {/* Abstract Background Effects */}
-                <div className="absolute top-0 right-0 -mr-40 -mt-20 w-[600px] h-[600px] bg-purple-500/[0.04] dark:bg-purple-500/[0.08] rounded-full blur-[120px] pointer-events-none" />
-                <div className="absolute bottom-[-10%] left-[-10%] w-[500px] h-[500px] bg-indigo-500/[0.04] dark:bg-indigo-500/[0.08] rounded-full blur-[120px] pointer-events-none" />
+                <div className="absolute top-0 right-0 -mr-40 -mt-20 w-[600px] h-[600px] bg-purple-500/[0.04] dark:bg-purple-500/[0.08] rounded-full blur-[60px] pointer-events-none transform-gpu" />
+                <div className="absolute bottom-[-10%] left-[-10%] w-[500px] h-[500px] bg-indigo-500/[0.04] dark:bg-indigo-500/[0.08] rounded-full blur-[60px] pointer-events-none transform-gpu" />
 
                 <div className="relative z-10 max-w-lg mx-auto text-center">
                     <p className="text-[10px] font-black text-purple-500 dark:text-purple-400 uppercase tracking-[0.4em] mb-3">

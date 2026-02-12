@@ -24,7 +24,7 @@ export default function BackButton({ title }) {
 
     return (
         <div className={`fixed top-0 left-0 w-full z-50 transition-all duration-500 ${scrolled
-            ? 'bg-white/80 dark:bg-slate-950/80 backdrop-blur-xl border-b border-slate-100 dark:border-white/5 py-3 shadow-sm'
+            ? 'bg-white/80 dark:bg-slate-950/80 backdrop-blur-lg border-b border-slate-100 dark:border-white/5 py-3 shadow-sm'
             : 'bg-transparent border-b border-transparent py-5'
             }`}>
             <div className="max-w-lg mx-auto px-6 relative flex items-center justify-between">
