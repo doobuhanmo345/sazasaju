@@ -135,38 +135,43 @@ const TYPE_CONFIG = {
         label_ko: '출산 택일', label_en: 'Childbirth Selection',
         icon: UserMinusIcon, color: 'text-indigo-400', bg: 'bg-indigo-50', path: '/saju/selbirth/result',
         category: 'saju'
+    }, ZSazaTalk: {
+        label_ko: '사자톡 상담', label_en: 'SazaTalk Consulting',
+        icon: ChatBubbleLeftRightIcon, color: 'text-violet-500', bg: 'bg-violet-50', path: '/saju/sazatalk/result',
+        category: 'saju'
     },
 
     // 타로
-    ZTarotDaily: {
+    tarotDaily: {
         label_ko: '타로 오늘의 운세', label_en: 'Tarot Daily',
         icon: CalendarDaysIcon, color: 'text-indigo-500', bg: 'bg-indigo-50', path: '/tarot/tarotdaily/result',
         category: 'tarot'
     },
-    ZTarotLove: {
+    tarotLove: {
         label_ko: '타로 연애운', label_en: 'Tarot Love',
         icon: SparklesIcon, color: 'text-rose-500', bg: 'bg-rose-50', path: '/tarot/tarotlove/result',
         category: 'tarot'
     },
-    ZTarotMoney: {
+    tarotMoney: {
         label_ko: '타로 금전운', label_en: 'Tarot Wealth',
         icon: CircleStackIcon, color: 'text-emerald-500', bg: 'bg-emerald-50', path: '/tarot/tarotmoney/result',
         category: 'tarot'
     },
-    ZTarotCounseling: {
+    tarotCounseling: {
         label_ko: '타로 고민상담', label_en: 'Tarot Counseling',
         icon: PresentationChartLineIcon, color: 'text-purple-500', bg: 'bg-purple-50', path: '/tarot/tarotcounseling/result',
         category: 'tarot'
     },
-    ZSazaTalk: {
-        label_ko: '사자톡 상담', label_en: 'SazaTalk Consulting',
-        icon: ChatBubbleLeftRightIcon, color: 'text-violet-500', bg: 'bg-violet-50', path: '/saju/sazatalk/result',
-        category: 'saju'
-    }
+    ZCookie: {
+        label_ko: '포춘쿠키', label_en: 'Fortune Cookie',
+        icon: SparklesIcon, color: 'text-rose-500', bg: 'bg-rose-50', path: '/tarot/tarotlove/result',
+        category: 'others'
+    },
+
 };
 
 export default function HistoryClient() {
-    const { user, userData, loadingUser } = useAuthContext();
+    const { user, userData, loadingUser, savedProfiles } = useAuthContext();
     const { language } = useLanguage();
     const router = useRouter();
     const isKo = language === 'ko';
@@ -177,6 +182,13 @@ export default function HistoryClient() {
         { id: 'others', label: isKo ? '기타' : 'Others' },
     ];
 
+    // Helper: Compare saju pillars
+    const checkSajuMatch = (saju1, saju2) => {
+        if (!saju1 || !saju2) return false;
+        const keys = ['sky0', 'grd0', 'sky1', 'grd1', 'sky2', 'grd2']; // Compare Year/Month/Day
+        return keys.every(k => saju1[k] === saju2[k]);
+    };
+
     const allHistoryItems = useMemo(() => {
         if (!userData?.usageHistory) return [];
 
@@ -186,6 +198,7 @@ export default function HistoryClient() {
         Object.keys(hist).forEach(key => {
             const data = hist[key];
             if (!data) return;
+            if (!data.result) return; // Filter out null results
 
             const standardKey = Object.keys(TYPE_CONFIG).find(k => k.toLowerCase() === key.toLowerCase());
 
@@ -205,6 +218,33 @@ export default function HistoryClient() {
 
             const timestamp = data.updatedAt || data.timestamp || data.date || data.today;
 
+            // [NEW] Determine "Who" (Identity)
+            let who = null;
+            if (config.category === 'saju') {
+                if (data.saju) {
+                    // Check Self
+                    if (checkSajuMatch(data.saju, userData?.saju)) {
+                        who = userData?.displayName || '사용자'
+                    }
+                    // Check Saved Profiles
+                    else if (savedProfiles?.length > 0) {
+                        const found = savedProfiles.find(p => checkSajuMatch(data.saju, p.saju));
+                        if (found) who = found.displayName;
+                    }
+                }
+
+                // Fallback: Birthdate
+                if (!who) {
+                    // Check birthDate or date in params (most common for saju history)
+                    const potentialDate = data.params?.birthDate || data.birthDate || (data.saju ? null : data.params?.date);
+                    if (potentialDate && /^\d{4}-\d{2}-\d{2}$/.test(potentialDate)) {
+                        who = potentialDate;
+                    }
+                }
+            } else if (key.toLowerCase().startsWith('zmatchanalysis')) {
+                who = isKo ? '궁합' : 'Couple';
+            }
+
             items.push({
                 id: key,
                 type: standardKey || key,
@@ -214,16 +254,22 @@ export default function HistoryClient() {
                 bg: config.bg,
                 path: config.path,
                 title: data.question || data.purpose || data.q1 || '',
+                who: who, // [NEW] Added who
                 timestamp: timestamp ? new Date(timestamp) : new Date(0),
                 displayDate: timestamp ? new Date(timestamp).toLocaleDateString(language, { year: 'numeric', month: '2-digit', day: '2-digit' }) : '',
                 category: config.category || (key.toLowerCase().startsWith('ztarot') ? 'tarot' : 'saju'),
-                raw: data
+                raw: data,
+                sajuText: `${data?.saju?.sky3}${data?.saju?.grd3}년 ${data?.saju?.sky2}${data?.saju?.grd2}월 ${data?.saju?.sky1}${data?.saju?.grd1}일 ${data?.saju?.sky0}${data?.saju?.grd0}${data?.saju?.sky0 ? '시' : ''} ${data?.saju?.gender === 'male' ? '남' : '여'}`
             });
         });
 
         return items.sort((a, b) => b.timestamp.getTime() - a.timestamp.getTime());
-    }, [userData, isKo, language]);
-
+    }, [userData, isKo, language, savedProfiles]); // Added savedProfiles dependency
+    const displayWho = (item) => {
+        if (item?.who) return `${item?.who}`;
+        if (item?.saju) return `${item?.sajuText}`;
+        if (!item?.who && !item?.saju) return '-';
+    }
     const groupedHistory = useMemo(() => {
         return categories.map(cat => ({
             ...cat,
@@ -338,22 +384,29 @@ export default function HistoryClient() {
 
                                                     <div className="flex-1 min-w-0">
                                                         <div className="flex items-center gap-2 mb-1">
-                                                            <h3 className="font-black text-sm sm:text-base text-slate-900 dark:text-white">
+                                                            <h3 className="font-black text-md sm:text-base text-slate-900 dark:text-white">
+
                                                                 {item.label}
                                                             </h3>
-                                                            <span className="hidden sm:block text-xs font-black text-slate-400 dark:text-slate-600 px-2 py-0.5 bg-slate-100 dark:bg-slate-800/50 rounded-full uppercase tracking-tighter shrink-0">
+                                                            <span className="hidden sm:block text-sm font-black text-slate-400 dark:text-slate-600 px-2 py-0.5 bg-slate-100 dark:bg-slate-800/50 rounded-full uppercase tracking-tighter shrink-0">
                                                                 {item.displayDate}
                                                             </span>
                                                         </div>
                                                         {item.title ? (
                                                             <p className="text-sm text-slate-500 dark:text-slate-400 font-medium line-clamp-1 break-all pr-2">
-                                                                {item.title}
+                                                                {item?.title}
                                                             </p>
                                                         ) : (
-                                                            <p className="text-sm text-slate-350 dark:text-slate-600 font-bold uppercase tracking-tight">
-                                                                {isKo ? '분석 완료' : 'Analysis Completed'}
-                                                            </p>
+                                                            <></>
                                                         )}
+                                                        <p className="text-sm text-slate-350 dark:text-slate-600 uppercase tracking-tight">
+
+                                                            <span className="font-bold">
+
+                                                                {displayWho(item)}
+                                                            </span>{item?.who ? '님의 분석 결과' : ''}
+
+                                                        </p>
                                                     </div>
                                                 </button>
 
