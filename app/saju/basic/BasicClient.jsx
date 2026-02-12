@@ -293,7 +293,7 @@ export default function BasicAnaPage() {
       <AnalysisStepContainer
         guideContent={sajuGuide}
         loadingContent={<LoadingFourPillar saju={saju} isTimeUnknown={isTimeUnknown} isAnalysisDone={isAnalysisDone} />}
-        resultComponent={null}
+        resultComponent={() => router.push('/saju/basic/result')}
         loadingTime={10000000} // Redirect handles result view
       />
     </>

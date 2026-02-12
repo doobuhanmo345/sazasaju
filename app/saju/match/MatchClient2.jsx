@@ -193,7 +193,7 @@ export default function MatchPage() {
           if (prev >= 99) return 99;
           return prev + (isCachedLoading ? 25 : 1);
         });
-      }, isCachedLoading ? 50 : 232);
+      }, isCachedLoading ? 50 : 1200);
     } else {
       setProgress(100);
     }

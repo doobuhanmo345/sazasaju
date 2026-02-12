@@ -84,7 +84,7 @@ export function AuthContextProvider({ children }) {
     if (!user) return;
     const userDocRef = doc(db, 'users', user.uid);
     try {
-      const isSelf = !profile || (profile.uid === user.uid);
+      const isSelf = !profile || (profile.uid === user.uid) || !profile.id;
 
       if (isSelf) {
         setSelectedProfile(userData); // 본인은 그대로
@@ -100,9 +100,13 @@ export function AuthContextProvider({ children }) {
           lastEditDate: userData.lastEditDate, // 본인의 lastEditDate
         };
 
-        setSelectedProfile(enrichedProfile);
-        await updateDoc(userDocRef, { currentProfileId: profile.id });
-        localStorage.setItem('lastSelectedProfileId', profile.id);
+        if (profile.id) {
+          setSelectedProfile(enrichedProfile);
+          await updateDoc(userDocRef, { currentProfileId: profile.id });
+          localStorage.setItem('lastSelectedProfileId', profile.id);
+        } else {
+          console.error("Profile ID missing for friend selection", profile);
+        }
       }
     } catch (e) {
       console.error("Failed to save selected profile:", e);

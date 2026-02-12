@@ -15,7 +15,9 @@ export const AnalysisStepContainer = ({
     if (onStart) onStart();
     setStage('loading');
   };
-
+  if (stage === 'result') {
+    router.push('result');
+  }
   const handleReset = () => {
     setStage('guide');
   };

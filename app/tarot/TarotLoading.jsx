@@ -87,10 +87,10 @@ export default function TarotLoading({ cardPicked }) {
           {globalStatusText || (language === 'ko' ? '운명의 카드를 해석하고 있습니다' : 'Interpreting your destiny...')}
         </p>
 
-        {/* 30초 로딩 프로그래스 바 */}
+        {/* 2분 로딩 프로그래스 바 */}
         <div className="relative w-full h-1.5 bg-amber-500/10 rounded-full overflow-hidden border border-amber-500/5">
           <div
-            className="absolute top-0 left-0 h-full bg-gradient-to-r from-amber-400 to-amber-600 shadow-[0_0_10px_rgba(245,158,11,0.5)] transition-all ease-linear duration-[30000ms]"
+            className="absolute top-0 left-0 h-full bg-gradient-to-r from-amber-400 to-amber-600 shadow-[0_0_10px_rgba(245,158,11,0.5)] transition-all ease-linear duration-[120000ms]"
             style={{ width: `${progress}%` }}
           />
         </div>
