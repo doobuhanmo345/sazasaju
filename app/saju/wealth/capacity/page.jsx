@@ -12,6 +12,7 @@ import EnergyBadge from '@/ui/EnergyBadge';
 import LoadingFourPillar from '@/components/LoadingFourPillar';
 import { SajuAnalysisService, AnalysisPresets } from '@/lib/SajuAnalysisService';
 import AnalyzeButton from '@/ui/AnalyzeButton';
+import { getPromptFromDB } from '@/lib/SajuAnalysisService';
 
 export default function CapacityPage() {
     const { language } = useLanguage();
@@ -22,7 +23,7 @@ export default function CapacityPage() {
     const targetProfile = selectedProfile || userData;
     const { gender, saju, isTimeUnknown } = targetProfile || {};
     const wealthEnergy = useConsumeEnergy();
-
+    const [prompt, setPrompt] = useState()
     const [selectedSubQ, setSelectedSubQ] = useState(null);
     const [isButtonClicked, setIsButtonClicked] = useState(false);
 
@@ -80,16 +81,35 @@ export default function CapacityPage() {
         if (prevData?.language !== language) return false;
         if (prevData?.gender !== targetProfile?.gender) return false;
         if (prevData?.ques !== '평생 재물운') return false;
-        if (prevData?.ques2 !== SUB_Q_TYPES.find((i) => i.id === selectedSubQ)?.desc) return false;
+        if (prevData?.ques2 !== prompt) return false;
         return SajuAnalysisService.compareSaju(prevData.saju, targetProfile?.saju);
     })();
 
+    const selectSubQ = async (subQid) => {
+        setSelectedSubQ(subQid);
+        const origin = SUB_Q_TYPES.find((i) => i.id === subQid);
+
+        const fetchPrompts = async () => {
+            try {
+                const q2 = await getPromptFromDB(`wealth_capacity_${subQid}`);
+
+
+                if (q2) setPrompt(q2);
+            } catch (error) {
+                console.error('Failed to fetch prompts:', error);
+            } finally {
+
+            }
+        };
+        fetchPrompts();
+
+    }
     const handleAnalysis = async () => {
         setAiResult('');
         setIsButtonClicked(true);
         const q1 = '평생 재물운';
-        const q2 = SUB_Q_TYPES.find((i) => i.id === selectedSubQ)?.desc;
-        const qprompt = SUB_Q_TYPES.find((i) => i.id === selectedSubQ)?.prompt;
+        const q2 = prompt
+        const qprompt = null
 
         try {
             const preset = AnalysisPresets.wealth({
@@ -109,7 +129,7 @@ export default function CapacityPage() {
             console.error(error);
         }
     };
-
+    console.log(prompt)
     useEffect(() => {
         if (isButtonClicked && !loading && isAnalysisDone && prevData?.result && prevData?.result?.length > 0) {
             router.push('/saju/wealth/capacity/result');
@@ -159,7 +179,7 @@ export default function CapacityPage() {
                             return (
                                 <button
                                     key={sub.id}
-                                    onClick={() => setSelectedSubQ(sub.id)}
+                                    onClick={() => selectSubQ(sub.id)}
                                     className={`relative flex items-center gap-4 p-6 rounded-2xl border-2 transition-all duration-200 text-left group ${isSelected
                                         ? 'border-amber-500 bg-amber-50 dark:bg-amber-900/20 shadow-lg shadow-amber-100 dark:shadow-amber-900/20 scale-[1.02]'
                                         : 'border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 hover:border-amber-300 hover:shadow-md'
@@ -201,31 +221,16 @@ export default function CapacityPage() {
 
                         {/* Analysis Button */}
                         <div className="flex flex-col items-center gap-4 py-8">
-                            <button
+                            <AnalyzeButton
                                 onClick={() => wealthEnergy.triggerConsume(handleAnalysis)}
                                 disabled={isDisabled || isDisabled2}
-                                className={`w-full sm:w-auto px-16 py-6 font-bold text-xl rounded-2xl shadow-2xl transform transition-all flex items-center justify-center gap-3 ${isDisabled || isDisabled2
-                                    ? 'bg-slate-100 text-slate-400 cursor-not-allowed border-2 border-slate-200'
-                                    : 'bg-gradient-to-r from-amber-600 to-orange-600 hover:from-amber-500 hover:to-orange-500 text-white shadow-amber-400 dark:shadow-amber-900/50 hover:-translate-y-1 hover:shadow-amber-500'
-                                    }`}
-                            >
-                                <SparklesIcon className="w-7 h-7 animate-pulse" />
-                                <span>{language === 'en' ? 'Start Analysis' : '분석 시작하기'}</span>
-                                {isAnalysisDone ? (
-                                    <div className="flex items-center gap-1 backdrop-blur-md bg-white/20 px-3 py-1 rounded-full border border-white/30">
-                                        <span className="text-xs font-bold text-white uppercase">Free</span>
-                                        <TicketIcon className="w-4 h-4 text-white" />
-                                    </div>
-                                ) : isLocked ? (
-                                    <div className="flex items-center gap-1 backdrop-blur-sm px-3 py-1 rounded-full border shadow-sm border-gray-500/50 bg-gray-400/40">
-                                        <LockClosedIcon className="w-5 h-5 text-amber-500" />
-                                    </div>
-                                ) : user && (
-                                    <div className="relative">
-                                        <EnergyBadge active={!!userData?.birthDate} consuming={loading} cost={-1} />
-                                    </div>
-                                )}
-                            </button>
+                                isDone={isAnalysisDone}
+                                language={language}
+                                label={language === 'en' ? 'Start Analysis' : '분석 시작하기'}
+                                cost={-1}
+                                color="amber"
+                            />
+
 
                             {/* Info Text */}
                             {isLocked ? (

@@ -15,6 +15,7 @@ import { SajuAnalysisService, AnalysisPresets, getPromptFromDB } from '@/lib/Saj
 import SelBd from '@/app/saju/match/SelBd';
 import SelectPerson from '@/ui/SelectPerson';
 import AnalyzeButton from '@/ui/AnalyzeButton';
+import { calculateSaju } from '@/lib/sajuCalculator';
 
 export default function FeelingsPage() {
     const { language } = useLanguage();
@@ -63,14 +64,24 @@ export default function FeelingsPage() {
         } else {
             document.title = 'Their True Feelings | What They Really Think';
         }
-
+        const today = new Date();
+        const currentMonthMid = new Date(today.getFullYear(), today.getMonth(), 15);
+        const currentPillar = calculateSaju(currentMonthMid);
+        let month;
+        if (currentPillar) {
+            const currentStr = `${currentPillar.sky2}${currentPillar.grd2}`;
+            const suffix = language === 'ko'
+                ? ` (이번달(${today.getMonth() + 1}월) 월주: ${currentStr})`
+                : ` (Current Month(${today.getMonth() + 1}) Pillar: ${currentStr})`;
+            month = suffix;
+        }
         // Fetch fixed prompts from DB
         const fetchPrompts = async () => {
             try {
                 const q1 = '상대방의 진심.'
                 const q2 = await getPromptFromDB('love_feeling');
                 if (q1) setPromptQ1(q1);
-                if (q2) setPromptQ2(q2);
+                if (q2) setPromptQ2(month + q2);
             } catch (error) {
                 console.error('Failed to fetch prompts:', error);
             } finally {
@@ -79,7 +90,7 @@ export default function FeelingsPage() {
         };
         fetchPrompts();
     }, [language]);
-
+    console.log(promptQ2)
     // [REMOVED] SUB_Q_TYPES
 
     const service = new SajuAnalysisService({
@@ -98,6 +109,7 @@ export default function FeelingsPage() {
         if (!prevData || !prevData.result) return false;
         if (prevData?.language !== language) return false;
         if (prevData?.gender !== targetProfile?.gender) return false;
+        if (prevData?.ques2 !== promptQ2) return false;
 
         if (!showPartnerInput && !!prevData.partnerSaju) {
             return false;
@@ -133,7 +145,7 @@ export default function FeelingsPage() {
                 saju,
                 gender,
                 q1,
-                q2,
+                q2: promptQ2,
                 qprompt,
                 language,
                 cacheKey: 'ZLoveFeelings',

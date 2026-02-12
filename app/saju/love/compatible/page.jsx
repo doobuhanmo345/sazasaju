@@ -12,6 +12,7 @@ import EnergyBadge from '@/ui/EnergyBadge';
 import LoadingFourPillar from '@/components/LoadingFourPillar';
 import { SajuAnalysisService, AnalysisPresets, getPromptFromDB } from '@/lib/SajuAnalysisService';
 import AnalyzeButton from '@/ui/AnalyzeButton';
+import { calculateSaju } from '@/lib/sajuCalculator';
 export default function CompatiblePage() {
     const { language } = useLanguage();
     const router = useRouter();
@@ -33,13 +34,24 @@ export default function CompatiblePage() {
         } else {
             document.title = 'Compatible Partners | Compatibility Analysis';
         }
+        const today = new Date();
+        const currentMonthMid = new Date(today.getFullYear(), today.getMonth(), 15);
+        const currentPillar = calculateSaju(currentMonthMid);
+        let month;
+        if (currentPillar) {
+            const currentStr = `${currentPillar.sky2}${currentPillar.grd2}`;
+            const suffix = language === 'ko'
+                ? ` (이번달(${today.getMonth() + 1}월) 월주: ${currentStr})`
+                : ` (Current Month(${today.getMonth() + 1}) Pillar: ${currentStr})`;
+            month = suffix;
+        }
 
         const fetchPrompts = async () => {
             try {
                 const q1 = '나와 잘 맞는 사람.';
                 const q2 = await getPromptFromDB('love_compatible');
                 if (q1) setPromptQ1(q1);
-                if (q2) setPromptQ2(q2);
+                if (q2) setPromptQ2(month + q2);
             } catch (error) {
                 console.error('Failed to fetch prompts:', error);
             } finally {
@@ -92,6 +104,8 @@ export default function CompatiblePage() {
                 qprompt,
                 language,
                 cacheKey: 'ZLoveCompatible',
+                partnerSaju: null,
+                partnerGender: null,
             });
 
             await service.analyze(preset);

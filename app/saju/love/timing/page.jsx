@@ -12,6 +12,7 @@ import EnergyBadge from '@/ui/EnergyBadge';
 import LoadingFourPillar from '@/components/LoadingFourPillar';
 import { SajuAnalysisService, AnalysisPresets, getPromptFromDB } from '@/lib/SajuAnalysisService';
 import AnalyzeButton from '@/ui/AnalyzeButton';
+import { calculateSaju } from '@/lib/sajuCalculator';
 
 export default function LoveTimingPage() {
     const { language } = useLanguage();
@@ -27,6 +28,7 @@ export default function LoveTimingPage() {
     const [promptQ2, setPromptQ2] = useState('언제쯤 인연이 찾아올지');
     const [loadingPrompts, setLoadingPrompts] = useState(true);
 
+
     useEffect(() => {
         if (language === 'ko') {
             document.title = '솔로 탈출 시기 | 연애 타이밍';
@@ -34,12 +36,25 @@ export default function LoveTimingPage() {
             document.title = 'When to Find Love | Romance Timing';
         }
 
+        const today = new Date();
+        const currentMonthMid = new Date(today.getFullYear(), today.getMonth(), 15);
+        const currentPillar = calculateSaju(currentMonthMid);
+
+        let month;
+        if (currentPillar) {
+            const currentStr = `${currentPillar.sky2}${currentPillar.grd2}`;
+            const suffix = language === 'ko'
+                ? ` (이번달(${today.getMonth() + 1}월) 월주: ${currentStr})`
+                : ` (Current Month(${today.getMonth() + 1}) Pillar: ${currentStr})`;
+            month = suffix;
+        }
+
         const fetchPrompts = async () => {
             try {
                 const q1 = '솔로 탈출 시기.';
                 const q2 = await getPromptFromDB('love_timing');
                 if (q1) setPromptQ1(q1);
-                if (q2) setPromptQ2(q2);
+                if (q2) setPromptQ2(month + q2);
             } catch (error) {
                 console.error('Failed to fetch prompts:', error);
             } finally {
@@ -63,10 +78,12 @@ export default function LoveTimingPage() {
     });
 
     const prevData = userData?.usageHistory?.ZLoveTiming;
+
     const isAnalysisDone = (() => {
         if (!prevData || !prevData.result) return false;
         if (prevData?.language !== language) return false;
         if (prevData?.gender !== targetProfile?.gender) return false;
+        if (prevData?.ques2 !== promptQ2) return false;
 
         return SajuAnalysisService.compareSaju(prevData.saju, targetProfile?.saju);
     })();
@@ -91,12 +108,15 @@ export default function LoveTimingPage() {
                 qprompt,
                 language,
                 cacheKey: 'ZLoveTiming',
+                partnerSaju: null,
+                partnerGender: null,
             });
             await service.analyze(preset);
         } catch (error) {
             console.error(error);
         }
     };
+
 
     useEffect(() => {
         if (isButtonClicked && !loading && isAnalysisDone && prevData?.result && prevData?.result?.length > 0) {

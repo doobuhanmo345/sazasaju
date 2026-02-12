@@ -11,7 +11,8 @@ import { useLoading } from '@/contexts/useLoadingContext';
 import EnergyBadge from '@/ui/EnergyBadge';
 import LoadingFourPillar from '@/components/LoadingFourPillar';
 import { SajuAnalysisService, AnalysisPresets } from '@/lib/SajuAnalysisService';
-import AnalyzeButton from '../../../../ui/AnalyzeButton';
+import AnalyzeButton from '@/ui/AnalyzeButton';
+import { getPromptFromDB } from '@/lib/SajuAnalysisService';
 
 export default function InvestmentPage() {
     const { language } = useLanguage();
@@ -22,17 +23,11 @@ export default function InvestmentPage() {
     const targetProfile = selectedProfile || userData;
     const { gender, saju, isTimeUnknown } = targetProfile || {};
     const wealthEnergy = useConsumeEnergy();
-
+    const [prompt, setPrompt] = useState()
     const [selectedSubQ, setSelectedSubQ] = useState(null);
     const [isButtonClicked, setIsButtonClicked] = useState(false);
 
-    useEffect(() => {
-        if (language === 'ko') {
-            document.title = '투자/재테크 분석 | 주식, 코인, 부동산';
-        } else {
-            document.title = 'Investment Analysis | Stocks, Crypto, Real Estate';
-        }
-    }, [language]);
+
 
 
 
@@ -46,7 +41,7 @@ export default function InvestmentPage() {
             prompt: 'Analyze suitability for high-risk, high-return investments like stocks or crypto.',
         },
         {
-            id: 'real_estate',
+            id: 'realestate',
             label: '부동산 / 청약 (문서운)',
             labelEn: 'Real Estate (Document Luck)',
             desc: '집을 사도 되는지, 이사 운이 있는지',
@@ -80,24 +75,57 @@ export default function InvestmentPage() {
         if (prevData?.language !== language) return false;
         if (prevData?.gender !== targetProfile?.gender) return false;
         if (prevData?.ques !== '투자 / 재테크') return false;
-        if (prevData?.ques2 !== SUB_Q_TYPES.find((i) => i.id === selectedSubQ)?.desc) return false;
+        if (prevData?.ques2 !== prompt) return false;
         return SajuAnalysisService.compareSaju(prevData.saju, targetProfile?.saju);
     })();
+    const selectSubQ = async (subQid) => {
+        setSelectedSubQ(subQid);
+        const origin = SUB_Q_TYPES.find((i) => i.id === subQid);
+
+        // const today = new Date();
+        // const currentMonthMid = new Date(today.getFullYear(), today.getMonth(), 15);
+        // const nextMonthMid = new Date(today.getFullYear(), today.getMonth() + 1, 15);
+
+        // const currentPillar = calculateSaju(currentMonthMid);
+        // const nextPillar = calculateSaju(nextMonthMid);
+
+        // if (currentPillar && nextPillar) {
+        //     const currentStr = `${currentPillar.sky2}${currentPillar.grd2}`;
+        //     const nextStr = `${nextPillar.sky2}${nextPillar.grd2}`;
+        //     const suffix = language === 'ko'
+        //         ? ` (이번달(${today.getMonth() + 1}월) 월주: ${currentStr}, 다음달(${today.getMonth() + 2}월) 월주: ${nextStr})`
+        //         : ` (Current Month(${today.getMonth() + 1}) Pillar: ${currentStr}, Next Month(${today.getMonth() + 2}) Pillar: ${nextStr})`;
+        //     origin.desc += suffix;
+        // }
+        const fetchPrompts = async () => {
+            try {
+                const q2 = await getPromptFromDB(`wealth_investment_${subQid}`);
+
+
+                if (q2) setPrompt(q2);
+            } catch (error) {
+                console.error('Failed to fetch prompts:', error);
+            } finally {
+
+            }
+        };
+        fetchPrompts();
+        // setPrompt(origin.desc);
+    }
+
 
     const handleAnalysis = async () => {
         setAiResult('');
         setIsButtonClicked(true);
         const q1 = '투자 / 재테크';
-        const q2 = SUB_Q_TYPES.find((i) => i.id === selectedSubQ)?.desc;
-        const qprompt = SUB_Q_TYPES.find((i) => i.id === selectedSubQ)?.prompt;
-
+        const q2 = prompt;
         try {
             const preset = AnalysisPresets.wealth({
                 saju,
                 gender,
                 q1,
                 q2,
-                qprompt,
+                qprompt: null,
                 language,
             });
             preset.type = 'wealthInvestment';
@@ -158,7 +186,7 @@ export default function InvestmentPage() {
                             return (
                                 <button
                                     key={sub.id}
-                                    onClick={() => setSelectedSubQ(sub.id)}
+                                    onClick={() => selectSubQ(sub.id)}
                                     className={`relative flex items-center gap-4 p-6 rounded-2xl border-2 transition-all duration-200 text-left group ${isSelected
                                         ? 'border-rose-500 bg-rose-50 dark:bg-rose-900/20 shadow-lg shadow-rose-100 dark:shadow-rose-900/20 scale-[1.02]'
                                         : 'border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 hover:border-rose-300 hover:shadow-md'

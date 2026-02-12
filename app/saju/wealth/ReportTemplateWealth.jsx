@@ -47,11 +47,7 @@ export default function ReportTemplateWealth({ storageKey }) {
                         {topicLabel}
                     </span>
                 </div>
-                {detailLabel && (
-                    <p className="text-sm text-slate-500 dark:text-slate-400 font-medium">
-                        {detailLabel}
-                    </p>
-                )}
+
             </div>
 
             {/* Main Content */}

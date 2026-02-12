@@ -12,7 +12,8 @@ import EnergyBadge from '@/ui/EnergyBadge';
 import LoadingFourPillar from '@/components/LoadingFourPillar';
 import { SajuAnalysisService, AnalysisPresets } from '@/lib/SajuAnalysisService';
 import AnalyzeButton from '@/ui/AnalyzeButton';
-
+import { getPromptFromDB } from '@/lib/SajuAnalysisService';
+import { calculateSaju } from '@/lib/sajuCalculator';
 export default function TimingPage() {
     const { language } = useLanguage();
     const router = useRouter();
@@ -22,7 +23,7 @@ export default function TimingPage() {
     const targetProfile = selectedProfile || userData;
     const { gender, saju, isTimeUnknown } = targetProfile || {};
     const wealthEnergy = useConsumeEnergy();
-
+    const [prompt, setPrompt] = useState('');
     const [selectedSubQ, setSelectedSubQ] = useState(null);
     const [isButtonClicked, setIsButtonClicked] = useState(false);
 
@@ -46,7 +47,7 @@ export default function TimingPage() {
             prompt: 'Analyze the financial flow for the current month and the next month specifically.',
         },
         {
-            id: 'next_year',
+            id: 'nextyear',
             label: '다가오는 2026년 재물운',
             labelEn: 'Financial luck for 2026',
             desc: '내년의 전체적인 총운과 승부처',
@@ -80,16 +81,69 @@ export default function TimingPage() {
         if (prevData?.language !== language) return false;
         if (prevData?.gender !== targetProfile?.gender) return false;
         if (prevData?.ques !== '올해/내년 흐름') return false;
-        if (prevData?.ques2 !== SUB_Q_TYPES.find((i) => i.id === selectedSubQ)?.desc) return false;
+        if (prevData?.ques2 !== prompt) return false;
         return SajuAnalysisService.compareSaju(prevData.saju, targetProfile?.saju);
     })();
+
+    const selectSubQ = async (subQid) => {
+        setSelectedSubQ(subQid);
+        //월별
+        const fetchPrompts = async () => {
+            try {
+                const q2 = await getPromptFromDB(`wealth_timing_${subQid}`);
+
+                const today = new Date();
+                // Use 15th for middle of the month to safely get the month pillar (Jeolgi transition usually happens around 4-8th)
+                const currentMonthMid = new Date(today.getFullYear(), today.getMonth(), 15);
+                const nextMonthMid = new Date(today.getFullYear(), today.getMonth() + 1, 15);
+                const currentYear = new Date(today.getFullYear(), 5, 1)
+                const currentPillar = calculateSaju(currentMonthMid);
+                const nextPillar = calculateSaju(nextMonthMid);
+                const thisYearPillar = calculateSaju(currentYear);
+
+                if (currentPillar && nextPillar) {
+                    const currentStr = `${currentPillar.sky2}${currentPillar.grd2}`;
+                    const nextStr = `${nextPillar.sky2}${nextPillar.grd2}`;
+                    const thisYearStr = `${thisYearPillar.sky3}${thisYearPillar.grd3}`;
+                    const month = language === 'ko'
+                        ? ` (이번달(${today.getMonth() + 1}월) 월주: ${currentStr}, 다음달(${today.getMonth() + 2}월) 월주: ${nextStr})`
+                        : ` (Current Month(${today.getMonth() + 1}) Pillar: ${currentStr}, Next Month(${today.getMonth() + 2}) Pillar: ${nextStr})`;
+                    const year = language === 'ko'
+                        ? ` (올해(${today.getFullYear()}년) 연주: ${thisYearStr})`
+                        : ` (Current Year(${today.getFullYear()}) Pillar: ${thisYearStr})`;
+                    switch (subQid) {
+                        case 'now':
+                            if (q2) setPrompt(month + q2);
+                            break;
+                        case 'nextyear':
+                            if (q2) setPrompt(year + q2);
+                            break;
+                        case 'caution':
+                            if (q2) setPrompt(month + q2);
+                            break;
+                    }
+
+
+                }
+            } catch (error) {
+                console.error('Failed to fetch prompts:', error);
+            } finally {
+
+            }
+        };
+        fetchPrompts();
+
+
+
+
+    }
 
     const handleAnalysis = async () => {
         setAiResult('');
         setIsButtonClicked(true);
         const q1 = '올해/내년 흐름';
-        const q2 = SUB_Q_TYPES.find((i) => i.id === selectedSubQ)?.desc;
-        const qprompt = SUB_Q_TYPES.find((i) => i.id === selectedSubQ)?.prompt;
+        const q2 = prompt
+        const qprompt = null
 
         try {
             const preset = AnalysisPresets.wealth({
@@ -155,7 +209,7 @@ export default function TimingPage() {
                             return (
                                 <button
                                     key={sub.id}
-                                    onClick={() => setSelectedSubQ(sub.id)}
+                                    onClick={() => selectSubQ(sub.id)}
                                     className={`relative flex items-center gap-4 p-6 rounded-2xl border-2 transition-all duration-200 text-left group ${isSelected
                                         ? 'border-sky-500 bg-sky-50 dark:bg-sky-900/20 shadow-lg shadow-sky-100 dark:shadow-sky-900/20 scale-[1.02]'
                                         : 'border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 hover:border-sky-300 hover:shadow-md'

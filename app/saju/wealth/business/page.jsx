@@ -12,7 +12,7 @@ import EnergyBadge from '@/ui/EnergyBadge';
 import LoadingFourPillar from '@/components/LoadingFourPillar';
 import { SajuAnalysisService, AnalysisPresets } from '@/lib/SajuAnalysisService';
 import AnalyzeButton from '@/ui/AnalyzeButton';
-
+import { getPromptFromDB } from '@/lib/SajuAnalysisService';
 export default function BusinessPage() {
     const { language } = useLanguage();
     const router = useRouter();
@@ -22,7 +22,7 @@ export default function BusinessPage() {
     const targetProfile = selectedProfile || userData;
     const { gender, saju, isTimeUnknown } = targetProfile || {};
     const wealthEnergy = useConsumeEnergy();
-
+    const [prompt, setPrompt] = useState()
     const [selectedSubQ, setSelectedSubQ] = useState(null);
     const [isButtonClicked, setIsButtonClicked] = useState(false);
 
@@ -78,16 +78,36 @@ export default function BusinessPage() {
         if (prevData?.language !== language) return false;
         if (prevData?.gender !== targetProfile?.gender) return false;
         if (prevData?.ques !== '사업 / 창업운') return false;
-        if (prevData?.ques2 !== SUB_Q_TYPES.find((i) => i.id === selectedSubQ)?.desc) return false;
+        if (prevData?.ques2 !== prompt) return false;
         return SajuAnalysisService.compareSaju(prevData.saju, targetProfile?.saju);
     })();
+    console.log(isAnalysisDone)
+    const selectSubQ = async (subQid) => {
+        setSelectedSubQ(subQid);
+        const origin = SUB_Q_TYPES.find((i) => i.id === subQid);
 
+        const fetchPrompts = async () => {
+            try {
+                const q2 = await getPromptFromDB(`wealth_business_${subQid}`);
+
+
+                if (q2) setPrompt(q2);
+            } catch (error) {
+                console.error('Failed to fetch prompts:', error);
+            } finally {
+
+            }
+        };
+        fetchPrompts();
+        // setPrompt(origin.desc);
+    }
+    console.log(prompt)
     const handleAnalysis = async () => {
         setAiResult('');
         setIsButtonClicked(true);
         const q1 = '사업 / 창업운';
-        const q2 = SUB_Q_TYPES.find((i) => i.id === selectedSubQ)?.desc;
-        const qprompt = SUB_Q_TYPES.find((i) => i.id === selectedSubQ)?.prompt;
+        const q2 = prompt
+
 
         try {
             const preset = AnalysisPresets.wealth({
@@ -95,7 +115,7 @@ export default function BusinessPage() {
                 gender,
                 q1,
                 q2,
-                qprompt,
+                qprompt: null,
                 language,
             });
             preset.type = 'wealthBusiness';
@@ -153,7 +173,7 @@ export default function BusinessPage() {
                             return (
                                 <button
                                     key={sub.id}
-                                    onClick={() => setSelectedSubQ(sub.id)}
+                                    onClick={() => selectSubQ(sub.id)}
                                     className={`relative flex items-center gap-4 p-6 rounded-2xl border-2 transition-all duration-200 text-left group ${isSelected
                                         ? 'border-emerald-500 bg-emerald-50 dark:bg-emerald-900/20 shadow-lg shadow-emerald-100 dark:shadow-emerald-900/20 scale-[1.02]'
                                         : 'border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 hover:border-emerald-300 hover:shadow-md'

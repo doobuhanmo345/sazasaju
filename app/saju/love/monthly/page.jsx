@@ -11,6 +11,7 @@ import { useLoading } from '@/contexts/useLoadingContext';
 import EnergyBadge from '@/ui/EnergyBadge';
 import LoadingFourPillar from '@/components/LoadingFourPillar';
 import { SajuAnalysisService, AnalysisPresets } from '@/lib/SajuAnalysisService';
+import { calculateSaju } from '@/lib/sajuCalculator';
 import AnalyzeButton from '@/ui/AnalyzeButton';
 
 export default function MonthlyLovePage() {
@@ -73,14 +74,38 @@ export default function MonthlyLovePage() {
     });
 
     const prevData = userData?.usageHistory?.ZLoveMonthly;
+    const [q2, setQ2] = useState('');
     const isAnalysisDone = (() => {
         if (!prevData || !prevData.result) return false;
         if (prevData?.language !== language) return false;
         if (prevData?.gender !== targetProfile?.gender) return false;
         if (prevData?.ques !== '이번 달 애정운') return false;
-        if (prevData?.ques2 !== SUB_Q_TYPES.find((i) => i.id === selectedSubQ)?.desc) return false;
+        if (prevData?.ques2 !== q2) return false;
         return SajuAnalysisService.compareSaju(prevData.saju, targetProfile?.saju);
     })();
+    const selectSubQ = async (subQid) => {
+        setSelectedSubQ(subQid);
+        const origin = SUB_Q_TYPES.find((i) => i.id === subQid);
+
+        const today = new Date();
+        // Use 15th for middle of the month to safely get the month pillar (Jeolgi transition usually happens around 4-8th)
+        const currentMonthMid = new Date(today.getFullYear(), today.getMonth(), 15);
+        const nextMonthMid = new Date(today.getFullYear(), today.getMonth() + 1, 15);
+
+        const currentPillar = calculateSaju(currentMonthMid);
+        const nextPillar = calculateSaju(nextMonthMid);
+
+        if (currentPillar && nextPillar) {
+            const currentStr = `${currentPillar.sky2}${currentPillar.grd2}`;
+            const nextStr = `${nextPillar.sky2}${nextPillar.grd2}`;
+            const suffix = language === 'ko'
+                ? ` (이번달(${today.getMonth() + 1}월) 월주: ${currentStr}, 다음달(${today.getMonth() + 2}월) 월주: ${nextStr})`
+                : ` (Current Month(${today.getMonth() + 1}) Pillar: ${currentStr}, Next Month(${today.getMonth() + 2}) Pillar: ${nextStr})`;
+            origin.desc += suffix;
+        }
+        setQ2(origin.desc);
+    }
+
 
     const handleAnalysis = async () => {
         setAiResult('');
@@ -90,7 +115,7 @@ export default function MonthlyLovePage() {
             return;
         }
         const q1 = '이번 달 애정운';
-        const q2 = SUB_Q_TYPES.find((i) => i.id === selectedSubQ)?.desc;
+
         const qprompt = SUB_Q_TYPES.find((i) => i.id === selectedSubQ)?.prompt;
 
         try {
@@ -102,6 +127,8 @@ export default function MonthlyLovePage() {
                 qprompt,
                 language,
                 cacheKey: 'ZLoveMonthly',
+                partnerSaju: null,
+                partnerGender: null,
             });
 
             await service.analyze(preset);
@@ -155,7 +182,7 @@ export default function MonthlyLovePage() {
                             return (
                                 <button
                                     key={sub.id}
-                                    onClick={() => setSelectedSubQ(sub.id)}
+                                    onClick={() => selectSubQ(sub.id)}
                                     className={`relative flex items-center gap-4 p-6 rounded-2xl border-2 transition-all duration-200 text-left group ${isSelected
                                         ? 'border-pink-500 bg-pink-50 dark:bg-pink-900/20 shadow-lg shadow-pink-100 dark:shadow-pink-900/20 scale-[1.02]'
                                         : 'border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 hover:border-pink-300 hover:shadow-md'

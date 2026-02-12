@@ -101,6 +101,8 @@ export default function LifetimeLovePage() {
                 qprompt,
                 language,
                 cacheKey: 'ZLoveLifetime',
+                partnerSaju: null,
+                partnerGender: null,
             });
 
             await service.analyze(preset);

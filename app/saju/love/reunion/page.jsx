@@ -15,6 +15,7 @@ import { SajuAnalysisService, AnalysisPresets, getPromptFromDB } from '@/lib/Saj
 import SelBd from '@/app/saju/match/SelBd';
 import SelectPerson from '@/ui/SelectPerson';
 import AnalyzeButton from '@/ui/AnalyzeButton';
+import { calculateSaju } from '@/lib/sajuCalculator';
 
 export default function ReunionPage() {
     const { language } = useLanguage();
@@ -56,12 +57,26 @@ export default function ReunionPage() {
             document.title = 'Reunion Fortune | Getting Back Together';
         }
 
+        const today = new Date();
+        const currentMonthMid = new Date(today.getFullYear(), today.getMonth(), 15);
+        const currentPillar = calculateSaju(currentMonthMid);
+
+        let month;
+        if (currentPillar) {
+            const currentStr = `${currentPillar.sky2}${currentPillar.grd2}`;
+            const suffix = language === 'ko'
+                ? ` (이번달(${today.getMonth() + 1}월) 월주: ${currentStr})`
+                : ` (Current Month(${today.getMonth() + 1}) Pillar: ${currentStr})`;
+            month = suffix;
+        }
+
         const fetchPrompts = async () => {
             try {
                 const q1 = '재회 가능성.';
                 const q2 = await getPromptFromDB('love_reunion');
                 if (q1) setPromptQ1(q1);
-                if (q2) setPromptQ2(q2);
+                if (q2) setPromptQ2(month + q2);
+
             } catch (error) {
                 console.error('Failed to fetch prompts:', error);
             } finally {
@@ -88,9 +103,10 @@ export default function ReunionPage() {
     const isAnalysisDone = (() => {
         if (!prevData || !prevData.result) return false;
         if (prevData?.language !== language) return false;
+        if (prevData?.ques2 !== promptQ2) return false;
         if (prevData?.gender !== targetProfile?.gender) return false;
         // Check partner saju if provided
-        if (!showPartnerInput && !prevData.partnerSaju) {
+        if (!showPartnerInput && prevData?.partnerSaju) {
             return false;
         }
         if (showPartnerInput && partnerSaju) {
@@ -100,7 +116,6 @@ export default function ReunionPage() {
 
         return SajuAnalysisService.compareSaju(prevData.saju, targetProfile?.saju);
     })();
-
 
     const handleAnalysis = async () => {
         setAiResult('');
@@ -118,7 +133,7 @@ export default function ReunionPage() {
                 saju,
                 gender,
                 q1,
-                q2,
+                q2: promptQ2,
                 qprompt,
                 language,
                 cacheKey: 'ZLoveReunion',
@@ -137,6 +152,7 @@ export default function ReunionPage() {
             router.push('/saju/love/reunion/result');
         }
     }, [isButtonClicked, prevData, router, isAnalysisDone, loading]);
+
 
     const isDisabled = (loading && !loveEnergy.isConsuming) || !user || loading || loadingPrompts;
     const isDisabled2 = !isAnalysisDone && isLocked;

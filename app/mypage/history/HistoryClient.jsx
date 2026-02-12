@@ -265,7 +265,6 @@ export default function HistoryClient() {
 
         return items.sort((a, b) => b.timestamp.getTime() - a.timestamp.getTime());
     }, [userData, isKo, language, savedProfiles]); // Added savedProfiles dependency
-    console.log(allHistoryItems)
     const displayWho = (item) => {
         if (item?.who) return `${item?.who}`;
         if (item?.raw.saju) return `${item?.raw.saju.sky3}${item?.raw.saju.grd3}년 ${item?.raw.saju.sky2}${item?.raw.saju.grd2}월 ${item?.raw.saju.sky1}${item?.raw.saju.grd1}일 ${item?.raw.saju.sky0}${item?.raw.saju.grd0}${item?.raw.saju.sky0 ? '시' : ''} /${item?.raw.saju.gender === 'male' ? '남' : '여'}`;

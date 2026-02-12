@@ -12,6 +12,7 @@ import EnergyBadge from '@/ui/EnergyBadge';
 import LoadingFourPillar from '@/components/LoadingFourPillar';
 import { SajuAnalysisService, AnalysisPresets, getPromptFromDB } from '@/lib/SajuAnalysisService';
 import AnalyzeButton from '@/ui/AnalyzeButton';
+import { calculateSaju } from '@/lib/sajuCalculator';
 
 export default function AvoidPage() {
     const { language } = useLanguage();
@@ -33,13 +34,23 @@ export default function AvoidPage() {
         } else {
             document.title = 'People to Avoid | Compatibility Warning';
         }
-
+        const today = new Date();
+        const currentMonthMid = new Date(today.getFullYear(), today.getMonth(), 15);
+        const currentPillar = calculateSaju(currentMonthMid);
+        let month;
+        if (currentPillar) {
+            const currentStr = `${currentPillar.sky2}${currentPillar.grd2}`;
+            const suffix = language === 'ko'
+                ? ` (이번달(${today.getMonth() + 1}월) 월주: ${currentStr})`
+                : ` (Current Month(${today.getMonth() + 1}) Pillar: ${currentStr})`;
+            month = suffix;
+        }
         const fetchPrompts = async () => {
             try {
                 const q1 = '내가 피해야 하는 사람.';
                 const q2 = await getPromptFromDB('love_avoid');
                 if (q1) setPromptQ1(q1);
-                if (q2) setPromptQ2(q2);
+                if (q2) setPromptQ2(month + q2);
             } catch (error) {
                 console.error('Failed to fetch prompts:', error);
             } finally {
@@ -66,10 +77,11 @@ export default function AvoidPage() {
     const isAnalysisDone = (() => {
         if (!prevData || !prevData.result) return false;
         if (prevData?.language !== language) return false;
+        if (prevData?.ques2 !== promptQ2) return false;
         if (prevData?.gender !== targetProfile?.gender) return false;
         return SajuAnalysisService.compareSaju(prevData.saju, targetProfile?.saju);
     })();
-
+    console.log(promptQ2)
     const handleAnalysis = async () => {
         setAiResult('');
         setIsButtonClicked(true);
@@ -90,6 +102,8 @@ export default function AvoidPage() {
                 qprompt,
                 language,
                 cacheKey: 'ZLoveAvoid',
+                partnerSaju: null,
+                partnerGender: null,
             });
             await service.analyze(preset);
         } catch (error) {
