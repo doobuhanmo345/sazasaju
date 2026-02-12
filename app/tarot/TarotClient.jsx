@@ -74,27 +74,29 @@ export default function TarotClient() {
             </div>
 
             {/* tarot List */}
-            <div className="max-w-lg mx-auto px-6 space-y-4">
+            <div className="max-w-lg grid grid-cols-1 sm:grid-cols-2 gap-4 mx-auto px-6">
                 {tarotItems.map((item, idx) => (
                     <button
                         key={idx}
                         onClick={() => router.push(item.path)}
-                        className="group relative flex items-center justify-between p-6 rounded-[2.5rem] bg-slate-50/50 dark:bg-slate-900/40 border border-slate-100/50 dark:border-white/[0.03] transition-all hover:bg-white dark:hover:bg-slate-900 hover:shadow-2xl hover:shadow-purple-500/5 hover:-translate-y-0.5 active:scale-[0.98]"
+                        className="h-full m-0 group relative flex flex-col items-center justify-between p-6 rounded-[2.5rem] bg-slate-50/50 dark:bg-slate-900/40 border border-slate-100/50 dark:border-white/[0.03] transition-all hover:bg-white dark:hover:bg-slate-900 hover:shadow-2xl hover:shadow-purple-500/5 hover:-translate-y-0.5 active:scale-[0.98]"
                     >
-                        <div className="flex items-center gap-6">
+                        <div className="text-lg font-black text-slate-800 dark:text-white leading-tight mb-1">
+                            {item.name}
+                        </div>
+                        <div className="flex relative w-full justify-between gap-3">
                             <div className={`p-4 rounded-3xl bg-white dark:bg-slate-800 shadow-sm transition-transform duration-500 group-hover:scale-110 ${item.color}`}>
                                 {React.cloneElement(item.icon, { className: 'w-7 h-7 stroke-[1.2]' })}
                             </div>
                             <div className="text-left">
-                                <p className="text-lg font-black text-slate-800 dark:text-white leading-tight mb-1">
-                                    {item.name}
-                                </p>
-                                <p className="text-sm text-slate-400 dark:text-slate-500 font-medium tracking-tight">
+
+                                <div className="absolute sm:relative min-w-[60px] top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2 sm:min-w-[120px] sm:text-xs text-md text-slate-400 dark:text-slate-500 font-medium tracking-tight">
                                     {item.desc}
-                                </p>
+                                </div>
                             </div>
+                            <ChevronRightIcon className="w-10 h-10 text-slate-300 dark:text-slate-700 group-hover:text-purple-500 transition-colors" />
                         </div>
-                        <ChevronRightIcon className="w-5 h-5 text-slate-300 dark:text-slate-700 group-hover:text-purple-500 transition-colors" />
+
                     </button>
                 ))}
             </div>
