@@ -316,6 +316,7 @@ export default function MatchClient() {
                 {language === 'ko' ? '을 정밀하게 분석합니다.' : '. Precise Relationship Map Analysis.'}
               </p>
 
+
               {/* Decorative divider */}
               <div className="mt-8 flex items-center justify-center gap-3">
                 <div className="h-px w-16 bg-gradient-to-r from-transparent via-rose-300 to-rose-400 dark:via-rose-700 dark:to-rose-600"></div>
@@ -324,6 +325,13 @@ export default function MatchClient() {
               </div>
             </div>
 
+            <div className="m-auto mb-6 max-w-sm rounded-2xl overflow-hidden shadow-sm border border-slate-100 dark:border-slate-800">
+              <img
+                src="/images/introcard/match_1.webp"
+                alt="today's luck"
+                className="w-full h-auto"
+              />
+            </div>
 
             {/* Relationship Selection */}
             <div className="mb-12">

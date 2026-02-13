@@ -50,7 +50,7 @@ const NewYearBanner = () => {
       {/* 마스코트 이미지 */}
       <div className="absolute bottom-0 left-6 h-full w-full flex justify-start items-end pointer-events-none z-10">
         <img
-          src="/images/banner/newyear.webp"
+          src="/images/banner/newyearhorse.png"
           className="h-[100%] sm:h-[115%] w-auto object-contain transition-all duration-700 group-hover:scale-105 origin-bottom-left"
           style={{
             filter: 'drop-shadow(5px 5px 15px rgba(220, 38, 38, 0.12))',

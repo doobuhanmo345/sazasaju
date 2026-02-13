@@ -42,6 +42,10 @@ const COLOR_MAPS = {
   cyan: {
     classes: 'bg-gradient-to-r from-cyan-600 to-teal-600 hover:from-cyan-500 hover:to-teal-500 shadow-cyan-200',
     text: 'text-cyan-500'
+  },
+  sky: {
+    classes: 'bg-gradient-to-r from-sky-500 to-blue-600 hover:from-sky-400 hover:to-blue-500 shadow-sky-200',
+    text: 'text-sky-500'
   }
 };
 

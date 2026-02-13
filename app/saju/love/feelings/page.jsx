@@ -2,7 +2,7 @@
 
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
-import { ChatBubbleLeftRightIcon, SparklesIcon, ExclamationTriangleIcon, LockClosedIcon, TicketIcon } from '@heroicons/react/24/outline';
+import { ChatBubbleLeftRightIcon, SparklesIcon, ExclamationTriangleIcon, LockClosedIcon, TicketIcon, HeartIcon, ChevronDownIcon } from '@heroicons/react/24/outline';
 import { useAuthContext } from '@/contexts/useAuthContext';
 import { useLanguage } from '@/contexts/useLanguageContext';
 import { useUsageLimit } from '@/contexts/useUsageLimit';
@@ -56,7 +56,7 @@ export default function FeelingsPage() {
             setPartnerGender(profile.gender);
         }
     };
-
+    const q1 = isKo ? '상대방의 진심.' : 'Their true feelings.';
     useEffect(() => {
         if (language === 'ko') {
             document.title = '상대방의 진심 | 그 사람의 마음';
@@ -77,7 +77,7 @@ export default function FeelingsPage() {
         // Fetch fixed prompts from DB
         const fetchPrompts = async () => {
             try {
-                const q1 = isKo ? '상대방의 진심.' : 'Their true feelings.';
+
                 const q2 = await getPromptFromDB('love_feeling');
                 if (q2) setPromptQ2(month + q2);
             } catch (error) {
@@ -170,105 +170,146 @@ export default function FeelingsPage() {
 
     return (
         <div className="w-full animate-in fade-in duration-500">
-            <div className="relative bg-gradient-to-br from-cyan-50 via-teal-50 to-blue-50 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900 border-b border-cyan-100 dark:border-slate-700">
-                <div className="max-w-4xl mx-auto px-4 py-16 text-center">
-                    <div className="inline-flex items-center justify-center w-20 h-20 rounded-3xl bg-gradient-to-br from-cyan-500 to-teal-600 mb-6 shadow-2xl shadow-cyan-300 dark:shadow-cyan-900/50">
-                        <ChatBubbleLeftRightIcon className="w-11 h-11 text-white" />
-                    </div>
-                    <h1 className="text-4xl sm:text-5xl font-black text-slate-900 dark:text-white mb-4 leading-tight">
-                        {language === 'ko' ? '상대방의 진심' : 'Their True Feelings'}
-                    </h1>
-                    <p className="text-lg text-slate-600 dark:text-slate-300 max-w-2xl mx-auto">
-                        {language === 'ko'
-                            ? '그 사람의 진짜 마음을 분석합니다'
-                            : 'Analyze what they truly feel about you'}
-                    </p>
-                </div>
-            </div>
 
-            <div className="max-w-4xl mx-auto px-4 py-12">
-                {/* Partner Input Toggle */}
-                <div className="mb-8 p-6 bg-cyan-50 dark:bg-cyan-900/10 rounded-2xl border border-cyan-200 dark:border-cyan-800">
-                    <div className="flex items-center justify-between mb-4">
-                        <h3 className="text-lg font-bold text-slate-800 dark:text-slate-100">
-                            {language === 'ko' ? '상대방 정보 입력 (선택사항)' : 'Partner Information (Optional)'}
-                        </h3>
+            <div className="mx-auto  text-center px-6 animate-in fade-in slide-in-from-bottom-5 duration-700">
+                <div>
+                    <h2 className=" text-3xl font-black text-slate-800 dark:text-white mb-4 tracking-tight">
+                        {language === 'ko' ? '사자가 읽어주는' : "by Saza's Saju reading"}
+
+                        <br />
+                        <span className=" relative text-amber-600 dark:text-amber-500">
+                            {language === 'ko' ? '상대방의 속마음' : "the other person's heart"}
+                            <div className="absolute inset-0 bg-amber-200/50 dark:bg-amber-800/60 blur-md rounded-full scale-100"></div>
+                        </span>
+                    </h2>
+                </div>
+                <div className="space-y-4 text-slate-600 dark:text-slate-400 mb-10 leading-relaxed break-keep">
+                    <p className="text-md">
+                        {language === 'ko' ? (
+                            <>
+                                그 사람은 나를 어떻게 생각하고 있을까요?<br /> <strong>상대방의 속마음</strong>과 진심을 사주로 분석해드립니다.
+                            </>
+                        ) : (
+                            'What is he/she thinking about me? We analyze the other person\'s hidden thoughts and true feelings through Saju.'
+                        )}
+                    </p>
+
+                    <div className="m-auto max-w-sm rounded-2xl overflow-hidden shadow-sm border border-slate-100 dark:border-slate-800">
+                        <img
+                            src="/images/introcard/love_feeling.webp"
+                            alt="today's luck"
+                            className="w-full h-auto"
+                        />
+                    </div>
+                </div>
+                {/* 파트너 인풋 */}
+                <div className="mx-auto max-w-md mb-10 text-left animate-in fade-in slide-in-from-bottom-5 duration-700">
+                    <div
+                        className={`transition-all duration-300 ease-in-out rounded-2xl border overflow-hidden ${showPartnerInput
+                            ? 'bg-white dark:bg-slate-800 border-amber-200 dark:border-amber-700/50 shadow-xl shadow-amber-100/50 dark:shadow-none ring-1 ring-amber-100 dark:ring-amber-900/20'
+                            : 'bg-white/60 dark:bg-slate-800/60 border-slate-200 dark:border-slate-700 hover:border-amber-200 dark:hover:border-amber-700/30'
+                            }`}
+                    >
                         <button
                             onClick={() => setShowPartnerInput(!showPartnerInput)}
-                            className={`px-4 py-2 rounded-lg font-semibold transition-all ${showPartnerInput
-                                ? 'bg-cyan-600 text-white'
-                                : 'bg-white dark:bg-slate-800 text-cyan-600 border border-cyan-300'
-                                }`}
+                            className="w-full p-5 flex items-center justify-between text-left focus:outline-none group"
                         >
-                            {showPartnerInput ? (language === 'ko' ? '입력 취소' : 'Cancel') : (language === 'ko' ? '입력하기' : 'Add Info')}
-                        </button>
-                    </div>
-                    <p className="text-sm text-slate-600 dark:text-slate-400">
-                        {language === 'ko'
-                            ? '상대방의 사주를 입력하면 더 정확한 궁합 분석이 가능합니다. 입력하지 않으면 일반적인 분석을 제공합니다.'
-                            : 'Enter partner\'s birth info for detailed compatibility analysis. Skip for general analysis.'}
-                    </p>
-
-                    {showPartnerInput && (
-                        <div className="mt-6 space-y-6">
-                            {savedProfiles && savedProfiles.length > 0 && (
-                                <div className="max-w-xs">
-                                    <label className="block text-xs font-black text-cyan-600/70 dark:text-cyan-400/70 uppercase tracking-wider mb-2">
-                                        {language === 'ko' ? '저장된 프로필 선택' : 'Select Saved Profile'}
-                                    </label>
-                                    <SelectPerson
-                                        list={savedProfiles}
-                                        onSelect={onSelectPartner}
-                                    />
+                            <div className="flex items-center gap-4">
+                                <div className={`w-12 h-12 rounded-xl flex items-center justify-center transition-all ${showPartnerInput
+                                    ? 'bg-gradient-to-br from-amber-400 to-orange-500 text-white shadow-lg shadow-amber-200/50 dark:shadow-none'
+                                    : 'bg-slate-100 dark:bg-slate-700 text-slate-400 group-hover:bg-amber-50 dark:group-hover:bg-slate-600 group-hover:text-amber-500'
+                                    }`}>
+                                    <HeartIcon className="w-6 h-6" />
                                 </div>
-                            )}
-                            <SelBd
-                                inputDate={partnerDate}
-                                setInputDate={setPartnerDate}
-                                isTimeUnknown={partnerTimeUnknown}
-                                setIsTimeUnknown={setPartnerTimeUnknown}
-                                gender={partnerGender}
-                                setGender={setPartnerGender}
-                                handleSaveMyInfo={() => { }}
-                                color="cyan"
-                            />
-                        </div>
-                    )}
-                </div>
+                                <div>
+                                    <h3 className={`text-base font-bold transition-colors ${showPartnerInput ? 'text-slate-900 dark:text-white' : 'text-slate-600 dark:text-slate-300'}`}>
+                                        {language === 'ko' ? '상대방 정보 입력 (선택)' : 'Partner Info (Optional)'}
+                                    </h3>
+                                    <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+                                        {showPartnerInput
+                                            ? (language === 'ko' ? '정보를 입력하여 정확도를 높이세요' : 'Add info for better accuracy')
+                                            : (language === 'ko' ? '상대방 사주를 추가할까요?' : 'Add partner\'s birth info?')}
+                                    </p>
+                                </div>
+                            </div>
+                            <div className={`transition-transform duration-300 ${showPartnerInput ? 'rotate-180 text-amber-500' : 'text-slate-400 group-hover:text-amber-400'}`}>
+                                <ChevronDownIcon className="w-5 h-5" />
+                            </div>
+                        </button>
 
-                <div className="mb-8">
-                    <div className="p-8 bg-white dark:bg-slate-800 rounded-3xl border border-slate-200 dark:border-slate-700 shadow-sm text-center">
-                        <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-cyan-100 dark:bg-cyan-900/30 text-cyan-500 mb-4">
-                            <SparklesIcon className="w-6 h-6" />
-                        </div>
-                        <h2 className="text-xl font-bold text-slate-800 dark:text-white mb-2">
-                            {isKo ? '상대방의 진심.' : 'Their true feelings.'}
-                        </h2>
-                        <p className="text-slate-600 dark:text-slate-400">
-                            {language === 'ko' ?
-                                '그 사람은 나를 어떻게 생각하고 있을까요? 상대방의 숨겨진 속마음과 진심을 사주로 분석해드립니다.' :
-                                'What do they really think of you? Analyze their hidden feelings and sincerity toward you using Saju.'}
-                        </p>
+                        {showPartnerInput && (
+                            <div className="px-5 pb-6 animate-in slide-in-from-top-2 fade-in duration-300">
+                                <div className="h-px w-full bg-gradient-to-r from-transparent via-slate-200 dark:via-slate-700 to-transparent mb-6"></div>
+
+                                <p className="text-sm text-slate-600 dark:text-slate-400 mb-6 bg-slate-50 dark:bg-slate-900/50 p-4 rounded-xl leading-relaxed border border-slate-100 dark:border-slate-800">
+                                    {language === 'ko'
+                                        ? '상대방의 생년월일을 입력하면 두 사람의 사주를 정밀하게 분석하여 속마음을 더 정확히 파악할 수 있습니다.'
+                                        : 'Enter partner\'s birth info for detailed compatibility analysis. Skip for general analysis.'}
+                                </p>
+
+                                <div className="space-y-8">
+                                    {/* Saved Profiles */}
+                                    {savedProfiles && savedProfiles.length > 0 && (
+                                        <div className="relative">
+                                            <label className="absolute -top-2.5 left-3 px-2 bg-white dark:bg-slate-800 text-[10px] font-bold text-amber-500 uppercase tracking-wider">
+                                                {language === 'ko' ? '저장된 프로필' : 'Saved Profile'}
+                                            </label>
+                                            <div className="border border-slate-200 dark:border-slate-700 rounded-xl p-4 pt-5">
+                                                <SelectPerson
+                                                    list={savedProfiles}
+                                                    onSelect={onSelectPartner}
+                                                />
+                                            </div>
+                                        </div>
+                                    )}
+
+                                    {/* Date Input */}
+                                    <div>
+                                        <div className="flex items-center gap-2 mb-3 px-1">
+                                            <div className="w-1 h-3 bg-amber-400 rounded-full"></div>
+                                            <span className="text-sm font-bold text-slate-700 dark:text-slate-200">
+                                                {language === 'ko' ? '상세 정보' : 'Details'}
+                                            </span>
+                                        </div>
+                                        <SelBd
+                                            inputDate={partnerDate}
+                                            setInputDate={setPartnerDate}
+                                            isTimeUnknown={partnerTimeUnknown}
+                                            setIsTimeUnknown={setPartnerTimeUnknown}
+                                            gender={partnerGender}
+                                            setGender={setPartnerGender}
+                                            handleSaveMyInfo={() => { }}
+                                            color="amber"
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+                        )}
                     </div>
                 </div>
 
-                <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
-                    <div className="flex flex-col items-center gap-4 py-8">
-                        <AnalyzeButton
-                            onClick={() => loveEnergy.triggerConsume(handleAnalysis)}
-                            disabled={isDisabled || isDisabled2}
-                            loading={loading}
-                            isDone={isAnalysisDone}
-                            label={language === 'ko' ? '상대방의 진심 확인하기' : 'Check Partner\'s Feelings'}
-                            color="cyan"
-                            cost={-1}
-                        />
+                {/* Primary Analyze Button */}
+                <div className="mb-12 max-w-lg mx-auto">
+                    <AnalyzeButton
+                        onClick={() => loveEnergy.triggerConsume(handleAnalysis)}
+                        disabled={isDisabled || isDisabled2}
+                        loading={loading}
+                        isDone={isAnalysisDone}
+                        label={language === 'ko' ? '확인하기' : 'Check his/her mind'}
+                        color="amber"
+                        cost={-1}
+                    />
 
-                    </div>
+
                 </div>
 
-                {/* [REMOVED] Question prompt */}
+
+
+
             </div>
+
+
+
         </div>
     );
 }

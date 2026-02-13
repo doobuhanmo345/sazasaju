@@ -192,7 +192,7 @@ export default function MenuBar() {
   const MenuItem = ({ item, color }) => (
     <button
       onClick={() => handleItemClick(item)}
-      className="w-full flex items-center justify-between p-3.5 rounded-2xl border border-slate-50 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900/50 active:scale-[0.97] transition-all"
+      className="w-full flex items-center justify-between p-3.5 rounded-2xl border border-slate-50 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900/50 active:scale-[0.95] active:bg-slate-100 dark:active:bg-slate-800/80 transition-all duration-100"
     >
       <div className="flex items-center gap-3.5 text-left">
         <div className={`p-2.5 rounded-xl bg-white dark:bg-slate-800 shadow-sm ${color}`}>
@@ -371,13 +371,13 @@ export default function MenuBar() {
       </div>
 
       <nav className="fixed -bottom-14 left-0 right-0 z-[70] bg-white/90 dark:bg-slate-900/95 backdrop-blur-md border-t border-slate-100 dark:border-slate-800 pt-4 pb-[calc(2.5rem+env(safe-area-inset-bottom,0px)+40px)]">
-        <div className="max-w-md mx-auto flex justify-between items-center px-6">
+        <div className="max-w-md mx-auto flex justify-between items-center px-3">
           <button
             onClick={() => {
               setActiveMenu(null);
               router.push('/');
             }}
-            className={`relative flex flex-col items-center gap-1.5 transition-all duration-300 active:scale-90 px-4 py-2.5 rounded-2xl group ${(!activeMenu && pathname === '/') ? 'text-indigo-600' : 'text-slate-400 hover:text-slate-600 hover:bg-slate-50 dark:hover:bg-slate-800/50 active:bg-slate-100 dark:active:bg-slate-800'}`}
+            className={`relative flex min-w-[82px] flex-col items-center gap-1.5 transition-all duration-200 active:scale-90 px-2 py-2.5 rounded-2xl group ${(!activeMenu && pathname === '/') ? 'text-indigo-600 active:bg-indigo-100/50' : 'text-slate-400 hover:text-slate-600 hover:bg-slate-50 dark:hover:bg-slate-800/50 active:bg-slate-100 dark:active:bg-slate-800'}`}
           >
             {(!activeMenu && pathname === '/') && (
               <div className="absolute inset-0 bg-indigo-50 dark:bg-indigo-500/15 rounded-2xl -z-10 animate-in fade-in zoom-in-95 duration-500" />
@@ -395,7 +395,7 @@ export default function MenuBar() {
               setActiveMenu(null);
               router.push('/fortune');
             }}
-            className={`relative flex flex-col items-center gap-1.5 transition-all duration-300 active:scale-90 px-4 py-2.5 rounded-2xl group ${pathname === '/fortune' ? 'text-indigo-600' : 'text-slate-400 hover:text-slate-600 hover:bg-slate-50 dark:hover:bg-slate-800/50 active:bg-slate-100 dark:active:bg-slate-800'}`}
+            className={`relative flex min-w-[82px] flex-col items-center gap-1.5 transition-all duration-200 active:scale-90 px-2 py-2.5 rounded-2xl group ${pathname === '/fortune' ? 'text-indigo-600 active:bg-indigo-100/50' : 'text-slate-400 hover:text-slate-600 hover:bg-slate-50 dark:hover:bg-slate-800/50 active:bg-slate-100 dark:active:bg-slate-800'}`}
           >
             {pathname === '/fortune' && (
               <div className="absolute inset-0 bg-indigo-50 dark:bg-indigo-500/15 rounded-2xl -z-10 animate-in fade-in zoom-in-95 duration-500" />
@@ -413,7 +413,7 @@ export default function MenuBar() {
               setActiveMenu(null);
               router.push('/tarot');
             }}
-            className={`relative flex flex-col items-center gap-1.5 transition-all duration-300 active:scale-90 px-4 py-2.5 rounded-2xl group ${pathname === '/tarot' ? 'text-indigo-600' : 'text-slate-400 hover:text-slate-600 hover:bg-slate-50 dark:hover:bg-slate-800/50 active:bg-slate-100 dark:active:bg-slate-800'}`}
+            className={`relative flex min-w-[82px] flex-col items-center gap-1.5 transition-all duration-200 active:scale-90 px-2 py-2.5 rounded-2xl group ${pathname === '/tarot' ? 'text-indigo-600 active:bg-indigo-100/50' : 'text-slate-400 hover:text-slate-600 hover:bg-slate-50 dark:hover:bg-slate-800/50 active:bg-slate-100 dark:active:bg-slate-800'}`}
           >
             {pathname === '/tarot' && (
               <div className="absolute inset-0 bg-indigo-50 dark:bg-indigo-500/15 rounded-2xl -z-10 animate-in fade-in zoom-in-95 duration-500" />
@@ -435,7 +435,7 @@ export default function MenuBar() {
                 router.push('/mypage');
               }
             }}
-            className={`relative flex flex-col items-center gap-1.5 transition-all duration-300 active:scale-90 px-4 py-2.5 rounded-2xl group ${(activeMenu === 'profile' || pathname === '/mypage') ? 'text-indigo-600' : 'text-slate-400 hover:text-slate-600 hover:bg-slate-50 dark:hover:bg-slate-800/50 active:bg-slate-100 dark:active:bg-slate-800'}`}
+            className={`relative flex min-w-[82px] flex-col items-center gap-1.5 transition-all duration-200 active:scale-90 px-2 py-2.5 rounded-2xl group ${(activeMenu === 'profile' || pathname === '/mypage') ? 'text-indigo-600 active:bg-indigo-100/50' : 'text-slate-400 hover:text-slate-600 hover:bg-slate-50 dark:hover:bg-slate-800/50 active:bg-slate-100 dark:active:bg-slate-800'}`}
           >
             {(activeMenu === 'profile' || pathname === '/mypage') && (
               <div className="absolute inset-0 bg-indigo-50 dark:bg-indigo-500/15 rounded-2xl -z-10 animate-in fade-in zoom-in-95 duration-500" />

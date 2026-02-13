@@ -49,6 +49,32 @@ export default function SelBd({
             dayLabel: 'text-cyan-600 dark:text-cyan-400',
             dayVal: 'text-cyan-600 dark:text-cyan-300',
             dayBg: 'bg-cyan-300/20 dark:bg-cyan-500/10'
+        },
+        amber: {
+            label: 'text-amber-600/70 dark:text-amber-400/70',
+            genderActive: 'bg-amber-100 dark:bg-amber-900/40 text-amber-700 dark:text-amber-300 shadow-sm',
+            genderInactive: 'bg-amber-50/30 dark:bg-amber-900/10 text-amber-400/60 dark:text-amber-500/50 hover:bg-amber-50 dark:hover:bg-amber-900/20',
+            checkbox: 'text-amber-600 focus:ring-amber-500 border-amber-300',
+            input: 'dark:bg-amber-900/10 border-amber-200/50 dark:border-amber-800/30 focus:ring-amber-500/30 focus:border-amber-400',
+            divider: 'via-amber-200 dark:via-amber-800',
+            sajuLabel: 'text-amber-400/70 dark:text-amber-500',
+            sajuVal: 'text-amber-700 dark:text-amber-300',
+            dayLabel: 'text-amber-600 dark:text-amber-400',
+            dayVal: 'text-amber-600 dark:text-amber-300',
+            dayBg: 'bg-amber-300/20 dark:bg-amber-500/10'
+        },
+        sky: {
+            label: 'text-sky-600/70 dark:text-sky-400/70',
+            genderActive: 'bg-sky-100 dark:bg-sky-900/40 text-sky-700 dark:text-sky-300 shadow-sm',
+            genderInactive: 'bg-sky-50/30 dark:bg-sky-900/10 text-sky-400/60 dark:text-sky-500/50 hover:bg-sky-50 dark:hover:bg-sky-900/20',
+            checkbox: 'text-sky-600 focus:ring-sky-500 border-sky-300',
+            input: 'dark:bg-sky-900/10 border-sky-200/50 dark:border-sky-800/30 focus:ring-sky-500/30 focus:border-sky-400',
+            divider: 'via-sky-200 dark:via-sky-800',
+            sajuLabel: 'text-sky-400/70 dark:text-sky-500',
+            sajuVal: 'text-sky-700 dark:text-sky-300',
+            dayLabel: 'text-sky-600 dark:text-sky-400',
+            dayVal: 'text-sky-600 dark:text-sky-300',
+            dayBg: 'bg-sky-300/20 dark:bg-sky-500/10'
         }
     };
 

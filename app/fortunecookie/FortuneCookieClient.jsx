@@ -179,7 +179,7 @@ export default function FortuneCookieClient() {
             </div>
             <div className="m-auto max-w-sm rounded-2xl overflow-hidden mb-8">
               <img
-                src="/images/introcard/cookie_2.webp"
+                src="/images/introcard/cookie_2.png"
                 alt="cookie started"
                 className="w-60 h-auto mx-auto"
               />
@@ -250,7 +250,7 @@ export default function FortuneCookieClient() {
                     </div>
                     <div className="m-auto max-w-sm rounded-2xl overflow-hidden mb-8">
                       <img
-                        src="/images/introcard/cookie_1.webp"
+                        src="/images/introcard/cookie_1.png"
                         alt="select cookie"
                         className="w-60 h-auto mx-auto"
                       />

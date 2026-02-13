@@ -26,7 +26,7 @@ export default function CapacityPage() {
     const [prompt, setPrompt] = useState()
     const [selectedSubQ, setSelectedSubQ] = useState(null);
     const [isButtonClicked, setIsButtonClicked] = useState(false);
-
+    const isKo = language === 'ko';
     useEffect(() => {
         if (language === 'ko') {
             document.title = '평생 재물운 분석 | 타고난 부의 그릇';
@@ -145,121 +145,141 @@ export default function CapacityPage() {
 
     return (
         <div className="w-full animate-in fade-in duration-500">
-            {/* Hero Section */}
-            <div className="relative bg-gradient-to-br from-amber-50 via-yellow-50 to-orange-50 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900 border-b border-amber-100 dark:border-slate-700">
-                <div className="max-w-4xl mx-auto px-4 py-16 text-center">
-                    <div className="inline-flex items-center justify-center w-20 h-20 rounded-3xl bg-gradient-to-br from-amber-500 to-orange-600 mb-6 shadow-2xl shadow-amber-300 dark:shadow-amber-900/50">
-                        <CircleStackIcon className="w-11 h-11 text-white" />
-                    </div>
-                    <h1 className="text-4xl sm:text-5xl font-black text-slate-900 dark:text-white mb-4 leading-tight">
-                        {language === 'ko' ? '평생 재물운 분석' : 'Lifetime Wealth Analysis'}
-                    </h1>
-                    <p className="text-lg text-slate-600 dark:text-slate-300 max-w-2xl mx-auto">
-                        {language === 'ko'
-                            ? '타고난 부의 그릇과 재물운의 흐름을 사주로 분석합니다'
-                            : 'Analyze your innate wealth capacity and financial fortune flow'}
-                    </p>
-                </div>
-            </div>
+            <div className="mx-auto  text-center px-6 animate-in fade-in slide-in-from-bottom-5 duration-700">
 
-            {/* Main Content */}
-            <div className="max-w-4xl mx-auto px-4 py-12">
-                {/* Question Selection */}
-                <div className="mb-8">
-                    <h2 className="text-2xl font-black text-slate-800 dark:text-slate-100 mb-8 text-center">
-                        {language === 'ko' ? '무엇이 궁금하신가요?' : 'What are you curious about?'}
+                <div className="space-y-4 text-slate-600 dark:text-slate-400 mb-10 leading-relaxed break-keep">
+                    <h2 className="text-3xl font-black text-slate-800 dark:text-white mb-4 tracking-tight">
+                        {language === 'ko' ? '나의 타고난 부의 그릇은?' : "What Is My Natural Wealth Capacity?"}
+
+                        <br />
+                        <span className="relative text-amber-600 dark:text-amber-500">
+                            {language === 'ko' ? '얼마나 벌 수 있고 언제 부자가 될까' : "How Much Can I Earn — And When?"}
+                            <div className="absolute inset-0 bg-amber-200/50 dark:bg-amber-800/60 blur-md rounded-full scale-100"></div>
+                        </span>
                     </h2>
-                    <div className="grid grid-cols-1 gap-4">
-                        {SUB_Q_TYPES.map((sub) => {
-                            const isSelected = selectedSubQ === sub.id;
-                            const labelText = language !== 'ko' ? sub.labelEn : sub.label;
-                            const descText = language !== 'ko' ? sub.descEn : sub.desc;
+                    <p className="text-md text-slate-600 dark:text-slate-400 mb-6 leading-relaxed break-keep">
+                        {language === 'ko' ? (
+                            <>
+                                당신의 사주가 담을 수 있는 <strong>부의 크기</strong>를 분석합니다. <br />
+                                얼마나 벌 수 있는지, <strong>부가 커지는 시기</strong>는 언제인지 확인하세요.
+                            </>
+                        ) : (
+                            <>
+                                Discover your natural <strong>capacity for wealth</strong>. <br />
+                                See how much you can accumulate and <strong>when prosperity expands</strong>.
+                            </>
+                        )}
 
-                            return (
-                                <button
-                                    key={sub.id}
-                                    onClick={() => selectSubQ(sub.id)}
-                                    className={`relative flex items-center gap-4 p-6 rounded-2xl border-2 transition-all duration-200 text-left group ${isSelected
-                                        ? 'border-amber-500 bg-amber-50 dark:bg-amber-900/20 shadow-lg shadow-amber-100 dark:shadow-amber-900/20 scale-[1.02]'
-                                        : 'border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 hover:border-amber-300 hover:shadow-md'
-                                        }`}
-                                >
-                                    <div className={`flex-shrink-0 w-14 h-14 rounded-xl flex items-center justify-center transition-all ${isSelected
-                                        ? 'bg-amber-500 text-white shadow-lg'
-                                        : 'bg-slate-100 dark:bg-slate-700 text-slate-400 group-hover:bg-amber-100 group-hover:text-amber-500'
-                                        }`}>
-                                        <CircleStackIcon className="w-7 h-7" />
-                                    </div>
-                                    <div className="flex-1">
-                                        <h3 className={`text-lg font-bold mb-1 ${isSelected ? 'text-amber-900 dark:text-amber-100' : 'text-slate-800 dark:text-slate-100'
-                                            }`}>
-                                            {labelText}
-                                        </h3>
-                                        <p className={`text-sm ${isSelected ? 'text-amber-700 dark:text-amber-300' : 'text-slate-500 dark:text-slate-400'
-                                            }`}>
-                                            {descText}
-                                        </p>
-                                    </div>
-                                    {isSelected && (
-                                        <div className="flex-shrink-0">
-                                            <div className="w-6 h-6 rounded-full bg-amber-500 flex items-center justify-center">
-                                                <svg className="w-4 h-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
-                                                </svg>
+                    </p>
+
+                    <div className="m-auto max-w-sm rounded-[2rem] overflow-hidden shadow-sm border border-slate-100 dark:border-slate-800 relative z-0"
+                        style={{ maskImage: 'linear-gradient(to bottom, black 60%, transparent 100%)', WebkitMaskImage: 'linear-gradient(to bottom, black 60%, transparent 100%)' }}>
+                        <img
+                            src="/images/introcard/wealth_1nobg.webp"
+                            alt="today's luck"
+                            className="w-full h-auto opacity-90"
+                        />
+                    </div>
+                </div>
+                <div className="max-w-md mx-auto px-4 -mt-20 relative z-10">
+                    {/* Question Selection */}
+                    <div className="mb-4">
+                        <h2 className="text-xl font-bold text-slate-800 dark:text-slate-100 mb-6 px-1 flex items-center gap-2">
+                            <span className="w-1.5 h-6 bg-amber-500 rounded-full inline-block"></span>
+                            {language === 'ko' ? '궁금한 주제 선택' : 'Select a Topic'}
+                        </h2>
+                        <div className="flex flex-col gap-2">
+                            {SUB_Q_TYPES.map((sub) => {
+                                const isSelected = selectedSubQ === sub.id;
+                                const labelText = language !== 'ko' ? sub.labelEn : sub.label;
+                                const descText = language !== 'ko' ? sub.descEn : sub.desc;
+
+                                return (
+                                    <button
+                                        key={sub.id}
+                                        onClick={() => selectSubQ(sub.id)}
+                                        className={`w-full text-left px-5 py-4 rounded-2xl transition-all duration-200 border relative overflow-hidden group ${isSelected
+                                            ? 'bg-amber-50 dark:bg-amber-900/20 border-amber-500 dark:border-amber-500/50 shadow-sm ring-1 ring-amber-500/20'
+                                            : 'bg-white dark:bg-slate-800 border-slate-100 dark:border-slate-800 hover:border-amber-200 dark:hover:border-amber-800 hover:bg-slate-50 dark:hover:bg-slate-700/50'
+                                            }`}
+                                    >
+                                        <div className="flex items-center justify-between relative z-10">
+                                            <div>
+                                                <h3 className={`font-bold text-[15px] transition-colors ${isSelected ? 'text-amber-800 dark:text-amber-300' : 'text-slate-700 dark:text-slate-200'
+                                                    }`}>
+                                                    {labelText}
+                                                </h3>
+                                                <p className={`text-xs mt-0.5 transition-colors ${isSelected ? 'text-amber-600/80 dark:text-amber-400/70' : 'text-slate-400 dark:text-slate-500'
+                                                    }`}>
+                                                    {descText}
+                                                </p>
+                                            </div>
+                                            <div className={`w-5 h-5 rounded-full border flex items-center justify-center transition-all ${isSelected
+                                                ? 'bg-amber-500 border-amber-500 scale-110'
+                                                : 'border-slate-300 dark:border-slate-600 group-hover:border-amber-300'
+                                                }`}>
+                                                {isSelected && (
+                                                    <svg className="w-3 h-3 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
+                                                        <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                                                    </svg>
+                                                )}
                                             </div>
                                         </div>
-                                    )}
-                                </button>
-                            );
-                        })}
+                                        {/* Subtle highlight effect on hover */}
+                                        {!isSelected && <div className="absolute inset-0 bg-amber-50/0 group-hover:bg-amber-50/30 transition-colors duration-300"></div>}
+                                    </button>
+                                );
+                            })}
+                        </div>
                     </div>
+
+                    {selectedSubQ && (
+                        <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
+
+                            {/* Analysis Button */}
+                            <div className="flex flex-col items-center gap-4 py-8">
+                                <AnalyzeButton
+                                    onClick={() => wealthEnergy.triggerConsume(handleAnalysis)}
+                                    disabled={isDisabled || isDisabled2}
+                                    isDone={isAnalysisDone}
+                                    language={language}
+                                    label={language !== 'ko' ? 'Start Analysis' : '분석 시작하기'}
+                                    cost={-1}
+                                    color="amber"
+                                />
+
+
+                                {isLocked ? (
+                                    <p className="text-rose-600 font-bold text-sm flex items-center gap-2 animate-pulse">
+                                        <ExclamationTriangleIcon className="w-5 h-5" />
+                                        {language === 'ko' ? '크레딧이 부족합니다' : 'Not Enough Credit'}
+                                    </p>
+                                ) : (
+                                    <p className="text-xs text-slate-400">
+                                        {language === 'ko' ? '이미 분석된 운세는 크래딧을 재소모하지 않습니다.' : 'Already analyzed fortunes do not consume credits.'}
+                                    </p>
+                                )}
+                            </div>
+                        </div>
+                    )}
+
+                    {!selectedSubQ && (
+                        <div className="text-center py-12">
+                            <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-slate-100 dark:bg-slate-800 mb-4">
+                                <svg className="w-8 h-8 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 11l5-5m0 0l5 5m-5-5v12" />
+                                </svg>
+                            </div>
+                            <p className="text-slate-400 text-sm">
+                                {language === 'ko' ? '위에서 질문을 선택해주세요.' : 'Please select a question above.'}
+                            </p>
+                        </div>
+                    )}
                 </div>
 
-                {selectedSubQ && (
-                    <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
-
-                        {/* Analysis Button */}
-                        <div className="flex flex-col items-center gap-4 py-8">
-                            <AnalyzeButton
-                                onClick={() => wealthEnergy.triggerConsume(handleAnalysis)}
-                                disabled={isDisabled || isDisabled2}
-                                isDone={isAnalysisDone}
-                                language={language}
-                                label={language !== 'ko' ? 'Start Analysis' : '분석 시작하기'}
-                                cost={-1}
-                                color="amber"
-                            />
-
-
-                            {/* Info Text */}
-                            {isLocked ? (
-                                <p className="text-rose-600 font-bold text-sm flex items-center gap-2 animate-pulse">
-                                    <ExclamationTriangleIcon className="w-5 h-5" />
-                                    {language === 'ko' ? '크레딧이 부족합니다' : 'Not Enough Credit'}
-                                </p>
-                            ) : (
-                                <p className="text-xs text-slate-400">
-                                    {language === 'ko' ? '이미 분석된 운세는 크래딧을 재소모하지 않습니다.' : 'Already analyzed fortunes do not consume credits.'}
-                                </p>
-                            )}
-                        </div>
-                    </div>
-                )}
-
-                {/* Empty State - Shows when no question selected */}
-                {!selectedSubQ && (
-                    <div className="text-center py-12">
-                        <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-slate-100 dark:bg-slate-800 mb-4">
-                            <svg className="w-8 h-8 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 11l5-5m0 0l5 5m-5-5v12" />
-                            </svg>
-                        </div>
-                        <p className="text-slate-400 text-sm">
-                            {language === 'ko' ? '위에서 질문을 선택해주세요' : 'Please select a question above'}
-                        </p>
-                    </div>
-                )}
             </div>
+
+
         </div>
     );
 }

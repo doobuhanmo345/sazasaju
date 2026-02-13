@@ -152,113 +152,56 @@ export default function MonthlyLovePage() {
 
     return (
         <div className="w-full animate-in fade-in duration-500">
-            <div className="relative bg-gradient-to-br from-pink-50 via-fuchsia-50 to-purple-50 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900 border-b border-pink-100 dark:border-slate-700">
-                <div className="max-w-4xl mx-auto px-4 py-16 text-center">
-                    <div className="inline-flex items-center justify-center w-20 h-20 rounded-3xl bg-gradient-to-br from-pink-500 to-fuchsia-600 mb-6 shadow-2xl shadow-pink-300 dark:shadow-pink-900/50">
-                        <CalendarDaysIcon className="w-11 h-11 text-white" />
-                    </div>
-                    <h1 className="text-4xl sm:text-5xl font-black text-slate-900 dark:text-white mb-4 leading-tight">
-                        {language === 'ko' ? '이번 달 애정운' : 'This Month\'s Love'}
-                    </h1>
-                    <p className="text-lg text-slate-600 dark:text-slate-300 max-w-2xl mx-auto">
-                        {language === 'ko'
-                            ? '이번 달의 애정운과 연애 흐름을 분석합니다'
-                            : 'Analyze this month\'s love fortune and romantic flow'}
-                    </p>
-                </div>
-            </div>
-
-            <div className="max-w-4xl mx-auto px-4 py-12">
-                <div className="mb-8">
-                    <h2 className="text-2xl font-black text-slate-800 dark:text-slate-100 mb-8 text-center">
-                        {language === 'ko' ? '무엇이 궁금하신가요?' : 'What are you curious about?'}
+            <div className="mx-auto  text-center px-6 animate-in fade-in slide-in-from-bottom-5 duration-700">
+                <div>
+                    <h2 className=" text-3xl font-black text-slate-800 dark:text-white mb-4 tracking-tight">
+                        {language === 'ko' ? '새로운 만남과 연애운' : "New Meeting and Love Fortune"}
+                        <br />
+                        <span className="relative text-emerald-600 dark:text-emerald-500">
+                            {language === 'ko' ? '이번 달의 운세' : "This Month's Fortune"}
+                        </span>
                     </h2>
-                    <div className="grid grid-cols-1 gap-4">
-                        {SUB_Q_TYPES.map((sub) => {
-                            const isSelected = selectedSubQ === sub.id;
-                            const labelText = language !== 'ko' ? sub.labelEn : sub.label;
-                            const descText = language !== 'ko' ? sub.descEn : sub.desc;
+                </div>
+                <div className="space-y-4 text-slate-600 dark:text-slate-400 mb-10 leading-relaxed break-keep">
+                    <p className="text-md">
+                        {language === 'ko' ? (
+                            <>
+                                이번 달, 당신의 사랑은 어떤 모습일까요? <br />
+                                <strong>새로운 설렘</strong>이 시작될 기회와 <strong>기존의 인연</strong>이 더 깊어지는 시기를 분석해 드립니다.
+                            </>
+                        ) : (
+                            <>
+                                What does love have in store for you this month? <br />
+                                We analyze opportunities for <strong>new sparks</strong> to ignite and identify the perfect timing for <strong>existing bonds</strong> to grow deeper.
+                            </>
+                        )}
+                    </p>
 
-                            return (
-                                <button
-                                    key={sub.id}
-                                    onClick={() => selectSubQ(sub.id)}
-                                    className={`relative flex items-center gap-4 p-6 rounded-2xl border-2 transition-all duration-200 text-left group ${isSelected
-                                        ? 'border-pink-500 bg-pink-50 dark:bg-pink-900/20 shadow-lg shadow-pink-100 dark:shadow-pink-900/20 scale-[1.02]'
-                                        : 'border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 hover:border-pink-300 hover:shadow-md'
-                                        }`}
-                                >
-                                    <div className={`flex-shrink-0 w-14 h-14 rounded-xl flex items-center justify-center transition-all ${isSelected
-                                        ? 'bg-pink-500 text-white shadow-lg'
-                                        : 'bg-slate-100 dark:bg-slate-700 text-slate-400 group-hover:bg-pink-100 group-hover:text-pink-500'
-                                        }`}>
-                                        <CalendarDaysIcon className="w-7 h-7" />
-                                    </div>
-                                    <div className="flex-1">
-                                        <h3 className={`text-lg font-bold mb-1 ${isSelected ? 'text-pink-900 dark:text-pink-100' : 'text-slate-800 dark:text-slate-100'
-                                            }`}>
-                                            {labelText}
-                                        </h3>
-                                        <p className={`text-sm ${isSelected ? 'text-pink-700 dark:text-pink-300' : 'text-slate-500 dark:text-slate-400'
-                                            }`}>
-                                            {descText}
-                                        </p>
-                                    </div>
-                                    {isSelected && (
-                                        <div className="flex-shrink-0">
-                                            <div className="w-6 h-6 rounded-full bg-pink-500 flex items-center justify-center">
-                                                <svg className="w-4 h-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
-                                                </svg>
-                                            </div>
-                                        </div>
-                                    )}
-                                </button>
-                            );
-                        })}
+                    <div className="m-auto max-w-sm rounded-2xl overflow-hidden shadow-sm border border-slate-100 dark:border-slate-800">
+                        <img
+                            src="/images/introcard/love_monthly.webp"
+                            alt="today's luck"
+                            className="w-full h-auto"
+                        />
                     </div>
                 </div>
 
-                {selectedSubQ && (
-                    <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
-                        <div className="flex flex-col items-center gap-4 py-8">
-                            <AnalyzeButton
-                                onClick={() => loveEnergy.triggerConsume(handleAnalysis)}
-                                disabled={isDisabled || isDisabled2}
-                                isDone={isAnalysisDone}
-                                language={language}
-                                label={language !== 'ko' ? 'Start Analysis' : '분석 시작하기'}
-                                cost={-1}
-                                color="rose"
-                            />
+                {/* Primary Analyze Button */}
+                <div className="mb-12 max-w-lg mx-auto">
+                    <AnalyzeButton
+                        onClick={() => loveEnergy.triggerConsume(handleAnalysis)}
+                        disabled={isDisabled || isDisabled2}
+                        isDone={isAnalysisDone}
+                        language={language}
+                        label={language !== 'ko' ? 'Start Analysis' : '분석 시작하기'}
+                        cost={-1}
+                        color="emerald"
+
+                    />
+
+                </div>
 
 
-                            {isLocked ? (
-                                <p className="text-pink-600 font-bold text-sm flex items-center gap-2 animate-pulse">
-                                    <ExclamationTriangleIcon className="w-5 h-5" />
-                                    {language === 'ko' ? '크레딧이 부족합니다' : 'Not Enough Credit'}
-                                </p>
-                            ) : (
-                                <p className="text-xs text-slate-400">
-                                    {language === 'ko' ? '이미 분석된 운세는 크래딧을 재소모하지 않습니다.' : 'Already analyzed fortunes do not consume credits.'}
-                                </p>
-                            )}
-                        </div>
-                    </div>
-                )}
-
-                {!selectedSubQ && (
-                    <div className="text-center py-12">
-                        <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-slate-100 dark:bg-slate-800 mb-4">
-                            <svg className="w-8 h-8 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 11l5-5m0 0l5 5m-5-5v12" />
-                            </svg>
-                        </div>
-                        <p className="text-slate-400 text-sm">
-                            {language === 'ko' ? '위에서 질문을 선택해주세요' : 'Please select a question above'}
-                        </p>
-                    </div>
-                )}
             </div>
         </div>
     );

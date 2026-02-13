@@ -28,7 +28,7 @@ export default function LoveTimingPage() {
     const [promptQ2, setPromptQ2] = useState('언제쯤 인연이 찾아올지');
     const [loadingPrompts, setLoadingPrompts] = useState(true);
     const isKo = language === 'ko'
-
+    const q1 = isKo ? '솔로 탈출 시기.' : 'When to Find Love';
     useEffect(() => {
         if (language === 'ko') {
             document.title = '솔로 탈출 시기 | 연애 타이밍';
@@ -51,7 +51,7 @@ export default function LoveTimingPage() {
 
         const fetchPrompts = async () => {
             try {
-                const q1 = isKo ? '솔로 탈출 시기.' : 'When to Find Love';
+
                 const q2 = await getPromptFromDB('love_timing');
                 if (q1) setPromptQ1(q1);
                 if (q2) setPromptQ2(month + q2);
@@ -133,54 +133,60 @@ export default function LoveTimingPage() {
 
     return (
         <div className="w-full animate-in fade-in duration-500">
-            <div className="relative bg-gradient-to-br from-sky-50 via-blue-50 to-indigo-50 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900 border-b border-sky-100 dark:border-slate-700">
-                <div className="max-w-4xl mx-auto px-4 py-16 text-center">
-                    <div className="inline-flex items-center justify-center w-20 h-20 rounded-3xl bg-gradient-to-br from-sky-500 to-blue-600 mb-6 shadow-2xl shadow-sky-300 dark:shadow-sky-900/50">
-                        <ClockIcon className="w-11 h-11 text-white" />
-                    </div>
-                    <h1 className="text-4xl sm:text-5xl font-black text-slate-900 dark:text-white mb-4 leading-tight">
-                        {language === 'ko' ? '솔로 탈출 시기' : 'When to Find Love'}
-                    </h1>
-                    <p className="text-lg text-slate-600 dark:text-slate-300 max-w-2xl mx-auto">
-                        {language === 'ko'
-                            ? '연애를 시작하기 좋은 시기를 분석합니다'
-                            : 'Analyze the best timing to start a relationship'}
+            <div className="mx-auto  text-center px-6 animate-in fade-in slide-in-from-bottom-5 duration-700">
+                <div>
+                    <h2 className=" text-3xl font-black text-slate-800 dark:text-white mb-4 tracking-tight">
+                        {language === 'ko' ? '운명의 인연 찾기' : "Discover Your Destiny"}
+                        <br />
+                        <span className="relative text-sky-600 dark:text-sky-500">
+                            {language === 'ko' ? '솔로 탈출 시기' : "When to Find Love"}
+                        </span>
+                    </h2>
+                </div>
+                <div className="space-y-4 text-slate-600 dark:text-slate-400 mb-10 leading-relaxed break-keep">
+                    <p className="text-md">
+                        {language === 'ko' ? (
+                            <>
+                                언제쯤 솔로를 탈출할 수 있을까요? <br />
+                                <strong>새로운 인연</strong>이 찾아오는 시기와 <strong>연애운</strong>이 가장 좋은 달을 분석해드립니다.
+                            </>
+                        ) : (
+                            <>
+                                "Ready to find your significant other?
+                                <br />
+                                We pinpoint the timing of your next encounter and analyze your strongest months for love luck."
+                                <br />
+                                Discover how your Five Elements align to create a destiny-altering synergy.
+                            </>
+                        )}
                     </p>
-                </div>
-            </div>
 
-            <div className="max-w-4xl mx-auto px-4 py-12">
-                <div className="mb-8">
-                    <div className="p-8 bg-white dark:bg-slate-800 rounded-3xl border border-slate-200 dark:border-slate-700 shadow-sm text-center">
-                        <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-sky-100 dark:bg-sky-900/30 text-sky-500 mb-4">
-                            <SparklesIcon className="w-6 h-6" />
-                        </div>
-                        <h2 className="text-xl font-bold text-slate-800 dark:text-white mb-2">
-                            {promptQ1}
-                        </h2>
-                        <p className="text-slate-600 dark:text-slate-400">
-                            {language === 'ko' ?
-                                '언제쯤 솔로를 탈출할 수 있을까요? 새로운 인연이 찾아오는 시기와 연애운이 가장 좋은 달을 분석해드립니다.' :
-                                'When will you find love? Analyze when a new connection will arrive and identify the best months for romance.'}
-                        </p>
+                    <div className="m-auto max-w-sm rounded-2xl overflow-hidden shadow-sm border border-slate-100 dark:border-slate-800">
+                        <img
+                            src="/images/introcard/love_timing.webp"
+                            alt="today's luck"
+                            className="w-full h-auto"
+                        />
                     </div>
                 </div>
 
-                <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
-
-
+                {/* Primary Analyze Button */}
+                <div className="mb-12 max-w-lg mx-auto">
                     <AnalyzeButton
                         onClick={() => loveEnergy.triggerConsume(handleAnalysis)}
                         disabled={isDisabled || isDisabled2}
                         isDone={isAnalysisDone}
                         label={language === 'ko' ? '분석 시작하기' : 'Start Analysis'}
-                        cost={1}
-                        color="blue"
-
+                        color="sky"
+                        cost={-1}
                     />
 
                 </div>
+
+
             </div>
+
+
         </div>
     );
 }

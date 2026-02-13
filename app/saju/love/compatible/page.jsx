@@ -129,48 +129,56 @@ export default function CompatiblePage() {
 
     return (
         <div className="w-full animate-in fade-in duration-500">
-            <div className="relative bg-gradient-to-br from-emerald-50 via-green-50 to-teal-50 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900 border-b border-emerald-100 dark:border-slate-700">
-                <div className="max-w-4xl mx-auto px-4 py-16 text-center">
-                    <div className="inline-flex items-center justify-center w-20 h-20 rounded-3xl bg-gradient-to-br from-emerald-500 to-green-600 mb-6 shadow-2xl shadow-emerald-300 dark:shadow-emerald-900/50">
-                        <UserPlusIcon className="w-11 h-11 text-white" />
-                    </div>
-                    <h1 className="text-4xl sm:text-5xl font-black text-slate-900 dark:text-white mb-4 leading-tight">
-                        {language === 'ko' ? '나와 잘 맞는 사람' : 'Compatible Partners'}
-                    </h1>
-                    <p className="text-lg text-slate-600 dark:text-slate-300 max-w-2xl mx-auto">
-                        {language === 'ko'
-                            ? '나와 궁합이 좋은 사람의 특징을 분석합니다'
-                            : 'Analyze characteristics of compatible partners'}
+            <div className="mx-auto  text-center px-6 animate-in fade-in slide-in-from-bottom-5 duration-700">
+                <div>
+                    <h2 className=" text-3xl font-black text-slate-800 dark:text-white mb-4 tracking-tight">
+                        {language === 'ko' ? '운명의 인연 찾기' : "Discover Your Destiny"}
+                        <br />
+                        <span className="relative text-amber-600 dark:text-amber-500">
+                            {language === 'ko' ? '나와의 찰떡 궁합' : "Your Cosmic Soulmate"}
+                        </span>
+                    </h2>
+                </div>
+                <div className="space-y-4 text-slate-600 dark:text-slate-400 mb-10 leading-relaxed break-keep">
+                    <p className="text-md">
+                        {language === 'ko' ? (
+                            <>
+                                단순한 호감을 넘어, 사주학적으로 <br />당신의 기운을 북돋아 줄 상대를 분석합니다.
+                                <br />
+                                서로의 부족한 오행을 채워주고 시너지를 낼 수 있는<br /> 최고의 인연을 확인해 보세요.
+                            </>
+                        ) : (
+                            <>
+                                Find the soul who balances your cosmic energy.
+                                <br />
+                                Discover how your Five Elements align to create a destiny-altering synergy.
+                            </>
+                        )}
                     </p>
-                </div>
-            </div>
 
-            <div className="max-w-4xl mx-auto px-4 py-12">
-                <div className="mb-8">
-                    <div className="p-8 bg-white dark:bg-slate-800 rounded-3xl border border-slate-200 dark:border-slate-700 shadow-sm text-center">
-                        <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-emerald-100 dark:bg-emerald-900/30 text-emerald-500 mb-4">
-                            <SparklesIcon className="w-6 h-6" />
-                        </div>
-                        <h2 className="text-xl font-bold text-slate-800 dark:text-white mb-2">
-                            나와잘맞는사람
-                        </h2>
-                        {language === 'ko' ?
-                            '나와 찰떡궁합인 사람은 누구일까요? 성격, 가치관, 연애 스타일까지 잘 맞는 천생연분의 특징을 알려드립니다.' :
-                            'Who is your perfect match? Discover the characteristics of your soulmate, including personality, values, and dating style.'}
+                    <div className="m-auto max-w-sm rounded-2xl overflow-hidden shadow-sm border border-slate-100 dark:border-slate-800">
+                        <img
+                            src="/images/introcard/love_compatible.webp"
+                            alt="today's luck"
+                            className="w-full h-auto"
+                        />
                     </div>
                 </div>
 
-                <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
+                {/* Primary Analyze Button */}
+                <div className="mb-12 max-w-lg mx-auto">
                     <AnalyzeButton
                         onClick={() => loveEnergy.triggerConsume(handleAnalysis)}
                         disabled={isDisabled || isDisabled2}
                         isDone={isAnalysisDone}
                         label={language !== 'ko' ? 'Start Analysis' : '분석 시작하기'}
-                        color="emerald"
+                        color="amber"
+                        cost={-1}
                     />
-
                 </div>
             </div>
+
+
         </div>
     );
 }

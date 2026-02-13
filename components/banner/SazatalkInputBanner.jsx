@@ -115,8 +115,8 @@ const SazatalkInputBanner = () => {
                             </h2>
                         </div>
                         <img
-                            src="/images/banner/ama.webp"
-                            className="absolute bottom-[-40px] xs:right-12 right-[-10px] xs:h-[150%] h-[130%] w-auto object-contain pointer-events-none z-10"
+                            src="/images/banner/sazatalk_main_clay.png"
+                            className="absolute bottom-[-70px] xs:right-12 right-[-10px] xs:h-[180%] h-[150%] w-auto object-contain pointer-events-none z-10"
                             alt="mascot"
                         />
                     </div>
