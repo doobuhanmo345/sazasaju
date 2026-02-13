@@ -4,9 +4,10 @@ import { useState, useEffect } from 'react';
 import { useAuthContext } from '@/contexts/useAuthContext';
 import { useLoading } from '@/contexts/useLoadingContext';
 import { db } from '@/lib/firebase';
-import { collection, query, where, orderBy, limit, onSnapshot, doc, updateDoc, deleteDoc } from 'firebase/firestore';
 import { XMarkIcon, SparklesIcon } from '@heroicons/react/24/outline';
 import { useRouter, usePathname } from 'next/navigation';
+import * as firestore from 'firebase/firestore';
+import { addDoc, collection, serverTimestamp, onSnapshot, doc, updateDoc, query, where, orderBy, writeBatch } from 'firebase/firestore';
 
 export default function AppBanner() {
     const { user, userData } = useAuthContext();
@@ -19,8 +20,36 @@ export default function AppBanner() {
     // Check if current path should hide the banner
     const isHiddenPath = pathname?.startsWith('/mypage') || pathname?.startsWith('/credit') || pathname?.startsWith('/tutorial')
     const shouldShow = (isBackground || isDirect || (userData?.isAnalyzing && !isStaleFlag)) && !isHiddenPath;
+    //isbackground true => 분석중, 새로고침해도 유지
 
-    if (!shouldShow) return null;
+
+    const handleAnalyzing = async (userData) => {
+        // [Global] Release analysis lock
+        if (userData?.uid) {
+            await updateDoc(doc(db, 'users', userData?.uid), { isAnalyzing: false });
+        }
+    }
+
+    //isbackground true => 분석중, 새로고침해도 유지
+    //isDirect true => 분석중, 새로고침하면 유지 안됨
+    //UserData?.isAnalyzing true => 분석중인거를 기록해놓기 위한 데이터
+    //useEffect로 분석중이면 banner를 유지하고, 분석이 끝나면 banner를 없앤다.
+    useEffect(() => {
+        if (userData?.isAnalyzing) {
+            if (!isDirect && !isBackground) {
+                handleAnalyzing(userData);
+                return;
+            } else if (!isDirect && isBackground) {
+                return;
+            } else if (!isDirect && !isBackground) {
+                handleAnalyzing(userData);
+                return;
+            } else {
+                return;
+            }
+        }
+    }, [isBackground, isDirect, userData?.isAnalyzing]);
+    // console.log(isBackground, isDirect, userData?.isAnalyzing)
 
     const formatTime = (seconds) => {
         const mins = Math.floor(seconds / 60);
@@ -43,7 +72,7 @@ export default function AppBanner() {
 
     // Use elapsedTime from context for direct, or estimate from queueDoc for background
     const displayTime = isDirect ? elapsedTime : (queueDoc?.createdAt ? Math.floor((Date.now() - queueDoc.createdAt.toMillis()) / 1000) : 0);
-
+    if (!shouldShow) return null;
     return (
         <div className="w-full relative overflow-hidden bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b border-indigo-100/50 dark:border-indigo-900/30">
             {/* Progress Bar Background */}

@@ -214,16 +214,21 @@ exports.processAnalysisQueue = onDocumentCreated(
       // 4. Release isAnalyzing lock and persist results if necessary
       const userId = data.userId;
       const type = data.analysisType;
-      const params = data.params;
+      const params = data.params || {};
 
       if (userId) {
         try {
-          const userRef = admin.firestore().collection('users').doc(userId);
           const now = new Date();
+          const userRef = admin.firestore().collection('users').doc(userId);
           // KST (UTC+9) date string for dailyUsage
           const kstDate = new Date(now.getTime() + (9 * 60 * 60 * 1000));
           const todayStr = kstDate.toISOString().split('T')[0];
           const timestamp = now.toISOString();
+          ///
+
+          // [중요] 클라이언트가 보낸 useCredit 값을 최우선으로 신뢰
+          // 만약 전달되지 않았을 경우를 대비해 Boolean 처리
+          const shouldDeductCredit = params.useCredit === true || params.useCredit === 'true';
 
           // Prepare basic user updates
           const userUpdates = {
@@ -235,15 +240,78 @@ exports.processAnalysisQueue = onDocumentCreated(
           };
 
           // Decide whether to increment editCount (free) or deduct credit (paid)
-          if (params?.useCredit) {
+          if (shouldDeductCredit) {
+            // 유료: 크레딧 차감 (editCount는 그대로 유지)
             userUpdates.credits = admin.firestore.FieldValue.increment(-1);
+            console.log(`[Queue] User ${userId}: Paid Analysis (Credit -1)`);
           } else {
+            // 무료: 무료 횟수 증가
             userUpdates.editCount = admin.firestore.FieldValue.increment(1);
+            console.log(`[Queue] User ${userId}: Free Analysis (editCount +1)`);
           }
 
           // Specific persistence logic based on type
+          // if (type === 'saza' && params?.question) {
+          //   // 1. Save to sazatalk_messages
+          //   await admin.firestore().collection('sazatalk_messages').add({
+          //     userId,
+          //     question: params.question,
+          //     result: text,
+          //     createdAt: admin.firestore.FieldValue.serverTimestamp(),
+          //   });
+
+          //   // 2. Update user history
+          //   userUpdates['usageHistory.Zsazatalk'] = {
+          //     question: params.question,
+          //     result: text,
+          //     timestamp: timestamp,
+          //   };
+          //   userUpdates['usageHistory.question_history'] = admin.firestore.FieldValue.arrayUnion({
+          //     question: params.question,
+          //     timestamp: timestamp,
+          //   });
+          // } else {
+          //   // 2. All other Saju & Tarot types
+          //   const finalCacheKey = data.cacheKey || (type && type.startsWith('tarot') ? type : 'ZApiAnalysis');
+
+          //   // Build a comprehensive history entry
+          //   const historyEntry = {
+          //     result: text,
+          //     saju: params?.saju || null,
+          //     language: params?.language || 'ko',
+          //     gender: params?.gender || null,
+          //     timestamp: timestamp,
+          //   };
+
+          //   // Add variety of possible params (merging what different presets use)
+          //   if (params?.question) historyEntry.question = params.question;
+          //   if (params?.ques) historyEntry.ques = params.ques;
+          //   if (params?.ques2) historyEntry.ques2 = params.ques2;
+          //   if (params?.saju2) historyEntry.saju2 = params.saju2;
+          //   if (params?.gender2) historyEntry.gender2 = params.gender2;
+          //   if (params?.relationship) historyEntry.relationship = params.relationship;
+          //   if (params?.startDate) historyEntry.startDate = params.startDate;
+          //   if (params?.endDate) historyEntry.endDate = params.endDate;
+          //   if (params?.purpose) historyEntry.purpose = params.purpose;
+          //   if (params?.selectedDate) historyEntry.selectedDate = params.selectedDate;
+          //   if (params?.date) historyEntry.date = params.date;
+          //   if (params?.sajuDate) historyEntry.sajuDate = params.sajuDate;
+          //   if (params?.partnerSaju) historyEntry.partnerSaju = params.partnerSaju;
+          //   if (params?.partnerGender) historyEntry.partnerGender = params.partnerGender;
+
+          //   if (type && type.startsWith('tarot')) {
+          //     // Tarot usually has a nested date structure
+          //     userUpdates[`usageHistory.${finalCacheKey}`] = {
+          //       [todayStr]: admin.firestore.FieldValue.increment(1),
+          //       result: text,
+          //       ...historyEntry
+          //     };
+          //   } else {
+          //     // Standard Saju mapping
+          //     userUpdates[`usageHistory.${finalCacheKey}`] = historyEntry;
+          //   }
+          // }
           if (type === 'saza' && params?.question) {
-            // 1. Save to sazatalk_messages
             await admin.firestore().collection('sazatalk_messages').add({
               userId,
               question: params.question,
@@ -251,7 +319,6 @@ exports.processAnalysisQueue = onDocumentCreated(
               createdAt: admin.firestore.FieldValue.serverTimestamp(),
             });
 
-            // 2. Update user history
             userUpdates['usageHistory.Zsazatalk'] = {
               question: params.question,
               result: text,
@@ -262,47 +329,31 @@ exports.processAnalysisQueue = onDocumentCreated(
               timestamp: timestamp,
             });
           } else {
-            // 2. All other Saju & Tarot types
             const finalCacheKey = data.cacheKey || (type && type.startsWith('tarot') ? type : 'ZApiAnalysis');
-
-            // Build a comprehensive history entry
             const historyEntry = {
               result: text,
               saju: params?.saju || null,
               language: params?.language || 'ko',
               gender: params?.gender || null,
               timestamp: timestamp,
+              // 필요한 파라미터들만 추출해서 저장
+              ...(['question', 'ques', 'ques2', 'saju2', 'gender2', 'relationship', 'startDate', 'endDate', 'purpose', 'selectedDate', 'date', 'sajuDate', 'partnerSaju', 'partnerGender']
+                .reduce((acc, key) => {
+                  if (params[key] !== undefined) acc[key] = params[key];
+                  return acc;
+                }, {}))
             };
 
-            // Add variety of possible params (merging what different presets use)
-            if (params?.question) historyEntry.question = params.question;
-            if (params?.ques) historyEntry.ques = params.ques;
-            if (params?.ques2) historyEntry.ques2 = params.ques2;
-            if (params?.saju2) historyEntry.saju2 = params.saju2;
-            if (params?.gender2) historyEntry.gender2 = params.gender2;
-            if (params?.relationship) historyEntry.relationship = params.relationship;
-            if (params?.startDate) historyEntry.startDate = params.startDate;
-            if (params?.endDate) historyEntry.endDate = params.endDate;
-            if (params?.purpose) historyEntry.purpose = params.purpose;
-            if (params?.selectedDate) historyEntry.selectedDate = params.selectedDate;
-            if (params?.date) historyEntry.date = params.date;
-            if (params?.sajuDate) historyEntry.sajuDate = params.sajuDate;
-            if (params?.partnerSaju) historyEntry.partnerSaju = params.partnerSaju;
-            if (params?.partnerGender) historyEntry.partnerGender = params.partnerGender;
-
             if (type && type.startsWith('tarot')) {
-              // Tarot usually has a nested date structure
               userUpdates[`usageHistory.${finalCacheKey}`] = {
                 [todayStr]: admin.firestore.FieldValue.increment(1),
                 result: text,
                 ...historyEntry
               };
             } else {
-              // Standard Saju mapping
               userUpdates[`usageHistory.${finalCacheKey}`] = historyEntry;
             }
           }
-
           await userRef.update(userUpdates);
           console.log(`[processAnalysisQueue] Successfully persisted results for user ${userId}`);
         } catch (lockError) {

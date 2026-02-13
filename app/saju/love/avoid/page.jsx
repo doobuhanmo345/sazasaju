@@ -72,7 +72,6 @@ export default function AvoidPage() {
         setAiResult,
         handleCancelHelper,
     });
-
     const prevData = userData?.usageHistory?.ZLoveAvoid;
     const isAnalysisDone = (() => {
         if (!prevData || !prevData.result) return false;
@@ -81,7 +80,7 @@ export default function AvoidPage() {
         if (prevData?.gender !== targetProfile?.gender) return false;
         return SajuAnalysisService.compareSaju(prevData.saju, targetProfile?.saju);
     })();
-    console.log(promptQ2)
+
     const handleAnalysis = async () => {
         setAiResult('');
         setIsButtonClicked(true);
@@ -106,6 +105,7 @@ export default function AvoidPage() {
                 partnerGender: null,
             });
             await service.analyze(preset);
+
         } catch (error) {
             console.error(error);
         }
@@ -121,6 +121,7 @@ export default function AvoidPage() {
     const isDisabled2 = !isAnalysisDone && isLocked;
 
     if (loading && saju) {
+        console.log(saju, isTimeUnknown, isAnalysisDone)
         return <LoadingFourPillar saju={saju} isTimeUnknown={isTimeUnknown} isAnalysisDone={isAnalysisDone} />;
     }
 

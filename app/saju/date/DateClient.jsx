@@ -192,7 +192,6 @@ export default function FirstDatePage() {
       // [NEW] 이미 저장된 데이터와 입력값이 같으면 잠시 대기 후 결과 페이지로 이동
       if (isAnalysisDone) {
         console.log('✅ 이미 분석된 데이터(옵션 일치)가 있어 결과 페이지로 이동합니다.');
-        setLoading(true); // Manually trigger loading state for UI transition
         setTimeout(() => {
           router.push('/saju/date/result');
         }, 2000);
@@ -216,6 +215,7 @@ export default function FirstDatePage() {
 
       } catch (error) {
         console.error(error);
+        setLoading(false); // ✅ 에러 시에도 로딩 종료
       }
     },
     [service, saju, gender, language, selectedDate, question, selectedDateSaju, setAiResult, dbPrompt, isAnalysisDone, router],
@@ -312,9 +312,9 @@ export default function FirstDatePage() {
     [language, selectedDate, selections, handleSelect, FIRST_DATE_OPTIONS],
   );
 
+
   const sajuGuide = useCallback(
     (onStart) => {
-      if (loading) return <LoadingFourPillar saju={saju} isTimeUnknown={isTimeUnknown} isAnalysisDone={isAnalysisDone} />;
 
       return (
         <div className="mx-auto px-6 py-12 animate-in fade-in slide-in-from-bottom-3 duration-1000">
@@ -421,7 +421,10 @@ export default function FirstDatePage() {
       router.push('/saju/date/result');
     }
   }, [isButtonClicked, prevData, router, isAnalysisDone, loading]);
-
+  if (loading) {
+    console.log('loading')
+    return <LoadingFourPillar saju={saju} isTimeUnknown={isTimeUnknown} isAnalysisDone={isAnalysisDone} />;
+  }
   return (
     <main className="min-h-screen">
       <AnalysisStepContainer

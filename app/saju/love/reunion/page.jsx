@@ -26,13 +26,16 @@ export default function ReunionPage() {
     const targetProfile = selectedProfile || userData;
     const { gender, saju, isTimeUnknown } = targetProfile || {};
     const loveEnergy = useConsumeEnergy();
-
     const [isButtonClicked, setIsButtonClicked] = useState(false);
     const [showPartnerInput, setShowPartnerInput] = useState(false);
-
     const [promptQ1, setPromptQ1] = useState('재회 가능성.');
     const [promptQ2, setPromptQ2] = useState('다시 만날 운명이 있을지');
     const [loadingPrompts, setLoadingPrompts] = useState(true);
+
+    const [partnerDate, setPartnerDate] = useState('2000-01-01T12:00');
+    const [partnerTimeUnknown, setPartnerTimeUnknown] = useState(false);
+    const [partnerGender, setPartnerGender] = useState('male');
+    const { saju: partnerSaju } = useSajuCalculator(partnerDate, partnerTimeUnknown);
 
     const onSelectPartner = (id) => {
         const profile = savedProfiles.find((p) => p.id === id);
@@ -45,10 +48,6 @@ export default function ReunionPage() {
     };
 
     // Partner saju state
-    const [partnerDate, setPartnerDate] = useState('2000-01-01T12:00');
-    const [partnerTimeUnknown, setPartnerTimeUnknown] = useState(false);
-    const [partnerGender, setPartnerGender] = useState('male');
-    const { saju: partnerSaju } = useSajuCalculator(partnerDate, partnerTimeUnknown);
 
     useEffect(() => {
         if (language === 'ko') {
@@ -113,7 +112,6 @@ export default function ReunionPage() {
             if (!prevData.partnerSaju) return false;
             if (!SajuAnalysisService.compareSaju(prevData.partnerSaju, partnerSaju)) return false;
         }
-
         return SajuAnalysisService.compareSaju(prevData.saju, targetProfile?.saju);
     })();
 
@@ -133,14 +131,13 @@ export default function ReunionPage() {
                 saju,
                 gender,
                 q1,
-                q2: promptQ2,
+                q2,
                 qprompt,
                 language,
                 cacheKey: 'ZLoveReunion',
                 partnerSaju: showPartnerInput ? partnerSaju : null,
                 partnerGender: showPartnerInput ? partnerGender : null,
             });
-
             await service.analyze(preset);
         } catch (error) {
             console.error(error);
@@ -158,6 +155,7 @@ export default function ReunionPage() {
     const isDisabled2 = !isAnalysisDone && isLocked;
 
     if (loading && saju) {
+
         return <LoadingFourPillar saju={saju} isTimeUnknown={isTimeUnknown} isAnalysisDone={isAnalysisDone} />;
     }
 
