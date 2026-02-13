@@ -135,7 +135,8 @@ export default function TutorialClient() {
                                 <h4 className="font-black text-slate-900 dark:text-white text-xl mb-3">자동 삭제 정책</h4>
                                 <p className="text-sm text-slate-500 dark:text-slate-400 font-medium leading-relaxed break-keep">
                                     서버 부하를 줄이기 위해 오래된 내역은 사자가 직접 비워요. <br />
-                                    최신 분석 결과 위주로 보관되는 점 참고해 주세요.
+                                    최신 분석 결과 위주로 보관되는 점 참고해 주세요. <br />
+                                    저장 개수 제한: 각 파트별로 최대 1개의 내역만 저장됩니다. 추가 저장이 필요한 경우 <strong>'공유하기'</strong>를 활용해 주세요. (공유 데이터는 7일 후 만료됩니다.)
                                 </p>
                             </div>
                         </div>

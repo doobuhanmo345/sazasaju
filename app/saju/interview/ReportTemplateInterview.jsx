@@ -241,7 +241,7 @@ const ReportTemplateInterview = ({ }) => {
 
 
 
-      <AfterReport fortuneType="interview" data={data} />
+      <AfterReport fortuneType="interview" data={data?.summary} />
     </div>
   );
 };

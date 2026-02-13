@@ -13,6 +13,7 @@ import LoadingFourPillar from '@/components/LoadingFourPillar';
 import { SajuAnalysisService, AnalysisPresets } from '@/lib/SajuAnalysisService';
 import { calculateSaju } from '@/lib/sajuCalculator';
 import AnalyzeButton from '@/ui/AnalyzeButton';
+import { getPromptFromDB } from '@/lib/SajuAnalysisService';
 
 export default function MonthlyLovePage() {
     const { language } = useLanguage();
@@ -85,7 +86,7 @@ export default function MonthlyLovePage() {
     })();
     const selectSubQ = async (subQid) => {
         setSelectedSubQ(subQid);
-        const origin = SUB_Q_TYPES.find((i) => i.id === subQid);
+        let origin = await getPromptFromDB(`love_monthly_${subQid}`);
 
         const today = new Date();
         // Use 15th for middle of the month to safely get the month pillar (Jeolgi transition usually happens around 4-8th)
@@ -101,9 +102,9 @@ export default function MonthlyLovePage() {
             const suffix = language === 'ko'
                 ? ` (이번달(${today.getMonth() + 1}월) 월주: ${currentStr}, 다음달(${today.getMonth() + 2}월) 월주: ${nextStr})`
                 : ` (Current Month(${today.getMonth() + 1}) Pillar: ${currentStr}, Next Month(${today.getMonth() + 2}) Pillar: ${nextStr})`;
-            origin.desc += suffix;
+            origin += suffix;
         }
-        setQ2(origin.desc);
+        setQ2(origin);
     }
 
 
