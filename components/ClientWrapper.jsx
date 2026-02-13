@@ -50,7 +50,7 @@ export default function ClientWrapper({ children }) {
   );
 
   // Special logic for Credit page: Hide Navbar (it has its own) but show MenuBar
-  const isNoNavbarPath = isSpecialPath || pathname === '/credit' || pathname.startsWith('/credit/') || pathname === '/mypage' || pathname.startsWith('/mypage/');
+  const isNoNavbarPath = isSpecialPath || pathname === '/credit' || pathname.startsWith('/credit/') || pathname === '/mypage' || pathname.startsWith('/mypage/') || pathname.startsWith('/admin/');
 
   // 2. Redirection logic for missing birthDate
   useEffect(() => {
@@ -125,7 +125,7 @@ export default function ClientWrapper({ children }) {
 
 
       <main className={!isNoNavbarPath ? "relative min-h-screen pt-[calc(64px+env(safe-area-inset-top))]" : "min-h-screen"}>
-        <div className="w-full mb-8 fixed top-16 z-20 ">
+        <div className="w-full mb-8 fixed top-16 z-30 ">
           <AppBanner />
         </div>
 

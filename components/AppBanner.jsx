@@ -17,7 +17,7 @@ export default function AppBanner() {
     const isStaleFlagContext = isStaleFlag; // Rename for clarity if needed, but context provides it.
 
     // Check if current path should hide the banner
-    const isHiddenPath = pathname?.startsWith('/mypage') || pathname?.startsWith('/credit') || pathname?.startsWith('/tutorial') || pathname?.startsWith('/saju')
+    const isHiddenPath = pathname?.startsWith('/mypage') || pathname?.startsWith('/credit') || pathname?.startsWith('/tutorial')
     const shouldShow = (isBackground || isDirect || (userData?.isAnalyzing && !isStaleFlag)) && !isHiddenPath;
 
     if (!shouldShow) return null;
