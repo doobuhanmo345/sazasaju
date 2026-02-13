@@ -120,7 +120,7 @@ export default function FortuneClient() {
                     color: 'text-rose-500'
                 },
                 {
-                    name: isKo ? '월별 애정운' : 'Monthly Love',
+                    name: isKo ? '이번달 애정운' : 'Monthly Love',
                     desc: isKo ? '이번 달 나의 연애 기운' : 'Monthly romantic energy',
                     icon: <CalendarDaysIcon />,
                     path: '/saju/love/monthly',
@@ -134,7 +134,7 @@ export default function FortuneClient() {
                     color: 'text-indigo-500'
                 },
                 {
-                    name: isKo ? '인연 타이밍' : 'Love Timing',
+                    name: isKo ? '솔로탈출 시기' : 'Love Timing',
                     desc: isKo ? '연인이 나타나는 결정적 시기' : 'Specific timing for love',
                     icon: <ClockIcon />,
                     path: '/saju/love/timing',

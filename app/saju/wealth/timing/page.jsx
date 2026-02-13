@@ -29,7 +29,7 @@ export default function TimingPage() {
 
     useEffect(() => {
         if (language === 'ko') {
-            document.title = '올해/내년 흐름 분석 | 단기 자금 흐름';
+            document.title = '단기 재물운 흐름 분석 | 단기 자금 흐름';
         } else {
             document.title = 'Yearly Flow Analysis | Short-term Cash Flow';
         }
@@ -185,11 +185,11 @@ export default function TimingPage() {
                         <CalendarDaysIcon className="w-11 h-11 text-white" />
                     </div>
                     <h1 className="text-4xl sm:text-5xl font-black text-slate-900 dark:text-white mb-4 leading-tight">
-                        {language === 'ko' ? '올해/내년 흐름 분석' : 'Yearly Flow Analysis'}
+                        {language === 'ko' ? '단기 재물운 흐름 분석' : 'Yearly Flow Analysis'}
                     </h1>
                     <p className="text-lg text-slate-600 dark:text-slate-300 max-w-2xl mx-auto">
                         {language === 'ko'
-                            ? '단기적인 자금 흐름과 승부수 타이밍을 분석합니다'
+                            ? '이번 달 운세부터 1년 운세까지 단기 재물운 흐름을 분석해드려요 승부수 타이밍을 분석합니다'
                             : 'Analyze short-term cash flow and strategic timing'}
                     </p>
                 </div>

@@ -10,7 +10,7 @@ const WealthIcons = () => {
 
     const WealthNavItems = [
         {
-            label: `${ko ? '재물복' : 'Wealth Capacity'}`,
+            label: `${ko ? '평생 재물운' : 'Wealth Capacity'}`,
             path: '/saju/wealth/capacity',
             isReady: true,
             // plusCredit: true,
@@ -37,7 +37,7 @@ const WealthIcons = () => {
             ),
         },
         {
-            label: `${ko ? '재물 타이밍' : 'Wealth Timing'}`,
+            label: `${ko ? '단기 재물운 흐름' : 'Wealth Timing'}`,
             path: '/saju/wealth/timing',
             isReady: true,
             desc: ko ? '재물이 들어오는 시기' : 'When wealth comes',

@@ -152,7 +152,7 @@ export default function FirstDatePreview({ onStart, isDisabled }) {
 
         <div className="text-center">
           <h3 className="text-xl font-bold text-slate-800 dark:text-white mb-2">
-            {language === 'ko' ? '사자가 준비한 완벽한 데이트 플랜' : "A Perfect Date Plan by Saza"}
+            {language === 'ko' ? '데이트날 최고의 결과를 가져오는 사자의 조언' : "A Perfect Date Plan by Saza"}
           </h3>
           <p className="text-sm text-slate-500 dark:text-slate-400 leading-relaxed max-w-sm mx-auto break-keep text-center">
             {language === 'ko'

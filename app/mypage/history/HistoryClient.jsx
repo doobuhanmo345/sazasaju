@@ -85,7 +85,7 @@ const TYPE_CONFIG = {
         category: 'saju'
     },
     ZLoveMonthly: {
-        label_ko: '월별 애정운', label_en: 'Monthly Love',
+        label_ko: '이번달 애정운', label_en: 'Monthly Love',
         icon: CalendarDaysIcon, color: 'text-rose-500', bg: 'bg-rose-50', path: '/saju/love/monthly/result',
         category: 'saju'
     },
@@ -95,7 +95,7 @@ const TYPE_CONFIG = {
         category: 'saju'
     },
     ZLoveTiming: {
-        label_ko: '인연 타이밍', label_en: 'Love Timing',
+        label_ko: '솔로탈출 시기', label_en: 'Love Timing',
         icon: ClockIcon, color: 'text-amber-500', bg: 'bg-amber-50', path: '/saju/love/timing/result',
         category: 'saju'
     },

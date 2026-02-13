@@ -81,7 +81,7 @@ export default function Wealth({ }) {
       id: 'timing',
       label: '올해/내년 흐름',
       sub: 'Yearly Flow',
-      desc: '단기적인 자금 흐름과 승부수 타이밍',
+      desc: '이번 달 운세부터 1년 운세까지 단기 재물운 흐름을 분석해드려요 승부수 타이밍',
       descEn: 'Short-term cash flow and strategic timing',
       icon: CalendarDaysIcon,
       color: 'text-sky-500',

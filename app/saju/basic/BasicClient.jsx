@@ -159,7 +159,7 @@ export default function BasicAnaPage() {
                   <span className="text-indigo-600 dark:text-indigo-400">{displayName}</span>
                   {language === 'ko' ? '의 ' : "'s "}
                   <span className="relative inline-block">
-                    <span className="relative z-10 text-slate-800 dark:text-slate-100"> {language === 'ko' ? '정밀 운세 분석' : 'Saju Analysis'}</span>
+                    <span className="relative z-10 text-slate-800 dark:text-slate-100"> {language === 'ko' ? '정밀 성격 분석' : 'Saju Analysis'}</span>
                     <div className="absolute inset-x-0 bottom-1 h-3 bg-indigo-200/50 dark:bg-indigo-800/50 -rotate-1 rounded-full"></div>
                   </span>
                 </>
@@ -168,7 +168,7 @@ export default function BasicAnaPage() {
                   {language === 'ko' ? '오행으로 읽는' : 'Reading the Five Elements'}
                   <br />
                   <span className="relative text-sky-600 dark:text-sky-500">
-                    {language === 'ko' ? '평생운세 & 10년 대운' : 'Saju Analysis'}
+                    {language === 'ko' ? '정밀 성격 분석' : 'Saju Analysis'}
                     <div className="absolute inset-0 bg-sky-200/50 dark:bg-sky-800/60 blur-md rounded-full scale-100"></div>
                   </span>
                 </>
@@ -178,8 +178,8 @@ export default function BasicAnaPage() {
               <p className="text-sm">
                 {language === 'ko' ? (
                   <>
-                    타고난 기질과 <strong>10년마다 찾아오는 대운</strong>의 흐름,<br />
-                    당신의 운명 지도를 분석합니다.
+                    사주상 <strong>타고난 기질</strong>이 각 상황에서 어떻게 나타나는지,<br />
+                    그리고 <strong>10년마다 찾아오는 대운의 흐름</strong>까지 알려드려요"
                   </>
                 ) : (
                   'My innate color and the period of change that comes every ten years. Analyzing your destiny map.'
@@ -202,7 +202,7 @@ export default function BasicAnaPage() {
               disabled={isDisabled || isDisabled2}
               loading={loading}
               isDone={isAnalysisDone}
-              label={language === 'ko' ? '평생 운세 보기' : 'Analyze Saju'}
+              label={language === 'ko' ? '사주 보러 가기' : 'Analyze Saju'}
               color="indigo"
               cost={-1}
             />

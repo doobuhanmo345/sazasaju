@@ -106,7 +106,7 @@ const SazatalkInputBanner = () => {
                                 {isKo ? '답답한 고민,' : 'Tricky problems,'} <br />
                                 <div className="flex sm:flex-row flex-col gap-2 py-3">
                                     <div className="font-serif italic font-medium text-indigo-700">
-                                        {isKo ? '무엇이든 ' : 'Ask Saza'}
+                                        {isKo ? '사자톡에 ' : 'Ask Saza'}
                                     </div>
                                     <div className="font-serif italic font-medium text-indigo-700">
                                         {isKo ? '물어보사자' : 'Anything'}
