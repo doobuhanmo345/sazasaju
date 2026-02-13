@@ -197,8 +197,28 @@ const EditPrompt = () => {
     }
   }, [searchTerm]);
 
+  const customScrollbarStyle = `
+    .custom-scrollbar::-webkit-scrollbar {
+      width: 4px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 10px;
+    }
+    .dark .custom-scrollbar::-webkit-scrollbar-thumb {
+      background: #334155;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+      background: #94a3b8;
+    }
+  `;
+
   return (
     <div className="p-6 max-w-6xl mx-auto bg-slate-50 dark:bg-slate-950 min-h-screen text-slate-900 dark:text-slate-100 transition-colors duration-500">
+      <style>{customScrollbarStyle}</style>
       {/* HEADER SECTION */}
       <header className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-12">
         <div>
@@ -265,7 +285,7 @@ const EditPrompt = () => {
 
         {/* SIDEBAR: NAVIGATION */}
         <aside
-          className={`lg:col-span-1 space-y-6 ${isNavOpen ? 'block' : 'hidden lg:block'} animate-in fade-in slide-in-from-top-4 lg:animate-none`}
+          className={`lg:col-span-1 space-y-6 ${isNavOpen ? 'block' : 'hidden lg:block'} animate-in fade-in slide-in-from-top-4 lg:animate-none lg:sticky lg:top-6 lg:h-fit lg:max-h-[calc(100vh-48px)] lg:overflow-y-auto pr-2 custom-scrollbar`}
         >
           {/* Global Instruction (Featured) */}
           {hasGlobalInstruction && (
