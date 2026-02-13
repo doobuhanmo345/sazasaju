@@ -118,7 +118,7 @@ export default function ShareLinkButton({ fortuneType = 'basic', storageKey }) {
                 try {
                     await navigator.share(shareDataLink);
                 } catch (err) {
-                    console.log('Error sharing:', err);
+                    console.log('😡Error sharing:', err);
                 }
             } else {
                 // Fallback to Clipboard Copy

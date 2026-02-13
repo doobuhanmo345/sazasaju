@@ -67,9 +67,9 @@ exports.warmupGemini = onSchedule(
       const model = genAI.getGenerativeModel({ model: 'gemini-2.5-flash' });
       // 아주 짧은 프롬프트를 보내 인스턴스를 활성화 상태로 유지합니다.
       await model.generateContent("ping");
-      console.log('Gemini Warm-up successful');
+      console.log('✅Gemini Warm-up successful');
     } catch (error) {
-      console.error('Gemini Warm-up failed:', error);
+      console.error('😡Gemini Warm-up failed:', error);
     }
   }
 );
@@ -169,17 +169,17 @@ exports.processAnalysisQueue = onDocumentCreated(
 
     const data = snapshot.data();
     const docId = event.params.docId;
-    console.log(`[processAnalysisQueue] Processing document: ${docId}`);
+    console.log(`✅[processAnalysisQueue] Processing document: ${docId}`);
 
     // 이미 처리 중이거나 완료된 경우 스킵
     if (data.status !== 'pending') {
-      console.log(`[processAnalysisQueue] Skipping document ${docId} with status: ${data.status}`);
+      console.log(`✅[processAnalysisQueue] Skipping document ${docId} with status: ${data.status}`);
       return;
     }
 
     try {
       // 1. 상태 업데이트: processing
-      console.log(`[processAnalysisQueue] Updating status to 'processing' for ${docId}`);
+      console.log(`✅[processAnalysisQueue] Updating status to 'processing' for ${docId}`);
       await snapshot.ref.update({
         status: 'processing',
         startedAt: admin.firestore.FieldValue.serverTimestamp()
@@ -191,7 +191,7 @@ exports.processAnalysisQueue = onDocumentCreated(
       }
 
       // 2. Gemini API 호출 (스트리밍 없이)
-      console.log(`[processAnalysisQueue] Calling Gemini API for ${docId}`);
+      console.log(`✅[processAnalysisQueue] Calling Gemini API for ${docId}`);
       const genAI = new GoogleGenerativeAI(GEMINI_API_KEY.value());
       const model = genAI.getGenerativeModel({
         model: 'gemini-2.5-flash',
@@ -200,10 +200,10 @@ exports.processAnalysisQueue = onDocumentCreated(
 
       const result = await model.generateContent(prompt);
       const text = result.response.text();
-      console.log(`[processAnalysisQueue] Gemini API call successful for ${docId}`);
+      console.log(`✅[processAnalysisQueue] Gemini API call successful for ${docId}`);
 
       // 3. 결과 저장 및 상태 완료 처리
-      console.log(`[processAnalysisQueue] Updating status to 'completed' for ${docId}`);
+      console.log(`✅[processAnalysisQueue] Updating status to 'completed' for ${docId}`);
       await snapshot.ref.update({
         status: 'completed',
         result: text,
@@ -243,11 +243,11 @@ exports.processAnalysisQueue = onDocumentCreated(
           if (shouldDeductCredit) {
             // 유료: 크레딧 차감 (editCount는 그대로 유지)
             userUpdates.credits = admin.firestore.FieldValue.increment(-1);
-            console.log(`[Queue] User ${userId}: Paid Analysis (Credit -1)`);
+            console.log(`✅[Queue] User ${userId}: Paid Analysis (Credit -1)`);
           } else {
             // 무료: 무료 횟수 증가
             userUpdates.editCount = admin.firestore.FieldValue.increment(1);
-            console.log(`[Queue] User ${userId}: Free Analysis (editCount +1)`);
+            console.log(`✅[Queue] User ${userId}: Free Analysis (editCount +1)`);
           }
 
           // Specific persistence logic based on type
@@ -355,7 +355,7 @@ exports.processAnalysisQueue = onDocumentCreated(
             }
           }
           await userRef.update(userUpdates);
-          console.log(`[processAnalysisQueue] Successfully persisted results for user ${userId}`);
+          console.log(`✅[processAnalysisQueue] Successfully persisted results for user ${userId}`);
         } catch (lockError) {
           console.error(`[processAnalysisQueue] Failed to update user ${userId}:`, lockError);
         }
@@ -371,7 +371,7 @@ exports.processAnalysisQueue = onDocumentCreated(
             isRead: false,
             createdAt: admin.firestore.FieldValue.serverTimestamp(),
           });
-          console.log(`[processAnalysisQueue] Created notification for user ${userId} with targetPath: ${data.targetPath}`);
+          console.log(`✅[processAnalysisQueue] Created notification for user ${userId} with targetPath: ${data.targetPath}`);
         } catch (notifError) {
           console.error(`[processAnalysisQueue] Failed to create notification for user ${userId}:`, notifError);
         }
@@ -381,12 +381,12 @@ exports.processAnalysisQueue = onDocumentCreated(
       // 6. Delete completed queue document to prevent stale UI
       try {
         await snapshot.ref.delete();
-        console.log(`[processAnalysisQueue] Deleted completed queue document ${docId}`);
+        console.log(`✅[processAnalysisQueue] Deleted completed queue document ${docId}`);
       } catch (deleteError) {
         console.error(`[processAnalysisQueue] Failed to delete queue document ${docId}:`, deleteError);
       }
       */
-      console.log(`[processAnalysisQueue] Successfully processed ${docId}`);
+      console.log(`✅[processAnalysisQueue] Successfully processed ${docId}`);
     } catch (error) {
       console.error(`[processAnalysisQueue] Error processing ${docId}:`, error);
 
@@ -406,7 +406,7 @@ exports.processAnalysisQueue = onDocumentCreated(
             analysisStartedAt: null,
             updatedAt: admin.firestore.FieldValue.serverTimestamp()
           });
-          console.log(`[processAnalysisQueue] Released isAnalyzing lock after error for user ${userId}`);
+          console.log(`✅[processAnalysisQueue] Released isAnalyzing lock after error for user ${userId}`);
         } catch (lockError) {
           console.error(`[processAnalysisQueue] Failed to release lock after error for user ${userId}:`, lockError);
         }
@@ -434,7 +434,7 @@ exports.onNotificationCreated = onDocumentCreated(
     const finalPath = typeof targetPath === 'object' ? targetPath.path : targetPath;
 
     if (!userId && targetRole !== 'admin') {
-      console.log('No userId or targetRole=admin found in notification document');
+      console.log('✅No userId or targetRole=admin found in notification document');
       return;
     }
 
@@ -463,7 +463,7 @@ exports.onNotificationCreated = onDocumentCreated(
       }
 
       if (tokens.length === 0) {
-        console.log(`No FCM tokens found for the target`);
+        console.log(`✅No FCM tokens found for the target`);
         return;
       }
 
@@ -504,7 +504,7 @@ exports.onNotificationCreated = onDocumentCreated(
         },
       });
 
-      console.log(`Successfully sent ${response.successCount} messages; ${response.failureCount} messages failed.`);
+      console.log(`✅Successfully sent ${response.successCount} messages; ${response.failureCount} messages failed.`);
 
       // 4. 실패한 토큰 정리 (만료된 토큰 등)
       if (response.failureCount > 0) {
@@ -523,7 +523,7 @@ exports.onNotificationCreated = onDocumentCreated(
           await admin.firestore().collection('users').doc(userId).update({
             fcmTokens: admin.firestore.FieldValue.arrayRemove(...failedTokens)
           });
-          console.log(`Cleaned up ${failedTokens.length} expired tokens for user ${userId}`);
+          console.log(`✅Cleaned up ${failedTokens.length} expired tokens for user ${userId}`);
         }
       }
     } catch (error) {

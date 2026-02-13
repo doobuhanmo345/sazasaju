@@ -99,7 +99,6 @@ export default function LifetimeLovePage() {
                 q1,
                 q2,
                 qprompt,
-                language,
                 cacheKey: 'ZLoveLifetime',
                 partnerSaju: null,
                 partnerGender: null,

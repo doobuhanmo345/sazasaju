@@ -159,7 +159,6 @@ export default function SelDatePage() {
           AnalysisPresets.selDate({
             saju,
             gender,
-            language,
             startDate,
             endDate,
             purpose: purposeText,

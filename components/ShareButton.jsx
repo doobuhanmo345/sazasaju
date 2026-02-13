@@ -20,7 +20,7 @@ export default function ShareButton() {
       try {
         await navigator.share(shareData);
       } catch (err) {
-        console.log('Error sharing:', err);
+        console.log('😡Error sharing:', err);
       }
     } else {
       // Fallback to Clipboard Copy

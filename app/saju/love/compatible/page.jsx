@@ -102,7 +102,6 @@ export default function CompatiblePage() {
                 q1,
                 q2,
                 qprompt,
-                language,
                 cacheKey: 'ZLoveCompatible',
                 partnerSaju: null,
                 partnerGender: null,

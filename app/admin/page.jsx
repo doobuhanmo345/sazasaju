@@ -78,7 +78,7 @@ export default function AdminPage() {
     }
 
     try {
-      console.log('거절 대상 UID:', selectedApp.uid);
+      console.log('✅거절 대상 UID:', selectedApp.uid);
 
       await addDoc(collection(db, 'notifications'), {
         userId: selectedApp.uid,

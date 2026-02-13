@@ -75,7 +75,6 @@ export default function DayLuckPage() {
         AnalysisPresets.dailySpecific({
           saju: saju,
           gender: gender,
-          language: language,
           selectedDate: selectedDate,
           question: question,
           sajuDate: selectedDateSaju,

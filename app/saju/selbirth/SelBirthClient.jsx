@@ -162,7 +162,6 @@ export default function SelBirthPage() {
           AnalysisPresets.selBirth({
             saju,
             gender,
-            language,
             startDate,
             endDate,
             purpose: purposeText,

@@ -102,7 +102,7 @@ export default function TodaysLuckPage() {
 
     setAiResult('');
     try {
-      await service.analyze(AnalysisPresets.daily({ saju, gender, language, selectedDate }), (result) => {
+      await service.analyze(AnalysisPresets.daily({ saju, gender, selectedDate }), (result) => {
         console.log('✅ 오늘의 운세 완료!');
         setLoading(false);
         setAiResult(result);

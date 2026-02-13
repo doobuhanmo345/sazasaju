@@ -81,7 +81,7 @@ export default function BusinessPage() {
         if (prevData?.ques2 !== prompt) return false;
         return SajuAnalysisService.compareSaju(prevData.saju, targetProfile?.saju);
     })();
-    console.log(isAnalysisDone)
+
     const selectSubQ = async (subQid) => {
         setSelectedSubQ(subQid);
         const origin = SUB_Q_TYPES.find((i) => i.id === subQid);
@@ -101,7 +101,7 @@ export default function BusinessPage() {
         fetchPrompts();
         // setPrompt(origin.desc);
     }
-    console.log(prompt)
+
     const handleAnalysis = async () => {
         setAiResult('');
         setIsButtonClicked(true);
@@ -116,7 +116,7 @@ export default function BusinessPage() {
                 q1,
                 q2,
                 qprompt: null,
-                language,
+
             });
             preset.type = 'wealthBusiness';
             preset.cacheKey = 'ZWealthBusiness';

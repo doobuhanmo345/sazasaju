@@ -147,8 +147,8 @@ export const HANJA_ENG_MAP = {
 };
 export const langPrompt = (language) => {
   return language === 'ko'
-    ? '답변은 한국어로. 300단어 근처로 작성.'
-    : 'Answer in English. nearly 300 WORDS.';
+    ? '**답변은 꼭 한국어로 작성해 주세요**'
+    : '**you MUST Answer in English.**';
 };
 
 const hantoeng = `[Terminology Reference]

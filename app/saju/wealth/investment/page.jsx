@@ -126,7 +126,7 @@ export default function InvestmentPage() {
                 q1,
                 q2,
                 qprompt: null,
-                language,
+
             });
             preset.type = 'wealthInvestment';
             preset.cacheKey = 'ZWealthInvestment';

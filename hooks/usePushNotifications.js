@@ -23,7 +23,7 @@ export const usePushNotifications = (onNavigate) => {
     if (Capacitor.isNativePlatform()) {
       // 1. App Url Open (Deep Link)
       const appUrlListener = App.addListener('appUrlOpen', (data) => {
-        console.log('App opened with URL:', data.url);
+        console.log('✅App opened with URL:', data.url);
         const slug = data.url.split('.com').pop() || data.url.split('://').pop();
         if (slug && navigateRef.current) {
           navigateRef.current(slug);
@@ -47,7 +47,7 @@ export const usePushNotifications = (onNavigate) => {
       };
 
       const registrationListener = PushNotifications.addListener('registration', async (token) => {
-        console.log('Push registration success');
+        console.log('✅Push registration success');
         try {
           await setDoc(
             doc(db, 'users', user.uid),
@@ -68,7 +68,7 @@ export const usePushNotifications = (onNavigate) => {
 
       // 3. Push Actions (Notification Click)
       const actionListener = PushNotifications.addListener('pushNotificationActionPerformed', (notification) => {
-        console.log('Push action performed');
+        console.log('✅Push action performed');
         const data = notification.notification.data;
         if (data && data.url && navigateRef.current) {
           navigateRef.current(data.url);
@@ -94,7 +94,7 @@ export const usePushNotifications = (onNavigate) => {
         // Request permission
         const permission = await Notification.requestPermission();
         if (permission !== 'granted') {
-          console.log('Web notification permission denied');
+          console.log('✅Web notification permission denied');
           return;
         }
 
@@ -105,7 +105,7 @@ export const usePushNotifications = (onNavigate) => {
         });
 
         if (token) {
-          console.log('Web FCM Token generated');
+          console.log('✅Web FCM Token generated');
           await setDoc(
             doc(db, 'users', user.uid),
             {
@@ -118,7 +118,7 @@ export const usePushNotifications = (onNavigate) => {
 
         // Foreground message handling
         const unsubOnMessage = onMessage(msg, (payload) => {
-          console.log('Foreground message received:', payload);
+          console.log('✅Foreground message received:', payload);
           // You could show a custom toast here if desired
           if (payload.notification && window.confirm(`${payload.notification.title}\n${payload.notification.body}\n\n이동하시겠습니까?`)) {
             const url = payload.data?.url || payload.fcmOptions?.link;

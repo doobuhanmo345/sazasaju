@@ -95,7 +95,7 @@ export default function MenuBar() {
           language: language
         });
       } catch (e) {
-        console.error('Logging click error:', e);
+        console.error('😡Logging click error:', e);
       }
 
       alert(isKo ? '준비중입니다.' : 'Coming soon!');

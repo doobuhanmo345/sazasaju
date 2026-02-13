@@ -90,7 +90,7 @@ export default function FeelingsPage() {
         };
         fetchPrompts();
     }, [language]);
-    console.log(promptQ2)
+
     // [REMOVED] SUB_Q_TYPES
 
     const service = new SajuAnalysisService({
@@ -124,7 +124,7 @@ export default function FeelingsPage() {
 
         return SajuAnalysisService.compareSaju(prevData.saju, targetProfile?.saju);
     })();
-    console.log(isAnalysisDone)
+
     const handleAnalysis = async () => {
         setAiResult('');
         setIsButtonClicked(true);
@@ -147,7 +147,6 @@ export default function FeelingsPage() {
                 q1,
                 q2: promptQ2,
                 qprompt,
-                language,
                 cacheKey: 'ZLoveFeelings',
                 partnerSaju: finalPartnerSaju,
                 partnerGender: finalPartnerGender,

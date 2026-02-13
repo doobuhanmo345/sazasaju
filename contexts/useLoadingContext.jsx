@@ -25,7 +25,7 @@ export function LoadingProvider({ children }) {
   const onCancel = () => {
     // Dispatch global event for services to catch
     if (typeof window !== 'undefined') {
-      console.log('[LoadingContext] Dispatching cancellation event');
+      console.log('✅[LoadingContext] Dispatching cancellation event');
       window.dispatchEvent(new CustomEvent('sazasaju-analysis-cancel'));
     }
     setLoading(false);
@@ -52,9 +52,9 @@ export function LoadingProvider({ children }) {
       if (uid) {
         await updateDoc(doc(db, 'users', uid), { isAnalyzing: false });
       }
-      console.log('Analysis cancelled');
+      console.log('😡Analysis cancelled');
     } catch (error) {
-      console.error('Failed to cancel analysis:', error);
+      console.error('😡Failed to cancel analysis:', error);
     }
     router.push('/');
   };
@@ -81,9 +81,9 @@ export function LoadingProvider({ children }) {
       if (uid) {
         await updateDoc(doc(db, 'users', uid), { isAnalyzing: false });
       }
-      console.log('Analysis cancelled');
+      console.log('😡Analysis cancelled');
     } catch (error) {
-      console.error('Failed to cancel analysis:', error);
+      console.error('😡Failed to cancel analysis:', error);
     }
     router.push('/');
   };

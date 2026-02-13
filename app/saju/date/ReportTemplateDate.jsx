@@ -74,7 +74,6 @@ const ReportTemplateDate = ({ }) => {
   const { displayName, birthDate, isTimeUnknown } = targetProfile;
   const saju = targetProfile.saju || {};
   const bd = toymdt(birthDate);
-  console.log(data)
 
   return (
     <div className={`rt-container ${isLoaded ? 'is-active' : ''}`}>

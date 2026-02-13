@@ -256,7 +256,7 @@ export default function MatchClient() {
           inputDate,
           inputDate2,
           relationship: selectedRel,
-          language,
+
         })
 
         // [CRITICAL FIX] 친구 프로필 분석 시 메인 유저의 saju 데이터 덮어쓰기 방지

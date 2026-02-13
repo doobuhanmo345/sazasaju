@@ -268,7 +268,7 @@ export default function Wealth({ }) {
           q1,
           q2,
           qprompt,
-          language,
+
         })
       );
       setStep(4);

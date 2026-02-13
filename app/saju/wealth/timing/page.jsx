@@ -152,7 +152,7 @@ export default function TimingPage() {
                 q1,
                 q2,
                 qprompt,
-                language,
+
             });
             preset.type = 'wealthTiming';
             preset.cacheKey = 'ZWealthTiming';

@@ -80,7 +80,7 @@ function MessagesContent() {
           });
           if (count > 0) {
             await batch.commit();
-            console.log(`[Cleanup] Deleted ${count} old messages.`);
+            console.log(`✅[Cleanup] Deleted ${count} old messages.`);
           }
         }
       } catch (e) {

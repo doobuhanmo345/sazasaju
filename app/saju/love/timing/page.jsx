@@ -106,7 +106,6 @@ export default function LoveTimingPage() {
                 q1,
                 q2,
                 qprompt,
-                language,
                 cacheKey: 'ZLoveTiming',
                 partnerSaju: null,
                 partnerGender: null,

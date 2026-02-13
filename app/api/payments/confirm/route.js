@@ -8,15 +8,15 @@ export async function POST(req) {
         const body = await req.json();
         const { paymentKey, orderId, amount, userId, creditsToAdd } = body;
 
-        console.log('=== Payment Confirm Start ===');
-        console.log('Request Body:', body);
-        console.log('Firebase Admin DB:', adminDb ? 'Available' : 'NOT AVAILABLE');
-        console.log('Toss Secret Key:', TOSS_SECRET_KEY ? 'Set' : 'NOT SET');
+        console.log('✅=== Payment Confirm Start ===');
+        console.log('✅Request Body:', body);
+        console.log('✅Firebase Admin DB:', adminDb ? 'Available' : 'NOT AVAILABLE');
+        console.log('✅Toss Secret Key:', TOSS_SECRET_KEY ? 'Set' : 'NOT SET');
 
         // 1. Confirm payment with Toss Payments
         const encryptedSecretKey = "Basic " + Buffer.from(TOSS_SECRET_KEY + ":").toString("base64");
 
-        console.log('Calling Toss API...');
+        console.log('✅Calling Toss API...');
         const response = await fetch("https://api.tosspayments.com/v1/payments/confirm", {
             method: "POST",
             headers: {
@@ -30,9 +30,9 @@ export async function POST(req) {
             }),
         });
 
-        console.log('Toss API Response Status:', response.status);
+        console.log('✅Toss API Response Status:', response.status);
         const paymentResult = await response.json();
-        console.log('Toss API Response:', paymentResult);
+        console.log('✅Toss API Response:', paymentResult);
 
         if (!response.ok) {
             console.error('Toss Verification Failed:', paymentResult);
@@ -45,7 +45,7 @@ export async function POST(req) {
         let updatedCredits = 0; // capture new credits
 
         if (adminDb) {
-            console.log('Updating Firestore...');
+            console.log('✅Updating Firestore...');
             const userRef = adminDb.collection('users').doc(userId);
             const paymentRef = adminDb.collection('payments').doc(orderId);
 
@@ -79,9 +79,9 @@ export async function POST(req) {
                 return newCredits; // Return newCredits from transaction
             });
 
-            console.log(`Successfully added ${creditsToAdd} credits to user ${userId}. Total: ${updatedCredits}`);
+            console.log(`✅Successfully added ${creditsToAdd} credits to user ${userId}. Total: ${updatedCredits}`);
         } else {
-            console.warn('Firebase Admin not initialized - skipping DB update');
+            console.warn('✅Firebase Admin not initialized - skipping DB update');
         }
 
         return NextResponse.json({

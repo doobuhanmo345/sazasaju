@@ -320,7 +320,8 @@ function SazaTalkContent() {
           gender: gender,
           inputDate: inputDate,
           question: userQuestion,
-          history: chatHistory
+          history: chatHistory,
+
         }),
       );
       if (result) {

@@ -58,7 +58,7 @@ export default function NotificationList() {
     const q_personal = query(collection(db, 'notifications'), where('userId', '==', user.uid));
     const unsub_personal = onSnapshot(q_personal, (snap) => {
       setPersonalNotifications(snap.docs.map(d => ({ id: d.id, ...d.data() })));
-    }, err => console.error('Personal notif error:', err));
+    }, err => console.error('😡Personal notif error:', err));
 
     // 2. 관리자용 역할 알림 감시 (관리자/슈퍼관리자만)
     let unsub_role = () => { };
@@ -70,7 +70,7 @@ export default function NotificationList() {
         if (err.code === 'permission-denied') {
           console.warn('Role notification permission denied (normal for non-admins).');
         } else {
-          console.error('Role notif error:', err);
+          console.error('😡Role notif error:', err);
         }
       });
     } else {

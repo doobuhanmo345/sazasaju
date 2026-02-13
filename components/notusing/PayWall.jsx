@@ -72,9 +72,9 @@ const PayWall = () => {
         price: 29,
         timestamp: serverTimestamp(),
       });
-      console.log('Click tracked');
+      console.log('✅Click tracked');
     } catch (e) {
-      console.error('Error tracking click: ', e);
+      console.error('😡Error tracking click: ', e);
     }
   };
 

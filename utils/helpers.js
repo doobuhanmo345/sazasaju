@@ -49,7 +49,7 @@ export const parseAiResponse = (rawString) => {
     return JSON.parse(cleaned);
   } catch (error) {
     console.warn('⚠️ JSON 파싱 1차 실패, 보정 시도...');
-    
+
     try {
       // 4. 보정 시도
       let fixed = cleaned.replace(/"([\s\S]*?)"/g, (m, p1) => {
@@ -62,7 +62,7 @@ export const parseAiResponse = (rawString) => {
       return JSON.parse(fixed);
     } catch (innerError) {
       console.error('❌ 모든 파싱 시도 실패:', innerError.message);
-      console.log('Failing JSON string:', cleaned);
+      console.log('✅Failing JSON string:', cleaned);
       return null;
     }
   }

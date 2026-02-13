@@ -129,7 +129,6 @@ export default function CapacityPage() {
             console.error(error);
         }
     };
-    console.log(prompt)
     useEffect(() => {
         if (isButtonClicked && !loading && isAnalysisDone && prevData?.result && prevData?.result?.length > 0) {
             router.push('/saju/wealth/capacity/result');

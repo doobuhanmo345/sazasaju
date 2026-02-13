@@ -57,7 +57,7 @@ export default function SuccessPage() {
                 }
 
                 const result = await response.json();
-                console.log('결제 확인 성공:', result);
+                console.log('✅결제 확인 성공:', result);
 
                 setAddedCredits(creditsToAdd);
 
@@ -71,7 +71,7 @@ export default function SuccessPage() {
                         const userDoc = await getDoc(userDocRef);
                         if (userDoc.exists()) {
                             const userData = userDoc.data();
-                            console.log('업데이트된 크레딧 (Fallback):', userData.credits);
+                            console.log('✅업데이트된 크레딧 (Fallback):', userData.credits);
                             setTotalCredits(userData.credits);
                         }
                     }
@@ -86,7 +86,7 @@ export default function SuccessPage() {
                 setLoading(false);
 
             } catch (err) {
-                console.error('Payment Confirmation Error:', err);
+                console.error('😡Payment Confirmation Error:', err);
                 setError(err.message);
                 setLoading(false);
 

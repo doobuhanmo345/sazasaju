@@ -69,7 +69,7 @@ export default function ClientWrapper({ children }) {
       timer = setTimeout(() => {
         // Double check inside timeout
         if (!userData?.birthDate) {
-          console.log('Redirecting to nobirthday: User data exists but birthDate is missing.');
+          console.log('✅Redirecting to nobirthday: User data exists but birthDate is missing.');
           router.push('/nobirthday');
         }
       }, 500);
@@ -155,7 +155,7 @@ export default function ClientWrapper({ children }) {
               window.Kakao.init('344188f5340e9fb502efb20389316a7f');
             }
           } catch (e) {
-            console.error('Kakao SDK Init Error:', e);
+            console.error('😡Kakao SDK Init Error:', e);
           }
         }}
       />

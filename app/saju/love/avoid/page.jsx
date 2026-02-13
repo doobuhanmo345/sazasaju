@@ -99,7 +99,6 @@ export default function AvoidPage() {
                 q1,
                 q2,
                 qprompt,
-                language,
                 cacheKey: 'ZLoveAvoid',
                 partnerSaju: null,
                 partnerGender: null,
@@ -121,7 +120,7 @@ export default function AvoidPage() {
     const isDisabled2 = !isAnalysisDone && isLocked;
 
     if (loading && saju) {
-        console.log(saju, isTimeUnknown, isAnalysisDone)
+
         return <LoadingFourPillar saju={saju} isTimeUnknown={isTimeUnknown} isAnalysisDone={isAnalysisDone} />;
     }
 

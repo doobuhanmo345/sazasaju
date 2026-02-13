@@ -126,7 +126,6 @@ export default function MonthlyLovePage() {
                 q1,
                 q2,
                 qprompt,
-                language,
                 cacheKey: 'ZLoveMonthly',
                 partnerSaju: null,
                 partnerGender: null,

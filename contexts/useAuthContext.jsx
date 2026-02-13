@@ -52,7 +52,7 @@ export function AuthContextProvider({ children }) {
         JSON.stringify(selectedProfile.saju) !== JSON.stringify(userData.saju);
 
       if (hasChanged) {
-        console.log('🔄 Syncing owner profile with latest userData');
+        console.log('✅🔄 Syncing owner profile with latest userData');
         setSelectedProfile(userData);
       }
     }
@@ -196,7 +196,7 @@ export function AuthContextProvider({ children }) {
       const safeGender = target.gender ? target.gender.toLowerCase() : 'male';
       return `/images/ilju/${safeIlju}_${safeGender}.png`;
     } catch (e) {
-      console.error('Ilju image path error:', e);
+      console.error('😡Ilju image path error:', e);
       return '/images/ilju/default.png';
     }
   }, [selectedProfile, userData, language]);
@@ -260,10 +260,10 @@ export function AuthContextProvider({ children }) {
     // Handle mobile redirect result
     getRedirectResult(auth).then((result) => {
       if (result) {
-        console.log('Mobile redirect login success:', result.user.email);
+        console.log('✅Mobile redirect login success:', result.user.email);
       }
     }).catch((error) => {
-      console.error('Redirect result error:', error);
+      console.error('😡Redirect result error:', error);
     });
 
     return () => unsubscribe?.();
@@ -286,7 +286,7 @@ export function AuthContextProvider({ children }) {
         setLoadingUser(false);
       },
       (error) => {
-        console.error('Firestore Snapshot Error:', error);
+        console.error('😡Firestore Snapshot Error:', error);
         setLoadingUser(false);
       },
     );
@@ -348,7 +348,7 @@ export function AuthContextProvider({ children }) {
           await setDoc(userDocRef, initialData);
         }
       } catch (error) {
-        console.error('User Initialization Error:', error);
+        console.error('😡User Initialization Error:', error);
       }
     };
 
@@ -373,7 +373,7 @@ export function AuthContextProvider({ children }) {
       selectedProfile.credits !== userDataCredits;
 
     if (needsSync) {
-      console.log('🔗 Merging owner usage data into friend profile');
+      console.log('✅🔗 Merging owner usage data into friend profile');
       setSelectedProfile(prev => ({
         ...prev,
         editCount: userDataEditCount,
@@ -416,7 +416,7 @@ export function AuthContextProvider({ children }) {
       if (error.code === 'auth/popup-closed-by-user') {
         return;
       }
-      console.error('Login Error:', error);
+      console.error('😡Login Error:', error);
     } finally {
       setIsLoggingIn(false);
     }

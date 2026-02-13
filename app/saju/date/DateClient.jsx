@@ -204,7 +204,6 @@ export default function FirstDatePage() {
           AnalysisPresets.dailySpecific({
             saju: saju,
             gender: gender,
-            language: language,
             selectedDate: selectedDate,
             sajuDate: selectedDateSaju,
             question: question,

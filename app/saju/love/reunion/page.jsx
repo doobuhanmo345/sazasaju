@@ -133,7 +133,6 @@ export default function ReunionPage() {
                 q1,
                 q2,
                 qprompt,
-                language,
                 cacheKey: 'ZLoveReunion',
                 partnerSaju: showPartnerInput ? partnerSaju : null,
                 partnerGender: showPartnerInput ? partnerGender : null,

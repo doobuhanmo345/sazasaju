@@ -89,7 +89,7 @@ export default function YearlyLuckPage() {
     setIsButtonClicked(true);
     // [NEW] 이미 저장된 데이터와 현재 입력값이 같으면 잠시 대기 후 결과 페이지로 이동
     if (isAnalysisDone) {
-      console.log('✅ 이미 분석된 데이터가 있어 결과 페이지로 이동합니다.');
+      console.log('✅이미 분석된 데이터가 있어 결과 페이지로 이동합니다.');
       setTimeout(() => {
         router.push('/saju/2026luck/result');
       }, 2000);
@@ -99,7 +99,7 @@ export default function YearlyLuckPage() {
     setAiResult('');
     try {
       onstart(); // [NEW] 로딩화면 먼저 진입
-      await service.analyze(AnalysisPresets.newYear({ saju, gender, language }), (result) => {
+      await service.analyze(AnalysisPresets.newYear({ saju, gender }), (result) => {
         console.log('✅ 신년운세 완료!');
       });
     } catch (error) {

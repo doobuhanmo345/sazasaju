@@ -77,7 +77,7 @@ export default function ApplySajuPage() {
       alert('전문가 신청이 완료되었습니다!');
       setApplied(true);
     } catch (error) {
-      console.error('Firebase Error:', error);
+      console.error('😡Firebase Error:', error);
       alert(`신청 중 오류가 발생했습니다: ${error.message}`);
     } finally {
       setIsSubmitting(false);
@@ -200,11 +200,10 @@ export default function ApplySajuPage() {
                       key={method.id}
                       type="button"
                       onClick={() => toggleMethod(method.id)}
-                      className={`flex flex-col items-center justify-center p-5 rounded-3xl border-2 transition-all gap-2 ${
-                        formData.methods.includes(method.id)
-                          ? 'border-indigo-500 bg-indigo-50 dark:bg-indigo-900/20 text-indigo-600 dark:text-indigo-400 shadow-md ring-2 ring-indigo-500/20'
-                          : 'border-gray-50 dark:border-slate-800 bg-gray-50 dark:bg-slate-800 text-gray-400 dark:text-gray-500 hover:border-gray-200'
-                      }`}
+                      className={`flex flex-col items-center justify-center p-5 rounded-3xl border-2 transition-all gap-2 ${formData.methods.includes(method.id)
+                        ? 'border-indigo-500 bg-indigo-50 dark:bg-indigo-900/20 text-indigo-600 dark:text-indigo-400 shadow-md ring-2 ring-indigo-500/20'
+                        : 'border-gray-50 dark:border-slate-800 bg-gray-50 dark:bg-slate-800 text-gray-400 dark:text-gray-500 hover:border-gray-200'
+                        }`}
                     >
                       <method.icon className="w-8 h-8" />
                       <span className="font-bold text-xs whitespace-nowrap">{method.label}</span>
