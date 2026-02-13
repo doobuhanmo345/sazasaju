@@ -16,7 +16,7 @@ export const basic_var = [
 ];
 export const new_year_var = [
   { key: '{{DEFAULT_INSTRUCTION}}', label: '(DB)STRICT_INSTRUCTION' },
-  { key: '{{NEW_YEAR_FORMAT}}', label: '(DB)new_year_format' },
+  { key: '{{targetFormat}}', label: '(DB)new_year_format' },
   { key: '{{gender}}', label: '성별' },
   { key: '{{birthDate}}', label: '생일' },
   { key: '{{sajuJson}}', label: '사주' },
@@ -27,7 +27,7 @@ export const new_year_var = [
 
 export const daily_var = [
   { key: '{{DEFAULT_INSTRUCTION}}', label: '(DB)STRICT_INSTRUCTION' },
-  { key: '{{DAILY_FORTUNE_PROMPT}}', label: '(DB)daily_basic' },
+  { key: '{{targetFormat}}', label: '(DB)target by language' },
   { key: '{{gender}}', label: '성별' },
   { key: '{{userSajuText}}', label: '사용자 사주' },
   { key: '{{todayDate}}', label: '오늘날짜일주' },
@@ -55,7 +55,7 @@ export const daily_s_var = [
 export const saza_var = [
   { key: '{{DEFAULT_INSTRUCTION}}', label: '(DB)defualt instruction' },
   { key: '{{STRICT_PROMPT}}', label: '(DB)saza_strict' },
-  { key: '{{SAZA_FORMAT}}', label: '(DB)SAZA_FORMAT' },
+  { key: '{{targetFormat}}', label: '(DB)saza_format' },
   { key: '{{myQuestion}}', label: '사용자 질문' },
   { key: '{{sajuInfo}}', label: '사주 정보' },
   { key: '{{todayInfo}}', label: '오늘 정보' },
@@ -65,7 +65,7 @@ export const saza_var = [
 
 export const wealth_var = [
   { key: '{{DEFAULT_INSTRUCTION}}', label: '(DB)defualt instruction' },
-  { key: '{{STRICT_PROMPT}}', label: '(DB)Wealth_strict' },
+  { key: '{{targetFormat}}', label: '(DB)wealth_format' },
   { key: '{{qLabel}}', label: 'qLabel' },
   { key: '{{subQuestion}}', label: 'subQuestion' },
   { key: '{{gender}}', label: '성별' },
@@ -81,7 +81,7 @@ export const wealth_var = [
 
 export const love_var = [
   { key: '{{DEFAULT_INSTRUCTION}}', label: '(DB)defualt instruction' },
-  { key: '{{STRICT_PROMPT}}', label: '(DB)Love_strict' },
+  { key: '{{targetFormat}}', label: '(DB)target by language' },
   { key: '{{qLabel}}', label: 'qLabel (main question)' },
   { key: '{{subQuestion}}', label: 'subQuestion (detailed question)' },
   { key: '{{gender}}', label: '성별' },
@@ -99,8 +99,7 @@ export const love_var = [
 
 export const match_var = [
   { key: '{{DEFAULT_INSTRUCTION}}', label: '(DB)defualt instruction' },
-  { key: '{{STRICT_PROMPT}}', label: '(DB)match_strict' },
-  { key: '{{SPECIFIC_PROMPT}}', label: '(DB)match_specifit' },
+  { key: '{{matchFormat}}', label: '(DB)match_format' },
   { key: '{{relationLabel}}', label: 'relationshipLabel, selected Rel' },
   { key: '{{gender}}', label: '성별' },
   { key: '{{displayName}}', label: '사용자 이름' },
@@ -113,7 +112,7 @@ export const match_var = [
 
 export const seldate_var = [
   { key: '{{DEFAULT_INSTRUCTION}}', label: '(DB)defualt instruction' },
-  { key: '{{SELDATE_FORMAT}}', label: '(DB)seldate_format' },
+  { key: '{{targetFormat}}', label: '(DB)seldate_format' },
   { key: '{{startDate}}', label: '시작일' },
   { key: '{{endDate}}', label: '종료일' },
   { key: '{{purpose}}', label: '목적' },
@@ -125,7 +124,7 @@ export const seldate_var = [
 ];
 export const selbirth_var = [
   { key: '{{DEFAULT_INSTRUCTION}}', label: '(DB)STRICT_INSTRUCTION' },
-  { key: '{{SELBIRTH_FORMAT}}', label: '(DB)selbirth_format' },
+  { key: '{{targetFormat}}', label: '(DB)selbirth_format' },
   { key: '{{calendarData}}', label: '세부 만세력 데이터' },
   { key: '{{displayName}}', label: '사용자 이름' },
   { key: '{{mySajuStr}}', label: '사용자 사주' },
