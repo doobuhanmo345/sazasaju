@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useAuthContext } from '@/contexts/useAuthContext';
 import { useLoading } from '@/contexts/useLoadingContext';
 import { db } from '@/lib/firebase';
@@ -34,14 +34,23 @@ export default function AppBanner() {
     //isDirect true => 분석중, 새로고침하면 유지 안됨
     //UserData?.isAnalyzing true => 분석중인거를 기록해놓기 위한 데이터
     //useEffect로 분석중이면 banner를 유지하고, 분석이 끝나면 banner를 없앤다.
+    const isInitialMount = useRef(true);
+
+
     useEffect(() => {
+        // ✅ 첫 렌더링은 건너뛰기
+        if (isInitialMount.current) {
+            isInitialMount.current = false;
+            return;
+        }
+
         if (userData?.isAnalyzing) {
             if (!isDirect && !isBackground) {
                 handleAnalyzing(userData);
                 return;
             } else if (!isDirect && isBackground) {
                 return;
-            } else if (!isDirect && !isBackground) {
+            } else if (isDirect && !isBackground) {
                 handleAnalyzing(userData);
                 return;
             } else {
@@ -49,7 +58,7 @@ export default function AppBanner() {
             }
         }
     }, [isBackground, isDirect, userData?.isAnalyzing]);
-    // console.log(isBackground, isDirect, userData?.isAnalyzing)
+
 
     const formatTime = (seconds) => {
         const mins = Math.floor(seconds / 60);

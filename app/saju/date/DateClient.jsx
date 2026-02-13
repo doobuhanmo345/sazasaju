@@ -194,7 +194,7 @@ export default function FirstDatePage() {
         console.log('✅ 이미 분석된 데이터(옵션 일치)가 있어 결과 페이지로 이동합니다.');
         setTimeout(() => {
           router.push('/saju/date/result');
-        }, 2000);
+        }, 1000);
         return;
       }
 
@@ -422,7 +422,7 @@ export default function FirstDatePage() {
     }
   }, [isButtonClicked, prevData, router, isAnalysisDone, loading]);
   if (loading) {
-    console.log('loading')
+
     return <LoadingFourPillar saju={saju} isTimeUnknown={isTimeUnknown} isAnalysisDone={isAnalysisDone} />;
   }
   return (

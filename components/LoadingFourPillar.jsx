@@ -127,10 +127,6 @@ export default function LoadingFourPillar({ isTimeUnknown, saju, isAnalysisDone 
       ? 'Crafting your unique, personalized report with precision...'
       : 'Final Synthesis: Harmonizing the overall energy flow (5/5)',
   };
-  if (!userData?.isAnalyzing && !isAnalysisDone) {
-
-    return
-  }
 
   if (!userData?.isAnalyzing && isAnalysisDone) {
 
