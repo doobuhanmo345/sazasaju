@@ -59,33 +59,27 @@ export default function ShareLinkButton({ fortuneType = 'basic', storageKey }) {
                 userQuestion: question || historyItem,
             };
 
-            // Compress using LZString for client-side legacy support
+            // 1. Construct URL with language parameter
+            const langSuffix = `lang=${language}`;
             const jsonStr = JSON.stringify(shareData);
             let shareUrl = '';
 
-            // Hybrid Strategy:
-            // If data is small (< 1000 chars), create direct client-side link (no expiration)
-            // If data is large, use Vercel KV (7-day expiration)
             if (jsonStr.length < 1000) {
                 const compressed = LZString.compressToEncodedURIComponent(jsonStr);
-                // Direct link: /saju/share/[type]?data=...
-                shareUrl = `${window.location.origin}/saju/share/${fortuneType}?data=${compressed}`;
+                shareUrl = `${window.location.origin}/saju/share/${fortuneType}?${langSuffix}&data=${compressed}`;
             } else {
-                // Server-side link: /saju/share/[type]/[id]
                 const response = await fetch('/api/saju/share', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: jsonStr, // Send raw JSON string
+                    body: jsonStr,
                 });
 
                 if (!response.ok) throw new Error('Failed to generate short link');
-
                 const result = await response.json();
-                // Construct URL based on directory structure: /saju/share/[type]/[id]
-                shareUrl = `${window.location.origin}/saju/share/${fortuneType}/${result.id}`;
+                shareUrl = `${window.location.origin}/saju/share/${fortuneType}/${result.id}?${langSuffix}`;
             }
 
-            // Use NativeBridge for better mobile experience
+            // 2. Sharing Logic
             const fortuneTypeLabels = {
                 basic: language === 'ko' ? '사주' : 'Saju',
                 tarot: language === 'ko' ? '타로' : 'Tarot',
@@ -98,42 +92,40 @@ export default function ShareLinkButton({ fortuneType = 'basic', storageKey }) {
                 ? `${targetProfile.displayName}님의 ${fortuneLabel} 분석 결과입니다. 확인해보세요!`
                 : `Check out ${targetProfile.displayName}'s ${fortuneLabel} analysis!`;
 
-            await NativeBridge.shareUrl(shareUrl, shareTitle, shareText);
-
-            // Also copy to clipboard for web users (UI feedback)
+            // Strategy: Always copy to clipboard (web), then trigger Share dialog
             if (!window.Capacitor?.isNativePlatform()) {
-                navigator.clipboard.writeText(shareUrl).then(() => {
-                    setIsCopied(true);
-                    setTimeout(() => setIsCopied(false), 2000);
-                });
+                await copyToClipboard(shareUrl);
             }
-            const shareDataLink = {
-                title: 'SAZA SAJU',
-                text: language === 'ko' ? '사자(SAZA)에서 당신의 운세를 확인해보세요!' : 'Check your fortune at SAZA SAJU!',
-                url: shareUrl, // Share the home page URL or current URL
-            };
 
-            // Try Native Share
-            if (navigator.share) {
+            if (window.Capacitor?.isNativePlatform()) {
+                await NativeBridge.shareUrl(shareUrl, shareTitle, shareText);
+            } else if (navigator.share) {
                 try {
-                    await navigator.share(shareDataLink);
+                    await navigator.share({
+                        title: shareTitle,
+                        text: shareText,
+                        url: shareUrl,
+                    });
                 } catch (err) {
-                    console.log('😡Error sharing:', err);
-                }
-            } else {
-                // Fallback to Clipboard Copy
-                try {
-                    await navigator.clipboard.writeText(shareData.url);
-                    setCopied(true);
-                    setTimeout(() => setCopied(false), 2000);
-                } catch (err) {
-                    console.error('Failed to copy keys', err);
+                    if (err.name !== 'AbortError') {
+                        console.error('Web Share Error:', err);
+                    }
                 }
             }
 
         } catch (err) {
             console.error('Error sharing link:', err);
             alert(language === 'ko' ? '링크 공유 중 오류가 발생했습니다.' : 'Error sharing link.');
+        }
+    };
+
+    const copyToClipboard = async (text) => {
+        try {
+            await navigator.clipboard.writeText(text);
+            setIsCopied(true);
+            setTimeout(() => setIsCopied(false), 2000);
+        } catch (err) {
+            console.error('Clipboard Error:', err);
         }
     };
 

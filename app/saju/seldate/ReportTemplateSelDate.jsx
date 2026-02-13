@@ -55,7 +55,7 @@ export default function ReportTemplateSelDate() {
       <div className="flex flex-col items-center justify-center min-h-[40vh] gap-4">
         <div className="w-8 h-8 rounded-full border-4 border-indigo-200 border-t-indigo-500 animate-spin"></div>
         <div className="text-center text-indigo-400 font-medium animate-pulse text-sm">
-          {language === 'en' ? 'Retrieving Analysis Results...' : '분석 결과를 불러오는 중입니다...'}
+          {language !== 'ko' ? 'Retrieving Analysis Results...' : '분석 결과를 불러오는 중입니다...'}
         </div>
       </div>
     );
@@ -73,14 +73,14 @@ export default function ReportTemplateSelDate() {
       <header className="rt-header">
         <div className="rt-tag animate-up">AUSPICIOUS DATE REPORT</div>
         <h1 className="rt-main-title animate-up">
-          {displayName}{language === 'en' ? "'s" : '님을 위한'}
+          {displayName}{language !== 'ko' ? "'s" : '님을 위한'}
           <br />
           <span className="text-highlight">
-            {language === 'en' ? 'Best Date Selection' : '길일 선정 리포트'}
+            {language !== 'ko' ? 'Best Date Selection' : '길일 선정 리포트'}
           </span>
         </h1>
         <p className="rt-desc animate-up">
-          {language === 'en'
+          {language !== 'ko'
             ? 'Optimal dates selected based on your destiny energy.'
             : '당신의 사주 에너지 흐름에 가장 적합한 길일을 선별했습니다.'}
         </p>
@@ -113,7 +113,7 @@ export default function ReportTemplateSelDate() {
       <main className="rt-main-content">
         <section className="rt-card animate-up">
           <h2 className="rt-card__title">
-            {language === 'en' ? '01. Purpose & Flow' : '01. 길일 선정 정보'}
+            {language !== 'ko' ? '01. Purpose & Flow' : '01. 길일 선정 정보'}
           </h2>
           <div className="rt-ootd-wrapper mb-4">
             <div className="rt-ootd-item">
@@ -130,7 +130,7 @@ export default function ReportTemplateSelDate() {
 
         <section className="rt-card animate-up">
           <h2 className="rt-card__title">
-            {language === 'en' ? '02. Top Recommendations' : '02. 최적의 날짜 추천'}
+            {language !== 'ko' ? '02. Top Recommendations' : '02. 최적의 날짜 추천'}
           </h2>
           <div className="space-y-4">
             {data.bestDates && data.bestDates.map((item, idx) => (
@@ -150,7 +150,7 @@ export default function ReportTemplateSelDate() {
 
         {data.caution && (
           <section className="rt-card animate-up">
-            <h2 className="rt-card__title">{language === 'en' ? '03. Dates to Avoid' : '03. 피해야 할 시기'}</h2>
+            <h2 className="rt-card__title">{language !== 'ko' ? '03. Dates to Avoid' : '03. 피해야 할 시기'}</h2>
             <div className="rt-analysis-list__item is-warning"><p>{data.caution}</p></div>
           </section>
         )}

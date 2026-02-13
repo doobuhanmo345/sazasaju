@@ -4,12 +4,14 @@ import React, { useEffect, useState, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import MatchShareTemplate from './MatchShareTemplate';
 import LZString from 'lz-string';
+import { useLanguage } from '@/contexts/useLanguageContext';
 
 function ShareContent() {
     const searchParams = useSearchParams();
     const [shareData, setShareData] = useState(null);
     const [error, setError] = useState(null);
-
+    const { language } = useLanguage();
+    const isKo = language === 'ko'
     useEffect(() => {
         const compressedData = searchParams.get('data');
         if (compressedData) {
@@ -43,7 +45,7 @@ function ShareContent() {
         );
     }
 
-    return <MatchShareTemplate shareData={shareData} />;
+    return <MatchShareTemplate shareData={shareData} language={language} />;
 }
 
 export default function MatchSharePage() {

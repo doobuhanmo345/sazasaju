@@ -114,7 +114,7 @@ export default function BasicAnaPage() {
                 ZApiAnalysis: {
                   result,
                   saju: targetProfile?.saju,
-                  language: p.language,
+                  language: service.language,
                   gender: targetProfile?.gender,
                   targetName: targetProfile.displayName || 'Friend', // 누구 사주인지 기록
                 },

@@ -8,10 +8,12 @@ import { useLanguage } from '@/contexts/useLanguageContext';
 import { reportStyleSimple } from '@/data/aiResultConstants';
 
 // shareData passed from Server Component OR via props
-export default function SelBirthShareTemplate({ shareData: propShareData }) {
+export default function SelBirthShareTemplate({ shareData: propShareData, language: propLanguage }) {
     const searchParams = useSearchParams();
     const [shareData, setShareData] = useState(propShareData || null);
-    const { language } = useLanguage();
+    const { language: hookLanguage } = useLanguage();
+    const language = propLanguage || hookLanguage;
+    const isEn = language !== 'ko';
 
     useEffect(() => {
         if (propShareData) {
@@ -59,7 +61,7 @@ export default function SelBirthShareTemplate({ shareData: propShareData }) {
             language={language}
             fortuneType="selbirth"
             gradientColors="from-emerald-400 via-teal-500 to-green-600"
-            headerBadgeText={language === 'en' ? 'Birth Selection Shared' : '출산 택일 공유'}
+            headerBadgeText={language !== 'ko' ? 'Birth Selection Shared' : '출산 택일 공유'}
         >
             <div className="rt-container is-active">
                 <style>{reportStyleSimple}</style>
@@ -68,10 +70,10 @@ export default function SelBirthShareTemplate({ shareData: propShareData }) {
                 <header className="rt-header">
                     <div className="rt-tag animate-up">BIRTH DATE SELECTION</div>
                     <h1 className="rt-main-title animate-up">
-                        {language === 'en' ? 'Gift of Destiny for' : '아기를 위한 최고의 선물'}
+                        {language !== 'ko' ? 'Gift of Destiny for' : '아기를 위한 최고의 선물'}
                         <br />
                         <span className="text-highlight">
-                            {language === 'en' ? 'Baby Birth Selection' : '명품 출산 택일'}
+                            {language !== 'ko' ? 'Baby Birth Selection' : '명품 출산 택일'}
                         </span>
                     </h1>
                 </header>
@@ -102,7 +104,7 @@ export default function SelBirthShareTemplate({ shareData: propShareData }) {
                 <main className="rt-main-content">
                     <section className="rt-card animate-up">
                         <h2 className="rt-card__title">
-                            {language === 'en' ? '01. Destiny Overview' : '01. 아이의 운명 개요'}
+                            {language !== 'ko' ? '01. Destiny Overview' : '01. 아이의 운명 개요'}
                         </h2>
                         <div className="rt-ootd-wrapper mb-4">
                             <div className="rt-ootd-item">
@@ -115,7 +117,7 @@ export default function SelBirthShareTemplate({ shareData: propShareData }) {
 
                     <section className="rt-card animate-up">
                         <h2 className="rt-card__title">
-                            {language === 'en' ? '02. Top Recommendations' : '02. 추천 출산일 Best'}
+                            {language !== 'ko' ? '02. Top Recommendations' : '02. 추천 출산일 Best'}
                         </h2>
                         <div className="space-y-6">
                             {data.bestDates && data.bestDates.slice(0, 1).map((item, idx) => (
@@ -133,7 +135,7 @@ export default function SelBirthShareTemplate({ shareData: propShareData }) {
                             ))}
                             {data.bestDates && data.bestDates.length > 1 && (
                                 <p className="text-center text-xs text-slate-400 mt-2">
-                                    {language === 'en' ? 'More dates available in full report.' : '전체 리포트에서 더 많은 날짜를 확인하세요.'}
+                                    {language !== 'ko' ? 'More dates available in full report.' : '전체 리포트에서 더 많은 날짜를 확인하세요.'}
                                 </p>
                             )}
                         </div>

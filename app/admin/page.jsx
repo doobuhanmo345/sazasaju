@@ -480,7 +480,7 @@ export default function AdminPage() {
                 Inquiry Board
               </h3>
               <div className="flex items-center gap-3">
-                <span className="text-[9px] font-black text-slate-400 uppercase tracking-widest">{showProcessed ? 'Viewing All' : 'Active Only'}</span>
+                <span className="text-xs font-black text-slate-400 uppercase tracking-widest">{showProcessed ? 'Viewing All' : 'Active Only'}</span>
                 <button
                   onClick={() => setShowProcessed(!showProcessed)}
                   className={`relative w-9 h-5 rounded-full transition-all duration-300 ${showProcessed ? 'bg-blue-600' : 'bg-slate-200 dark:bg-slate-700'}`}
@@ -520,7 +520,7 @@ export default function AdminPage() {
                             <span className="text-xs font-black text-slate-900 dark:text-white uppercase truncate max-w-[120px]">
                               {msg.senderName}
                             </span>
-                            <span className="text-[9px] font-bold text-slate-400 dark:text-slate-600">
+                            <span className="text-xs font-bold text-slate-400 dark:text-slate-600">
                               {msg.createdAt ? new Date(msg.createdAt.seconds * 1000).toLocaleDateString() : 'Pending'}
                             </span>
                           </div>
@@ -534,7 +534,7 @@ export default function AdminPage() {
                             <>
                               <button
                                 onClick={() => openReplyModal(msg)}
-                                className="px-4 py-2 bg-slate-900 dark:bg-white text-white dark:text-slate-900 rounded-xl text-[9px] font-black uppercase tracking-widest hover:scale-105 transition-all shadow-md"
+                                className="px-4 py-2 bg-slate-900 dark:bg-white text-white dark:text-slate-900 rounded-xl text-xs font-black uppercase tracking-widest hover:scale-105 transition-all shadow-md"
                               >
                                 Reply
                               </button>
@@ -549,7 +549,7 @@ export default function AdminPage() {
                           ) : (
                             <button
                               onClick={() => handleMarkProcessed(msg.id, false)}
-                              className="px-3 py-1.5 text-[9px] font-black text-slate-400 hover:text-blue-600 uppercase tracking-widest bg-slate-100 dark:bg-slate-800 rounded-lg transition-all"
+                              className="px-3 py-1.5 text-xs font-black text-slate-400 hover:text-blue-600 uppercase tracking-widest bg-slate-100 dark:bg-slate-800 rounded-lg transition-all"
                             >
                               Cancel / Restore
                             </button>

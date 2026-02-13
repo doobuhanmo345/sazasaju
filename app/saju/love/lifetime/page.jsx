@@ -24,9 +24,9 @@ export default function LifetimeLovePage() {
 
     const [selectedSubQ, setSelectedSubQ] = useState(null);
     const [isButtonClicked, setIsButtonClicked] = useState(false);
-
+    const isKo = language === 'ko'
     useEffect(() => {
-        if (language === 'ko') {
+        if (isKo) {
             document.title = '평생 애정운 분석 | 타고난 연애 패턴';
         } else {
             document.title = 'Lifetime Love Fortune | Innate Relationship Patterns';
@@ -88,7 +88,7 @@ export default function LifetimeLovePage() {
             router.push('/saju/love/lifetime/result');
             return;
         }
-        const q1 = '평생 애정운';
+        const q1 = isKo ? '평생 애정운' : 'Lifetime Love Fortune';
         const q2 = SUB_Q_TYPES.find((i) => i.id === selectedSubQ)?.desc;
         const qprompt = SUB_Q_TYPES.find((i) => i.id === selectedSubQ)?.prompt;
 
@@ -153,8 +153,8 @@ export default function LifetimeLovePage() {
                     <div className="grid grid-cols-1 gap-4">
                         {SUB_Q_TYPES.map((sub) => {
                             const isSelected = selectedSubQ === sub.id;
-                            const labelText = language === 'en' ? sub.labelEn : sub.label;
-                            const descText = language === 'en' ? sub.descEn : sub.desc;
+                            const labelText = language !== 'ko' ? sub.labelEn : sub.label;
+                            const descText = language !== 'ko' ? sub.descEn : sub.desc;
 
                             return (
                                 <button
@@ -206,7 +206,7 @@ export default function LifetimeLovePage() {
                                 disabled={isDisabled || isDisabled2}
                                 isDone={isAnalysisDone}
                                 language={language}
-                                label={language === 'en' ? 'Start Analysis' : '분석 시작하기'}
+                                label={language !== 'ko' ? 'Start Analysis' : '분석 시작하기'}
                                 cost={-1}
                                 color="rose"
                             />

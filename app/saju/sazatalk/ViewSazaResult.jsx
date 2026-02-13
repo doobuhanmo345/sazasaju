@@ -97,7 +97,7 @@ export default function ViewSazaResult({
           {data.saza && (
             <div className="mt-4 pt-4 border-t border-slate-50 dark:border-slate-700">
               <strong className="text-indigo-600 dark:text-indigo-400 block mb-1">
-                {language === 'en' ? "Saza's Advice" : '사자의 조언'}
+                {language !== 'ko' ? "Saza's Advice" : '사자의 조언'}
               </strong>
               {typeof data.saza === 'object' ? (
                 <div className="text-sm">
@@ -147,11 +147,11 @@ export default function ViewSazaResult({
             className="w-full p-4 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 rounded-2xl font-bold flex items-center justify-center gap-2 hover:bg-slate-200 transition-colors"
           >
             <PlusIcon className="w-5 h-5" />
-            {language === 'en' ? 'Ask another question' : '다른 질문하기'}
+            {language !== 'ko' ? 'Ask another question' : '다른 질문하기'}
           </button>
 
           <p className="text-sm text-slate-400 text-center font-medium">
-            {language === 'en'
+            {language !== 'ko'
               ? 'Enter a new question to restart the Saju analysis.'
               : '새로운 질문을 입력하면 사주 분석을 다시 시작합니다.'}
           </p>

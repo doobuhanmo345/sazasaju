@@ -4,12 +4,14 @@ import React, { useEffect, useState, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import SazaShareTemplate from './SazaShareTemplate';
 import LZString from 'lz-string';
+import { useLanguage } from '@/contexts/useLanguageContext';
 
 function ShareContent() {
     const searchParams = useSearchParams();
     const [shareData, setShareData] = useState(null);
     const [error, setError] = useState(null);
-
+    const { language } = useLanguage();
+    const isKo = language === 'ko'
     useEffect(() => {
         const compressedData = searchParams.get('data');
         if (compressedData) {
@@ -22,10 +24,10 @@ function ShareContent() {
                 setShareData(parsedData);
             } catch (err) {
                 console.error('Failed to decode share data:', err);
-                setError('유효하지 않은 공유 링크입니다.');
+                setError(isKo ? '유효하지 않은 공유 링크입니다.' : 'Invalid share link.');
             }
         } else {
-            setError('공유 데이터가 없습니다.');
+            setError(isKo ? '공유 데이터가 없습니다.' : 'No share data.');
         }
     }, [searchParams]);
 
@@ -35,7 +37,7 @@ function ShareContent() {
                 <div className="text-center p-8 bg-white rounded-xl shadow-lg border border-red-100">
                     <p className="text-red-600 font-semibold mb-4">{error}</p>
                     <a href="/" className="px-6 py-2 bg-indigo-600 text-white rounded-full font-bold shadow-md hover:bg-indigo-700 transition-colors">
-                        홈으로 돌아가기
+                        {isKo ? '홈으로 돌아가기' : 'Go to Home'}
                     </a>
                 </div>
             </div>
@@ -50,7 +52,7 @@ function ShareContent() {
         );
     }
 
-    return <SazaShareTemplate shareData={shareData} language="ko" />;
+    return <ShareTemplate shareData={shareData} language={language} />;
 }
 
 export default function SazaSharePage() {

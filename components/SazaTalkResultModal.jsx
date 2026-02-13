@@ -129,7 +129,7 @@ export default function SazaTalkResultModal({ question, answer, onClose, message
                                     {parsedData.saza && (
                                         <div className="mt-4 pt-4 border-t border-slate-50 dark:border-slate-700">
                                             <strong className="text-indigo-600 dark:text-indigo-400 block mb-1">
-                                                {language === 'en' ? "Saza's Advice" : '사자의 조언'}
+                                                {language !== 'ko' ? "Saza's Advice" : '사자의 조언'}
                                             </strong>
                                             {typeof parsedData.saza === 'object' ? (
                                                 <div className="text-sm">

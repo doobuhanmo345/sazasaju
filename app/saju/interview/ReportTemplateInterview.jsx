@@ -62,7 +62,7 @@ const ReportTemplateInterview = ({ }) => {
       <div className="flex flex-col items-center justify-center min-h-[40vh] gap-4">
         <div className="w-8 h-8 rounded-full border-4 border-blue-200 border-t-blue-500 animate-spin"></div>
         <div className="text-center text-blue-400 font-medium animate-pulse text-sm">
-          {language === 'en' ? 'Retrieving Strategy Report...' : '면접 분석 데이터를 불러오는 중...'}
+          {language !== 'ko' ? 'Retrieving Strategy Report...' : '면접 분석 데이터를 불러오는 중...'}
         </div>
       </div>
     );
@@ -79,18 +79,18 @@ const ReportTemplateInterview = ({ }) => {
       {/* [RT-HEADER] 메인 타이틀 */}
       <header className="rt-header">
         <div className="rt-tag animate-up">
-          {language === 'en' ? 'SUCCESS STRATEGY REPORT' : 'SUCCESS STRATEGY REPORT'}
+          {language !== 'ko' ? 'SUCCESS STRATEGY REPORT' : 'SUCCESS STRATEGY REPORT'}
         </div>
         <h1 className="rt-main-title animate-up">
           {displayName}
-          {language === 'en' ? "'s" : '님의'}
+          {language !== 'ko' ? "'s" : '님의'}
           <br />
           <span className="text-highlight">
-            {language === 'en' ? 'Interview Success Analysis' : '면접 합격운 분석 리포트'}
+            {language !== 'ko' ? 'Interview Success Analysis' : '면접 합격운 분석 리포트'}
           </span>
         </h1>
         <p className="rt-desc animate-up">
-          {language === 'en'
+          {language !== 'ko'
             ? "A winning strategy combining the venue's energy with your destiny flow."
             : '면접 장소의 기운과 당신의 사주 흐름을 결합한 필승 전략입니다.'}
         </p>
@@ -121,21 +121,21 @@ const ReportTemplateInterview = ({ }) => {
             <div className="rt-saju-grid">
               {saju.sky0 && (
                 <div className="rt-saju-grid__item">
-                  <span>{language === 'en' ? 'Hour' : '시'}</span>
+                  <span>{language !== 'ko' ? 'Hour' : '시'}</span>
                   {saju.sky0} {saju.grd0}
                 </div>
               )}
 
               <div className="rt-saju-grid__item">
-                <span>{language === 'en' ? 'Day' : '일'}</span>
+                <span>{language !== 'ko' ? 'Day' : '일'}</span>
                 {saju.sky1} {saju.grd1}
               </div>
               <div className="rt-saju-grid__item">
-                <span>{language === 'en' ? 'Month' : '월'}</span>
+                <span>{language !== 'ko' ? 'Month' : '월'}</span>
                 {saju.sky2} {saju.grd2}
               </div>
               <div className="rt-saju-grid__item">
-                <span>{language === 'en' ? 'Year' : '년'}</span>
+                <span>{language !== 'ko' ? 'Year' : '년'}</span>
                 {saju.sky3} {saju.grd3}
               </div>
             </div>
@@ -147,7 +147,7 @@ const ReportTemplateInterview = ({ }) => {
         {/* 01. 면접 무드 & 복장 가이드 */}
         <section className="rt-card animate-up">
           <h2 className="rt-card__title">
-            {language === 'en' ? '01. Vibe Strategy for Success' : '01. 합격을 부르는 Vibe 전략'}
+            {language !== 'ko' ? '01. Vibe Strategy for Success' : '01. 합격을 부르는 Vibe 전략'}
           </h2>
           <div className="rt-ootd-wrapper">
             <div className="rt-ootd-item">
@@ -165,11 +165,11 @@ const ReportTemplateInterview = ({ }) => {
         {/* 02. 합격운 및 면접 지수 */}
         <section className="rt-card animate-up">
           <h2 className="rt-card__title">
-            {language === 'en' ? '02. Interview Success Index' : '02. 면접 합격 지수'}
+            {language !== 'ko' ? '02. Interview Success Index' : '02. 면접 합격 지수'}
           </h2>
           <div className="rt-score-box">
             <div className="rt-score-box__label">
-              {language === 'en' ? 'Final Pass Probability' : '최종 합격 가능성'}
+              {language !== 'ko' ? 'Final Pass Probability' : '최종 합격 가능성'}
             </div>
             <div className="rt-score-box__val">
               {data.passIndex}
@@ -184,11 +184,11 @@ const ReportTemplateInterview = ({ }) => {
           </div>
           <div className="rt-timing-grid">
             <div className="rt-timing-grid__item">
-              <span>{language === 'en' ? 'Golden Time' : '면접 골든 타임'}</span>
+              <span>{language !== 'ko' ? 'Golden Time' : '면접 골든 타임'}</span>
               <strong>{data.section02?.goldenTime}</strong>
             </div>
             <div className="rt-timing-grid__item">
-              <span>{language === 'en' ? 'Lucky Item' : '행운의 아이템'}</span>
+              <span>{language !== 'ko' ? 'Lucky Item' : '행운의 아이템'}</span>
               <strong>{data.section02?.luckyItem}</strong>
             </div>
           </div>
@@ -197,24 +197,24 @@ const ReportTemplateInterview = ({ }) => {
         {/* 03. 맞춤형 인사이트 */}
         <section className="rt-card animate-up">
           <h2 className="rt-card__title">
-            {language === 'en' ? '03. Winning Mindset & Insights' : '03. 필승 마인드셋 & 인사이트'}
+            {language !== 'ko' ? '03. Winning Mindset & Insights' : '03. 필승 마인드셋 & 인사이트'}
           </h2>
           <div className="rt-analysis-list">
             <div className="rt-analysis-list__item">
               <span className="rt-analysis-list__sub-title">
-                {language === 'en' ? `Resolving Anxiety` : `불안 요소 해결`} ({data.concern})
+                {language !== 'ko' ? `Resolving Anxiety` : `불안 요소 해결`} ({data.concern})
               </span>
               <p>{data.section03?.anxietySolution}</p>
             </div>
             <div className="rt-analysis-list__item is-warning">
               <span className="rt-analysis-list__sub-title">
-                {language === 'en' ? 'Impression on Interviewers' : '면접관이 느낄 첫인상'}
+                {language !== 'ko' ? 'Impression on Interviewers' : '면접관이 느낄 첫인상'}
               </span>
               <p>{data.section03?.firstImpression}</p>
             </div>
             <div className="rt-analysis-list__item is-success">
               <span className="rt-analysis-list__sub-title">
-                {language === 'en' ? 'Handling Surprise Questions' : '예상 돌발 질문 대응'}
+                {language !== 'ko' ? 'Handling Surprise Questions' : '예상 돌발 질문 대응'}
               </span>
               <p>{data.section03?.surpriseQuestionTip}</p>
             </div>
@@ -224,11 +224,11 @@ const ReportTemplateInterview = ({ }) => {
         {/* 04. 최종 합격 제언 */}
         <section className="rt-card animate-up">
           <h2 className="rt-card__title">
-            {language === 'en' ? '04. Final Recommendation' : '04. 최종 합격 제언'}
+            {language !== 'ko' ? '04. Final Recommendation' : '04. 최종 합격 제언'}
           </h2>
           <div className="rt-tip-box">
             <span className="rt-tip-box__label">
-              {language === 'en' ? 'Post-Interview Guidelines' : '면접 후 행동 지침'}
+              {language !== 'ko' ? 'Post-Interview Guidelines' : '면접 후 행동 지침'}
             </span>
             <p>{data.section04?.actionGuideline}</p>
           </div>

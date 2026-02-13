@@ -27,7 +27,8 @@ export default function AvoidPage() {
     const [promptQ1, setPromptQ1] = useState('내가 피해야 하는 사람.');
     const [promptQ2, setPromptQ2] = useState('나와 맞지 않는 사람의 유형');
     const [loadingPrompts, setLoadingPrompts] = useState(true);
-
+    const isKo = language === 'ko'
+    const q1 = isKo ? '내가 피해야 하는 사람.' : 'People I should avoid.';
     useEffect(() => {
         if (language === 'ko') {
             document.title = '내가 피해야 하는 사람 | 궁합 주의';
@@ -47,9 +48,8 @@ export default function AvoidPage() {
         }
         const fetchPrompts = async () => {
             try {
-                const q1 = '내가 피해야 하는 사람.';
+
                 const q2 = await getPromptFromDB('love_avoid');
-                if (q1) setPromptQ1(q1);
                 if (q2) setPromptQ2(month + q2);
             } catch (error) {
                 console.error('Failed to fetch prompts:', error);
@@ -88,7 +88,7 @@ export default function AvoidPage() {
             router.push('/saju/love/avoid/result');
             return;
         }
-        const q1 = promptQ1;
+
         const q2 = promptQ2;
         const qprompt = '';
 
@@ -149,7 +149,7 @@ export default function AvoidPage() {
                             <SparklesIcon className="w-6 h-6" />
                         </div>
                         <h2 className="text-xl font-bold text-slate-800 dark:text-white mb-2">
-                            {promptQ1}
+                            {q1}
                         </h2>
                         <p className="text-slate-600 dark:text-slate-400">
                             {language === 'ko' ?
@@ -164,7 +164,7 @@ export default function AvoidPage() {
                         onClick={() => loveEnergy.triggerConsume(handleAnalysis)}
                         disabled={isDisabled || isDisabled2}
                         isDone={isAnalysisDone}
-                        label={language === 'en' ? 'Start Analysis' : '분석 시작하기'}
+                        label={language !== 'ko' ? 'Start Analysis' : '분석 시작하기'}
                         color="rose"
                     />
 

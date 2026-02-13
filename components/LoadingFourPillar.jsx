@@ -94,7 +94,7 @@ export default function LoadingFourPillar({ isTimeUnknown, saju, isAnalysisDone 
     // 3. 서브 로그 업데이트 타이머
     const logInterval = setInterval(
       () => {
-        const currentLang = language === 'en' ? 'en' : 'ko';
+        const currentLang = language !== 'ko' ? 'en' : 'ko';
         const currentMode = isDeepAnalyzing ? 'deep' : 'standard';
         const selectedLogs = logData[currentLang][currentMode];
 
@@ -181,11 +181,11 @@ export default function LoadingFourPillar({ isTimeUnknown, saju, isAnalysisDone 
           <div className="space-y-2">
             <h3 className="text-md font-serif font-light italic text-slate-800 dark:text-slate-100 tracking-tight leading-snug">
               <span className="not-italic font-normal">“</span>
-              {globalStatusText || (language === 'en' ? statusMessagesEn[analysisStep] : statusMessages[analysisStep])}
+              {globalStatusText || (language !== 'ko' ? statusMessagesEn[analysisStep] : statusMessages[analysisStep])}
               <span className="not-italic font-normal">”</span>
             </h3>
             <p className="text-sm font-mono text-slate-400 dark:text-slate-500 transition-opacity duration-1000">
-              {language === 'en' ? (
+              {language !== 'ko' ? (
                 <>{subLog || 'Discovering your unique inner radiance'}</>
               ) : (
                 <>{subLog || '당신만의 고유한 빛을 찾아내고 있습니다'}</>
@@ -195,7 +195,7 @@ export default function LoadingFourPillar({ isTimeUnknown, saju, isAnalysisDone 
             <div className="mt-4 animate-pulse flex items-center justify-center gap-1.5">
               <span className="text-amber-500 dark:text-amber-400 text-xs">⚠️</span>
               <p className="text-sm font-bold text-rose-500/90 dark:text-rose-400/90 tracking-tight">
-                {language === 'en'
+                {language !== 'ko'
                   ? 'Analysis in progress. Please do not leave this page.'
                   : '분석 중입니다. 페이지를 나가지 마세요.'}
               </p>
@@ -228,12 +228,12 @@ export default function LoadingFourPillar({ isTimeUnknown, saju, isAnalysisDone 
             <div className="h-4" />
             <div className="h-[90px] flex items-center pr-2 border-r border-sky-700/30">
               <span className="text-xs font-bold text-sky-700 dark:text-cyan-600 uppercase">
-                {language === 'en' ? 'Stem' : '천간'}
+                {language !== 'ko' ? 'Stem' : '천간'}
               </span>
             </div>
             <div className="h-[110px] flex items-center pr-2 border-r border-stone-400/20">
               <span className="text-xs font-bold text-stone-500 dark:text-yellow-600 uppercase">
-                {language === 'en' ? 'Branch' : '지지'}
+                {language !== 'ko' ? 'Branch' : '지지'}
               </span>
             </div>
           </div>
@@ -419,7 +419,7 @@ export default function LoadingFourPillar({ isTimeUnknown, saju, isAnalysisDone 
             style={{ width: `${progress}%` }}
           />
         </div>
-        <span className="mt-3 text-[9px] font-mono text-gray-400 tracking-[0.2em] uppercase">
+        <span className="mt-3 text-xs font-mono text-gray-400 tracking-[0.2em] uppercase">
           {isDeepAnalyzing
             ? 'SYSTEM_STABILIZATION_IN_PROGRESS'
             : 'ENCRYPTED_DATA_SCAN_PROCESS_ACTIVE'}

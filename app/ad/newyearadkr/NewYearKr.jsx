@@ -71,7 +71,7 @@ export default function NewYearKr({ setStep }) {
                 <span className="text-xs font-black text-slate-500 leading-tight text-center">
                   27명 명리학자 참여
                   <br />
-                  <span className="font-medium text-[9px]">직접 검증 데이터 기반</span>
+                  <span className="font-medium text-xs">직접 검증 데이터 기반</span>
                 </span>
               </div>
 
@@ -82,7 +82,7 @@ export default function NewYearKr({ setStep }) {
                 <span className="text-xs font-black text-slate-500 leading-tight text-center">
                   수만 건 해석 데이터 구조화
                   <br />
-                  <span className="font-medium text-[9px]">방대한 DB 활용 분석</span>
+                  <span className="font-medium text-xs">방대한 DB 활용 분석</span>
                 </span>
               </div>
 

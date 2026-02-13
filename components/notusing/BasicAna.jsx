@@ -226,16 +226,16 @@ const BasicAna = ({ inputDate, saju, inputGender, isTimeUnknown, handleSetViewMo
         Object.entries(branches).forEach(([pos, branch]) => {
           if (branch === target) {
             const posName = {
-              year: language === 'en' ? 'Year Pillar (Ancestors)' : '년지(조상자리)',
-              month: language === 'en' ? 'Month Pillar (Social)' : '월지(사회자리)',
-              day: language === 'en' ? 'Day Pillar (Spouse)' : '일지(배우자자리)',
-              time: language === 'en' ? 'Hour Pillar (Children/Late Life)' : '시지(자식/말년자리)',
+              year: language !== 'ko' ? 'Year Pillar (Ancestors)' : '년지(조상자리)',
+              month: language !== 'ko' ? 'Month Pillar (Social)' : '월지(사회자리)',
+              day: language !== 'ko' ? 'Day Pillar (Spouse)' : '일지(배우자자리)',
+              time: language !== 'ko' ? 'Hour Pillar (Children/Late Life)' : '시지(자식/말년자리)',
             }[pos];
 
             finalShinsal.push({
-              name: language === 'en' ? 'noble gold star' : '천을귀인',
-              type: language === 'en' ? 'Great Auspicious Star' : '대길신',
-              desc: language === 'en'
+              name: language !== 'ko' ? 'noble gold star' : '천을귀인',
+              type: language !== 'ko' ? 'Great Auspicious Star' : '대길신',
+              desc: language !== 'ko'
                 ? `Located in '${ENG_MAP[branch]}' of your ${posName}. This is the ultimate auspicious star that turns bad luck into good and brings help from noble people at decisive moments.`
                 : `사주의 ${posName}인 '${branch}'에 위치하고 있습니다. 이는 흉을 길로 바꾸고 결정적인 순간에 귀인의 도움을 받는 최고의 길신입니다`,
             });
@@ -249,15 +249,15 @@ const BasicAna = ({ inputDate, saju, inputGender, isTimeUnknown, handleSetViewMo
         if (pos === 'day') return;
         if (gongmangTargets.includes(branch)) {
           const posName = {
-            year: language === 'en' ? 'Year Pillar (Early Life)' : '년지(초년)',
-            month: language === 'en' ? 'Month Pillar (Social)' : '월지(청년/사회)',
-            time: language === 'en' ? 'Hour Pillar (Late Life)' : '시지(말년)',
+            year: language !== 'ko' ? 'Year Pillar (Early Life)' : '년지(초년)',
+            month: language !== 'ko' ? 'Month Pillar (Social)' : '월지(청년/사회)',
+            time: language !== 'ko' ? 'Hour Pillar (Late Life)' : '시지(말년)',
           }[pos];
 
           finalShinsal.push({
-            name: language === 'en' ? 'gongmang' : '공망',
-            type: language === 'en' ? 'emptiness' : '공허',
-            desc: language === 'en'
+            name: language !== 'ko' ? 'gongmang' : '공망',
+            type: language !== 'ko' ? 'emptiness' : '공허',
+            desc: language !== 'ko'
               ? `${posName} contains the character '${ENG_MAP[branch]}', which is in Gongmang (Emptiness). During this period, you will find more peace by pursuing spiritual or philosophical values rather than material greed.`
               : `${posName}에 해당하는 '${branch}' 글자가 비어있는 공망입니다. 해당 시기에는 현실적 욕심보다 정신적, 철학적 가치를 추구할 때 마음이 편안해집니다`,
           });
@@ -443,10 +443,10 @@ const BasicAna = ({ inputDate, saju, inputGender, isTimeUnknown, handleSetViewMo
         <div className="bg-gradient-to-r from-indigo-500 to-purple-600 p-6 text-white text-center">
           <CalendarDaysIcon className="w-10 h-10 mx-auto mb-2 opacity-80" />
           <h2 className="text-2xl font-bold">
-            {language === 'en' ? 'Innate Destiny Analysis' : '나의 선천적 기질 분석'}
+            {language !== 'ko' ? 'Innate Destiny Analysis' : '나의 선천적 기질 분석'}
           </h2>
           <p className="text-sm opacity-90 mt-1">
-            {language === 'en' ? 'Nature, Stars, and Life Path' : '타고난 성향과 운명의 흐름'}
+            {language !== 'ko' ? 'Nature, Stars, and Life Path' : '타고난 성향과 운명의 흐름'}
           </p>
         </div>
 
@@ -477,7 +477,7 @@ const BasicAna = ({ inputDate, saju, inputGender, isTimeUnknown, handleSetViewMo
               <div className="flex items-center gap-2 mb-4">
                 <div className="w-1.5 h-6 bg-indigo-500 rounded-full"></div>
                 <h3 className="text-lg font-bold text-slate-800 dark:text-white">
-                  {language === 'en' ? 'Personality Signature' : '나의 핵심 기질'}
+                  {language !== 'ko' ? 'Personality Signature' : '나의 핵심 기질'}
                 </h3>
               </div>
               <div className="bg-indigo-50/50 dark:bg-indigo-900/10 rounded-2xl p-6 border border-indigo-100 dark:border-indigo-900/30 text-center">
@@ -503,7 +503,7 @@ const BasicAna = ({ inputDate, saju, inputGender, isTimeUnknown, handleSetViewMo
               <div className="flex items-center gap-2 mb-4">
                 <div className="w-1.5 h-6 bg-amber-500 rounded-full"></div>
                 <h3 className="text-lg font-bold text-slate-800 dark:text-white">
-                  {language === 'en' ? 'Energy Chemistry' : '에너지 상호작용 (합/충)'}
+                  {language !== 'ko' ? 'Energy Chemistry' : '에너지 상호작용 (합/충)'}
                 </h3>
               </div>
               <div className="grid grid-cols-1 gap-3">
@@ -520,7 +520,7 @@ const BasicAna = ({ inputDate, saju, inputGender, isTimeUnknown, handleSetViewMo
                 ))}
                 {relations.length === 0 && (
                   <p className="text-sm text-slate-500 italic py-4 text-center">
-                    {language === 'en' ? 'Your energies flow peacefully without major clashes.' : '특별한 충돌 없이 기운이 조화롭게 흐르고 있습니다.'}
+                    {language !== 'ko' ? 'Your energies flow peacefully without major clashes.' : '특별한 충돌 없이 기운이 조화롭게 흐르고 있습니다.'}
                   </p>
                 )}
               </div>
@@ -530,7 +530,7 @@ const BasicAna = ({ inputDate, saju, inputGender, isTimeUnknown, handleSetViewMo
               <div className="flex items-center gap-2 mb-4">
                 <div className="w-1.5 h-6 bg-emerald-500 rounded-full"></div>
                 <h3 className="text-lg font-bold text-slate-800 dark:text-white">
-                  {language === 'en' ? 'Special Fate Stars' : '나의 운명을 돕는 글자 (신살)'}
+                  {language !== 'ko' ? 'Special Fate Stars' : '나의 운명을 돕는 글자 (신살)'}
                 </h3>
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -551,11 +551,11 @@ const BasicAna = ({ inputDate, saju, inputGender, isTimeUnknown, handleSetViewMo
                 <div className="flex items-center gap-2">
                   <div className="w-1.5 h-6 bg-blue-500 rounded-full"></div>
                   <h3 className="text-lg font-bold text-slate-800 dark:text-white">
-                    {language === 'en' ? 'Luck Cycles (Daewoon)' : '대운의 흐름'}
+                    {language !== 'ko' ? 'Luck Cycles (Daewoon)' : '대운의 흐름'}
                   </h3>
                 </div>
                 <span className="text-xs font-bold px-2 py-1 bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300 rounded-full">
-                  {language === 'en' ? `Age ${currentAge}` : `현재 ${currentAge}세`}
+                  {language !== 'ko' ? `Age ${currentAge}` : `현재 ${currentAge}세`}
                 </span>
               </div>
 
@@ -572,7 +572,7 @@ const BasicAna = ({ inputDate, saju, inputGender, isTimeUnknown, handleSetViewMo
                     >
                       <span className="text-xs opacity-80 mb-1">{dae.startAge}세</span>
                       <span className="font-bold text-sm">
-                        {language === 'en' ? `${getEng(dae.name[0])} ${getEng(dae.name[1])}` : dae.name}
+                        {language !== 'ko' ? `${getEng(dae.name[0])} ${getEng(dae.name[1])}` : dae.name}
                       </span>
                       {dae.isCurrent && (
                         <div className={`mt-1 h-1.5 w-1.5 rounded-full ${(selectedDae && selectedDae.startAge === dae.startAge) ? 'bg-white' : 'bg-blue-500'}`}></div>
@@ -590,10 +590,10 @@ const BasicAna = ({ inputDate, saju, inputGender, isTimeUnknown, handleSetViewMo
                     </div>
                     <div>
                       <h4 className="font-bold text-slate-800 dark:text-slate-200">
-                        {language === 'en' ? `${getEng(selectedDae.name[0])} ${getEng(selectedDae.name[1])}` : selectedDae.name} {language === 'en' ? 'Luck Cycle' : '대운'}
+                        {language !== 'ko' ? `${getEng(selectedDae.name[0])} ${getEng(selectedDae.name[1])}` : selectedDae.name} {language !== 'ko' ? 'Luck Cycle' : '대운'}
                       </h4>
                       <p className="text-xs text-blue-500 font-black tracking-widest uppercase">
-                        {selectedDae.startAge} - {selectedDae.endAge} {language === 'en' ? 'AGE' : '세'}
+                        {selectedDae.startAge} - {selectedDae.endAge} {language !== 'ko' ? 'AGE' : '세'}
                       </p>
                     </div>
                   </div>
@@ -609,13 +609,13 @@ const BasicAna = ({ inputDate, saju, inputGender, isTimeUnknown, handleSetViewMo
             onClick={() => handleShare('basic-ana-card')}
             className="flex-1 py-3 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl font-bold shadow-lg shadow-indigo-200 dark:shadow-none transition-all active:scale-95"
           >
-            {language === 'en' ? 'Share Result' : '분석 결과 저장'}
+            {language !== 'ko' ? 'Share Result' : '분석 결과 저장'}
           </button>
           <button
             onClick={handleSetViewMode}
             className="flex-1 py-3 bg-white dark:bg-slate-700 text-slate-700 dark:text-white border border-slate-200 dark:border-slate-600 rounded-xl font-bold transition-all hover:bg-slate-50 dark:hover:bg-slate-600"
           >
-            {language === 'en' ? 'Back' : '돌아가기'}
+            {language !== 'ko' ? 'Back' : '돌아가기'}
           </button>
         </div>
       </div>

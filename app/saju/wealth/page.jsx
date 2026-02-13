@@ -114,8 +114,8 @@ export default function WealthLandingPage() {
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-12">
           {CATEGORIES.map((category) => {
             const Icon = category.icon;
-            const labelText = language === 'en' ? category.sub : category.label;
-            const descText = language === 'en' ? category.descEn : category.desc;
+            const labelText = language !== 'ko' ? category.sub : category.label;
+            const descText = language !== 'ko' ? category.descEn : category.desc;
 
             return (
               <button

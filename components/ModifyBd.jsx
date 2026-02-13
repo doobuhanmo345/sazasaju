@@ -19,7 +19,7 @@ export default function ModifyBd({
 }) {
   const { user } = useAuthContext();
   const { language } = useLanguage();
-  const t = (char) => (language === 'en' ? getEng(char) : char);
+  const t = (char) => (language !== 'ko' ? getEng(char) : char);
   const [inputValue, setInputValue] = useState(() => {
     // 1. 외부에서 받아온 값이 있으면 우선 사용
     if (inputDate) return inputDate;

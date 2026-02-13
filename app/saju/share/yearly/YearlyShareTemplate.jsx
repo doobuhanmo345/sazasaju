@@ -10,7 +10,7 @@ import LZString from 'lz-string';
  * YearlyShareTemplate - New Year Fortune Content Template
  * Matches design of ReportTemplateNewYear.jsx
  */
-export default function YearlyShareTemplate({ shareData, language = 'ko' }) {
+export default function YearlyShareTemplate({ shareData, language }) {
     if (!shareData) return <div className="p-10 text-center text-slate-400">Loading...</div>;
 
     // Parse AI Result 

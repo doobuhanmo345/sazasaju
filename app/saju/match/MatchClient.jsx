@@ -63,7 +63,7 @@ export default function MatchClient() {
 
   const [gender2, setGender2] = useState('male');
 
-  const t = (char) => (language === 'en' ? getEng(char) : char);
+  const t = (char) => (language !== 'ko' ? getEng(char) : char);
   // const compaEnergy = useConsumeEnergy();
   const onSelect = (id) => {
     const selectedProfile = savedProfiles.find((profile) => profile.id === id);
@@ -271,7 +271,7 @@ export default function MatchClient() {
                   saju: targetProfile?.saju,
                   saju2: saju2,
                   gender2: gender2,
-                  language: p.language,
+                  language: service.language,
                   gender: targetProfile?.gender,
                   relation: selectedRel,
                 },
@@ -341,7 +341,7 @@ export default function MatchClient() {
                 {RELATION_TYPES.map((type) => {
                   const isSelected = selectedRel === type.id;
                   const Icon = type.icon;
-                  const labelText = language === 'en' ? type.sub : type.label;
+                  const labelText = language !== 'ko' ? type.sub : type.label;
                   return (
                     <button
                       key={type.id}
@@ -419,7 +419,7 @@ export default function MatchClient() {
                   <div className="font-mono text-slate-700 dark:text-slate-300 text-md">
                     {inputDate
                       ? (isTimeUnknown ? inputDate.split('T')[0] : inputDate.replace('T', ' '))
-                      : (language === 'en' ? 'Please register' : '정보 등록 필요')}
+                      : (language !== 'ko' ? 'Please register' : '정보 등록 필요')}
                   </div>
                   {inputDate && <span className="text-sm">{gender === 'male' ? '👨' : '👩'}</span>}
                   {inputDate && isTimeUnknown && (

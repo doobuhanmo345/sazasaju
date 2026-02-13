@@ -4,12 +4,14 @@ import React, { useEffect, useState, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import YearlyShareTemplate from './YearlyShareTemplate';
 import LZString from 'lz-string';
+import { useLanguage } from '@/contexts/useLanguageContext';
 
 function ShareContent() {
     const searchParams = useSearchParams();
     const [shareData, setShareData] = useState(null);
     const [error, setError] = useState(null);
-
+    const { language } = useLanguage();
+    const isKo = language === 'ko'
     useEffect(() => {
         const compressedData = searchParams.get('data');
         if (compressedData) {
@@ -20,10 +22,10 @@ function ShareContent() {
                 setShareData(parsedData);
             } catch (err) {
                 console.error('Failed to decode share data:', err);
-                setError('유효하지 않은 공유 링크입니다.');
+                setError(isKo ? '유효하지 않은 공유 링크입니다.' : 'Invalid share link.');
             }
         } else {
-            setError('공유 데이터가 없습니다.');
+            setError(isKo ? '공유 데이터가 없습니다.' : 'No share data.');
         }
     }, [searchParams]);
 
@@ -33,7 +35,7 @@ function ShareContent() {
                 <div className="text-center p-8 bg-white rounded-xl shadow-lg">
                     <p className="text-red-600 font-semibold">{error}</p>
                     <a href="/" className="mt-4 inline-block text-amber-600 hover:underline">
-                        홈으로 돌아가기
+                        {isKo ? '홈으로 돌아가기' : 'Go to Home'}
                     </a>
                 </div>
             </div>
@@ -48,7 +50,7 @@ function ShareContent() {
         );
     }
 
-    return <YearlyShareTemplate shareData={shareData} language="ko" />;
+    return <YearlyShareTemplate shareData={shareData} language={language} />;
 }
 
 export default function YearlySharePage() {

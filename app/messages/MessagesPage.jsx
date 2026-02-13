@@ -432,7 +432,7 @@ function MessagesContent() {
                 <React.Fragment key={msg.id}>
                   {showSectionHeader && (
                     <div className="px-6 py-2 bg-slate-50/50 dark:bg-slate-800/30 border-y border-slate-100 dark:border-slate-800">
-                      <span className="text-[9px] font-black text-slate-400 uppercase tracking-widest">
+                      <span className="text-xs font-black text-slate-400 uppercase tracking-widest">
                         {sectionLabel}
                       </span>
                     </div>
@@ -486,7 +486,7 @@ function MessagesContent() {
                             >
                               <TrashIcon className="w-4 h-4" />
                             </button>
-                            <span className="text-[9px] font-bold text-slate-400 uppercase">
+                            <span className="text-xs font-bold text-slate-400 uppercase">
                               {msg.createdAt ? msg.createdAt.toDate().toLocaleDateString() : '...'}
                             </span>
                           </div>
@@ -541,7 +541,7 @@ function MessagesContent() {
                                   Sent
                                 </div>
                               )}
-                              <span className="text-[9px] font-bold text-slate-400 uppercase">
+                              <span className="text-xs font-bold text-slate-400 uppercase">
                                 {msg.createdAt ? msg.createdAt.toDate().toLocaleDateString() : '...'}
                               </span>
                             </div>
@@ -568,7 +568,7 @@ function MessagesContent() {
             <div className="py-20 flex flex-col items-center justify-center text-center">
               <InboxStackIcon className="w-12 h-12 text-slate-100 dark:text-slate-800 mb-4" />
               <h3 className="text-sm font-black text-slate-900 dark:text-white uppercase tracking-tighter mb-1">No conversations</h3>
-              <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest">History will appear here</p>
+              <p className="text-xs font-bold text-slate-400 uppercase tracking-widest">History will appear here</p>
             </div>
           )}
         </div>

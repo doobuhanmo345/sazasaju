@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import { useAuthContext } from '@/contexts/useAuthContext';
 import { useUsageLimit } from '@/contexts/useUsageLimit';
 
-const CreditModal = ({ isOpen, onClose, onWatchAd, language = 'ko' }) => {
+const CreditModal = ({ isOpen, onClose, onWatchAd, language }) => {
   const { isCookieDone } = useAuthContext();
   const { editCount, credits } = useUsageLimit();
   const router = useRouter();

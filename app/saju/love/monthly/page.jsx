@@ -27,7 +27,7 @@ export default function MonthlyLovePage() {
 
     const [selectedSubQ, setSelectedSubQ] = useState(null);
     const [isButtonClicked, setIsButtonClicked] = useState(false);
-
+    const isKo = language === 'ko'
     useEffect(() => {
         if (language === 'ko') {
             document.title = '이번 달 애정운 | 이달의 연애 흐름';
@@ -115,7 +115,7 @@ export default function MonthlyLovePage() {
             router.push('/saju/love/monthly/result');
             return;
         }
-        const q1 = '이번 달 애정운';
+        const q1 = isKo ? '이번 달 애정운' : 'This Month\'s Love Fortune';
 
         const qprompt = SUB_Q_TYPES.find((i) => i.id === selectedSubQ)?.prompt;
 
@@ -176,8 +176,8 @@ export default function MonthlyLovePage() {
                     <div className="grid grid-cols-1 gap-4">
                         {SUB_Q_TYPES.map((sub) => {
                             const isSelected = selectedSubQ === sub.id;
-                            const labelText = language === 'en' ? sub.labelEn : sub.label;
-                            const descText = language === 'en' ? sub.descEn : sub.desc;
+                            const labelText = language !== 'ko' ? sub.labelEn : sub.label;
+                            const descText = language !== 'ko' ? sub.descEn : sub.desc;
 
                             return (
                                 <button
@@ -227,7 +227,7 @@ export default function MonthlyLovePage() {
                                 disabled={isDisabled || isDisabled2}
                                 isDone={isAnalysisDone}
                                 language={language}
-                                label={language === 'en' ? 'Start Analysis' : '분석 시작하기'}
+                                label={language !== 'ko' ? 'Start Analysis' : '분석 시작하기'}
                                 cost={-1}
                                 color="rose"
                             />

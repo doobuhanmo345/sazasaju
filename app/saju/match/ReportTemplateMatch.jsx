@@ -52,7 +52,7 @@ export default function ReportTemplateMatch({ storageKey }) {
                     <div className="mb-4">
                         <div className="text-6xl font-black text-rose-600 dark:text-rose-400 mb-2">
                             {data.score}
-                            <span className="text-3xl text-rose-400 dark:text-rose-500">점</span>
+                            <span className="text-3xl text-rose-400 dark:text-rose-500">{language === 'ko' ? '점' : 'pt'}</span>
                         </div>
                         <div className="h-2 bg-slate-200 dark:bg-slate-700 rounded-full overflow-hidden max-w-xs mx-auto">
                             <div

@@ -29,7 +29,6 @@ export default function FeelingsPage() {
 
     const [isButtonClicked, setIsButtonClicked] = useState(false);
     const [showPartnerInput, setShowPartnerInput] = useState(false);
-    const [promptQ1, setPromptQ1] = useState('상대방의 진심');
     const [promptQ2, setPromptQ2] = useState('그 사람이 나를 어떻게 생각하는지');
     const [loadingPrompts, setLoadingPrompts] = useState(true);
 
@@ -39,7 +38,7 @@ export default function FeelingsPage() {
     const [partnerGender, setPartnerGender] = useState('male');
     const { saju: partnerSajuCalculated } = useSajuCalculator(partnerDate, partnerTimeUnknown);
     const [partnerSaju, setPartnerSaju] = useState(null);
-
+    const isKo = language === 'ko';
     useEffect(() => {
         if (partnerSajuCalculated) {
             setPartnerSaju(partnerSajuCalculated);
@@ -78,9 +77,8 @@ export default function FeelingsPage() {
         // Fetch fixed prompts from DB
         const fetchPrompts = async () => {
             try {
-                const q1 = '상대방의 진심.'
+                const q1 = isKo ? '상대방의 진심.' : 'Their true feelings.';
                 const q2 = await getPromptFromDB('love_feeling');
-                if (q1) setPromptQ1(q1);
                 if (q2) setPromptQ2(month + q2);
             } catch (error) {
                 console.error('Failed to fetch prompts:', error);
@@ -132,8 +130,7 @@ export default function FeelingsPage() {
             router.push('/saju/love/feelings/result');
             return;
         }
-        const q1 = promptQ1;
-        const q2 = promptQ2;
+
         const qprompt = ''; // Full instructions are now in q2 from DB
 
         // Ensure partner info is strictly null if input is closed
@@ -245,7 +242,7 @@ export default function FeelingsPage() {
                             <SparklesIcon className="w-6 h-6" />
                         </div>
                         <h2 className="text-xl font-bold text-slate-800 dark:text-white mb-2">
-                            {promptQ1}
+                            {isKo ? '상대방의 진심.' : 'Their true feelings.'}
                         </h2>
                         <p className="text-slate-600 dark:text-slate-400">
                             {language === 'ko' ?

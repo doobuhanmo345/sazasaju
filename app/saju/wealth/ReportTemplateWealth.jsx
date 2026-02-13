@@ -149,7 +149,7 @@ export default function ReportTemplateWealth({ storageKey }) {
                     onClick={() => router.push('/saju/wealth')}
                     className="inline-flex items-center gap-2 px-6 py-3 text-sm font-semibold text-slate-600 dark:text-slate-300 hover:text-amber-600 dark:hover:text-amber-400 transition-colors rounded-xl border border-slate-200 dark:border-slate-700 hover:border-amber-300 dark:hover:border-amber-600"
                 >
-                    ← {language === 'en' ? 'Check Another Topic' : '다른 재물운 보기'}
+                    ← {language !== 'ko' ? 'Check Another Topic' : '다른 재물운 보기'}
                 </button>
                 <AfterReport fortuneType="wealth" storageKey={storageKey} data={data?.summary} />
             </div>

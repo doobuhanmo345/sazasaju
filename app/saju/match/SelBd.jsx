@@ -21,7 +21,7 @@ export default function SelBd({
 
     const { user } = useAuthContext();
     const { language } = useLanguage();
-    const t = (char) => (language === 'en' ? getEng(char) : char);
+    const t = (char) => (language !== 'ko' ? getEng(char) : char);
 
     const THEMES = {
         pink: {

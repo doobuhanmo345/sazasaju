@@ -189,7 +189,7 @@ export default function NavBar() {
                         KO
                       </span>
                       <span className="text-gray-300">/</span>
-                      <span className={language === 'en' ? 'text-indigo-600' : 'text-gray-400'}>
+                      <span className={language !== 'ko' ? 'text-indigo-600' : 'text-gray-400'}>
                         EN
                       </span>
                     </div>

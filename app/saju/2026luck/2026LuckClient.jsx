@@ -82,7 +82,7 @@ export default function YearlyLuckPage() {
       handleCancelHelper: handleCancelHelper,
     });
   }, [user, targetProfile, language]); // 필요한 의존성만
-  // console.log(handleCancelHelper)
+  console.log(handleCancelHelper)
   const handleStartClick = async (onstart) => {
     // [UX FIX] 로딩 화면을 먼저 보여줌
     onstart();

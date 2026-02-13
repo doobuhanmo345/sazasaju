@@ -32,13 +32,13 @@ export default function MyProfileClient() {
                 <div className="w-20 h-20 bg-white rounded-3xl shadow-sm flex items-center justify-center mb-6">
                     <span className="text-4xl">👤</span>
                 </div>
-                <h2 className="text-xl font-black text-slate-900 mb-2">로그인이 필요합니다</h2>
-                <p className="text-slate-500 mb-8">마이페이지를 이용하시려면 로그인을 해주세요.</p>
+                <h2 className="text-xl font-black text-slate-900 mb-2">{isKo ? '로그인이 필요합니다' : 'Login Required'}</h2>
+                <p className="text-slate-500 mb-8">{isKo ? '마이페이지를 이용하시려면 로그인을 해주세요.' : 'Please log in to access your profile.'}</p>
                 <button
                     onClick={() => router.push('/')}
                     className="w-full max-w-xs py-4 bg-indigo-600 text-white rounded-2xl font-black shadow-lg shadow-indigo-500/20"
                 >
-                    홈으로 가기
+                    {isKo ? '홈으로 가기' : 'Go to Home'}
                 </button>
             </div>
         );

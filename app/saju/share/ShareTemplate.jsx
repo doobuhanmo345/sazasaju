@@ -12,7 +12,7 @@ import { shareStyleSimple } from '@/data/aiResultConstants';
  */
 export default function ShareTemplate({
     children,
-    language = 'ko',
+    language,
     fortuneType = 'basic',
     headerBadgeText,
     ctaText,
@@ -26,17 +26,19 @@ export default function ShareTemplate({
         compatibility: { ko: '궁합', en: 'Compatibility' },
     };
 
-    const fortuneLabel = fortuneTypeLabels[fortuneType]?.[language] || fortuneTypeLabels.basic[language];
 
-    const defaultBadgeText = language === 'ko'
+    const isKo = language === 'ko';
+    const fortuneLabel = fortuneTypeLabels[fortuneType]?.[isKo ? 'ko' : 'en'] || fortuneTypeLabels.basic[isKo ? 'ko' : 'en'];
+
+    const defaultBadgeText = isKo
         ? `사자사주 ${fortuneLabel} 공유`
         : `SAZA SAJU ${fortuneLabel} Shared`;
 
-    const defaultCtaText = language === 'ko'
+    const defaultCtaText = isKo
         ? `나도 내 ${fortuneLabel}를 확인하고 싶다면?`
         : `Want your own ${fortuneLabel} reading?`;
 
-    const defaultCtaSubText = language === 'ko'
+    const defaultCtaSubText = isKo
         ? 'AI가 분석하는 나만의 사주·타로·궁합'
         : 'AI-powered Saju, Tarot & Compatibility';
 
@@ -46,16 +48,16 @@ export default function ShareTemplate({
 
             <div className="max-w-3xl mx-auto sm:px-4 px-0 py-8">
 
-                <div className="text-center mb-8">
+                {/* <div className="text-center mb-8">
                     <div className="inline-flex items-center gap-2 px-5 py-2.5 bg-white rounded-full shadow-lg border border-indigo-100">
-                        {/* 아이콘에도 그라데이션 느낌을 주려면 text-indigo-600 유지 혹은 변경 */}
+                  
                         <SparklesIcon className={`w-5 h-5 ${gradientColors}`} />
 
                         <span className={`text-sm font-bold bg-gradient-to-r ${gradientColors} bg-clip-text text-transparent`}>
                             {headerBadgeText || defaultBadgeText}
                         </span>
                     </div>
-                </div>
+                </div> */}
 
                 {/* Main Container */}
                 <div className="bg-white rounded-3xl sm:shadow-2xl shadow-none overflow-hidden sm:border border-indigo-100">

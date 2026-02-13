@@ -31,7 +31,7 @@ export default function AfterReport({ fortuneType = 'basic', storageKey = false,
           <div className="flex flex-col items-center gap-4">
             <div className="flex items-center gap-2 text-blue-600 font-bold text-sm uppercase tracking-wide">
               <Share2 size={16} />
-              <span>친구에게 공유하기</span>
+              <span>{language !== 'ko' ? 'Share with friends' : '친구에게 공유하기'}</span>
             </div>
             <div className="flex items-center justify-center gap-4">
               <div className="transform transition-transform hover:scale-110 duration-200">
@@ -50,7 +50,7 @@ export default function AfterReport({ fortuneType = 'basic', storageKey = false,
           </div>
           <div className="relative flex justify-center text-sm">
             <span className="px-4 bg-gradient-to-b from-white via-blue-50/30 to-white text-slate-400 font-medium">
-              또는 사자에게 질문하기
+              {language !== 'ko' ? 'Or ask Saza' : '또는 사자에게 질문하기'}
             </span>
           </div>
         </div>
@@ -60,10 +60,10 @@ export default function AfterReport({ fortuneType = 'basic', storageKey = false,
             <MessageCircle size={24} className="text-blue-600" />
           </div>
           <h3 className="text-2xl sm:text-3xl font-black text-slate-800 tracking-tight">
-            {language === 'en' ? 'Curious for More?' : '더 궁금한 점이 있으신가요?'}
+            {language !== 'ko' ? 'Curious for More?' : '더 궁금한 점이 있으신가요?'}
           </h3>
           <p className="text-slate-600 text-lg leading-relaxed max-w-md mx-auto">
-            {language === 'en' ? 'Saza can provide detailed answers to your specific questions.' : '사자(SAZA)가 당신의 질문에 대해\n더 자세하고 명확한 답변을 드릴 수 있어요.'}
+            {language !== 'ko' ? 'Saza can provide detailed answers to your specific questions.' : '사자(SAZA)가 당신의 질문에 대해\n더 자세하고 명확한 답변을 드릴 수 있어요.'}
           </p>
         </div>
 
@@ -77,7 +77,7 @@ export default function AfterReport({ fortuneType = 'basic', storageKey = false,
             onClick={handleStartSazaTalk}
             className="w-full sm:w-auto px-10 py-5 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-2xl font-bold text-xl shadow-xl shadow-blue-500/25 hover:shadow-2xl hover:shadow-blue-500/40 hover:-translate-y-1 transition-all duration-300 flex items-center justify-center gap-3 mx-auto group"
           >
-            <span>{language === 'en' ? 'Start Chat with Saza' : '사자와 채팅 시작하기'}</span>
+            <span>{language !== 'ko' ? 'Start Chat with Saza' : '사자와 채팅 시작하기'}</span>
             <MessageCircle size={22} className="group-hover:rotate-12 transition-transform" />
           </button>
 
@@ -92,19 +92,19 @@ export default function AfterReport({ fortuneType = 'basic', storageKey = false,
             <div className="w-12 h-12 bg-rose-50 rounded-2xl flex items-center justify-center group-hover:bg-rose-100 transition-colors">
               <Heart size={20} className="text-rose-500" />
             </div>
-            <span className="text-xs font-bold text-slate-500">{language === 'en' ? 'Love' : '연애운'}</span>
+            <span className="text-xs font-bold text-slate-500">{language !== 'ko' ? 'Love' : '연애운'}</span>
           </div>
           <div className="flex flex-col items-center gap-3 group cursor-default">
             <div className="w-12 h-12 bg-amber-50 rounded-2xl flex items-center justify-center group-hover:bg-amber-100 transition-colors">
               <Sparkles size={20} className="text-amber-500" />
             </div>
-            <span className="text-xs font-bold text-slate-500">{language === 'en' ? 'Success' : '성공운'}</span>
+            <span className="text-xs font-bold text-slate-500">{language !== 'ko' ? 'Success' : '성공운'}</span>
           </div>
           <div className="flex flex-col items-center gap-3 group cursor-default">
             <div className="w-12 h-12 bg-indigo-50 rounded-2xl flex items-center justify-center group-hover:bg-indigo-100 transition-colors">
               <Star size={20} className="text-indigo-500" />
             </div>
-            <span className="text-xs font-bold text-slate-500">{language === 'en' ? 'Future' : '미래운'}</span>
+            <span className="text-xs font-bold text-slate-500">{language !== 'ko' ? 'Future' : '미래운'}</span>
           </div>
         </div>
 

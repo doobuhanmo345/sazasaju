@@ -378,9 +378,9 @@ export default function BeforeLoginPage() {
             <div className="p-5 bg-slate-50 dark:bg-slate-800/50 rounded-[2rem] border-2 border-dashed border-indigo-200 dark:border-indigo-900">
               <div className="bg-slate-50 dark:bg-slate-800/50 rounded-2xl p-4 border border-slate-100 dark:border-slate-800 shadow-sm">
                 <div className="grid grid-cols-2 gap-y-4 gap-x-2 text-left">
-                  <div className="space-y-1"><p className="text-xs font-black text-slate-400 uppercase">{language === 'en' ? 'Gender' : '성별'}</p><p className="text-sm font-black dark:text-white">{gender === 'male' ? (language === 'ko' ? '남성 ♂' : 'Male ♂') : (language === 'ko' ? '여성 ♀' : 'Female ♀')}</p></div>
-                  <div className="space-y-1"><p className="text-xs font-black text-slate-400 uppercase">{language === 'en' ? 'Birth Date' : '생년월일'}</p><p className="text-sm font-black dark:text-white">{birthData.year}.{birthData.month}.{birthData.day}</p></div>
-                  <div className="space-y-1"><p className="text-xs font-black text-slate-400 uppercase">{language === 'en' ? 'Birth Time' : '시분'}</p><p className="text-sm font-black dark:text-white">{timeUnknown ? (language === 'ko' ? '시간 모름' : 'Unknown') : `${birthData.hour}:${birthData.minute}`}</p></div>
+                  <div className="space-y-1"><p className="text-xs font-black text-slate-400 uppercase">{language !== 'ko' ? 'Gender' : '성별'}</p><p className="text-sm font-black dark:text-white">{gender === 'male' ? (language === 'ko' ? '남성 ♂' : 'Male ♂') : (language === 'ko' ? '여성 ♀' : 'Female ♀')}</p></div>
+                  <div className="space-y-1"><p className="text-xs font-black text-slate-400 uppercase">{language !== 'ko' ? 'Birth Date' : '생년월일'}</p><p className="text-sm font-black dark:text-white">{birthData.year}.{birthData.month}.{birthData.day}</p></div>
+                  <div className="space-y-1"><p className="text-xs font-black text-slate-400 uppercase">{language !== 'ko' ? 'Birth Time' : '시분'}</p><p className="text-sm font-black dark:text-white">{timeUnknown ? (language === 'ko' ? '시간 모름' : 'Unknown') : `${birthData.hour}:${birthData.minute}`}</p></div>
                   <div className="flex items-end justify-end"><button onClick={handleEdit} className="px-3 py-1.5 bg-white dark:bg-slate-700 rounded-lg text-sm font-black text-indigo-600 dark:text-indigo-400 shadow-sm border border-slate-100 dark:border-slate-600 active:scale-95 transition-all">{language === 'ko' ? '정보 수정' : 'Edit Info'}</button></div>
                 </div>
               </div>

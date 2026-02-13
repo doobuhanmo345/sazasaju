@@ -18,7 +18,7 @@ const BdInput = ({
   onChange,
   isTimeUnknown,
   setIsTimeUnknown,
-  language = 'ko',
+  language,
   color = 'indigo'
 }) => {
   const [isOpen, setIsOpen] = useState(false);

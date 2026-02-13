@@ -49,7 +49,7 @@ export default function ReportTemplateSelBirth() {
       <div className="flex flex-col items-center justify-center min-h-[40vh] gap-4">
         <div className="w-8 h-8 rounded-full border-4 border-emerald-200 border-t-emerald-500 animate-spin"></div>
         <div className="text-center text-emerald-400 font-medium animate-pulse text-sm">
-          {language === 'en' ? 'Retrieving Dates...' : '택일 결과를 불러오는 중...'}
+          {language !== 'ko' ? 'Retrieving Dates...' : '택일 결과를 불러오는 중...'}
         </div>
       </div>
     );
@@ -88,14 +88,14 @@ export default function ReportTemplateSelBirth() {
       <header className="rt-header">
         <div className="rt-tag animate-up">BIRTH DATE SELECTION</div>
         <h1 className="rt-main-title animate-up">
-          {language === 'en' ? 'Gift of Destiny for' : '아기를 위한 최고의 선물'}
+          {language !== 'ko' ? 'Gift of Destiny for' : '아기를 위한 최고의 선물'}
           <br />
           <span className="text-highlight">
-            {language === 'en' ? 'Baby Birth Selection' : '명품 출산 택일'}
+            {language !== 'ko' ? 'Baby Birth Selection' : '명품 출산 택일'}
           </span>
         </h1>
         <p className="rt-desc animate-up">
-          {language === 'en'
+          {language !== 'ko'
             ? 'Selecting the most auspicious birth dates for a bright future.'
             : '소중한 아이가 세상의 축복을 안고 태어날 수 있는 최고의 날짜를 선별했습니다.'}
         </p>
@@ -150,7 +150,7 @@ export default function ReportTemplateSelBirth() {
       <main className="rt-main-content">
         <section className="rt-card animate-up">
           <h2 className="rt-card__title">
-            {language === 'en' ? '01. Destiny Overview' : '01. 아이의 운명 개요'}
+            {language !== 'ko' ? '01. Destiny Overview' : '01. 아이의 운명 개요'}
           </h2>
           <div className="rt-ootd-wrapper mb-4">
             <div className="rt-ootd-item">
@@ -163,7 +163,7 @@ export default function ReportTemplateSelBirth() {
 
         <section className="rt-card animate-up">
           <h2 className="rt-card__title">
-            {language === 'en' ? '02. Recommended Birth Dates' : '02. 추천 출산일 Best'}
+            {language !== 'ko' ? '02. Recommended Birth Dates' : '02. 추천 출산일 Best'}
           </h2>
           <div className="space-y-6">
             {data.bestDates && data.bestDates.map((item, idx) => (
@@ -181,7 +181,7 @@ export default function ReportTemplateSelBirth() {
                   {item.grade && <span className="text-xs font-bold text-amber-500">★ {item.grade}</span>}
                 </div>
                 <p className="text-sm text-slate-700 dark:text-slate-300 leading-relaxed mb-2">
-                  <span className="font-bold mr-2 text-slate-900 dark:text-white block mb-1">{language === 'en' ? 'Destiny Analysis' : '사주 분석'}</span>
+                  <span className="font-bold mr-2 text-slate-900 dark:text-white block mb-1">{language !== 'ko' ? 'Destiny Analysis' : '사주 분석'}</span>
                   {item.reason}
                 </p>
                 <div className="bg-white dark:bg-slate-900 p-3 rounded-lg border border-slate-100 dark:border-slate-700 mt-2">
@@ -197,7 +197,7 @@ export default function ReportTemplateSelBirth() {
 
         {data.caution && (
           <section className="rt-card animate-up">
-            <h2 className="rt-card__title">{language === 'en' ? '03. Dates to Avoid' : '03. 피해야 할 시기'}</h2>
+            <h2 className="rt-card__title">{language !== 'ko' ? '03. Dates to Avoid' : '03. 피해야 할 시기'}</h2>
             <div className="rt-analysis-list__item is-warning"><p>{data.caution}</p></div>
           </section>
         )}

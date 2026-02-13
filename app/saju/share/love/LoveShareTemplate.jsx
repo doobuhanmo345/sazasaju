@@ -7,7 +7,7 @@ import { HeartIcon } from '@heroicons/react/24/outline';
 /**
  * LoveShareTemplate - 애정운 공유 템플릿
  */
-export default function LoveShareTemplate({ shareData, language = 'ko' }) {
+export default function LoveShareTemplate({ shareData, language }) {
     const { displayName, aiResult } = shareData || {};
     const aiData = typeof aiResult === 'string' ? JSON.parse(aiResult) : aiResult;
 

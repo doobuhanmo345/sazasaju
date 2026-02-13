@@ -769,7 +769,7 @@ const NewYearAdKr = () => {
                               🦁
                             </div>
                             <div className="bg-white p-4 rounded-[20px] rounded-tl-none border border-indigo-100 text-sm text-slate-800 max-w-[80%] shadow-sm leading-relaxed">
-                              {language === 'en' ? (
+                              {language !== 'ko' ? (
                                 <>
                                   Your financial luck could fluctuate significantly between
                                   <span className="font-bold"> May and October</span> due to "one

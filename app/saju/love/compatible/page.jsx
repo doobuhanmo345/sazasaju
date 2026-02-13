@@ -27,7 +27,8 @@ export default function CompatiblePage() {
     const [promptQ1, setPromptQ1] = useState('나와 잘 맞는 사람.');
     const [promptQ2, setPromptQ2] = useState('나의 천생연분 유형');
     const [loadingPrompts, setLoadingPrompts] = useState(true);
-
+    const isKo = language === 'ko'
+    const q1 = isKo ? '나와 잘 맞는 사람.' : 'People who are compatible with me.';
     useEffect(() => {
         if (language === 'ko') {
             document.title = '나와 잘 맞는 사람 | 궁합 분석';
@@ -48,7 +49,7 @@ export default function CompatiblePage() {
 
         const fetchPrompts = async () => {
             try {
-                const q1 = '나와 잘 맞는 사람.';
+
                 const q2 = await getPromptFromDB('love_compatible');
                 if (q1) setPromptQ1(q1);
                 if (q2) setPromptQ2(month + q2);
@@ -91,7 +92,7 @@ export default function CompatiblePage() {
             router.push('/saju/love/compatible/result');
             return;
         }
-        const q1 = promptQ1;
+
         const q2 = promptQ2;
         const qprompt = '';
 
@@ -164,7 +165,7 @@ export default function CompatiblePage() {
                         onClick={() => loveEnergy.triggerConsume(handleAnalysis)}
                         disabled={isDisabled || isDisabled2}
                         isDone={isAnalysisDone}
-                        label={language === 'en' ? 'Start Analysis' : '분석 시작하기'}
+                        label={language !== 'ko' ? 'Start Analysis' : '분석 시작하기'}
                         color="emerald"
                     />
 

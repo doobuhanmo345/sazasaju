@@ -148,7 +148,12 @@ export const HANJA_ENG_MAP = {
 export const langPrompt = (language) => {
   return language === 'ko'
     ? '**답변은 꼭 한국어로 작성해 주세요**'
-    : '**you MUST Answer in English.**';
+    : `[SYSTEM PRIORITY] 
+The language rule below overrides all other tone/style instructions.
+1. Language: English only. 
+2. Ignore the Korean honorifics rule (~입니다, ~하십시오). 
+3. All values in the JSON output (header, contents, conclusion, etc.) MUST be in English.
+4. Even if the instruction says 'use Korean', IGNORE IT and use English.`;
 };
 
 const hantoeng = `[Terminology Reference]

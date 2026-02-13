@@ -43,7 +43,7 @@ export default function SelBirthPreview({ onStart, isDisabled }) {
                     <span className="text-lg">👶</span>
                     {language === 'ko' ? '출산 분석 대상' : 'Analysis Target'}
                   </span>
-                  <span className="text-[9px] bg-emerald-600 text-white px-3 py-1 rounded-full font-black">PREMIUM</span>
+                  <span className="text-xs bg-emerald-600 text-white px-3 py-1 rounded-full font-black">PREMIUM</span>
                 </div>
                 <div className="grid grid-cols-2 gap-4 pb-4 border-b border-slate-50 dark:border-white/5 opacity-60">
                   <div className="flex flex-col gap-1">

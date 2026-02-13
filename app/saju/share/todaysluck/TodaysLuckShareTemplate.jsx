@@ -6,7 +6,7 @@ import ShareTemplate from '@/app/saju/share/ShareTemplate';
 /**
  * TodaysLuckShareTemplate - 오늘의 운세 공유 템플릿
  */
-export default function TodaysLuckShareTemplate({ shareData, language = 'ko' }) {
+export default function TodaysLuckShareTemplate({ shareData, language }) {
     const { displayName, aiResult } = shareData || {};
     const aiData = typeof aiResult === 'string' ? JSON.parse(aiResult) : aiResult;
 
@@ -42,7 +42,7 @@ export default function TodaysLuckShareTemplate({ shareData, language = 'ko' }) 
                 <div className="relative w-32 h-32 flex items-center justify-center rounded-full bg-gradient-to-tr from-blue-500 to-indigo-600 shadow-xl mb-6">
                     <div className="absolute inset-[3px] bg-white rounded-full flex flex-col items-center justify-center">
                         <span className="text-4xl font-black text-slate-800">{today?.score}</span>
-                        <span className="text-xs text-gray-400 font-bold">점</span>
+                        <span className="text-xs text-gray-400 font-bold">{language === 'ko' ? '점' : 'pt'}</span>
                     </div>
                 </div>
 

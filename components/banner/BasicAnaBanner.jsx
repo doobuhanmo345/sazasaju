@@ -153,7 +153,7 @@ export default function BasicAnaBanner({ inputDate, isTimeUnknown, gender }) {
       >
         {/* 배경 대형 텍스트 (한자 일주) */}
         <div className="absolute left-[30%] top-[10%] text-[90px] font-black opacity-[0.05] italic select-none pointer-events-none text-gray-900 whitespace-nowrap">
-          {!hasData ? '??' : (language === 'en' ? (
+          {!hasData ? '??' : (language !== 'ko' ? (
             <>
               {ENG_MAP[targetProfile?.saju?.sky1]?.toUpperCase()}
               {ENG_MAP[targetProfile?.saju?.grd1]?.toUpperCase()}

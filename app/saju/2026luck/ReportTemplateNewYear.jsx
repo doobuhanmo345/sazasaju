@@ -17,7 +17,6 @@ const ReportTemplateNewYear = ({ }) => {
 
   const isEn = language !== 'ko';
   const [data, setData] = useState(null);
-  console.log(data)
   useEffect(() => {
     // 1. aiResult가 있으면 우선 사용 (방금 분석 완료)
     if (aiResult) {

@@ -126,7 +126,7 @@ export default function AmaEn({ question, setQuestion, setStep }) {
               <span className="text-xs font-black text-gray-500 leading-tight text-center">
                 27 Saju Masters
                 <br />
-                <span className="font-medium text-[9px]">Verified Data Base</span>
+                <span className="font-medium text-xs">Verified Data Base</span>
               </span>
             </div>
 
@@ -137,7 +137,7 @@ export default function AmaEn({ question, setQuestion, setStep }) {
               <span className="text-xs font-black text-gray-500 leading-tight text-center">
                 Thousands of Cases
                 <br />
-                <span className="font-medium text-[9px]">Vast DB Analysis</span>
+                <span className="font-medium text-xs">Vast DB Analysis</span>
               </span>
             </div>
 

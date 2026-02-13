@@ -325,8 +325,8 @@ export default function HistoryClient() {
                         Consultation History
                     </div>
                     <h1 className="text-3xl sm:text-4xl font-black text-slate-900 dark:text-white tracking-tight leading-tight">
-                        사자와 함께한<br />
-                        <span className="font-serif italic text-indigo-700 dark:text-indigo-400">상담의 기록들</span>
+                        {isKo ? '사자와 함께한' : 'With the Lion'}<br />
+                        <span className="font-serif italic text-indigo-700 dark:text-indigo-400">{isKo ? '상담의 기록들' : 'Consultation Records'}</span>
                     </h1>
                 </div>
             </div>
@@ -361,7 +361,7 @@ export default function HistoryClient() {
                                             {isKo ? `총 ${group.items.length}건의 기록` : `Total ${group.items.length} records`}
                                         </div>
                                         <h2 className="text-2xl font-black text-slate-900 dark:text-white tracking-tight">
-                                            <span className="font-serif italic text-indigo-600 dark:text-indigo-400"> {group.label === 'Others' ? '기타' : group.label}</span>  내역
+                                            <span className="font-serif italic text-indigo-600 dark:text-indigo-400"> {group.label === 'Others' ? '기타' : group.label}</span> {isKo ? '내역' : 'Records'}
                                         </h2>
                                     </div>
 
@@ -404,7 +404,7 @@ export default function HistoryClient() {
                                                             <span className="">
 
                                                                 {displayWho(item)}
-                                                            </span>{item?.who ? '님의 분석 결과' : ''}
+                                                            </span>{item?.who ? (isKo ? '님의 분석 결과' : `' analysis result`) : ''}
 
                                                         </p>
                                                     </div>

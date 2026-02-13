@@ -12,7 +12,7 @@ import ShareTemplate from '@/app/saju/share/ShareTemplate';
  * BasicShareTemplate - 사주 Basic 콘텐츠 템플릿
  * ShareTemplate wrapper 안에서 사용됨
  */
-export default function BasicShareTemplate({ shareData, language = 'ko' }) {
+export default function BasicShareTemplate({ shareData, language }) {
     const [data, setData] = useState(null);
     const [sajuData, setSajuData] = useState(null);
 

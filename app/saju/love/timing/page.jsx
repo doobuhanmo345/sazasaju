@@ -27,7 +27,7 @@ export default function LoveTimingPage() {
     const [promptQ1, setPromptQ1] = useState('솔로 탈출 시기.');
     const [promptQ2, setPromptQ2] = useState('언제쯤 인연이 찾아올지');
     const [loadingPrompts, setLoadingPrompts] = useState(true);
-
+    const isKo = language === 'ko'
 
     useEffect(() => {
         if (language === 'ko') {
@@ -51,7 +51,7 @@ export default function LoveTimingPage() {
 
         const fetchPrompts = async () => {
             try {
-                const q1 = '솔로 탈출 시기.';
+                const q1 = isKo ? '솔로 탈출 시기.' : 'When to Find Love';
                 const q2 = await getPromptFromDB('love_timing');
                 if (q1) setPromptQ1(q1);
                 if (q2) setPromptQ2(month + q2);
@@ -95,7 +95,7 @@ export default function LoveTimingPage() {
             router.push('/saju/love/timing/result');
             return;
         }
-        const q1 = promptQ1;
+
         const q2 = promptQ2;
         const qprompt = '';
 

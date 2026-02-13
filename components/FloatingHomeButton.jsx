@@ -3,7 +3,7 @@
 import React from 'react';
 import { useRouter } from 'next/navigation';
 
-const FloatingHomeButton = ({ language = 'ko' }) => {
+const FloatingHomeButton = ({ language }) => {
     const router = useRouter();
     const isKo = language === 'ko';
 
@@ -15,7 +15,7 @@ const FloatingHomeButton = ({ language = 'ko' }) => {
                 aria-label={isKo ? '사자사주 홈으로 이동' : 'Go to Saza Saju Home'}
             >
                 {/* Dynamic Badge - Smaller on mobile */}
-                <div className="mb-1.5 sm:mb-0 sm:mt-2 sm:order-2 bg-indigo-600 text-white text-[9px] sm:text-xs font-black px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-full shadow-lg animate-bounce ring-1 sm:ring-2 ring-white whitespace-nowrap">
+                <div className="mb-1.5 sm:mb-0 sm:mt-2 sm:order-2 bg-indigo-600 text-white text-xs sm:text-xs font-black px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-full shadow-lg animate-bounce ring-1 sm:ring-2 ring-white whitespace-nowrap">
                     {isKo ? '매일 3회 무료 분석 ✨' : '3 FREE DAILY ANALYSES ✨'}
                 </div>
 

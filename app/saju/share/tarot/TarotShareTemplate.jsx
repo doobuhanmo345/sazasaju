@@ -7,7 +7,7 @@ import ShareTemplate from '@/app/saju/share/ShareTemplate';
  * TarotShareTemplate - 타로 콘텐츠 템플릿
  * ShareTemplate wrapper 안에서 사용됨
  */
-export default function TarotShareTemplate({ shareData, language = 'ko' }) {
+export default function TarotShareTemplate({ shareData, language }) {
     const { displayName, aiResult } = shareData || {};
 
     if (!shareData) {

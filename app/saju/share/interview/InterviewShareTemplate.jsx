@@ -8,10 +8,12 @@ import { useLanguage } from '@/contexts/useLanguageContext';
 import { reportStyleSimple } from '@/data/aiResultConstants';
 
 // shareData passed from Server Component OR via props
-export default function InterviewShareTemplate({ shareData: propShareData }) {
+export default function InterviewShareTemplate({ shareData: propShareData, language: propLanguage }) {
     const searchParams = useSearchParams();
     const [shareData, setShareData] = useState(propShareData || null);
-    const { language } = useLanguage();
+    const { language: hookLanguage } = useLanguage();
+    const language = propLanguage || hookLanguage;
+    const isEn = language !== 'ko';
 
     useEffect(() => {
         if (propShareData) {
@@ -68,7 +70,7 @@ export default function InterviewShareTemplate({ shareData: propShareData }) {
             language={language}
             fortuneType="interview"
             gradientColors="from-blue-500 via-indigo-500 to-slate-500"
-            headerBadgeText={language === 'en' ? 'Strategy Shared' : '합격 전략 공유'}
+            headerBadgeText={language !== 'ko' ? 'Strategy Shared' : '합격 전략 공유'}
         >
             <div className="rt-container is-active">
                 <style>{`
@@ -91,10 +93,10 @@ export default function InterviewShareTemplate({ shareData: propShareData }) {
                 <header className="rt-header">
                     <div className="rt-tag animate-up">SUCCESS STRATEGY REPORT</div>
                     <h1 className="rt-main-title animate-up">
-                        {displayName}{language === 'en' ? "'s" : '님의'}
+                        {displayName}{language !== 'ko' ? "'s" : '님의'}
                         <br />
                         <span className="text-highlight">
-                            {language === 'en' ? 'Interview Success Analysis' : '면접 합격운 분석 리포트'}
+                            {language !== 'ko' ? 'Interview Success Analysis' : '면접 합격운 분석 리포트'}
                         </span>
                     </h1>
                 </header>
@@ -131,7 +133,7 @@ export default function InterviewShareTemplate({ shareData: propShareData }) {
                     {/* 01. Vibe Strategy */}
                     <section className="rt-card animate-up">
                         <h2 className="rt-card__title">
-                            {language === 'en' ? '01. Vibe Strategy for Success' : '01. 합격을 부르는 Vibe 전략'}
+                            {language !== 'ko' ? '01. Vibe Strategy for Success' : '01. 합격을 부르는 Vibe 전략'}
                         </h2>
                         <div className="rt-ootd-wrapper">
                             <div className="rt-ootd-item">
@@ -149,11 +151,11 @@ export default function InterviewShareTemplate({ shareData: propShareData }) {
                     {/* 02. Success Index */}
                     <section className="rt-card animate-up">
                         <h2 className="rt-card__title">
-                            {language === 'en' ? '02. Interview Success Index' : '02. 면접 합격 지수'}
+                            {language !== 'ko' ? '02. Interview Success Index' : '02. 면접 합격 지수'}
                         </h2>
                         <div className="rt-score-box">
                             <div className="rt-score-box__label">
-                                {language === 'en' ? 'Final Pass Probability' : '최종 합격 가능성'}
+                                {language !== 'ko' ? 'Final Pass Probability' : '최종 합격 가능성'}
                             </div>
                             <div className="rt-score-box__val">
                                 {data.passIndex}
@@ -168,11 +170,11 @@ export default function InterviewShareTemplate({ shareData: propShareData }) {
                         </div>
                         <div className="rt-timing-grid">
                             <div className="rt-timing-grid__item">
-                                <span>{language === 'en' ? 'Golden Time' : '면접 골든 타임'}</span>
+                                <span>{language !== 'ko' ? 'Golden Time' : '면접 골든 타임'}</span>
                                 <strong>{data.section02?.goldenTime}</strong>
                             </div>
                             <div className="rt-timing-grid__item">
-                                <span>{language === 'en' ? 'Lucky Item' : '행운의 아이템'}</span>
+                                <span>{language !== 'ko' ? 'Lucky Item' : '행운의 아이템'}</span>
                                 <strong>{data.section02?.luckyItem}</strong>
                             </div>
                         </div>

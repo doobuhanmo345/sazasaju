@@ -50,7 +50,7 @@ export default function TodaysLuckPage() {
     if (!adate) return false;
     return SajuAnalysisService.compareSaju(prevData.saju, targetProfile?.saju);
   })();
-  // console.log(prevData?.selectedDate, new Date().toISOString().split('T')[0], selectedDate)
+  console.log(prevData?.selectedDate, new Date().toISOString().split('T')[0], selectedDate)
 
   const [isButtonClicked, setIsButtonClicked] = useState(false);
   const isDisabled2 = !isTargetOthers && !isAnalysisDone && isLocked;

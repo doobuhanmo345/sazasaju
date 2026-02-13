@@ -36,7 +36,7 @@ export default function ReunionPage() {
     const [partnerTimeUnknown, setPartnerTimeUnknown] = useState(false);
     const [partnerGender, setPartnerGender] = useState('male');
     const { saju: partnerSaju } = useSajuCalculator(partnerDate, partnerTimeUnknown);
-
+    const isKo = language === 'ko'
     const onSelectPartner = (id) => {
         const profile = savedProfiles.find((p) => p.id === id);
         if (profile) {
@@ -71,7 +71,7 @@ export default function ReunionPage() {
 
         const fetchPrompts = async () => {
             try {
-                const q1 = '재회 가능성.';
+                const q1 = isKo ? '재회 가능성.' : 'Reunion Possibility';
                 const q2 = await getPromptFromDB('love_reunion');
                 if (q1) setPromptQ1(q1);
                 if (q2) setPromptQ2(month + q2);
@@ -122,7 +122,7 @@ export default function ReunionPage() {
             router.push('/saju/love/reunion/result');
             return;
         }
-        const q1 = promptQ1;
+
         const q2 = promptQ2;
         const qprompt = '';
 

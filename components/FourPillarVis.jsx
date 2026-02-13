@@ -9,7 +9,7 @@ import { useTheme } from '@/contexts/useThemeContext';
 
 export default function FourPillarVis({ isTimeUnknown, saju }) {
   const { language } = useLanguage();
-  const t = (char) => (language === 'en' ? getEng(char) : char);
+  const t = (char) => (language !== 'ko' ? getEng(char) : char);
   const { theme } = useTheme();
   const processedData = processSajuData(saju);
   const {
@@ -166,20 +166,20 @@ export default function FourPillarVis({ isTimeUnknown, saju }) {
           <div className="h-[90px] flex items-center pr-2 border-r border-sky-700/30">
             <div className="text-right">
               <span className="block text-xs font-bold text-sky-700 uppercase tracking-widest opacity-80 dark:text-cyan-600">
-                {language === 'en' ? 'Heavenly' : '천간'}
+                {language !== 'ko' ? 'Heavenly' : '천간'}
               </span>
               <span className="block text-xs font-serif font-bold text-gray-700 drop-shadow-sm dark:text-gray-400">
-                {language === 'en' ? 'Stem' : ''}
+                {language !== 'ko' ? 'Stem' : ''}
               </span>
             </div>
           </div>
           <div className="h-[110px] flex items-center pr-2 border-r border-stone-400/20">
             <div className="text-right">
               <span className="block text-xs font-bold text-stone-500 uppercase tracking-widest opacity-70 dark:text-yellow-600">
-                {language === 'en' ? 'Earthly' : '지지'}
+                {language !== 'ko' ? 'Earthly' : '지지'}
               </span>
               <span className="block text-xs font-serif font-bold text-stone-700 drop-shadow-sm dark:text-gray-400">
-                {language === 'en' ? 'Branch' : ''}
+                {language !== 'ko' ? 'Branch' : ''}
               </span>
             </div>
           </div>

@@ -39,7 +39,7 @@ export default function SazaTalkMessageItem({ message, onClick, onSave, onDelete
                             {language === 'ko' ? '사자 (Saza)' : 'Saza'}
                         </span>
                         {message.isSaved && (
-                            <span className="px-2 py-0.5 bg-violet-100 dark:bg-violet-900/30 text-violet-600 dark:text-violet-400 text-[9px] font-bold rounded-full">
+                            <span className="px-2 py-0.5 bg-violet-100 dark:bg-violet-900/30 text-violet-600 dark:text-violet-400 text-xs font-bold rounded-full">
                                 {language === 'ko' ? '저장됨' : 'Saved'}
                             </span>
                         )}
@@ -64,7 +64,7 @@ export default function SazaTalkMessageItem({ message, onClick, onSave, onDelete
                     {onSave && (
                         <button
                             onClick={() => onSave(message.id)}
-                            className={`px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-widest transition-all border ${message.isSaved
+                            className={`px-3 py-1 rounded-full text-xs font-black uppercase tracking-widest transition-all border ${message.isSaved
                                 ? 'bg-amber-100 border-amber-200 text-amber-600 shadow-sm'
                                 : 'bg-white border-slate-200 text-slate-400 hover:border-violet-300 hover:text-violet-500'
                                 }`}

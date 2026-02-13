@@ -429,7 +429,7 @@ const EditPrompt = () => {
               >
                 Delete This File
               </button>
-              <p className="mt-2 text-[9px] text-slate-400 text-center font-bold uppercase tracking-tighter">
+              <p className="mt-2 text-xs text-slate-400 text-center font-bold uppercase tracking-tighter">
                 Action cannot be undone
               </p>
             </div>
@@ -467,7 +467,7 @@ const EditPrompt = () => {
                   <span className="text-sm font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest">
                     Insert Variables
                   </span>
-                  <span className="ml-2 px-1.5 py-0.5 bg-slate-100 dark:bg-slate-800 rounded text-[9px] font-bold text-slate-400">
+                  <span className="ml-2 px-1.5 py-0.5 bg-slate-100 dark:bg-slate-800 rounded text-xs font-bold text-slate-400">
                     {variableMapper[targetPath].length} AVAILABLE
                   </span>
                 </div>

@@ -3,15 +3,16 @@
 import React from 'react';
 import ShareTemplate from '@/app/saju/share/ShareTemplate';
 import { HeartIcon, SparklesIcon, CheckCircleIcon, ExclamationCircleIcon, LightBulbIcon, ChatBubbleLeftRightIcon } from '@heroicons/react/24/outline';
-
+import { useLanguage } from '@/contexts/useLanguageContext';
 /**
  * MatchShareTemplate - 궁합 분석 결과 공유 템플릿
  * Matches design of ReportTemplateMatch.jsx
  */
 // shareData passed from Server Component OR via props
-export default function MatchShareTemplate({ shareData, language = 'ko' }) {
+export default function MatchShareTemplate({ shareData, language }) {
     if (!shareData) return <div className="p-10 text-center text-slate-400">Loading...</div>;
 
+    const isKo = language === 'ko';
     // Parse AI Result if needed
     let data = null;
     try {
@@ -28,10 +29,10 @@ export default function MatchShareTemplate({ shareData, language = 'ko' }) {
     if (!data) return <div className="p-10 text-center text-rose-500">Data Processing Error</div>;
 
     const { displayName } = shareData;
-    const isEn = language !== 'ko';
+
 
     // Default label if not found in data
-    const relationLabel = data.relation || (isEn ? 'Relationship' : '궁합');
+    const relationLabel = data.relation || (isKo ? '궁합' : 'Relationship');
 
     return (
         <ShareTemplate
@@ -39,7 +40,7 @@ export default function MatchShareTemplate({ shareData, language = 'ko' }) {
             fortuneType="match"
             // Use a Pink/Rose gradient for Match
             gradientColors="from-rose-500 via-pink-500 to-red-500"
-            headerBadgeText={isEn ? 'Compatibility Analysis Shared' : '궁합 분석 결과 공유'}
+            headerBadgeText={isKo ? '궁합 분석 결과 공유' : 'Compatibility Analysis Shared'}
         >
             <div className="w-full max-w-4xl mx-auto px-4 py-8 animate-in fade-in duration-500">
                 {/* Score Header */}
@@ -50,14 +51,14 @@ export default function MatchShareTemplate({ shareData, language = 'ko' }) {
                         <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/80 dark:bg-slate-800/80 border border-rose-200 dark:border-rose-700 mb-4">
                             <HeartIcon className="w-4 h-4 text-rose-500" />
                             <span className="text-xs font-bold text-rose-600 dark:text-rose-400 uppercase tracking-wider">
-                                {relationLabel} {isEn ? 'Analysis' : '분석'}
+                                {relationLabel} {isKo ? '분석' : 'Analysis'}
                             </span>
                         </div>
 
                         <div className="mb-4">
                             <div className="text-6xl font-black text-rose-600 dark:text-rose-400 mb-2">
                                 {data.score}
-                                <span className="text-3xl text-rose-400 dark:text-rose-500">{isEn ? '' : '점'}</span>
+                                <span className="text-3xl text-rose-400 dark:text-rose-500">{isKo ? '점' : 'pt'}</span>
                             </div>
                             <div className="h-2 bg-slate-200 dark:bg-slate-700 rounded-full overflow-hidden max-w-xs mx-auto">
                                 <div
@@ -104,7 +105,7 @@ export default function MatchShareTemplate({ shareData, language = 'ko' }) {
                         <div className="flex items-center gap-2 mb-4">
                             <div className="w-1 h-6 bg-gradient-to-b from-slate-400 to-slate-600 rounded-full"></div>
                             <h3 className="text-lg font-black text-slate-700 dark:text-slate-300">
-                                {isEn ? 'My Traits' : '나의 특성'}
+                                {isKo ? '나의 특성' : 'My Traits'}
                             </h3>
                         </div>
                         <p className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
@@ -117,7 +118,7 @@ export default function MatchShareTemplate({ shareData, language = 'ko' }) {
                         <div className="flex items-center gap-2 mb-4">
                             <div className="w-1 h-6 bg-gradient-to-b from-pink-400 to-rose-500 rounded-full"></div>
                             <h3 className="text-lg font-black text-pink-700 dark:text-pink-300">
-                                {isEn ? 'Partner\'s Traits' : '상대방의 특성'}
+                                {isKo ? '상대방의 특성' : 'Partner\'s Traits'}
                             </h3>
                         </div>
                         <p className="text-sm text-pink-900/70 dark:text-pink-200/70 leading-relaxed">
@@ -133,7 +134,7 @@ export default function MatchShareTemplate({ shareData, language = 'ko' }) {
                         <div className="flex items-center gap-2 mb-4">
                             <CheckCircleIcon className="w-6 h-6 text-emerald-500" />
                             <h3 className="text-lg font-black text-emerald-700 dark:text-emerald-400">
-                                {isEn ? 'Strengths' : '장점'}
+                                {isKo ? '장점' : 'Strengths'}
                             </h3>
                         </div>
                         <ul className="space-y-3">
@@ -151,7 +152,7 @@ export default function MatchShareTemplate({ shareData, language = 'ko' }) {
                         <div className="flex items-center gap-2 mb-4">
                             <ExclamationCircleIcon className="w-6 h-6 text-amber-500" />
                             <h3 className="text-lg font-black text-amber-700 dark:text-amber-400">
-                                {isEn ? 'Challenges' : '주의할 점'}
+                                {isKo ? '주의할 점' : 'Challenges'}
                             </h3>
                         </div>
                         <ul className="space-y-3">
@@ -170,14 +171,14 @@ export default function MatchShareTemplate({ shareData, language = 'ko' }) {
                     <div className="flex items-center gap-2 mb-4">
                         <SparklesIcon className="w-6 h-6 text-indigo-500" />
                         <h3 className="text-lg font-black text-indigo-700 dark:text-indigo-400">
-                            {isEn ? 'Synergy Analysis' : '시너지 분석'}
+                            {isKo ? '시너지 분석' : 'Synergy Analysis'}
                         </h3>
                     </div>
 
                     <div className="space-y-4">
                         <div>
                             <h4 className="text-sm font-bold text-emerald-600 dark:text-emerald-400 mb-2">
-                                {isEn ? '✨ Positive Synergy' : '✨ 긍정적 시너지'}
+                                {isKo ? '✨ 긍정적 시너지' : '✨ Positive Synergy'}
                             </h4>
                             <p className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
                                 {data.insights?.synergyPros}
@@ -186,10 +187,10 @@ export default function MatchShareTemplate({ shareData, language = 'ko' }) {
 
                         <div>
                             <h4 className="text-sm font-bold text-amber-600 dark:text-amber-400 mb-2">
-                                {isEn ? '⚠️ Challenging Synergy' : '⚠️ 주의할 시너지'}
+                                {isKo ? '⚠️ 주의할 시너지' : '⚠️ Challenging Synergy'}
                             </h4>
                             <p className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
-                                {data.insights?.synergyCons}
+                                {data?.insights?.synergyCons}
                             </p>
                         </div>
                     </div>
@@ -200,19 +201,19 @@ export default function MatchShareTemplate({ shareData, language = 'ko' }) {
                     <div className="flex items-center gap-2 mb-4">
                         <LightBulbIcon className="w-6 h-6 text-yellow-500" />
                         <h3 className="text-lg font-black text-slate-700 dark:text-slate-300">
-                            {isEn ? 'Advice for Growth' : '관계 발전을 위한 조언'}
+                            {isKo ? '관계 발전을 위한 조언' : 'Advice for Growth'}
                         </h3>
                     </div>
 
                     <div className="space-y-4">
                         <div className="p-4 bg-yellow-50 dark:bg-yellow-900/10 rounded-xl border border-yellow-200 dark:border-yellow-800">
                             <p className="text-sm font-semibold text-yellow-900 dark:text-yellow-200">
-                                {data.advice}
+                                {data?.advice}
                             </p>
                         </div>
 
                         <p className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
-                            {data.insights?.solution}
+                            {data?.insights?.solution}
                         </p>
                     </div>
                 </div>

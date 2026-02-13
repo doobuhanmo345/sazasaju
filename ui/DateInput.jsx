@@ -7,7 +7,7 @@ const DAYS_KO = ['일', '월', '화', '수', '목', '금', '토'];
 const DAYS_EN = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 
 const DateInput = forwardRef(
-  ({ label, value, onChange, min, max, className = '', required = false, disabled = false, language = 'ko', color = 'rose' }, ref) => {
+  ({ label, value, onChange, min, max, className = '', required = false, disabled = false, language, color = 'rose' }, ref) => {
     const [isOpen, setIsOpen] = useState(false);
     const containerRef = useRef(null);
 

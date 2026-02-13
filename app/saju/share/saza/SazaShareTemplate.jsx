@@ -7,7 +7,7 @@ import ViewSazaResult from '@/app/saju/sazatalk/ViewSazaResult';
 /**
  * SazaShareTemplate - 사자톡 공유 콘텐츠 템플릿
  */
-export default function SazaShareTemplate({ shareData, language = 'ko' }) {
+export default function SazaShareTemplate({ shareData, language }) {
     const { aiResult, displayName, userQuestion } = shareData || {};
 
     if (!shareData) {

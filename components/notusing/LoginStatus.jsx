@@ -42,7 +42,7 @@ export default function LoginStatus() {
             </div>
             {/* 다음 충전 타이머 */}
             {remainingCredit < MAX_EDIT_COUNT && timeLeft && (
-              <span className="text-[9px] font-bold text-amber-600/80 dark:text-amber-500/80 mt-1 whitespace-nowrap">
+              <span className="text-xs font-bold text-amber-600/80 dark:text-amber-500/80 mt-1 whitespace-nowrap">
                 {language === 'ko' ? `충전까지 ${timeLeft}` : `Refill in ${timeLeft}`}
               </span>
             )}
@@ -58,7 +58,7 @@ export default function LoginStatus() {
               <span className="text-sm font-bold text-slate-700 dark:text-white whitespace-nowrap">
                 {language === 'ko' ? '포춘쿠키(1일 1회)' : 'Fortune(once a day)'}
               </span>
-              <span className="text-[9px] font-medium text-indigo-500 dark:text-indigo-400 whitespace-nowrap">
+              <span className="text-xs font-medium text-indigo-500 dark:text-indigo-400 whitespace-nowrap">
                 {language === 'ko' ? '1~5 추가 크레딧' : 'Get Free Credit'}
               </span>
             </div>

@@ -69,8 +69,8 @@ const ReportTemplateBasic = ({ shareData }) => {
     }
   }, [inputDate, gender, isTimeUnknown, language]);
 
-  if (!shareData && !userData) return <div className="p-10 text-center">유저 정보를 불러오는 중입니다...</div>;
-  if (!sajuData) return <div className="p-10 text-center animate-pulse">데이터 계산 중...</div>;
+  if (!shareData && !userData) return <div className="p-10 text-center">{isEn ? 'Loading user information...' : '유저 정보를 불러오는 중입니다...'}</div>;
+  if (!sajuData) return <div className="p-10 text-center animate-pulse">{isEn ? 'Calculating data...' : '데이터 계산 중...'}</div>;
 
   const { saju, pillars, ohaengCount } = sajuData;
   const iljuKey = pillars.day;

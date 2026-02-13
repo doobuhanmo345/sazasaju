@@ -3,11 +3,14 @@
 import React, { useEffect, useState, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import ShareTemplate from '@/app/saju/share/ShareTemplate';
+import { useLanguage } from '@/contexts/useLanguageContext';
+
 function ShareContent() {
     const searchParams = useSearchParams();
     const [shareData, setShareData] = useState(null);
     const [error, setError] = useState(null);
-
+    const { language } = useLanguage();
+    const isKo = language === 'ko'
     useEffect(() => {
         const dataParam = searchParams.get('data');
         if (dataParam) {
@@ -48,7 +51,7 @@ function ShareContent() {
         );
     }
 
-    return <ShareTemplate shareData={shareData} language="ko" />;
+    return <ShareTemplate shareData={shareData} language={language} />;
 }
 
 export default function SharePage() {

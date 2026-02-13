@@ -8,10 +8,12 @@ import { useLanguage } from '@/contexts/useLanguageContext';
 import { reportStyleSimple } from '@/data/aiResultConstants';
 
 // shareData passed from Server Component OR via props
-export default function SelDateShareTemplate({ shareData: propShareData }) {
+export default function SelDateShareTemplate({ shareData: propShareData, language: propLanguage }) {
     const searchParams = useSearchParams();
     const [shareData, setShareData] = useState(propShareData || null);
-    const { language } = useLanguage();
+    const { language: hookLanguage } = useLanguage();
+    const language = propLanguage || hookLanguage;
+    const isEn = language !== 'ko';
 
     useEffect(() => {
         if (propShareData) {
@@ -68,7 +70,7 @@ export default function SelDateShareTemplate({ shareData: propShareData }) {
             language={language}
             fortuneType="seldate"
             gradientColors="from-indigo-500 via-purple-500 to-violet-600"
-            headerBadgeText={language === 'en' ? 'Auspicious Date Shared' : '길일 선정 공유'}
+            headerBadgeText={language !== 'ko' ? 'Auspicious Date Shared' : '길일 선정 공유'}
         >
             <div className="rt-container is-active">
                 <style>{reportStyleSimple}</style>
@@ -77,10 +79,10 @@ export default function SelDateShareTemplate({ shareData: propShareData }) {
                 <header className="rt-header">
                     <div className="rt-tag animate-up">AUSPICIOUS DATE REPORT</div>
                     <h1 className="rt-main-title animate-up">
-                        {displayName}{language === 'en' ? "'s" : '님을 위한'}
+                        {displayName}{language !== 'ko' ? "'s" : '님을 위한'}
                         <br />
                         <span className="text-highlight">
-                            {language === 'en' ? 'Best Date Selection' : '길일 선정 리포트'}
+                            {language !== 'ko' ? 'Best Date Selection' : '길일 선정 리포트'}
                         </span>
                     </h1>
                 </header>
@@ -111,7 +113,7 @@ export default function SelDateShareTemplate({ shareData: propShareData }) {
                 <main className="rt-main-content">
                     <section className="rt-card animate-up">
                         <h2 className="rt-card__title">
-                            {language === 'en' ? '01. Purpose & Flow' : '01. 길일 선정 정보'}
+                            {language !== 'ko' ? '01. Purpose & Flow' : '01. 길일 선정 정보'}
                         </h2>
                         <div className="rt-ootd-wrapper mb-4">
                             <div className="rt-ootd-item">
@@ -128,7 +130,7 @@ export default function SelDateShareTemplate({ shareData: propShareData }) {
 
                     <section className="rt-card animate-up">
                         <h2 className="rt-card__title">
-                            {language === 'en' ? '02. Top Recommendations' : '02. 최적의 날짜 추천'}
+                            {language !== 'ko' ? '02. Top Recommendations' : '02. 최적의 날짜 추천'}
                         </h2>
                         <div className="space-y-4">
                             {data.bestDates && data.bestDates.slice(0, 1).map((item, idx) => (
@@ -144,7 +146,7 @@ export default function SelDateShareTemplate({ shareData: propShareData }) {
                             ))}
                             {data.bestDates && data.bestDates.length > 1 && (
                                 <p className="text-center text-xs text-slate-400 mt-2">
-                                    {language === 'en' ? 'More dates available in full report.' : '전체 리포트에서 더 많은 날짜를 확인하세요.'}
+                                    {language !== 'ko' ? 'More dates available in full report.' : '전체 리포트에서 더 많은 날짜를 확인하세요.'}
                                 </p>
                             )}
                         </div>

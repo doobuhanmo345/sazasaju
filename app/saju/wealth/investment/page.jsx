@@ -117,7 +117,7 @@ export default function InvestmentPage() {
     const handleAnalysis = async () => {
         setAiResult('');
         setIsButtonClicked(true);
-        const q1 = '투자 / 재테크';
+        const q1 = isKo ? '투자 / 재테크' : 'Investment / Wealth Management';
         const q2 = prompt;
         try {
             const preset = AnalysisPresets.wealth({
@@ -180,8 +180,8 @@ export default function InvestmentPage() {
                     <div className="grid grid-cols-1 gap-4">
                         {SUB_Q_TYPES.map((sub) => {
                             const isSelected = selectedSubQ === sub.id;
-                            const labelText = language === 'en' ? sub.labelEn : sub.label;
-                            const descText = language === 'en' ? sub.descEn : sub.desc;
+                            const labelText = language !== 'ko' ? sub.labelEn : sub.label;
+                            const descText = language !== 'ko' ? sub.descEn : sub.desc;
 
                             return (
                                 <button
@@ -233,7 +233,7 @@ export default function InvestmentPage() {
                                 disabled={isDisabled || isDisabled2}
                                 isDone={isAnalysisDone}
                                 language={language}
-                                label={language === 'en' ? 'Start Analysis' : '분석 시작하기'}
+                                label={language !== 'ko' ? 'Start Analysis' : '분석 시작하기'}
                                 cost={-1}
                                 color="rose"
                             />

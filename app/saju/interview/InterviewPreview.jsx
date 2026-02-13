@@ -39,7 +39,7 @@ export default function InterviewPreview({ onStart, isDisabled, userData, select
             <div className="bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-3xl p-6 shadow-sm">
               <div className="flex justify-between items-center mb-6 pb-4 border-b border-dashed border-slate-100 dark:border-slate-800">
                 <span className="text-xl font-black text-slate-800 dark:text-white">{userData?.displayName || 'CANDIDATE'}</span>
-                <span className="text-[9px] bg-slate-900 text-white px-3 py-1 rounded-full font-black">CANDIDATE</span>
+                <span className="text-xs bg-slate-900 text-white px-3 py-1 rounded-full font-black">CANDIDATE</span>
               </div>
               <div className="space-y-3">
                 <div className="flex justify-between text-xs">
@@ -65,11 +65,11 @@ export default function InterviewPreview({ onStart, isDisabled, userData, select
 
               <div className="flex gap-3 mb-4">
                 <div className="flex-1 bg-slate-50 dark:bg-slate-800/50 p-4 rounded-2xl border border-slate-100 dark:border-slate-800">
-                  <span className="text-[9px] font-bold text-blue-500 block mb-1">MOOD</span>
+                  <span className="text-xs font-bold text-blue-500 block mb-1">MOOD</span>
                   <span className="text-sm font-black">{language === 'ko' ? '"지적인 성실함"' : '"Intellectual Sincerity"'}</span>
                 </div>
                 <div className="flex-1 bg-slate-50 dark:bg-slate-800/50 p-4 rounded-2xl border border-slate-100 dark:border-slate-800">
-                  <span className="text-[9px] font-bold text-blue-500 block mb-1">POINT</span>
+                  <span className="text-xs font-bold text-blue-500 block mb-1">POINT</span>
                   <span className="text-sm font-black">{language === 'ko' ? '첫 질문의 속도' : 'Response Speed'}</span>
                 </div>
               </div>

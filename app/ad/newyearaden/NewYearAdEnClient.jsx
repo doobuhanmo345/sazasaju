@@ -771,7 +771,7 @@ const NewYearAdEn = () => {
                               🦁
                             </div>
                             <div className="bg-white p-4 rounded-[20px] rounded-tl-none border border-[#E8DCCF] text-sm text-[#4A3428] max-w-[80%] shadow-sm leading-relaxed">
-                              {language === 'en' ? (
+                              {language !== 'ko' ? (
                                 <>
                                   Your financial luck could fluctuate significantly between
                                   <span className="font-bold"> May and October</span> due to "one
@@ -789,7 +789,7 @@ const NewYearAdEn = () => {
                           {/* 사용자 리액션 유도 (더 리얼하게) */}
                           <div className="flex justify-end">
                             <div className="bg-[#F47521] text-white p-3 px-5 rounded-[20px] rounded-br-none text-sm font-bold shadow-md">
-                              {language === 'en' ? (
+                              {language !== 'ko' ? (
                                 <>Wait, what is it? Should I be worried? 🥺</>
                               ) : (
                                 <>그게 뭐예요? 저 조심해야 하나요? 🥺</>

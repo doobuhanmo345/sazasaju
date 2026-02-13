@@ -105,7 +105,7 @@ export default function BusinessPage() {
     const handleAnalysis = async () => {
         setAiResult('');
         setIsButtonClicked(true);
-        const q1 = '사업 / 창업운';
+        const q1 = isKo ? '사업 / 창업운' : 'Business / Entrepreneurship';
         const q2 = prompt
 
 
@@ -167,8 +167,8 @@ export default function BusinessPage() {
                     <div className="grid grid-cols-1 gap-4">
                         {SUB_Q_TYPES.map((sub) => {
                             const isSelected = selectedSubQ === sub.id;
-                            const labelText = language === 'en' ? sub.labelEn : sub.label;
-                            const descText = language === 'en' ? sub.descEn : sub.desc;
+                            const labelText = language !== 'ko' ? sub.labelEn : sub.label;
+                            const descText = language !== 'ko' ? sub.descEn : sub.desc;
 
                             return (
                                 <button
@@ -219,7 +219,7 @@ export default function BusinessPage() {
                                 disabled={isDisabled || isDisabled2}
                                 isDone={isAnalysisDone}
                                 language={language}
-                                label={language === 'en' ? 'Start Analysis' : '분석 시작하기'}
+                                label={language !== 'ko' ? 'Start Analysis' : '분석 시작하기'}
                                 cost={-1}
                                 color="emerald"
                             />

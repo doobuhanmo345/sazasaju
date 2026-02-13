@@ -165,7 +165,7 @@ export default function MatchPage() {
     }
   };
 
-  const t = (char) => (language === 'en' ? getEng(char) : char);
+  const t = (char) => (language !== 'ko' ? getEng(char) : char);
   const compaEnergy = useConsumeEnergy();
 
   useEffect(() => {
@@ -299,7 +299,7 @@ export default function MatchPage() {
                     <div className="font-mono text-slate-700 dark:text-slate-300 text-md">
                       {inputDate
                         ? (isTimeUnknown ? inputDate.split('T')[0] : inputDate.replace('T', ' '))
-                        : (language === 'en' ? 'Please register' : '정보 등록 필요')}
+                        : (language !== 'ko' ? 'Please register' : '정보 등록 필요')}
                     </div>
                     {inputDate && <span className="text-sm">{gender === 'male' ? '👨' : '👩'}</span>}
                     {inputDate && isTimeUnknown && (
@@ -416,7 +416,7 @@ export default function MatchPage() {
                   {RELATION_TYPES.map((type) => {
                     const isSelected = selectedRel === type.id;
                     const Icon = type.icon;
-                    const labelText = language === 'en' ? type.sub : type.label;
+                    const labelText = language !== 'ko' ? type.sub : type.label;
                     return (
                       <button
                         key={type.id}
@@ -449,7 +449,7 @@ export default function MatchPage() {
                   )}
                 >
                   <SparklesIcon className="w-5 h-5 animate-pulse" />
-                  <span>{language === 'en' ? 'Start Chemistry Analysis' : '궁합 분석 시작하기'}</span>
+                  <span>{language !== 'ko' ? 'Start Chemistry Analysis' : '궁합 분석 시작하기'}</span>
                   {!!isAnalysisDone ? (
                     <div className="flex items-center gap-1 backdrop-blur-md bg-white/20 px-2 py-0.5 rounded-full border border-white/30">
                       <span className="text-sm font-bold text-white uppercase">Free</span>
@@ -491,7 +491,7 @@ export default function MatchPage() {
                   <span className="text-xs font-bold text-indigo-600 dark:text-indigo-400">
                     {(() => {
                       const r = RELATION_TYPES.find((t) => t.id === selectedRel);
-                      return r ? (language === 'en' ? r.sub : r.label) : selectedRel;
+                      return r ? (language !== 'ko' ? r.sub : r.label) : selectedRel;
                     })()}
                   </span>
                 </div>
@@ -554,11 +554,11 @@ export default function MatchPage() {
                   </section>
                   <section className="space-y-6 border-t border-slate-100 dark:border-slate-800 pt-6">
                     <div>
-                      <h4 className="font-xs font-black text-slate-800 uppercase tracking-widest mb-2">{language === 'en' ? 'Synergy' : '관계 시너지'}</h4>
+                      <h4 className="font-xs font-black text-slate-800 uppercase tracking-widest mb-2">{language !== 'ko' ? 'Synergy' : '관계 시너지'}</h4>
                       <p className="text-sm leading-relaxed text-slate-500 dark:text-slate-400">{data.insights.synergyPros}</p>
                     </div>
                     <div>
-                      <h4 className="font-xs font-black text-slate-800 uppercase tracking-widest mb-2">{language === 'en' ? 'Points of Friction' : '주의할 지점'}</h4>
+                      <h4 className="font-xs font-black text-slate-800 uppercase tracking-widest mb-2">{language !== 'ko' ? 'Points of Friction' : '주의할 지점'}</h4>
                       <p className="text-sm leading-relaxed text-slate-500 dark:text-slate-400">{data.insights.synergyCons}</p>
                     </div>
                   </section>
@@ -589,7 +589,7 @@ export default function MatchPage() {
             </div>
             <div className="mt-8 text-center">
               <button onClick={() => setStep(0)} className="text-sm text-slate-400 hover:text-indigo-500 underline underline-offset-4 transition-all">
-                {language === 'en' ? 'Check Another Match' : '다른 궁합 보러가기'}
+                {language !== 'ko' ? 'Check Another Match' : '다른 궁합 보러가기'}
               </button>
             </div>
           </div>

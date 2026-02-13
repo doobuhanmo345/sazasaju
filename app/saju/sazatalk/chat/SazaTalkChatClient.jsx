@@ -377,7 +377,7 @@ function ChatClientContent() {
                                     <div
                                         className="mt-1 flex items-center gap-1 backdrop-blur-sm px-2 py-0.5 rounded-full border shadow-sm relative z-10 border-gray-500/50 bg-gray-400/40"
                                     >
-                                        <span className="text-[9px] font-bold text-white tracking-wide uppercase">
+                                        <span className="text-xs font-bold text-white tracking-wide uppercase">
                                             <LockClosedIcon className="w-4 h-4 text-amber-500" />
                                         </span>
                                     </div>
@@ -542,7 +542,7 @@ function ChatClientContent() {
                                                         {parsedHistoryData.saza && (
                                                             <div className="mt-4 pt-4 border-t border-slate-50 dark:border-slate-700">
                                                                 <strong className="text-indigo-600 dark:text-indigo-400 block mb-1">
-                                                                    {language === 'en' ? "Saza's Advice" : '사자의 조언'}
+                                                                    {language !== 'ko' ? "Saza's Advice" : '사자의 조언'}
                                                                 </strong>
                                                                 {typeof parsedHistoryData.saza === 'object' ? (
                                                                     <div className="text-sm">

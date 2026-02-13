@@ -13,7 +13,7 @@ import CreditIcon from '@/ui/CreditIcon';
 
 const getLuckyResult = (lang) => {
   const rand = Math.floor(Math.random() * 200) + 1;
-  const db = lang === 'en' ? FORTUNE_DB : FORTUNE_DB_KR;
+  const db = lang !== 'ko' ? FORTUNE_DB : FORTUNE_DB_KR;
 
   if (rand <= 6) {
     return {
@@ -82,7 +82,7 @@ export default function FortuneCookieClient() {
         setLoading(false);
         setSelectedId(null);
         return alert(
-          language === 'en'
+          language !== 'ko'
             ? 'Already claimed! See you tomorrow.'
             : '오늘의 보너스 수령완료! 내일 다시 찾아주세요.'
         );
@@ -197,7 +197,7 @@ export default function FortuneCookieClient() {
             {!loading && !fortuneMessage && userData?.usageHistory?.ZCookie?.today === todayStr ? (
               <div className="animate-in fade-in duration-700 flex flex-col items-center my-6 w-full">
                 <div className="fortune-label mb-2 px-3 py-1 bg-amber-100 dark:bg-amber-900/40 text-amber-800 dark:text-amber-200 text-xs font-bold rounded-full shadow-sm border border-amber-200 dark:border-amber-800">
-                  {language === 'en' ? "Today's Message" : '오늘의 메시지'}
+                  {language !== 'ko' ? "Today's Message" : '오늘의 메시지'}
                 </div>
                 <div className="fortune-paper relative bg-[#fffdf5] dark:bg-slate-800 px-8 py-10 rounded-sm shadow-[0_4px_10px_rgba(0,0,0,0.1)] border-t-4 border-amber-400 max-w-sm w-full text-center overflow-hidden">
                   <div className="absolute inset-0 opacity-10 pointer-events-none bg-[url('https://www.transparenttextures.com/patterns/natural-paper.png')] dark:invert"></div>
@@ -237,7 +237,7 @@ export default function FortuneCookieClient() {
                 ) : (
                   <div className="text-center animate-in fade-in duration-500">
                     <div className="text-slate-600 dark:text-slate-400 font-medium mb-6">
-                      {language === 'en' ? (
+                      {language !== 'ko' ? (
                         'Choose a cookie to check your fortune!'
                       ) : (
                         <>

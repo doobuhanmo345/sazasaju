@@ -28,7 +28,7 @@ export default function MyInfoBar() {
   // Birth Date Logic
   const birthDateStr = target?.birthDate ? target.birthDate.split('T')[0].replace(/-/g, '.') : '';
   const birthTimeStr = target?.isTimeUnknown
-    ? (language === 'en' ? 'Time Unknown' : '시간 모름')
+    ? (language !== 'ko' ? 'Time Unknown' : '시간 모름')
     : (target?.birthDate && target.birthDate.split('T')[1] ? target.birthDate.split('T')[1] : '');
 
   return (

@@ -7,10 +7,12 @@ import LZString from 'lz-string';
 import { useLanguage } from '@/contexts/useLanguageContext';
 import { reportStyleSimple } from '@/data/aiResultConstants';
 
-export default function DateShareTemplate({ shareData: propShareData }) {
+export default function DateShareTemplate({ shareData: propShareData, language: propLanguage }) {
     const searchParams = useSearchParams();
     const [shareData, setShareData] = useState(propShareData || null);
-    const { language } = useLanguage();
+    const { language: hookLanguage } = useLanguage();
+    const language = propLanguage || hookLanguage;
+    const isEn = language !== 'ko';
 
     useEffect(() => {
         if (propShareData) {
@@ -64,7 +66,7 @@ export default function DateShareTemplate({ shareData: propShareData }) {
             language={language}
             fortuneType="date"
             gradientColors="from-rose-500 via-pink-500 to-red-500"
-            headerBadgeText={language === 'en' ? 'Date Analysis Shared' : '데이트 운세 공유'}
+            headerBadgeText={language !== 'ko' ? 'Date Analysis Shared' : '데이트 운세 공유'}
         >
             <div className="rt-container is-active">
                 <style>{reportStyleSimple}</style>
@@ -73,10 +75,10 @@ export default function DateShareTemplate({ shareData: propShareData }) {
                 <header className="rt-header">
                     <div className="rt-tag animate-up">PREMIUM ROMANCE DOSSIER</div>
                     <h1 className="rt-main-title animate-up">
-                        {displayName}{language === 'en' ? "'s" : '님의'}
+                        {displayName}{language !== 'ko' ? "'s" : '님의'}
                         <br />
                         <span className="text-highlight">
-                            {language === 'en' ? 'First Encounter Destiny Report' : '첫만남 운명 리포트'}
+                            {language !== 'ko' ? 'First Encounter Destiny Report' : '첫만남 운명 리포트'}
                         </span>
                     </h1>
                 </header>
@@ -111,7 +113,7 @@ export default function DateShareTemplate({ shareData: propShareData }) {
                     {/* 01. OOTD */}
                     <section className="rt-card animate-up">
                         <h2 className="rt-card__title">
-                            {language === 'en' ? '01. Vibe & OOTD Strategy' : '01. 상대에게 각인될 OOTD 전략'}
+                            {language !== 'ko' ? '01. Vibe & OOTD Strategy' : '01. 상대에게 각인될 OOTD 전략'}
                         </h2>
                         <div className="rt-ootd-wrapper">
                             <div className="rt-ootd-item">
@@ -129,15 +131,15 @@ export default function DateShareTemplate({ shareData: propShareData }) {
                     {/* 03. Score */}
                     <section className="rt-card animate-up">
                         <h2 className="rt-card__title">
-                            {language === 'en' ? '03. Chemistry & Timing' : '03. 케미스트리 & 타이밍'}
+                            {language !== 'ko' ? '03. Chemistry & Timing' : '03. 케미스트리 & 타이밍'}
                         </h2>
                         <div className="rt-score-box">
                             <div className="rt-score-box__label">
-                                {language === 'en' ? 'Interaction Chemistry Score' : '대화 티키타카 지수'}
+                                {language !== 'ko' ? 'Interaction Chemistry Score' : '대화 티키타카 지수'}
                             </div>
                             <div className="rt-score-box__val">
                                 {data?.section03?.chemistryScore}
-                                <span>{language === 'en' ? 'pt' : '점'}</span>
+                                <span>{language !== 'ko' ? 'pt' : '점'}</span>
                             </div>
                             <div className="rt-progress">
                                 <div

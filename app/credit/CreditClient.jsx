@@ -116,7 +116,7 @@ export default function CreditClient() {
                                 }`}
                         >
                             {plan.recommended && (
-                                <div className="absolute -top-3 left-8 bg-indigo-600 text-white text-[9px] font-black px-3 py-1 rounded-full uppercase tracking-widest">
+                                <div className="absolute -top-3 left-8 bg-indigo-600 text-white text-xs font-black px-3 py-1 rounded-full uppercase tracking-widest">
                                     Best Choice
                                 </div>
                             )}

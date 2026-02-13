@@ -19,7 +19,7 @@ const COUNTRIES = [
   '직접 입력 (Direct Input)',
 ];
 
-export default function CityInput({ value, onChange, language = 'ko', className = '', name = 'birthCity' }) {
+export default function CityInput({ value, onChange, language, className = '', name = 'birthCity' }) {
   const [selected, setSelected] = useState('');
   const [customInput, setCustomInput] = useState('');
   const [isDirect, setIsDirect] = useState(false);
