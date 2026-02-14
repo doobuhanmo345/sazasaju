@@ -2,6 +2,7 @@
 
 import { useLanguage } from '@/contexts/useLanguageContext';
 import { TrashIcon } from '@heroicons/react/24/outline';
+import Image from 'next/image';
 
 /**
  * Message item component for SazaTalk messages in inbox
@@ -34,7 +35,14 @@ export default function SazaTalkMessageItem({ message, onClick, onSave, onDelete
                 <div className="flex-1 min-w-0">
                     {/* Sender */}
                     <div className="flex items-center gap-2 mb-1">
-                        <span className="text-xl">🦁</span>
+                        <div className="relative w-8 h-8 rounded-full overflow-hidden border border-slate-100 dark:border-slate-700 bg-white">
+                            <Image
+                                src="/images/brand/saza_teacher.png"
+                                alt="Saza Profile"
+                                fill
+                                className="object-cover"
+                            />
+                        </div>
                         <span className="font-black text-sm text-violet-600 dark:text-violet-400">
                             {language === 'ko' ? '사자 (Saza)' : 'Saza'}
                         </span>

@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, useRef } from 'react';
+import Image from 'next/image';
 import { useLanguage } from '@/contexts/useLanguageContext';
 import { useRouter } from 'next/navigation';
 import { useAuthContext } from '@/contexts/useAuthContext';
@@ -164,7 +165,15 @@ const SazatalkInputBanner = () => {
                             {messages.map((msg, idx) => (
                                 <div key={msg.id || idx} className={classNames("flex items-start", msg.role === 'user' ? "justify-end" : "justify-start")}>
                                     {msg.role === 'saza' && (
-                                        <div className="w-10 h-10 bg-indigo-500 rounded-[15px] flex items-center justify-center text-xl mr-2 flex-shrink-0 shadow-sm text-white">🦁</div>
+                                        <div className="w-10 h-10 rounded-[15px] flex items-center justify-center mr-2 flex-shrink-0 shadow-sm bg-white overflow-hidden border border-indigo-100">
+                                            <Image
+                                                src="/images/brand/saza_teacher.png"
+                                                alt="Saza"
+                                                width={40}
+                                                height={40}
+                                                className="object-cover w-full h-full"
+                                            />
+                                        </div>
                                     )}
                                     <div className={classNames("flex flex-col", msg.role === 'user' ? "items-end" : "items-start")}>
                                         {msg.role === 'saza' && (
@@ -185,7 +194,15 @@ const SazatalkInputBanner = () => {
                             {/* 분석 중 애니메이션 */}
                             {isAnalyzing && (
                                 <div className="flex items-start">
-                                    <div className="w-10 h-10 bg-indigo-500 rounded-[15px] flex items-center justify-center text-xl mr-2 flex-shrink-0 shadow-sm text-white animate-pulse">🦁</div>
+                                    <div className="w-10 h-10 rounded-[15px] flex items-center justify-center mr-2 flex-shrink-0 shadow-sm bg-white overflow-hidden border border-indigo-100">
+                                        <Image
+                                            src="/images/brand/saza_teacher.png"
+                                            alt="Saza Analyzing"
+                                            width={40}
+                                            height={40}
+                                            className="object-cover w-full h-full animate-pulse"
+                                        />
+                                    </div>
                                     <div className="flex flex-col">
                                         <span className="text-sm text-slate-500 dark:text-slate-400 mb-1 ml-1 font-bold">{isKo ? '사자' : 'Saza'}</span>
                                         <div className="bg-white dark:bg-slate-800 p-3.5 px-5 rounded-[16px] rounded-tl-none shadow-sm flex items-center gap-1.5">

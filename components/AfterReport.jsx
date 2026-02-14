@@ -33,13 +33,10 @@ export default function AfterReport({ fortuneType = 'basic', storageKey = false,
               <Share2 size={16} />
               <span>{language !== 'ko' ? 'Share with friends' : '친구에게 공유하기'}</span>
             </div>
-            <div className="flex items-center justify-center gap-4">
-              <div className="transform transition-transform hover:scale-110 duration-200">
-                <ShareLinkButton fortuneType={fortuneType} storageKey={storageKey} />
-              </div>
-              <div className="transform transition-transform hover:scale-110 duration-200">
-                <ShareButton />
-              </div>
+            <div className="flex sm:flex-row flex-col items-center justify-center gap-4">
+              <ShareLinkButton fortuneType={fortuneType} storageKey={storageKey} />
+              <ShareButton />
+
             </div>
           </div>
         </div>

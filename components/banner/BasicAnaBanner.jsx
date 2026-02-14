@@ -187,7 +187,8 @@ export default function BasicAnaBanner({ inputDate, isTimeUnknown, gender }) {
                 <span className="inline-flex items-center text-xs font-bold py-1 px-3 bg-gray-100 rounded-full text-gray-600 uppercase tracking-tighter group-hover:bg-indigo-600 group-hover:text-white transition-all duration-300">
                   {hasData
                     ? (isKo ? '상세 분석 확인하기' : 'View Full Report')
-                    : (isKo ? '정보 등록하고 확인하기' : 'Register to View')}
+
+                    : <>{isKo ? <div className='flex flex-col sm:flex-row'><div> 정보 등록하고&nbsp;</div><div>확인하기 </div></div> : 'Register to View'}</>}
                   <span className="ml-1 text-sm leading-none">→</span>
                 </span>
               </div>
@@ -203,8 +204,13 @@ export default function BasicAnaBanner({ inputDate, isTimeUnknown, gender }) {
                   alt="ilju"
                 />
               ) : (
-                <div className="relative w-28 h-28 sm:w-32 sm:h-32 flex items-center justify-center bg-gray-50 rounded-full border-2 border-dashed border-gray-200 group-hover:border-indigo-300 transition-colors">
-                  <span className="text-4xl font-serif italic text-gray-200 group-hover:text-indigo-200 transition-colors">?</span>
+                <div className="relative overflow-hidden  w-28 h-28 sm:w-32 sm:h-32 flex items-center justify-center bg-gray-50 rounded-full border-2 border-dashed border-gray-200 group-hover:border-indigo-300 transition-colors">
+                  <img
+                    src={iljuImagePath}
+                    className="absolute inset-0 m-auto w-36 h-36 sm:w-40 sm:h-40 opacity-30 translate-y-0 object-contain transition-transform group-hover:rotate-6 duration-700 z-0 scale-[135%]"
+                    alt="ilju"
+                  />
+                  <span className="absolute inset-0 m-auto flex items-center justify-center text-4xl font-serif italic text-gray-600 group-hover:text-indigo-400 text-gray-300 transition-colors z-10 w-full h-full">?</span>
                 </div>
               )}
             </div>
