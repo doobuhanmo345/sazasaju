@@ -1,6 +1,7 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
+import Image from 'next/image';
 import { useEffect, useState } from 'react';
 import { CalendarDaysIcon, SparklesIcon, ExclamationTriangleIcon, LockClosedIcon, TicketIcon } from '@heroicons/react/24/outline';
 import { useAuthContext } from '@/contexts/useAuthContext';
@@ -208,10 +209,13 @@ export default function TimingPage() {
 
                     <div className="m-auto max-w-sm rounded-[2rem] overflow-hidden shadow-sm border border-slate-100 dark:border-slate-800 relative z-0"
                         style={{ maskImage: 'linear-gradient(to bottom, black 60%, transparent 100%)', WebkitMaskImage: 'linear-gradient(to bottom, black 60%, transparent 100%)' }}>
-                        <img
+                        <Image
                             src="/images/introcard/ledger.webp"
                             alt="today's luck"
+                            width={800}
+                            height={600}
                             className="w-full h-auto opacity-90"
+                            priority
                         />
                     </div>
                 </div>

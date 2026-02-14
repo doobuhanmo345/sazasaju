@@ -21,6 +21,7 @@ import CityInput from '@/ui/CityInput';
 import { calculateSaju } from '@/lib/sajuCalculator';
 import { getRomanizedIlju } from '@/data/sajuInt';
 import BackButton from '@/ui/BackButton';
+import Image from 'next/image';
 
 export default function EditProfilePage() {
   const { user, userData, updateProfileData } = useAuthContext();
@@ -131,7 +132,9 @@ export default function EditProfilePage() {
               <img
                 src={getIljuImage()}
                 alt="Ilju Symbol"
+                fill
                 className="w-full h-full object-cover scale-110"
+                sizes="(max-width: 640px) 96px, 128px"
               />
             ) : (
               <img

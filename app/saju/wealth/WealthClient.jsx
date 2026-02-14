@@ -2,6 +2,7 @@
 
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
+import Image from 'next/image';
 import {
   CircleStackIcon,
   CalendarDaysIcon,
@@ -81,7 +82,7 @@ export default function Wealth({ }) {
       id: 'timing',
       label: '올해/내년 흐름',
       sub: 'Yearly Flow',
-      desc: '이번 달 운세부터 1년 운세까지 단기 재물운 흐름을 분석해드려요 승부수 타이밍',
+      desc: '단기적인 자금 흐름과 승부수 타이밍',
       descEn: 'Short-term cash flow and strategic timing',
       icon: CalendarDaysIcon,
       color: 'text-sky-500',
@@ -268,7 +269,7 @@ export default function Wealth({ }) {
           q1,
           q2,
           qprompt,
-
+          language,
         })
       );
       setStep(4);
@@ -341,7 +342,14 @@ export default function Wealth({ }) {
                 {language === 'ko' ? ', 당신의 재물 지도 분석.' : ', Analyzing your financial map.'}
               </p>
               <div className="m-auto max-w-sm rounded-2xl overflow-hidden shadow-sm border border-slate-100 dark:border-slate-800">
-                <img src="/images/introcard/wealth_1.webp" alt="wealth" className="w-full h-auto" />
+                <Image
+                  src="/images/introcard/wealth_1.webp"
+                  alt="wealth"
+                  width={800}
+                  height={600}
+                  className="w-full h-auto"
+                  priority
+                />
               </div>
             </div>
 
@@ -373,8 +381,8 @@ export default function Wealth({ }) {
               {Q_TYPES.map((type) => {
                 const isSelected = selectedQ === type.id;
                 const Icon = type.icon;
-                const labelText = language !== 'ko' ? type.sub : type.label;
-                const descText = language !== 'ko' ? type.descEn : type.desc;
+                const labelText = language === 'en' ? type.sub : type.label;
+                const descText = language === 'en' ? type.descEn : type.desc;
 
                 return (
                   <button
@@ -417,7 +425,7 @@ export default function Wealth({ }) {
                 onClick={handleQNext}
                 className={`px-8 py-3.5 rounded-xl text-sm font-bold tracking-wide transition-all shadow-lg ${selectedQ ? 'bg-indigo-600 hover:bg-indigo-500 text-white shadow-indigo-200 translate-y-0' : 'bg-slate-200 dark:bg-slate-700 text-slate-400 cursor-not-allowed shadow-none'}`}
               >
-                {language !== 'ko' ? 'Next Step' : '다음 단계로 (Next)'}
+                {language === 'en' ? 'Next Step' : '다음 단계로 (Next)'}
               </button>
             </div>
           </div>
@@ -439,8 +447,8 @@ export default function Wealth({ }) {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               {(SUB_Q_TYPES[selectedQ] || []).map((sub) => {
                 const isSelected = selectedSubQ === sub.id;
-                const labelText = language !== 'ko' ? sub.labelEn : sub.label;
-                const descText = language !== 'ko' ? sub.descEn : sub.desc;
+                const labelText = language === 'en' ? sub.labelEn : sub.label;
+                const descText = language === 'en' ? sub.descEn : sub.desc;
 
                 return (
                   <button
@@ -475,7 +483,7 @@ export default function Wealth({ }) {
                 className={`flex items-center gap-2 px-8 py-3.5 rounded-xl text-sm font-bold tracking-wide transition-all shadow-lg ${selectedSubQ && !loading ? 'bg-indigo-600 hover:bg-indigo-500 text-white shadow-indigo-200 translate-y-0' : 'bg-slate-200 dark:bg-slate-700 text-slate-400 cursor-not-allowed shadow-none'}`}
               >
                 <SparklesIcon className="w-4 h-4" />
-                {language !== 'ko' ? 'Next' : '다음'}
+                {language === 'en' ? 'Next' : '다음'}
               </button>
             </div>
           </div>
@@ -488,7 +496,7 @@ export default function Wealth({ }) {
             {(() => {
               const qData = Q_TYPES.find((r) => r.id === selectedQ);
               const RelIcon = qData?.icon || UserGroupIcon;
-              const qLabel = language !== 'ko' ? qData?.sub : qData?.label;
+              const qLabel = language === 'en' ? qData?.sub : qData?.label;
               return (
                 <div className={`flex items-center gap-3 px-5 py-3 rounded-2xl border-2 shadow-sm w-full sm:w-auto ${qData?.bg || 'bg-slate-50'} ${qData?.border || 'border-slate-200'} dark:bg-slate-800 dark:border-slate-700`}>
                   <div className={`p-2 rounded-full bg-white dark:bg-slate-900 shadow-sm ${qData?.color || 'text-slate-400'}`}>
@@ -512,7 +520,7 @@ export default function Wealth({ }) {
             {(() => {
               const subData = (SUB_Q_TYPES[selectedQ] || []).find((r) => r.id === selectedSubQ);
               if (!subData) return null;
-              const subLabel = language !== 'ko' ? subData.labelEn : subData.label;
+              const subLabel = language === 'en' ? subData.labelEn : subData.label;
               return (
                 <div className="flex items-center gap-3 px-5 py-3 rounded-2xl border-2 border-indigo-100 bg-indigo-50 dark:bg-slate-800 dark:border-indigo-900 shadow-sm w-full sm:w-auto">
                   <div className="p-2 rounded-full bg-white dark:bg-slate-900 shadow-sm text-indigo-500">
@@ -538,10 +546,10 @@ export default function Wealth({ }) {
               className={`w-full sm:w-auto px-10 py-4 font-bold rounded-xl shadow-lg transform transition-all flex items-center justify-center gap-2 ${isDisabled ? 'bg-gray-100 text-gray-400 cursor-not-allowed border border-gray-200' : 'bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-500 hover:to-violet-500 text-white shadow-indigo-200 hover:-translate-y-1'}`}
             >
               <SparklesIcon className="w-5 h-5 animate-pulse" />
-              <span>{language !== 'ko' ? 'Start Analysis' : '분석 시작하기'}</span>
+              <span>{language === 'en' ? 'Start Analysis' : '분석 시작하기'}</span>
               {isAnalysisDone ? (
                 <div className="flex items-center gap-1 backdrop-blur-md bg-white/20 px-2 py-0.5 rounded-full border border-white/30">
-                  <span className="text-xs font-bold text-white uppercase">Free</span>
+                  <span className="text-[9px] font-bold text-white uppercase">Free</span>
                   <TicketIcon className="w-3 h-3 text-white" />
                 </div>
               ) : isLocked ? (

@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { useLanguage } from '@/contexts/useLanguageContext';
 import { useLoading } from '@/contexts/useLoadingContext';
+import Image from 'next/image';
 
 export default function TarotLoading({ cardPicked }) {
   const { language } = useLanguage();
@@ -39,10 +40,12 @@ export default function TarotLoading({ cardPicked }) {
                 className="absolute inset-0 w-full h-full z-20 rounded-lg overflow-hidden border border-white/30 shadow-[0_0_20px_rgba(251,191,36,0.1)]"
                 style={{ backfaceVisibility: 'hidden', WebkitBackfaceVisibility: 'hidden' }}
               >
-                <img
+                <Image
                   src="/images/tarot/cardback.png"
                   alt="tarot card back"
-                  className="w-full h-full object-cover"
+                  fill
+                  className="object-cover"
+                  sizes="(max-width: 768px) 33vw, 20vw"
                 />
                 {/* 카드 표면 은은한 빛 반사 효과 */}
                 <div className="absolute inset-0 bg-gradient-to-tr from-white/5 to-transparent opacity-60" />
@@ -58,10 +61,12 @@ export default function TarotLoading({ cardPicked }) {
                 }}
               >
                 {cardPicked ? (
-                  <img
+                  <Image
                     src={`/images/tarot/${cardPicked.id}.jpg`}
                     alt={cardPicked.kor}
-                    className="w-full h-full object-cover"
+                    fill
+                    className="object-cover"
+                    sizes="(max-width: 768px) 33vw, 20vw"
                   />
                 ) : (
                   <div className="w-full h-full bg-slate-800 animate-pulse" />

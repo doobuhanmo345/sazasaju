@@ -66,7 +66,7 @@ export default function HomeClient() {
   }, [user, userData, setEditCount]);
 
   return (
-    <div className="pb-24 px-3 max-w-full overflow-x-hidden overscroll-behavior-y-none">
+    <div className="pt-3 pb-20 px-3 max-w-full overflow-x-hidden overscroll-behavior-y-none">
       {/* MyInfo Bar - Conditional Render */}
 
       <LoginStatus />

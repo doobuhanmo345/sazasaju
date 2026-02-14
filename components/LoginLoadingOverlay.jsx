@@ -8,7 +8,7 @@ export default function LoginLoadingOverlay({ onCancel }) {
       <div className="relative mb-8 flex justify-center items-center">
         <div className="w-16 h-16 bg-indigo-600 rounded-[2.5rem] flex items-center justify-center shadow-2xl animate-optimize-bounce overflow-visible">
           <Image
-            src="/images/splash.webp"
+            src="/images/brand/splash_saza.png"
             width={144}
             height={144}
             className="absolute max-w-none object-contain transform"

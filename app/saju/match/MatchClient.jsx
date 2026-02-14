@@ -1,6 +1,7 @@
 'use client';
 
 import { useRef, useState, useMemo, useEffect, useCallback } from 'react';
+import Image from 'next/image';
 import { useAuthContext } from '@/contexts/useAuthContext';
 import { useUsageLimit } from '@/contexts/useUsageLimit';
 import { useLoading } from '@/contexts/useLoadingContext';
@@ -326,10 +327,13 @@ export default function MatchClient() {
             </div>
 
             <div className="m-auto mb-6 max-w-sm rounded-2xl overflow-hidden shadow-sm border border-slate-100 dark:border-slate-800">
-              <img
+              <Image
                 src="/images/introcard/match_1.webp"
                 alt="today's luck"
+                width={800}
+                height={600}
                 className="w-full h-auto"
+                priority
               />
             </div>
 

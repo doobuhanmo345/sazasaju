@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useCallback, useMemo, useEffect } from 'react';
+import Image from 'next/image';
 import AnalysisStepContainer from '@/components/AnalysisStepContainer';
 import { useAuthContext } from '@/contexts/useAuthContext';
 import { useUsageLimit } from '@/contexts/useUsageLimit';
@@ -403,10 +404,13 @@ export default function SelBirthPage() {
 
             <div className="mb-12 relative group max-w-sm mx-auto">
               <div className="absolute inset-0 bg-emerald-500/20 blur-3xl rounded-full scale-75 group-hover:scale-100 transition-transform duration-700" />
-              <img
+              <Image
                 src="/images/introcard/sel_birth.webp"
                 alt="Birth Selection"
-                className="relative z-10 w-full rounded-[2.5rem] shadow-2xl border border-white/50 dark:border-slate-700/50"
+                width={800}
+                height={600}
+                className="relative z-10 w-full rounded-[2.5rem] shadow-2xl border border-white/50 dark:border-slate-700/50 h-auto"
+                priority
               />
             </div>
 

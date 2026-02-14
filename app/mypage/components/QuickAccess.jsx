@@ -22,9 +22,9 @@ const QuickAccess = memo(({ isKo, router }) => {
                 <button
                     key={idx}
                     onClick={() => router.push(item.path)}
-                    className="relative w-full flex flex-col items-center gap-2 sm:gap-4 p-3 sm:p-5 rounded-2xl sm:rounded-3xl bg-white/40 dark:bg-slate-900/40 border border-white/60 dark:border-white/[0.03] shadow-[0_4px_20px_rgba(0,0,0,0.03)] dark:shadow-[0_8px_32px_rgba(0,0,0,0.2)] backdrop-blur-sm hover:scale-105 active:scale-95 transition-all duration-300 group overflow-hidden transform-gpu"
+                    className="relative w-full flex flex-col items-center gap-2 sm:gap-4 p-3 sm:p-5 rounded-2xl sm:rounded-3xl bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 shadow-sm hover:shadow-md hover:scale-105 active:scale-95 transition-all duration-300 group overflow-hidden"
                 >
-                    <div className={`absolute inset-0 bg-gradient-to-br ${item.color.replace('text-', 'from-')}/[0.02] to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500`} />
+                    <div className={`absolute inset-0 bg-gradient-to-br ${item.color.replace('text-', 'from-')}/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300`} />
                     <div className={`w-7 h-7 sm:w-9 sm:h-9 ${item.color} group-hover:scale-110 transition-all duration-500 relative z-10`}>
                         {React.cloneElement(item.icon, { className: 'w-full h-full stroke-[1.2]' })}
                     </div>

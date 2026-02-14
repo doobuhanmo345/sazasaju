@@ -319,7 +319,7 @@ export function AuthContextProvider({ children }) {
           const initialData = {
             uid: user.uid,
             email: user.email,
-            displayName: user.displayName || '사용자',
+            displayName: user.displayName || '',
             photoURL: user.photoURL || '',
             provider: providerId, // 로그인 제공자 저장 (google.com, kakao.com 등)
             phoneNumber: user.phoneNumber || '', // 이미 있으면 저장
@@ -329,19 +329,14 @@ export function AuthContextProvider({ children }) {
             lastLoginDate: todayStr,
             editCount: 0,
             credits: 0,
-            gender: 'female',
+            gender: '',
             birthDate: '',
             birthCity: '',
             isTimeUnknown: false,
             saju: null,
             createdAt: new Date().toISOString(),
             updatedAt: new Date().toISOString(),
-            usageHistory: {
-              ZNewYear: null,
-              ZLastDaily: null,
-              ZCookie: null,
-              ZApiAnalysis: null,
-            },
+            usageHistory: {},
             question_history: [],
             dailyUsage: {},
           };

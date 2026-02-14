@@ -1,6 +1,7 @@
 'use client';
 
 import { useRef, useState, useMemo, useEffect } from 'react';
+import Image from 'next/image';
 import { AnalysisStepContainer } from '@/components/AnalysisStepContainer';
 import { useSajuCalculator } from '@/hooks/useSajuCalculator';
 import { useAuthContext } from '@/contexts/useAuthContext';
@@ -135,10 +136,13 @@ export default function YearlyLuckPage() {
           </p>
 
           <div className="m-auto max-w-sm rounded-2xl overflow-hidden shadow-sm border border-slate-100 dark:border-slate-800">
-            <img
+            <Image
               src="/images/introcard/newyear_1.webp"
               alt="2026 yearly luck"
+              width={800}
+              height={600}
               className="w-full h-auto"
+              priority
             />
           </div>
         </div>

@@ -2,6 +2,7 @@
 
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
+import Image from 'next/image';
 import {
   CircleStackIcon,
   CalendarDaysIcon,
@@ -91,25 +92,18 @@ export default function WealthLandingPage() {
         </h2>
 
         <div className="space-y-4 text-slate-600 dark:text-slate-400 mb-10 leading-relaxed break-keep">
-          <p className="text-sm">
-            <strong>{language === 'ko' ? '타고난 금전의 그릇' : 'Innate Wealth Capacity'}</strong>
-            {language === 'ko' ? '과 ' : ' and '}
-            <strong>{language === 'ko' ? '재물이 모이는 시기' : 'Strategic Financial Timing'}</strong>
-            {language === 'ko' ? ', 당신의 재물 지도 분석.' : ', Analyzing your financial map.'}
+          <p className="text-base">
+
+            {language === 'ko' ? <><strong>타고난 금전의 그릇</strong>과 <strong>재물이 모이는 시기</strong><br />당신의 재물 지도 분석합니다.<br /><strong>주제를 선택</strong>하면 그 주제로 <br />당신의 사주를 정밀하게 분석해 드립니다. </> :
+              <>Analyzing your<strong> financial map</strong>.<br />What financial insight do you need?<br /><strong>Select a topic</strong> for a precise analysis based on your Saju.</>}
+
           </p>
           <div className="m-auto max-w-sm rounded-2xl overflow-hidden shadow-sm border border-slate-100 dark:border-slate-800">
-            <img src="/images/introcard/wealth_1.webp" alt="wealth" className="w-full h-auto" />
+
           </div>
         </div>
 
-        <div className="text-center mb-8">
-          <h3 className="text-xl font-bold text-slate-800 dark:text-slate-100 mb-2">
-            {language === 'ko' ? '어떤 재물운이 궁금하신가요?' : 'What financial insight do you need?'}
-          </h3>
-          <p className="text-sm text-slate-500 dark:text-slate-400">
-            {language === 'ko' ? '주제를 선택하면 그 주제로 당신의 사주를 정밀하게 분석해 드립니다.' : 'Select a topic for a precise analysis based on your Saju.'}
-          </p>
-        </div>
+
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-12">
           {CATEGORIES.map((category) => {

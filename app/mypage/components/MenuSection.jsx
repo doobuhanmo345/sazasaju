@@ -1,6 +1,7 @@
 'use client';
 
 import React, { memo } from 'react';
+import MyPageMenuButton from '@/ui/MyPageMenuButton';
 import {
     ChevronRightIcon,
     UserCircleIcon,
@@ -23,24 +24,7 @@ const MenuSection = memo(({ isKo, userData, handleLogout, router }) => {
         <div className="px-10 max-w-lg mx-auto space-y-12">
             <div className="flex flex-col gap-10">
                 {menuItems.map((item, idx) => (
-                    <button
-                        key={idx}
-                        onClick={item.action || (() => router.push(item.path))}
-                        className="group flex flex-col items-start gap-3 transform-gpu"
-                    >
-                        <div className="flex items-center gap-3">
-                            <div className="w-5 h-5 opacity-40 group-hover:opacity-100 transition-opacity">
-                                {item.icon}
-                            </div>
-                            <span className="text-xs font-black text-slate-400 dark:text-slate-600 uppercase tracking-[0.3em]">{item.exp}</span>
-                        </div>
-                        <div className="flex items-end gap-3">
-                            <span className="text-3xl font-black text-slate-900 dark:text-white tracking-tighter group-hover:text-indigo-600 transition-colors">
-                                {item.label}
-                            </span>
-                            <ChevronRightIcon className="w-8 h-8 text-indigo-600 mb-1 group-hover:translate-x-3 transition-transform" />
-                        </div>
-                    </button>
+                    <MyPageMenuButton key={idx} item={item} />
                 ))}
             </div>
         </div>

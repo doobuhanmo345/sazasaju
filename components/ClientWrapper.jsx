@@ -125,7 +125,7 @@ export default function ClientWrapper({ children }) {
 
 
       <main className={!isNoNavbarPath ? "relative min-h-screen pt-[calc(64px+env(safe-area-inset-top))]" : "min-h-screen"}>
-        <div className="w-full mb-8 fixed top-16 z-30 ">
+        <div className="w-full sticky top-16 z-30 ">
           <AppBanner />
         </div>
 

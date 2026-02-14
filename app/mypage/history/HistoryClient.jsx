@@ -27,6 +27,7 @@ import {
     ArrowLeftIcon
 } from '@heroicons/react/24/outline';
 import BackButton from '@/ui/BackButton';
+import Image from 'next/image';
 
 const TYPE_CONFIG = {
     // 전통 사주
@@ -315,10 +316,13 @@ export default function HistoryClient() {
 
                 <div className="relative z-10 max-w-lg mx-auto text-center flex flex-col items-center">
                     <div className="relative w-20 h-20 sm:w-28 sm:h-28 overflow-hidden rounded-full border-4 border-white shadow-2xl mb-4 bg-white dark:bg-slate-800 flex items-center justify-center">
-                        <img
+                        <Image
                             src="/images/history/clay_history_bg.png"
                             alt="Consultation Records"
+                            width={112}
+                            height={112}
                             className='w-full h-full object-cover scale-110'
+                            priority
                         />
                     </div>
                     <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 text-xs font-black uppercase tracking-widest mb-4">

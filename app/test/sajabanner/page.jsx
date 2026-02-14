@@ -22,9 +22,9 @@ const SazaTalkBanner = () => {
                     {language === 'ko' ? '사업 성패의 결정적 한 수' : "Your Business Success Blueprint"}
 
                     <br />
-                    <span className="relative text-amber-600 dark:text-amber-500">
+                    <span className="relative text-emerald-600 dark:text-emerald-500">
                         {language === 'ko' ? '창업 시기부터 업종 분석까지' : "From Launch Timing to Best Industry"}
-                        <div className="absolute inset-0 bg-amber-200/50 dark:bg-amber-800/60 blur-md rounded-full scale-100"></div>
+                        <div className="absolute inset-0 bg-emerald-200/50 dark:bg-emerald-800/60 blur-md rounded-full scale-100"></div>
                     </span>
                 </h2>
             </div>
@@ -53,7 +53,7 @@ const SazaTalkBanner = () => {
             {/* Primary Analyze Button */}
             <div className="mb-12 max-w-lg mx-auto">
                 <AnalyzeButton
-                    onClick={() => loveEnergy.triggerConsume(handleAnalysis)}
+                    onClick={() => wealthEnergy.triggerConsume(handleAnalysis)}
                     disabled={isDisabled || isDisabled2}
                     loading={loading}
                     isDone={isAnalysisDone}

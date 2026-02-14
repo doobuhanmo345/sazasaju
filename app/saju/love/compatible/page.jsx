@@ -1,6 +1,7 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
+import Image from 'next/image';
 import { useEffect, useState } from 'react';
 import { UserPlusIcon, SparklesIcon, ExclamationTriangleIcon, LockClosedIcon, TicketIcon } from '@heroicons/react/24/outline';
 import { useAuthContext } from '@/contexts/useAuthContext';
@@ -157,10 +158,13 @@ export default function CompatiblePage() {
                     </p>
 
                     <div className="m-auto max-w-sm rounded-2xl overflow-hidden shadow-sm border border-slate-100 dark:border-slate-800">
-                        <img
+                        <Image
                             src="/images/introcard/love_compatible.webp"
                             alt="today's luck"
+                            width={800}
+                            height={600}
                             className="w-full h-auto"
+                            priority
                         />
                     </div>
                 </div>

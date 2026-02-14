@@ -25,6 +25,7 @@ import {
   CalendarDaysIcon,
 } from '@heroicons/react/24/outline';
 import { DateService } from '@/utils/dateService';
+import Image from 'next/image';
 
 export default function Page() {
   const { user, userData } = useAuthContext();
@@ -57,7 +58,7 @@ export default function Page() {
             limit(1),
           );
           const appSnapshot = await getDocs(q);
-const todayDate = await DateService.getTodayDate();
+          const todayDate = await DateService.getTodayDate();
           if (!appSnapshot.empty) {
             const appData = appSnapshot.docs[0].data();
             const initialData = {
@@ -128,11 +129,18 @@ const todayDate = await DateService.getTodayDate();
             </p>
           </div>
           <div className="flex items-center gap-3 bg-white dark:bg-slate-900 p-2 rounded-2xl shadow-sm border border-gray-100 dark:border-slate-800">
-            <img
-              src={user?.photoURL}
-              className="w-10 h-10 rounded-full border-2 border-indigo-500"
-              alt="profile"
-            />
+            {user?.photoURL ? (
+              <Image
+                src={user.photoURL}
+                alt="profile"
+                width={40}
+                height={40}
+                className="w-10 h-10 rounded-full border-2 border-indigo-500 object-cover"
+                unoptimized
+              />
+            ) : (
+              <div className="w-10 h-10 rounded-full border-2 border-indigo-500 bg-indigo-100" />
+            )}
             <div className="pr-4 text-left">
               <p className="text-xs text-gray-400 font-bold uppercase tracking-tighter">
                 Verified Expert
@@ -178,9 +186,8 @@ const todayDate = await DateService.getTodayDate();
               )}
               <button
                 onClick={() => (isEditing ? handleSave() : setIsEditing(true))}
-                className={`flex items-center gap-2 px-5 py-2.5 rounded-xl font-bold transition-all ${
-                  isEditing ? 'bg-emerald-500 text-white' : 'bg-indigo-600 text-white'
-                }`}
+                className={`flex items-center gap-2 px-5 py-2.5 rounded-xl font-bold transition-all ${isEditing ? 'bg-emerald-500 text-white' : 'bg-indigo-600 text-white'
+                  }`}
               >
                 {isEditing ? (
                   <>
@@ -246,11 +253,10 @@ const todayDate = await DateService.getTodayDate();
                       type="button"
                       disabled={!isEditing}
                       onClick={() => toggleMethod(method.id)}
-                      className={`flex items-center justify-between p-4 rounded-2xl border-2 transition-all ${
-                        isActive
-                          ? 'border-indigo-500 bg-indigo-50 dark:bg-indigo-900/20 text-indigo-600 dark:text-indigo-300'
-                          : 'border-transparent bg-gray-50 dark:bg-slate-800 text-gray-400'
-                      }`}
+                      className={`flex items-center justify-between p-4 rounded-2xl border-2 transition-all ${isActive
+                        ? 'border-indigo-500 bg-indigo-50 dark:bg-indigo-900/20 text-indigo-600 dark:text-indigo-300'
+                        : 'border-transparent bg-gray-50 dark:bg-slate-800 text-gray-400'
+                        }`}
                     >
                       <div className="flex items-center gap-3">
                         <method.icon className="w-6 h-6" />

@@ -1,6 +1,7 @@
 'use client';
 
 import { useRef, useState, useEffect, useCallback, useMemo } from 'react'; // 1. useMemo 추가
+import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import AnalyzeButton from '@/ui/AnalyzeButton';
 import { useSajuCalculator } from '@/hooks/useSajuCalculator';
@@ -186,10 +187,13 @@ export default function BasicAnaPage() {
                 )}
               </p>
               <div className="m-auto max-w-sm rounded-2xl overflow-hidden shadow-sm border border-slate-100 dark:border-slate-800">
-                <img
+                <Image
                   src="/images/introcard/basicana_1.webp"
                   alt="saju analysis"
+                  width={800}
+                  height={600}
                   className="w-full h-auto"
+                  priority
                 />
               </div>
             </div>

@@ -3,6 +3,7 @@
 import { useLoading } from '@/contexts/useLoadingContext';
 import { aiSajuStyle } from '@/data/aiResultConstants';
 import { useMemo } from 'react';
+import Image from 'next/image';
 
 export default function ViewTarotResult({ cardPicked, loading, data }) {
   const { aiResult } = useLoading();
@@ -53,10 +54,13 @@ export default function ViewTarotResult({ cardPicked, loading, data }) {
                 100% { transform: translate(0, 0) scale(1); opacity: 0.1; z-index: -1; }
               }
             `}</style>
-              <img
+              <Image
                 src={`/images/tarot/${cardPicked?.id}.jpg`}
                 alt={cardPicked?.kor}
+                width={256}
+                height={400}
                 className="w-48 md:w-64 rounded-3xl shadow-[0_30px_60px_-12px_rgba(88,28,135,0.25)] object-cover ring-1 ring-white/50"
+                priority
               />
             </div>
           </div>

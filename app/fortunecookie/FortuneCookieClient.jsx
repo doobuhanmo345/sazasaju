@@ -10,6 +10,7 @@ import { useLanguage } from '@/contexts/useLanguageContext';
 import { FORTUNE_DB, FORTUNE_DB_KR } from '@/data/fortuneCookie';
 import { BoltIcon } from '@heroicons/react/24/outline';
 import CreditIcon from '@/ui/CreditIcon';
+import Image from 'next/image';
 
 const getLuckyResult = (lang) => {
   const rand = Math.floor(Math.random() * 200) + 1;
@@ -178,10 +179,13 @@ export default function FortuneCookieClient() {
               <CreditIcon num={language === 'ko' ? '최대 +5' : 'Max +5 '} />
             </div>
             <div className="m-auto max-w-sm rounded-2xl overflow-hidden mb-8">
-              <img
+              <Image
                 src="/images/introcard/cookie_2.png"
                 alt="cookie started"
+                width={240}
+                height={240}
                 className="w-60 h-auto mx-auto"
+                priority
               />
             </div>
 
@@ -220,10 +224,13 @@ export default function FortuneCookieClient() {
                     {showCoin && <div className="flying-coin-animation">⚡</div>}
                     <div className="text-center">
                       <div className="m-auto max-w-sm rounded-2xl overflow-hidden shadow-sm border border-slate-100 dark:border-slate-800 mb-6">
-                        <img
+                        <Image
                           src="/images/introcard/cookie_result.webp"
                           alt="cookie result"
+                          width={400}
+                          height={400}
                           className="w-full h-auto"
+                          priority
                         />
                       </div>
                       <p className="text-slate-800 dark:text-amber-100 text-xl font-bold leading-relaxed mb-6 break-keep px-4">
@@ -249,10 +256,13 @@ export default function FortuneCookieClient() {
                       )}
                     </div>
                     <div className="m-auto max-w-sm rounded-2xl overflow-hidden mb-8">
-                      <img
+                      <Image
                         src="/images/introcard/cookie_1.png"
                         alt="select cookie"
+                        width={240}
+                        height={240}
                         className="w-60 h-auto mx-auto"
+                        priority
                       />
                     </div>
                     <div className="flex gap-8 items-center justify-center">
@@ -269,9 +279,11 @@ export default function FortuneCookieClient() {
                           <div
                             className={`w-24 h-24 flex items-center justify-center transition-all duration-300 cookie-emoji-container ${selectedId === idx && loading ? 'animate-pulse' : ''}`}
                           >
-                            <img
+                            <Image
                               src="/images/fortunecookie/clay_fortune_cookie.png"
                               alt="fortune cookie"
+                              width={96}
+                              height={96}
                               className="w-full h-auto mix-blend-multiply dark:mix-blend-normal"
                             />
                           </div>
