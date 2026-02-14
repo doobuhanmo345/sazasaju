@@ -153,7 +153,7 @@ export default function NotificationList() {
 
       {/* 드롭다운 알림창 */}
       {isOpen && (
-        <div className="z-50 absolute right-0 mt-2 w-72 sm:w-80 bg-white dark:bg-slate-900 rounded-3xl shadow-2xl border border-gray-100 dark:border-slate-800 overflow-hidden z-[100] animate-in fade-in zoom-in-95 duration-200 origin-top-right">
+        <div className="z-50 absolute -right-10 mt-2 w-72 sm:w-80 bg-white dark:bg-slate-900 rounded-3xl shadow-2xl border border-gray-100 dark:border-slate-800 overflow-hidden z-[100] animate-in fade-in zoom-in-95 duration-200 origin-top-right">
           <div className="p-4 bg-gray-50/50 dark:bg-slate-800/50 border-b border-gray-100 dark:border-slate-800 flex justify-between items-center">
             <span className="text-xs font-black text-gray-800 dark:text-white flex items-center gap-2">
               <BellIcon className="w-3.5 h-3.5 text-purple-500" />

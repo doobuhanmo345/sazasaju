@@ -34,7 +34,7 @@ export default function MyInfoBar() {
   return (
 
     <button
-      onClick={() => router.push('/profile/manage')}
+      onClick={() => router.push('/mypage/manage')}
       className="w-full flex items-center justify-between group"
     >
       <div className="flex items-center gap-3 text-sm tracking-tight overflow-hidden">
