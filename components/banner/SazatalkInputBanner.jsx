@@ -10,6 +10,7 @@ import { useUsageLimit } from '@/contexts/useUsageLimit';
 import { SajuAnalysisService, AnalysisPresets } from '@/lib/SajuAnalysisService';
 import { UI_TEXT, langPrompt, hanja } from '@/data/constants';
 import { classNames, parseAiResponse } from '@/utils/helpers';
+import EnergyBadge from '@/ui/EnergyBadge';
 
 const SazatalkInputBanner = () => {
     const router = useRouter();
@@ -163,8 +164,8 @@ const SazatalkInputBanner = () => {
                             className="flex-1 overflow-y-auto p-5 space-y-6 scrollbar-hide bg-indigo-50 dark:bg-slate-900 scroll-smooth"
                         >
                             {messages.map((msg, idx) => (
-                                <div key={msg.id || idx} className={classNames("flex items-start", msg.role === 'user' ? "justify-end" : "justify-start")}>
-                                    {msg.role === 'saza' && (
+                                <div key={msg.id || idx} className={classNames("flex items-start", msg.role === 'user' ? "justify-end" : "justify-start", msg.role === 'saza-advice' ? "justify-center w-full my-2" : "")}>
+                                    {(msg.role === 'saza') && (
                                         <div className="w-10 h-10 rounded-[15px] flex items-center justify-center mr-2 flex-shrink-0 shadow-sm bg-white overflow-hidden border border-indigo-100">
                                             <Image
                                                 src="/images/brand/saza_teacher.png"
@@ -175,19 +176,42 @@ const SazatalkInputBanner = () => {
                                             />
                                         </div>
                                     )}
-                                    <div className={classNames("flex flex-col", msg.role === 'user' ? "items-end" : "items-start")}>
-                                        {msg.role === 'saza' && (
-                                            <span className="text-sm text-slate-500 dark:text-slate-400 mb-1 ml-1 font-bold">{isKo ? '사자' : 'Saza'}</span>
-                                        )}
-                                        <div className={classNames(
-                                            "relative p-3.5 px-4 rounded-[16px] shadow-sm max-w-[280px] text-sm leading-snug font-medium",
-                                            msg.role === 'user'
-                                                ? "bg-indigo-600 text-white rounded-tr-none"
-                                                : "bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 rounded-tl-none"
-                                        )}>
-                                            <p className="whitespace-pre-wrap">{msg.text}</p>
+
+                                    {msg.role === 'saza-advice' ? (
+                                        <div className="w-full max-w-sm bg-gradient-to-br from-amber-50 to-orange-50 border border-amber-200 rounded-xl p-4 shadow-sm relative overflow-hidden group hover:shadow-md transition-all">
+                                            <div className="absolute top-2 left-2 text-amber-200/50 text-4xl font-serif">"</div>
+                                            <div className="flex flex-col items-center text-center relative z-10">
+                                                <div className="w-12 h-12 rounded-full border-2 border-white shadow-sm overflow-hidden mb-2">
+                                                    <Image
+                                                        src="/images/brand/saza_teacher.png"
+                                                        alt="Saza"
+                                                        width={48}
+                                                        height={48}
+                                                        className="object-cover w-full h-full"
+                                                    />
+                                                </div>
+                                                <h4 className="text-xs font-bold text-amber-600 uppercase tracking-widest mb-2">Saza's Advice</h4>
+                                                <p className="text-sm text-slate-700 font-medium leading-relaxed break-keep">
+                                                    {msg.text}
+                                                </p>
+                                            </div>
+                                            <div className="absolute bottom-[-10px] right-2 text-amber-200/50 text-6xl font-serif rotate-180">"</div>
                                         </div>
-                                    </div>
+                                    ) : (
+                                        <div className={classNames("flex flex-col", msg.role === 'user' ? "items-end" : "items-start")}>
+                                            {msg.role === 'saza' && (
+                                                <span className="text-sm text-slate-500 dark:text-slate-400 mb-1 ml-1 font-bold">{isKo ? '사자' : 'Saza'}</span>
+                                            )}
+                                            <div className={classNames(
+                                                "relative p-3.5 px-4 rounded-[16px] shadow-sm max-w-[280px] text-sm leading-snug font-medium",
+                                                msg.role === 'user'
+                                                    ? "bg-indigo-600 text-white rounded-tr-none"
+                                                    : "bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 rounded-tl-none"
+                                            )}>
+                                                <p className="whitespace-pre-wrap">{msg.text}</p>
+                                            </div>
+                                        </div>
+                                    )}
                                 </div>
                             ))}
 
@@ -333,16 +357,16 @@ const SazatalkInputBanner = () => {
                                                     const parts = [];
                                                     if (Array.isArray(parsed.contents)) {
                                                         parsed.contents.forEach(c => {
-                                                            if (typeof c === 'string') parts.push(c);
-                                                            else if (c.detail) parts.push(c.detail);
+                                                            if (typeof c === 'string') parts.push({ type: 'content', text: c });
+                                                            else if (c.detail) parts.push({ type: 'content', text: c.detail });
                                                         });
                                                     } else if (typeof parsed.contents === 'string') {
-                                                        parts.push(parsed.contents);
+                                                        parts.push({ type: 'content', text: parsed.contents });
                                                     }
 
                                                     if (parsed.saza) {
                                                         const sazaAdvice = typeof parsed.saza === 'object' ? parsed.saza.advice : parsed.saza;
-                                                        parts.push(sazaAdvice);
+                                                        parts.push({ type: 'advice', text: sazaAdvice });
                                                     }
 
                                                     // 순차적으로 메시지 추가
@@ -352,8 +376,8 @@ const SazatalkInputBanner = () => {
 
                                                         setMessages(prev => [...prev, {
                                                             id: `${Date.now()}-${i}`,
-                                                            role: 'saza',
-                                                            text: parts[i]
+                                                            role: parts[i].type === 'advice' ? 'saza-advice' : 'saza',
+                                                            text: parts[i].text
                                                         }]);
                                                     }
                                                 } else {
@@ -376,10 +400,11 @@ const SazatalkInputBanner = () => {
                                             setIsAnalyzing(false);
                                         }
                                     }}
-                                    className={`w-16 h-11 rounded-[14px] flex items-center justify-center transition-all ${inputValue.trim() && !isAnalyzing ? 'bg-indigo-600 text-white shadow-md active:scale-95' : 'bg-slate-100 dark:bg-slate-700 text-slate-300 dark:text-slate-500 font-normal'
+                                    className={`w-[99px] h-[45px] rounded-[14px] flex flex-row items-center justify-center gap-2 transition-all ${inputValue.trim() && !isAnalyzing ? 'bg-indigo-600 text-white shadow-md active:scale-95' : 'bg-slate-100 dark:bg-slate-700 text-slate-500 dark:text-slate-500 font-normal'
                                         }`}
                                 >
-                                    <span className="text-sm font-bold">{isKo ? '전송' : 'Send'}</span>
+                                    <EnergyBadge active={true} consuming={isAnalyzing} loading={isAnalyzing} cost={-1} />
+                                    <div className="text-sm font-bold">{isKo ? '전송' : 'Send'}</div>
                                 </button>
                             </div>
                         </div>
