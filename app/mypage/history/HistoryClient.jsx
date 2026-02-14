@@ -27,7 +27,7 @@ import {
     ArrowLeftIcon
 } from '@heroicons/react/24/outline';
 import BackButton from '@/ui/BackButton';
-import Image from 'next/image';
+import HeroBg from '@/app/mypage/components/HeroBg';
 
 const TYPE_CONFIG = {
     // 전통 사주
@@ -308,21 +308,17 @@ export default function HistoryClient() {
         <div className="min-h-screen bg-white dark:bg-slate-950">
             {/* Hero Section - Tutorial Style */}
             <div className="relative overflow-hidden bg-white dark:bg-slate-900 pt-6 pb-12 sm:pt-12 sm:pb-20 px-6 border-b border-slate-100 dark:border-slate-800">
-                <div className="absolute bottom-0 right-0 -mr-20 -mb-20 w-80 h-80 bg-indigo-500/10 dark:bg-indigo-500/20 rounded-full blur-[80px]" />
-                <div className="absolute bottom-0 left-0 -ml-20 -mb-20 w-80 h-80 bg-purple-500/10 dark:bg-purple-500/20 rounded-full blur-[80px]" />
-
+                <HeroBg />
                 {/* Glassy Back Button */}
                 <BackButton title={isKo ? '상담 기록' : 'Consultation History'} />
 
                 <div className="relative z-10 max-w-lg mx-auto text-center flex flex-col items-center">
                     <div className="relative w-20 h-20 sm:w-28 sm:h-28 overflow-hidden rounded-full border-4 border-white shadow-2xl mb-4 bg-white dark:bg-slate-800 flex items-center justify-center">
-                        <Image
+                        <img
                             src="/images/history/clay_history_bg.png"
                             alt="Consultation Records"
-                            width={112}
-                            height={112}
                             className='w-full h-full object-cover scale-110'
-                            priority
+
                         />
                     </div>
                     <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 text-xs font-black uppercase tracking-widest mb-4">

@@ -4,6 +4,7 @@ import React, { memo } from 'react';
 import Image from 'next/image';
 import { ArrowPathIcon } from '@heroicons/react/24/outline';
 import BackButton from '@/ui/BackButton';
+import HeroBg from './HeroBg';
 
 const MyProfileHero = memo(({
     iljuImagePath,
@@ -16,25 +17,14 @@ const MyProfileHero = memo(({
     return (
         <div className="relative pt-24 pb-9 px-8">
             {/* Background Decoration - Image */}
-            <div className="absolute inset-0 pointer-events-none select-none overflow-hidden">
-                <Image
-                    src="/images/mypage_hero_bg.png"
-                    alt="Background"
-                    fill
-                    className="object-cover object-center opacity-60 dark:opacity-40"
-                    priority
-                />
-
-                {/* 그라데이션 오버레이 */}
-                <div className="absolute inset-0 bg-gradient-to-b from-transparent via-slate-50/20 to-white dark:via-white dark:to-slate-950" />
-            </div>
+            <HeroBg />
             <BackButton title={isKo ? '마이페이지' : 'My Page'} />
 
             <div className="relative z-10 max-w-lg mx-auto flex flex-col items-center">
                 {/* Floating Avatar */}
                 <div className="relative">
 
-                    <div className="absolute inset-[-80%] bg-white/[0.6] dark:bg-indigo-500/[0.1] rounded-full blur-2xl transform-gpu" />
+                    <div className="absolute inset-[-80%] rounded-full blur-2xl transform-gpu" />
 
                     <div className="relative w-32 h-32 sm:w-40 sm:h-40 flex items-center justify-center transform-gpu shadow-[0_32px_64px_rgba(79,70,229,0.15)] rounded-full bg-white/20 dark:bg-slate-900/20 backdrop-blur-sm">
                         {/* Identity Badge */}
@@ -44,11 +34,9 @@ const MyProfileHero = memo(({
                             </span>
                         </div>
 
-                        <Image
+                        <img
                             src={iljuImagePath}
                             alt="Profile"
-                            fill
-                            priority
                             className="object-contain transition-all duration-500 p-2"
                         />
 

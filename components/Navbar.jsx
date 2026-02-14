@@ -114,12 +114,11 @@ export default function NavBar() {
         >
           {pathname === '/' ? (
             <div className="relative h-[40px] w-[120px]">
-              <Image
+              <img
                 src={logoSrc}
                 alt="Logo"
-                fill
                 className="object-contain"
-                priority
+
               />
             </div>
           ) : (

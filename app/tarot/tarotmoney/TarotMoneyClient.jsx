@@ -171,20 +171,17 @@ export default function TarotMoneyPage() {
               style={{ transformStyle: 'preserve-3d' }}>
               <div className="w-full h-full transition-transform duration-700 shadow-xl rounded-2xl relative" style={{ transformStyle: 'preserve-3d', transform: flippedIdx === i ? 'rotateY(180deg)' : 'rotateY(0deg)' }}>
                 <div className="absolute inset-0 w-full h-full z-10 [backface-visibility:hidden]" style={{ backfaceVisibility: 'hidden', WebkitBackfaceVisibility: 'hidden' }}>
-                  <Image
+                  <img
                     src="/images/tarot/cardback.png"
                     alt="tarot card"
-                    fill
                     className="object-cover rounded-2xl border border-white/10"
-                    sizes="(max-width: 768px) 33vw, 20vw"
                   />
                 </div>
                 <div className="absolute inset-0 w-full h-full z-20 bg-white dark:bg-slate-800 flex items-center justify-center rounded-2xl overflow-hidden" style={{ backfaceVisibility: 'hidden', WebkitBackfaceVisibility: 'hidden', transform: 'rotateY(180deg)' }}>
                   {cardPicked && (
-                    <Image
+                    <img
                       src={`/images/tarot/${cardPicked.id}.jpg`}
                       alt={cardPicked.kor}
-                      fill
                       className="object-cover"
                       sizes="(max-width: 768px) 33vw, 20vw"
                     />

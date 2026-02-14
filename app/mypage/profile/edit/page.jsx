@@ -21,7 +21,7 @@ import CityInput from '@/ui/CityInput';
 import { calculateSaju } from '@/lib/sajuCalculator';
 import { getRomanizedIlju } from '@/data/sajuInt';
 import BackButton from '@/ui/BackButton';
-import Image from 'next/image';
+import HeroBg from '@/app/mypage/components/HeroBg';
 
 export default function EditProfilePage() {
   const { user, userData, updateProfileData } = useAuthContext();
@@ -119,8 +119,7 @@ export default function EditProfilePage() {
     <div className="min-h-screen bg-white dark:bg-slate-950">
       {/* Hero Section - History Style */}
       <div className="relative overflow-hidden bg-white dark:bg-slate-900 pt-6 pb-16 sm:pt-12 sm:pb-20 px-6 border-b border-slate-100 dark:border-slate-800">
-        <div className="absolute bottom-0 right-0 -mr-20 -mb-20 w-80 h-80 bg-indigo-500/10 dark:bg-indigo-500/20 rounded-full blur-[80px]" />
-        <div className="absolute bottom-0 left-0 -ml-20 -mb-20 w-80 h-80 bg-purple-500/10 dark:bg-purple-500/20 rounded-full blur-[80px]" />
+        <HeroBg />
         <BackButton title={language === 'ko' ? '내 정보 수정' : 'Edit Profile'} />
         <div className="relative z-10 max-w-lg mx-auto text-center flex flex-col items-center">
           {/* Back Button integrated into Hero */}
@@ -132,9 +131,7 @@ export default function EditProfilePage() {
               <img
                 src={getIljuImage()}
                 alt="Ilju Symbol"
-                fill
                 className="w-full h-full object-cover scale-110"
-                sizes="(max-width: 640px) 96px, 128px"
               />
             ) : (
               <img

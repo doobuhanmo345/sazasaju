@@ -14,6 +14,7 @@ import {
 import { getRomanizedIlju } from '@/data/sajuInt';
 import { calculateSaju } from '@/lib/sajuCalculator';
 import BackButton from '@/ui/BackButton';
+import HeroBg from '@/app/mypage/components/HeroBg';
 /**
  * 친구/가족 프로필 관리 및 선택 페이지
  */
@@ -65,8 +66,7 @@ export default function ProfileManagePage() {
     <div className="min-h-screen bg-white dark:bg-slate-950">
       {/* Hero Section - History Style */}
       <div className="relative overflow-hidden bg-white dark:bg-slate-900 pt-6 pb-12 sm:pt-12 sm:pb-20 px-6 border-b border-slate-100 dark:border-slate-800">
-        <div className="absolute bottom-0 right-0 -mr-20 -mb-20 w-80 h-80 bg-indigo-500/10 dark:bg-indigo-500/20 rounded-full blur-[80px]" />
-        <div className="absolute bottom-0 left-0 -ml-20 -mb-20 w-80 h-80 bg-purple-500/10 dark:bg-purple-500/20 rounded-full blur-[80px]" />
+        <HeroBg />
         <BackButton title={language === 'ko' ? '프로필 전환' : 'Profile Management'} />
         <div className="relative z-10 max-w-lg mx-auto text-center flex flex-col items-center">
           <div className="relative w-20 h-20 sm:w-28 sm:h-28 overflow-hidden rounded-full border-4 border-white dark:border-slate-800 shadow-2xl mb-4 bg-white dark:bg-slate-800 flex items-center justify-center">

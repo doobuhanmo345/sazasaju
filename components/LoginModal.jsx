@@ -32,10 +32,8 @@ export default function LoginModal({ isOpen, onClose }) {
         {/* Leaning Saza mascot */}
         <div className="relative h-28 -mb-10 z-20 pointer-events-none">
           <div className="absolute -top-[100px] left-1/2 -translate-x-1/2 bottom-0 w-48 h-48">
-            <Image
+            <img
               src="/images/brand/login_saza.png"
-              width={200}
-              height={200}
               className="w-full h-full object-contain"
               alt="leaning mascot"
             />

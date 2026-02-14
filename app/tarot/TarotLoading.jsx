@@ -40,12 +40,10 @@ export default function TarotLoading({ cardPicked }) {
                 className="absolute inset-0 w-full h-full z-20 rounded-lg overflow-hidden border border-white/30 shadow-[0_0_20px_rgba(251,191,36,0.1)]"
                 style={{ backfaceVisibility: 'hidden', WebkitBackfaceVisibility: 'hidden' }}
               >
-                <Image
+                <img
                   src="/images/tarot/cardback.png"
                   alt="tarot card back"
-                  fill
                   className="object-cover"
-                  sizes="(max-width: 768px) 33vw, 20vw"
                 />
                 {/* 카드 표면 은은한 빛 반사 효과 */}
                 <div className="absolute inset-0 bg-gradient-to-tr from-white/5 to-transparent opacity-60" />

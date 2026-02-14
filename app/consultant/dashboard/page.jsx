@@ -130,13 +130,10 @@ export default function Page() {
           </div>
           <div className="flex items-center gap-3 bg-white dark:bg-slate-900 p-2 rounded-2xl shadow-sm border border-gray-100 dark:border-slate-800">
             {user?.photoURL ? (
-              <Image
+              <img
                 src={user.photoURL}
                 alt="profile"
-                width={40}
-                height={40}
                 className="w-10 h-10 rounded-full border-2 border-indigo-500 object-cover"
-                unoptimized
               />
             ) : (
               <div className="w-10 h-10 rounded-full border-2 border-indigo-500 bg-indigo-100" />

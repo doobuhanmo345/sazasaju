@@ -36,10 +36,9 @@ export default function SazaTalkMessageItem({ message, onClick, onSave, onDelete
                     {/* Sender */}
                     <div className="flex items-center gap-2 mb-1">
                         <div className="relative w-8 h-8 rounded-full overflow-hidden border border-slate-100 dark:border-slate-700 bg-white">
-                            <Image
+                            <img
                                 src="/images/brand/saza_teacher.png"
                                 alt="Saza Profile"
-                                fill
                                 className="object-cover"
                             />
                         </div>
