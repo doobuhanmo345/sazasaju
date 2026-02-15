@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import Router from 'next/router';
+import { useRouter } from 'next/navigation';
 
 export const AnalysisStepContainer = ({
   guideContent, // 안내 페이지에 보여줄 JSX
@@ -11,7 +11,7 @@ export const AnalysisStepContainer = ({
   onStart, // 시작 버튼 클릭 시 추가 로직 (선택)
 }) => {
   const [stage, setStage] = useState('guide'); // guide, loading, result
-
+  const router = useRouter();
   const handleStart = () => {
     if (onStart) onStart();
     setStage('loading');
