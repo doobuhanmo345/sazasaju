@@ -14,7 +14,7 @@ export default function LoginLoadingOverlay({ onCancel }) {
             className="absolute max-w-none object-contain transform"
             alt="splash logo"
             style={{ pointerEvents: 'none' }}
-            loading="eager"
+
           />
         </div>
         <div className="absolute inset-0 bg-indigo-500/20 blur-2xl rounded-full scale-150 animate-pulse -z-10"></div>

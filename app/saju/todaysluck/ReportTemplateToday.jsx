@@ -71,7 +71,7 @@ const ReportTemplateToday = ({ }) => {
       <section className="fortune-section">
         <div
           className="score-circle-gauge"
-          style={{ '--p': gaugeScore }} // 여기서 --p 값을 제어합니다.
+          style={{ '--p': gaugeScore }}
         >
           <div className="score-number-wrap">
             <span className="score-value">{data?.today?.score}</span>
@@ -95,7 +95,9 @@ const ReportTemplateToday = ({ }) => {
           </div>
           <div className="luck-element-item">
             <div className="luck-item-title">{isEn ? 'Keywords' : '키워드'}</div>
-            <div className="luck-item-content">{data?.lucky_elements?.keywords?.tags.join(', ')}</div>
+            <div className="luck-item-content">
+              {data?.lucky_elements?.keywords?.tags?.join(', ') || '-'}
+            </div>
             <div className="luck-item-desc">{data?.lucky_elements?.keywords?.desc}</div>
           </div>
         </div>
@@ -108,21 +110,26 @@ const ReportTemplateToday = ({ }) => {
           <div className="detail-body">{data?.today?.analysis}</div>
         </div>
 
-        {Object.keys(data?.categories).map((key) => (
-          <div key={key} className="detail-item-box">
-            <div className="detail-title category-title">
-              {key === 'love' && (isEn ? 'Love' : '연애운')}
-              {key === 'wealth' && (isEn ? 'Wealth' : '금전운')}
-              {key === 'career' && (isEn ? 'Career' : '사업운')}
-              {key === 'health' && (isEn ? 'Health' : '건강운')}
-              {key === 'study' && (isEn ? 'Study' : '학업운')}
+        {Object.keys(data?.categories || {}).map((key) => {
+          const item = data.categories[key];
+          if (!item) return null;
+
+          return (
+            <div key={key} className="detail-item-box">
+              <div className="detail-title category-title">
+                {key === 'love' && (isEn ? 'Love' : '연애운')}
+                {key === 'wealth' && (isEn ? 'Wealth' : '금전운')}
+                {key === 'career' && (isEn ? 'Career' : '사업운')}
+                {key === 'health' && (isEn ? 'Health' : '건강운')}
+                {key === 'study' && (isEn ? 'Study' : '학업운')}
+              </div>
+              <div className="detail-body">
+                {item.summary && <strong>[{item.summary}]</strong>}
+                <p>{item.analysis}</p>
+              </div>
             </div>
-            <div className="detail-body">
-              <strong>[{data?.categories[key]?.summary}]</strong>
-              <p>{data?.categories[key]?.analysis}</p>
-            </div>
-          </div>
-        ))}
+          );
+        })}
 
         {/* 내일의 운세 */}
         <div className="detail-item-box tomorrow-box">

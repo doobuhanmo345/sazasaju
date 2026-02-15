@@ -15,7 +15,7 @@ export default function SplashScreen() {
             className="absolute max-w-none object-contain transform"
             alt="splash logo"
             style={{ pointerEvents: 'none' }}
-            loading="eager"
+            priority
           />
         </div>
         {/* Glow Effect */}
