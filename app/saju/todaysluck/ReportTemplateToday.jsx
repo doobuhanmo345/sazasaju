@@ -111,7 +111,7 @@ const ReportTemplateToday = ({ }) => {
         </div>
 
         {Object.keys(data?.categories || {}).map((key) => {
-          const item = data.categories[key];
+          const item = data?.categories?.[key];
           if (!item) return null;
 
           return (

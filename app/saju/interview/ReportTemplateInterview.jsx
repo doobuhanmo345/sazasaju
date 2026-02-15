@@ -112,11 +112,11 @@ const ReportTemplateInterview = ({ }) => {
             </div>
             <div className="rt-info-row">
               <span className="rt-info-row__label">TARGET</span>
-              <span className="rt-info-row__value">{data.interviewType}</span>
+              <span className="rt-info-row__value">{data?.interviewType}</span>
             </div>
             <div className="rt-info-row">
               <span className="rt-info-row__label">DATE</span>
-              <span className="rt-info-row__value">{data.interviewDate}</span>
+              <span className="rt-info-row__value">{data?.interviewDate}</span>
             </div>
             <div className="rt-saju-grid">
               {saju.sky0 && (
@@ -152,14 +152,14 @@ const ReportTemplateInterview = ({ }) => {
           <div className="rt-ootd-wrapper">
             <div className="rt-ootd-item">
               <span className="rt-ootd-item__label">MOOD</span>
-              <span className="rt-ootd-item__value">"{data.section01?.mood}"</span>
+              <span className="rt-ootd-item__value">"{data?.section01?.mood}"</span>
             </div>
             <div className="rt-ootd-item">
               <span className="rt-ootd-item__label">POINT</span>
-              <span className="rt-ootd-item__value">{data.section01?.point}</span>
+              <span className="rt-ootd-item__value">{data?.section01?.point}</span>
             </div>
           </div>
-          <p className="rt-card__text">{data.section01?.description}</p>
+          <p className="rt-card__text">{data?.section01?.description}</p>
         </section>
 
         {/* 02. 합격운 및 면접 지수 */}
@@ -172,24 +172,24 @@ const ReportTemplateInterview = ({ }) => {
               {language !== 'ko' ? 'Final Pass Probability' : '최종 합격 가능성'}
             </div>
             <div className="rt-score-box__val">
-              {data.passIndex}
+              {data?.passIndex}
               <span>%</span>
             </div>
             <div className="rt-progress">
               <div
                 className="rt-progress__fill"
-                style={{ width: isLoaded ? `${data.passIndex}%` : '0%' }}
+                style={{ width: isLoaded ? `${data?.passIndex}%` : '0%' }}
               ></div>
             </div>
           </div>
           <div className="rt-timing-grid">
             <div className="rt-timing-grid__item">
               <span>{language !== 'ko' ? 'Golden Time' : '면접 골든 타임'}</span>
-              <strong>{data.section02?.goldenTime}</strong>
+              <strong>{data?.section02?.goldenTime}</strong>
             </div>
             <div className="rt-timing-grid__item">
               <span>{language !== 'ko' ? 'Lucky Item' : '행운의 아이템'}</span>
-              <strong>{data.section02?.luckyItem}</strong>
+              <strong>{data?.section02?.luckyItem}</strong>
             </div>
           </div>
         </section>
@@ -202,21 +202,21 @@ const ReportTemplateInterview = ({ }) => {
           <div className="rt-analysis-list">
             <div className="rt-analysis-list__item">
               <span className="rt-analysis-list__sub-title">
-                {language !== 'ko' ? `Resolving Anxiety` : `불안 요소 해결`} ({data.concern})
+                {language !== 'ko' ? `Resolving Anxiety` : `불안 요소 해결`} ({data?.concern})
               </span>
-              <p>{data.section03?.anxietySolution}</p>
+              <p>{data?.section03?.anxietySolution}</p>
             </div>
             <div className="rt-analysis-list__item is-warning">
               <span className="rt-analysis-list__sub-title">
                 {language !== 'ko' ? 'Impression on Interviewers' : '면접관이 느낄 첫인상'}
               </span>
-              <p>{data.section03?.firstImpression}</p>
+              <p>{data?.section03?.firstImpression}</p>
             </div>
             <div className="rt-analysis-list__item is-success">
               <span className="rt-analysis-list__sub-title">
                 {language !== 'ko' ? 'Handling Surprise Questions' : '예상 돌발 질문 대응'}
               </span>
-              <p>{data.section03?.surpriseQuestionTip}</p>
+              <p>{data?.section03?.surpriseQuestionTip}</p>
             </div>
           </div>
         </section>
@@ -230,10 +230,10 @@ const ReportTemplateInterview = ({ }) => {
             <span className="rt-tip-box__label">
               {language !== 'ko' ? 'Post-Interview Guidelines' : '면접 후 행동 지침'}
             </span>
-            <p>{data.section04?.actionGuideline}</p>
+            <p>{data?.section04?.actionGuideline}</p>
           </div>
           <div className="rt-final-badge">
-            PASS SYMBOL: <span>{data.section04?.passSymbol}</span>
+            PASS SYMBOL: <span>{data?.section04?.passSymbol}</span>
           </div>
         </section>
       </main>

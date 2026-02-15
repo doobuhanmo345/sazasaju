@@ -48,7 +48,7 @@ export default function LoveShareTemplate({ shareData, language }) {
             {/* Keywords */}
             {header?.keywords && (
                 <div className="flex flex-wrap justify-center gap-2 mb-8">
-                    {header.keywords.map((word, i) => (
+                    {header?.keywords?.map((word, i) => (
                         <span key={i} className="px-3 py-1 bg-pink-50 text-pink-700 text-xs font-bold rounded-full border border-pink-100">
                             #{word}
                         </span>
@@ -77,10 +77,10 @@ export default function LoveShareTemplate({ shareData, language }) {
             {conclusion && (
                 <div className="bg-gradient-to-br from-pink-50 to-rose-50 p-6 rounded-2xl border border-pink-100 text-center">
                     <h3 className="font-bold text-pink-800 mb-2">
-                        {conclusion.title}
+                        {conclusion?.title}
                     </h3>
                     <p className="text-sm text-pink-700 leading-relaxed">
-                        {conclusion.desc}
+                        {conclusion?.desc}
                     </p>
                 </div>
             )}

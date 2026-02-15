@@ -64,11 +64,11 @@ export default function ReportTemplateSelBirth() {
   const savedHistory = userData?.usageHistory?.ZSelBirth;
 
   // 1순위: 현재 세션 파라미터(lastParams), 2순위: AI 응답, 3순위: 히스토리 메타데이터
-  const partnerBirthRaw = (lastParams?.partnerBirthDate) || (data.partnerBirthDate && data.partnerBirthDate !== 'unknown' ? data.partnerBirthDate : (savedHistory?.partnerBirthDate || ''));
+  const partnerBirthRaw = (lastParams?.partnerBirthDate) || (data?.partnerBirthDate && data?.partnerBirthDate !== 'unknown' ? data?.partnerBirthDate : (savedHistory?.partnerBirthDate || ''));
 
   const partnerTimeUnknown = lastParams?.partnerTimeUnknown !== undefined
     ? lastParams.partnerTimeUnknown
-    : (data.partnerTimeUnknown !== undefined ? data.partnerTimeUnknown : (savedHistory?.partnerTimeUnknown || false));
+    : (data?.partnerTimeUnknown !== undefined ? data?.partnerTimeUnknown : (savedHistory?.partnerTimeUnknown || false));
 
   // partnerSaju calculation is optional here since we use mother/father birth dates
   const partnerBirth = partnerBirthRaw.split('T')[0];
@@ -118,13 +118,13 @@ export default function ReportTemplateSelBirth() {
               <div className="rt-info-row !flex-col !items-start gap-1">
                 <span className="rt-info-row__label !mb-0">{language === 'ko' ? '출산 예정일' : 'DUE DATE'}</span>
                 <span className="rt-info-row__value font-black text-emerald-600 text-lg">
-                  {data.dueDate || '-'}
+                  {data?.dueDate || '-'}
                 </span>
               </div>
               <div className="rt-info-row !flex-col !items-start gap-1 text-right">
                 <span className="rt-info-row__label !mb-0 self-end">{language === 'ko' ? '아이 성별' : "BABY'S GENDER"}</span>
                 <span className="rt-info-row__value font-black text-slate-800 dark:text-slate-200 text-lg self-end uppercase">
-                  {data.babyGender || (language === 'ko' ? '성별모름' : 'Unknown')}
+                  {data?.babyGender || (language === 'ko' ? '성별모름' : 'Unknown')}
                 </span>
               </div>
             </div>
@@ -155,10 +155,10 @@ export default function ReportTemplateSelBirth() {
           <div className="rt-ootd-wrapper mb-4">
             <div className="rt-ootd-item">
               <span className="rt-ootd-item__label">FOCUS</span>
-              <span className="rt-ootd-item__value">{data.keyword || (language === 'ko' ? '건강/재물/명예' : 'Health/Wealth/Honor')}</span>
+              <span className="rt-ootd-item__value">{data?.keyword || (language === 'ko' ? '건강/재물/명예' : 'Health/Wealth/Honor')}</span>
             </div>
           </div>
-          <p className="rt-card__text">{data.overview}</p>
+          <p className="rt-card__text">{data?.overview}</p>
         </section>
 
         <section className="rt-card animate-up">
@@ -166,7 +166,7 @@ export default function ReportTemplateSelBirth() {
             {language !== 'ko' ? '02. Recommended Birth Dates' : '02. 추천 출산일 Best'}
           </h2>
           <div className="space-y-6">
-            {data.bestDates && data.bestDates.map((item, idx) => (
+            {data?.bestDates && data?.bestDates.map((item, idx) => (
               <div key={idx} className="bg-slate-50 dark:bg-slate-800/50 p-5 rounded-xl border border-emerald-100 dark:border-emerald-900/30 relative overflow-hidden">
                 <div className="absolute top-0 right-0 p-3 opacity-10">
                   <span className="text-4xl">👶</span>
@@ -195,10 +195,10 @@ export default function ReportTemplateSelBirth() {
           </div>
         </section>
 
-        {data.caution && (
+        {data?.caution && (
           <section className="rt-card animate-up">
             <h2 className="rt-card__title">{language !== 'ko' ? '03. Dates to Avoid' : '03. 피해야 할 시기'}</h2>
-            <div className="rt-analysis-list__item is-warning"><p>{data.caution}</p></div>
+            <div className="rt-analysis-list__item is-warning"><p>{data?.caution}</p></div>
           </section>
         )}
 

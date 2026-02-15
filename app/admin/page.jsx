@@ -51,6 +51,7 @@ export default function AdminPage() {
   const [selectedUserForReply, setSelectedUserForReply] = useState(null);
   const [selectedMsgId, setSelectedMsgId] = useState(null);
   const [showProcessed, setShowProcessed] = useState(false);
+  const [maintenanceMode, setMaintenanceMode] = useState(false); // [NEW] Maintenance Mode State
 
   // 1단계: 거절 버튼 클릭 시 모달 열기
   const openRejectModal = (app) => {
@@ -143,6 +144,18 @@ export default function AdminPage() {
 
     return unsubscribe;
   }, [userData?.uid, userData?.role]);
+
+  // [NEW] Maintenance Mode Listener
+  useEffect(() => {
+    if (!userData || (userData.role !== 'admin' && userData.role !== 'super_admin')) return;
+    const unsub = onSnapshot(doc(db, 'settings', 'general'), (doc) => {
+      if (doc.exists()) {
+        setMaintenanceMode(doc.data().maintenanceMode || false);
+      }
+    });
+    return unsub;
+  }, [userData?.uid, userData?.role]);
+
 
   const handleMarkProcessed = async (msgId, status = true) => {
     try {
@@ -241,6 +254,23 @@ export default function AdminPage() {
     }
   };
 
+  // [NEW] Toggle Maintenance Mode
+  const handleToggleMaintenance = async () => {
+    const newVal = !maintenanceMode;
+    if (!confirm(`시스템 점검 모드를 ${newVal ? '켜시겠습니까?' : '끄시겠습니까?'} \n(켜면 관리자를 제외한 모든 사용자의 접근이 차단됩니다.)`)) return;
+
+    try {
+      // Use setDoc with merge to create document if it doesn't exist
+      await import('firebase/firestore').then(({ setDoc }) =>
+        setDoc(doc(db, 'settings', 'general'), { maintenanceMode: newVal }, { merge: true })
+      );
+      alert(`시스템 점검 모드가 ${newVal ? '활성화' : '비활성화'} 되었습니다.`);
+    } catch (error) {
+      console.error('Failed to toggle maintenance mode:', error);
+      alert('설정 변경에 실패했습니다.');
+    }
+  };
+
   return (
     <div className="bg-gray-50 dark:bg-gray-900 transition-colors duration-300 max-w-xl m-auto">
       <div className="max-w-xl mx-auto space-y-8">
@@ -251,6 +281,31 @@ export default function AdminPage() {
           </h1>
           <p className="text-sm text-gray-500 mt-1">관리자 권한으로 시스템을 제어합니다.</p>
         </header>
+        {/* [NEW] System Maintenance Toggle Section */}
+        <section className={`rounded-2xl shadow-sm border p-8 transition-colors ${maintenanceMode ? 'bg-red-50 dark:bg-red-900/10 border-red-200 dark:border-red-900/30' : 'bg-white dark:bg-gray-900 border-gray-100 dark:border-gray-800'}`}>
+          <div className="flex items-center justify-between">
+            <div>
+              <h3 className="text-lg font-bold text-gray-800 dark:text-gray-200 flex items-center gap-2">
+                <span className={`w-3 h-3 rounded-full ${maintenanceMode ? 'bg-red-500 animate-pulse' : 'bg-green-500'}`}></span>
+                System Maintenance Mode
+              </h3>
+              <p className="text-sm text-gray-500 mt-1">
+                {maintenanceMode
+                  ? '현재 점검 모드가 활성화되어 있습니다. 관리자를 제외한 일반 사용자의 접속이 차단됩니다.'
+                  : '정상 서비스 중입니다.'}
+              </p>
+            </div>
+            <button
+              onClick={handleToggleMaintenance}
+              className={`relative inline-flex h-8 w-14 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 ${maintenanceMode ? 'bg-red-600' : 'bg-gray-200 dark:bg-gray-700'}`}
+            >
+              <span
+                className={`${maintenanceMode ? 'translate-x-7' : 'translate-x-1'} inline-block h-6 w-6 transform rounded-full bg-white transition-transform`}
+              />
+            </button>
+          </div>
+        </section>
+
         {/* 3. 편집 횟수 수정 (기존 로직 유지) */}
         <section className="bg-white dark:bg-gray-900 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800 p-8">
           <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-4 flex items-center gap-2">

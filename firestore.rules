@@ -13,6 +13,12 @@ service cloud.firestore {
     match /paywall_funnel_logs/{docId} { allow create: if true; }
     match /paywall_waitlist/{docId} { allow create: if true; }
     match /paywall_analytics/{docId} { allow create: if true; }
+
+    // [New] Settings collection (Public Read for Maintenance Mode)
+    match /settings/{docId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
     
     match /sazatalkad_logs/{docId} { 
       allow read, create, update: if true; 

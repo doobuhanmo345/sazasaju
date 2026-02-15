@@ -553,9 +553,9 @@ function SazaTalkContent() {
                         {language === 'ko' ? '사자의 답변' : "Saza's Answer"}
                       </div>
                       <div className="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-violet-100/50 dark:border-violet-900/20 shadow-sm overflow-hidden text-sm leading-relaxed text-slate-600 dark:text-slate-400">
-                        {parsedHistoryData && (parsedHistoryData.contents || parsedHistoryData.saza) ? (
+                        {parsedHistoryData && (parsedHistoryData?.contents || parsedHistoryData?.saza) ? (
                           <div className="leading-8 w-full">
-                            {parsedHistoryData.contents && Array.isArray(parsedHistoryData.contents) ? (
+                            {parsedHistoryData?.contents && Array.isArray(parsedHistoryData?.contents) ? (
                               parsedHistoryData.contents.map((i, idx) => {
                                 if (typeof i === 'object' && i !== null) {
                                   return (
@@ -568,25 +568,25 @@ function SazaTalkContent() {
                                 return <p key={idx}>{i}</p>;
                               })
                             ) : (
-                              <p>{typeof parsedHistoryData.contents === 'string' ? parsedHistoryData.contents : ''}</p>
+                              <p>{typeof parsedHistoryData?.contents === 'string' ? parsedHistoryData?.contents : ''}</p>
                             )}
 
-                            {parsedHistoryData.saza && (
+                            {parsedHistoryData?.saza && (
                               <div className="mt-4 pt-4 border-t border-slate-50 dark:border-slate-700">
                                 <strong className="text-indigo-600 dark:text-indigo-400 block mb-1">
                                   {language !== 'ko' ? "Saza's Advice" : '사자의 조언'}
                                 </strong>
-                                {typeof parsedHistoryData.saza === 'object' ? (
+                                {typeof parsedHistoryData?.saza === 'object' ? (
                                   <div className="text-sm">
-                                    {parsedHistoryData.saza.category && (
+                                    {parsedHistoryData?.saza?.category && (
                                       <span className="inline-block px-2 py-0.5 bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 rounded text-xs font-bold mr-2">
-                                        {parsedHistoryData.saza.category}
+                                        {parsedHistoryData?.saza?.category}
                                       </span>
                                     )}
-                                    <p className="inline italic">"{parsedHistoryData.saza.advice}"</p>
+                                    <p className="inline italic">"{parsedHistoryData?.saza?.advice}"</p>
                                   </div>
                                 ) : (
-                                  <p className="italic">"{parsedHistoryData.saza}"</p>
+                                  <p className="italic">"{parsedHistoryData?.saza}"</p>
                                 )}
                               </div>
                             )}

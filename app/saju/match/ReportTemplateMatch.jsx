@@ -51,28 +51,28 @@ export default function ReportTemplateMatch({ storageKey }) {
 
                     <div className="mb-4">
                         <div className="text-6xl font-black text-rose-600 dark:text-rose-400 mb-2">
-                            {data.score}
+                            {data?.score}
                             <span className="text-3xl text-rose-400 dark:text-rose-500">{language === 'ko' ? '점' : 'pt'}</span>
                         </div>
                         <div className="h-2 bg-slate-200 dark:bg-slate-700 rounded-full overflow-hidden max-w-xs mx-auto">
                             <div
                                 className="h-full bg-gradient-to-r from-rose-400 to-pink-500 rounded-full transition-all duration-1000"
-                                style={{ width: `${data.score}%` }}
+                                style={{ width: `${data?.score}%` }}
                             ></div>
                         </div>
                     </div>
 
                     <h1 className="text-2xl md:text-3xl font-black text-slate-800 dark:text-white mb-3">
-                        {data.title}
+                        {data?.title}
                     </h1>
                     <p className="text-base text-slate-600 dark:text-slate-400 max-w-2xl mx-auto">
-                        {data.vibe}
+                        {data?.vibe}
                     </p>
                 </div>
 
                 {/* Keywords */}
                 <div className="flex flex-wrap justify-center gap-2 mt-6">
-                    {data.keywords?.map((keyword, i) => (
+                    {data?.keywords?.map((keyword, i) => (
                         <span
                             key={i}
                             className="px-3 py-1.5 bg-white/60 dark:bg-slate-800/60 backdrop-blur-sm rounded-full text-xs font-semibold text-rose-600 dark:text-rose-400 border border-rose-200 dark:border-rose-700"
@@ -83,10 +83,10 @@ export default function ReportTemplateMatch({ storageKey }) {
                 </div>
 
                 {/* Match Identity */}
-                {data.matchIdentity && (
+                {data?.matchIdentity && (
                     <div className="mt-6 text-center">
                         <p className="text-sm text-slate-500 dark:text-slate-400 italic">
-                            "{data.matchIdentity}"
+                            "{data?.matchIdentity}"
                         </p>
                     </div>
                 )}
@@ -103,7 +103,7 @@ export default function ReportTemplateMatch({ storageKey }) {
                         </h3>
                     </div>
                     <p className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
-                        {data.insights?.me}
+                        {data?.insights?.me}
                     </p>
                 </div>
 
@@ -116,7 +116,7 @@ export default function ReportTemplateMatch({ storageKey }) {
                         </h3>
                     </div>
                     <p className="text-sm text-pink-900/70 dark:text-pink-200/70 leading-relaxed">
-                        {data.insights?.target}
+                        {data?.insights?.target}
                     </p>
                 </div>
             </div>
@@ -132,7 +132,7 @@ export default function ReportTemplateMatch({ storageKey }) {
                         </h3>
                     </div>
                     <ul className="space-y-3">
-                        {data.pros?.map((pro, i) => (
+                        {data?.pros?.map((pro, i) => (
                             <li key={i} className="flex gap-2 text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
                                 <span className="text-emerald-500 mt-1">•</span>
                                 <span>{pro}</span>
@@ -150,7 +150,7 @@ export default function ReportTemplateMatch({ storageKey }) {
                         </h3>
                     </div>
                     <ul className="space-y-3">
-                        {data.cons?.map((con, i) => (
+                        {data?.cons?.map((con, i) => (
                             <li key={i} className="flex gap-2 text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
                                 <span className="text-amber-500 mt-1">•</span>
                                 <span>{con}</span>
@@ -175,7 +175,7 @@ export default function ReportTemplateMatch({ storageKey }) {
                             {language === 'ko' ? '✨ 긍정적 시너지' : '✨ Positive Synergy'}
                         </h4>
                         <p className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
-                            {data.insights?.synergyPros}
+                            {data?.insights?.synergyPros}
                         </p>
                     </div>
 
@@ -184,7 +184,7 @@ export default function ReportTemplateMatch({ storageKey }) {
                             {language === 'ko' ? '⚠️ 주의할 시너지' : '⚠️ Challenging Synergy'}
                         </h4>
                         <p className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
-                            {data.insights?.synergyCons}
+                            {data?.insights?.synergyCons}
                         </p>
                     </div>
                 </div>
@@ -202,12 +202,12 @@ export default function ReportTemplateMatch({ storageKey }) {
                 <div className="space-y-4">
                     <div className="p-4 bg-yellow-50 dark:bg-yellow-900/10 rounded-xl border border-yellow-200 dark:border-yellow-800">
                         <p className="text-sm font-semibold text-yellow-900 dark:text-yellow-200">
-                            {data.advice}
+                            {data?.advice}
                         </p>
                     </div>
 
                     <p className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
-                        {data.insights?.solution}
+                        {data?.insights?.solution}
                     </p>
                 </div>
             </div>
@@ -216,7 +216,7 @@ export default function ReportTemplateMatch({ storageKey }) {
             <div className="bg-gradient-to-r from-rose-100 to-pink-100 dark:from-rose-900/20 dark:to-pink-900/20 rounded-2xl p-6 border border-rose-200 dark:border-rose-800 text-center">
                 <ChatBubbleLeftRightIcon className="w-8 h-8 text-rose-500 mx-auto mb-3" />
                 <p className="text-sm text-slate-700 dark:text-slate-300 leading-relaxed max-w-2xl mx-auto">
-                    {data.insights?.ctaChat}
+                    {data?.insights?.ctaChat}
                 </p>
             </div>
 

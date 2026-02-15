@@ -118,14 +118,14 @@ export default function ReportTemplateSelDate() {
           <div className="rt-ootd-wrapper mb-4">
             <div className="rt-ootd-item">
               <span className="rt-ootd-item__label">PURPOSE</span>
-              <span className="rt-ootd-item__value">{data.purpose}</span>
+              <span className="rt-ootd-item__value">{data?.purpose}</span>
             </div>
             <div className="rt-ootd-item">
               <span className="rt-ootd-item__label">KEYWORD</span>
-              <span className="rt-ootd-item__value">{data.keyword}</span>
+              <span className="rt-ootd-item__value">{data?.keyword}</span>
             </div>
           </div>
-          <p className="rt-card__text">{data.overview}</p>
+          <p className="rt-card__text">{data?.overview}</p>
         </section>
 
         <section className="rt-card animate-up">
@@ -133,7 +133,7 @@ export default function ReportTemplateSelDate() {
             {language !== 'ko' ? '02. Top Recommendations' : '02. 최적의 날짜 추천'}
           </h2>
           <div className="space-y-4">
-            {data.bestDates && data.bestDates.map((item, idx) => (
+            {data?.bestDates && data?.bestDates.map((item, idx) => (
               <div key={idx} className="bg-slate-50 dark:bg-slate-800/50 p-4 rounded-lg flex flex-col gap-2 border border-slate-100 dark:border-slate-700">
                 <div className="flex items-center justify-between">
                   <span className="text-lg font-bold text-rose-500">{item.date}</span>
@@ -148,10 +148,10 @@ export default function ReportTemplateSelDate() {
           </div>
         </section>
 
-        {data.caution && (
+        {data?.caution && (
           <section className="rt-card animate-up">
             <h2 className="rt-card__title">{language !== 'ko' ? '03. Dates to Avoid' : '03. 피해야 할 시기'}</h2>
-            <div className="rt-analysis-list__item is-warning"><p>{data.caution}</p></div>
+            <div className="rt-analysis-list__item is-warning"><p>{data?.caution}</p></div>
           </section>
         )}
 

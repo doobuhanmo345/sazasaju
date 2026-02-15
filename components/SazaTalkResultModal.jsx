@@ -107,9 +107,9 @@ export default function SazaTalkResultModal({ question, answer, onClose, message
                             {language === 'ko' ? '사자의 답변' : "Saza's Answer"}
                         </div>
                         <div className="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-violet-100/50 dark:border-violet-900/20 shadow-sm overflow-hidden text-sm leading-relaxed text-slate-600 dark:text-slate-400">
-                            {parsedData && (parsedData.contents || parsedData.saza) ? (
+                            {parsedData && (parsedData?.contents || parsedData?.saza) ? (
                                 <div className="leading-8 w-full">
-                                    {parsedData.contents && Array.isArray(parsedData.contents) ? (
+                                    {parsedData?.contents && Array.isArray(parsedData?.contents) ? (
                                         parsedData.contents.map((i, idx) => {
                                             if (typeof i === 'object' && i !== null) {
                                                 return (
@@ -123,25 +123,25 @@ export default function SazaTalkResultModal({ question, answer, onClose, message
                                             return <p key={idx}>{i}</p>;
                                         })
                                     ) : (
-                                        <p>{typeof parsedData.contents === 'string' ? parsedData.contents : ''}</p>
+                                        <p>{typeof parsedData?.contents === 'string' ? parsedData?.contents : ''}</p>
                                     )}
 
-                                    {parsedData.saza && (
+                                    {parsedData?.saza && (
                                         <div className="mt-4 pt-4 border-t border-slate-50 dark:border-slate-700">
                                             <strong className="text-indigo-600 dark:text-indigo-400 block mb-1">
                                                 {language !== 'ko' ? "Saza's Advice" : '사자의 조언'}
                                             </strong>
-                                            {typeof parsedData.saza === 'object' ? (
+                                            {typeof parsedData?.saza === 'object' ? (
                                                 <div className="text-sm">
-                                                    {parsedData.saza.category && (
+                                                    {parsedData?.saza?.category && (
                                                         <span className="inline-block px-2 py-0.5 bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 rounded text-xs font-bold mr-2">
-                                                            {parsedData.saza.category}
+                                                            {parsedData?.saza?.category}
                                                         </span>
                                                     )}
-                                                    <p className="inline italic">"{parsedData.saza.advice}"</p>
+                                                    <p className="inline italic">"{parsedData?.saza?.advice}"</p>
                                                 </div>
                                             ) : (
-                                                <p className="italic">"{parsedData.saza}"</p>
+                                                <p className="italic">"{parsedData?.saza}"</p>
                                             )}
                                         </div>
                                     )}

@@ -118,14 +118,14 @@ export default function SelDateShareTemplate({ shareData: propShareData, languag
                         <div className="rt-ootd-wrapper mb-4">
                             <div className="rt-ootd-item">
                                 <span className="rt-ootd-item__label">PURPOSE</span>
-                                <span className="rt-ootd-item__value">{data.purpose}</span>
+                                <span className="rt-ootd-item__value">{data?.purpose}</span>
                             </div>
                             <div className="rt-ootd-item">
                                 <span className="rt-ootd-item__label">KEYWORD</span>
-                                <span className="rt-ootd-item__value">{data.keyword}</span>
+                                <span className="rt-ootd-item__value">{data?.keyword}</span>
                             </div>
                         </div>
-                        <p className="rt-card__text">{data.overview}</p>
+                        <p className="rt-card__text">{data?.overview}</p>
                     </section>
 
                     <section className="rt-card animate-up">
@@ -133,7 +133,7 @@ export default function SelDateShareTemplate({ shareData: propShareData, languag
                             {language !== 'ko' ? '02. Top Recommendations' : '02. 최적의 날짜 추천'}
                         </h2>
                         <div className="space-y-4">
-                            {data.bestDates && data.bestDates.slice(0, 1).map((item, idx) => (
+                            {data?.bestDates && data?.bestDates.slice(0, 1).map((item, idx) => (
                                 <div key={idx} className="bg-slate-50 p-4 rounded-lg flex flex-col gap-2 border border-slate-100">
                                     <div className="flex items-center justify-between">
                                         <span className="text-lg font-bold text-rose-500">{item.date}</span>
@@ -144,7 +144,7 @@ export default function SelDateShareTemplate({ shareData: propShareData, languag
                                     <p className="text-sm text-slate-700"><span className="font-bold mr-2">Why?</span>{item.reason}</p>
                                 </div>
                             ))}
-                            {data.bestDates && data.bestDates.length > 1 && (
+                            {data?.bestDates && data?.bestDates.length > 1 && (
                                 <p className="text-center text-xs text-slate-400 mt-2">
                                     {language !== 'ko' ? 'More dates available in full report.' : '전체 리포트에서 더 많은 날짜를 확인하세요.'}
                                 </p>

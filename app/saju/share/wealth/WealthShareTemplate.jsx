@@ -50,7 +50,7 @@ export default function WealthShareTemplate({ shareData, language }) {
             {/* Keywords */}
             {header?.keywords && (
                 <div className="flex flex-wrap justify-center gap-2 mb-8">
-                    {header.keywords.map((word, i) => (
+                    {header?.keywords?.map((word, i) => (
                         <span key={i} className="px-3 py-1 bg-amber-50 text-amber-700 text-xs font-bold rounded-full border border-amber-100">
                             #{word}
                         </span>
@@ -66,10 +66,10 @@ export default function WealthShareTemplate({ shareData, language }) {
                     <div key={idx} className="bg-slate-50/50 p-5 rounded-2xl border border-slate-100">
                         <h3 className="font-bold text-slate-800 mb-2 flex items-center gap-2">
                             <span className="w-1.5 h-1.5 rounded-full bg-amber-500"></span>
-                            {item.title}
+                            {item?.title}
                         </h3>
                         <p className="text-sm text-slate-600 leading-relaxed">
-                            {item.desc}
+                            {item?.desc}
                         </p>
                     </div>
                 ))}
@@ -79,10 +79,10 @@ export default function WealthShareTemplate({ shareData, language }) {
             {conclusion && (
                 <div className="bg-gradient-to-br from-amber-50 to-orange-50 p-6 rounded-2xl border border-amber-100 text-center">
                     <h3 className="font-bold text-amber-800 mb-2">
-                        {conclusion.title}
+                        {conclusion?.title}
                     </h3>
                     <p className="text-sm text-amber-700 leading-relaxed">
-                        {conclusion.desc}
+                        {conclusion?.desc}
                     </p>
                 </div>
             )}

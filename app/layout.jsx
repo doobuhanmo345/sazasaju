@@ -2,6 +2,7 @@ import './globals.css';
 import { AppProvider } from '@/contexts/AppProvider';
 import { LoadingProvider } from '@/contexts/useLoadingContext';
 import ClientWrapper from '@/components/ClientWrapper';
+import MaintenanceGate from '@/components/MaintenanceGate';
 
 export const metadata = {
   title: {
@@ -70,9 +71,11 @@ export default function RootLayout({ children }) {
       <body className="antialiased font-pretendard" suppressHydrationWarning>
         <AppProvider>
           <LoadingProvider>
-            <ClientWrapper>
-              {children}
-            </ClientWrapper>
+            <MaintenanceGate>
+              <ClientWrapper>
+                {children}
+              </ClientWrapper>
+            </MaintenanceGate>
           </LoadingProvider>
         </AppProvider>
       </body>

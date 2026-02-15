@@ -93,7 +93,7 @@ export default function SelBirthShareTemplate({ shareData: propShareData, langua
                                 <div className="rt-info-row !flex-col !items-start gap-1">
                                     <span className="rt-info-row__label !mb-0">{language === 'ko' ? '출산 예정일' : 'DUE DATE'}</span>
                                     <span className="rt-info-row__value font-black text-emerald-600 text-lg">
-                                        {data.dueDate || '-'}
+                                        {data?.dueDate || '-'}
                                     </span>
                                 </div>
                             </div>
@@ -109,10 +109,10 @@ export default function SelBirthShareTemplate({ shareData: propShareData, langua
                         <div className="rt-ootd-wrapper mb-4">
                             <div className="rt-ootd-item">
                                 <span className="rt-ootd-item__label">FOCUS</span>
-                                <span className="rt-ootd-item__value">{data.keyword}</span>
+                                <span className="rt-ootd-item__value">{data?.keyword}</span>
                             </div>
                         </div>
-                        <p className="rt-card__text">{data.overview}</p>
+                        <p className="rt-card__text">{data?.overview}</p>
                     </section>
 
                     <section className="rt-card animate-up">
@@ -120,7 +120,7 @@ export default function SelBirthShareTemplate({ shareData: propShareData, langua
                             {language !== 'ko' ? '02. Top Recommendations' : '02. 추천 출산일 Best'}
                         </h2>
                         <div className="space-y-6">
-                            {data.bestDates && data.bestDates.slice(0, 1).map((item, idx) => (
+                            {data?.bestDates && data?.bestDates.slice(0, 1).map((item, idx) => (
                                 <div key={idx} className="bg-slate-50 p-5 rounded-xl border border-emerald-100 relative overflow-hidden">
                                     <div className="flex items-center justify-between mb-3">
                                         <span className="text-xl font-black text-emerald-600 tracking-tight">{item.date}</span>
@@ -133,7 +133,7 @@ export default function SelBirthShareTemplate({ shareData: propShareData, langua
                                     </p>
                                 </div>
                             ))}
-                            {data.bestDates && data.bestDates.length > 1 && (
+                            {data?.bestDates && data?.bestDates.length > 1 && (
                                 <p className="text-center text-xs text-slate-400 mt-2">
                                     {language !== 'ko' ? 'More dates available in full report.' : '전체 리포트에서 더 많은 날짜를 확인하세요.'}
                                 </p>

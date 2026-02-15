@@ -117,7 +117,7 @@ export default function InterviewShareTemplate({ shareData: propShareData, langu
                             </div>
                             <div className="rt-info-row">
                                 <span className="rt-info-row__label">TARGET</span>
-                                <span className="rt-info-row__value">{data.interviewType}</span>
+                                <span className="rt-info-row__value">{data?.interviewType}</span>
                             </div>
                             <div className="rt-saju-grid">
                                 {saju.sky0 && <div className="rt-saju-grid__item"><span>Hour</span>{saju.sky0} {saju.grd0}</div>}
@@ -158,24 +158,24 @@ export default function InterviewShareTemplate({ shareData: propShareData, langu
                                 {language !== 'ko' ? 'Final Pass Probability' : '최종 합격 가능성'}
                             </div>
                             <div className="rt-score-box__val">
-                                {data.passIndex}
+                                {data?.passIndex}
                                 <span>%</span>
                             </div>
                             <div className="rt-progress">
                                 <div
                                     className="rt-progress__fill"
-                                    style={{ width: `${data.passIndex}%` }}
+                                    style={{ width: `${data?.passIndex}%` }}
                                 ></div>
                             </div>
                         </div>
                         <div className="rt-timing-grid">
                             <div className="rt-timing-grid__item">
                                 <span>{language !== 'ko' ? 'Golden Time' : '면접 골든 타임'}</span>
-                                <strong>{data.section02?.goldenTime}</strong>
+                                <strong>{data?.section02?.goldenTime}</strong>
                             </div>
                             <div className="rt-timing-grid__item">
                                 <span>{language !== 'ko' ? 'Lucky Item' : '행운의 아이템'}</span>
-                                <strong>{data.section02?.luckyItem}</strong>
+                                <strong>{data?.section02?.luckyItem}</strong>
                             </div>
                         </div>
                     </section>

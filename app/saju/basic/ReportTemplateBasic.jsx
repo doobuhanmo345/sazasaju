@@ -164,13 +164,13 @@ const ReportTemplateBasic = ({ shareData }) => {
 
             <div className="flex flex-wrap justify-center gap-x-6 gap-y-2">
               {[
-                { label: UI_TEXT.year[language], gan: saju.sky3, zhi: saju.grd3 },
-                { label: UI_TEXT.month[language], gan: saju.sky2, zhi: saju.grd2 },
-                { label: UI_TEXT.day[language], gan: saju.sky1, zhi: saju.grd1, highlight: true },
+                { label: UI_TEXT.year[language], gan: saju?.sky3, zhi: saju?.grd3 },
+                { label: UI_TEXT.month[language], gan: saju?.sky2, zhi: saju?.grd2 },
+                { label: UI_TEXT.day[language], gan: saju?.sky1, zhi: saju?.grd1, highlight: true },
                 {
                   label: UI_TEXT.hour[language],
-                  gan: saju.sky0,
-                  zhi: saju.grd0,
+                  gan: saju?.sky0,
+                  zhi: saju?.grd0,
                   unknown: isTimeUnknown,
                 },
               ].map(
@@ -274,25 +274,25 @@ const ReportTemplateBasic = ({ shareData }) => {
                   {isTimeUnknown || (
                     <div className="rt-saju-grid__item">
                       <span>시</span>
-                      {saju.sky0}
-                      {saju.grd0}
+                      {saju?.sky0}
+                      {saju?.grd0}
                     </div>
                   )}
 
                   <div className="rt-saju-grid__item">
                     <span>일</span>
-                    {saju.sky1}
-                    {saju.grd1}
+                    {saju?.sky1}
+                    {saju?.grd1}
                   </div>
                   <div className="rt-saju-grid__item">
                     <span>월</span>
-                    {saju.sky2}
-                    {saju.grd2}
+                    {saju?.sky2}
+                    {saju?.grd2}
                   </div>
                   <div className="rt-saju-grid__item">
                     <span>년</span>
-                    {saju.sky3}
-                    {saju.grd3}
+                    {saju?.sky3}
+                    {saju?.grd3}
                   </div>
                 </div>
               </div>

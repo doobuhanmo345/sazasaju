@@ -197,7 +197,6 @@ const SazaTalkAd = () => {
       setStep(1);
     } else if (step === 1) {
       setStep(0.5);
-      console.log(step);
     } else if (step === 'result') {
       setStep('input');
     }
