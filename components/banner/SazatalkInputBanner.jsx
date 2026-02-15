@@ -331,14 +331,12 @@ const SazatalkInputBanner = () => {
                                             });
 
                                             // 4. 이전 대화 기록 추출 (최근 10개 메시지 = 약 5회 분량)
-                                            // 4. 이전 대화 기록 추출 (Saza 답변만 최근 10개)
                                             const chatHistory = messages
-                                                ?.slice(1) // 환영 인사 제외
-                                                ?.filter(m => m.role !== 'user')
-                                                ?.map(m => `Saza: ${m.text}`)
-                                                ?.slice(-10)
-                                                ?.join('\n');
-                                            console.log(chatHistory)
+                                                .slice(1) // 환영 인사 제외
+                                                .filter(m => m.role === 'user' || m.role === 'saza-advice') // [Modified] content가 아닌 saza(advice)만 포함
+                                                .map(m => `${m.role === 'user' ? 'User' : 'Saza'}: ${m.text}`)
+                                                .slice(-20)
+                                                .join('\n');
 
                                             const result = await service.analyze(
                                                 AnalysisPresets.saza({
