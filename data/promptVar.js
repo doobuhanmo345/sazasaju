@@ -61,6 +61,8 @@ export const saza_var = [
   { key: '{{todayInfo}}', label: '오늘 정보' },
   { key: '{{langPrompt}}', label: '언어' },
   { key: '{{hanjaPrompt}}', label: '한자' },
+  { key: '{{lovePrompt}}', label: '연애프롬프트' },
+  { key: '{{sajuOther}}', label: '상대방 사주' },
 ];
 
 export const wealth_var = [

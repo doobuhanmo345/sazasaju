@@ -130,13 +130,18 @@ export default function ShareLinkButton({ fortuneType = 'basic', storageKey }) {
     };
 
 
+    const isLove = fortuneType === 'love' || fortuneType === 'match';
+
     return (
         <button
             onClick={handleShareLink}
             className={`flex items-center gap-2 px-8 py-4 rounded-full font-bold transition-all shadow-lg active:scale-95
         ${isCopied
                     ? 'bg-green-600 text-white'
-                    : 'bg-indigo-600 text-white hover:bg-indigo-700 hover:shadow-indigo-500/20'}`}
+                    : isLove
+                        ? 'bg-rose-500 text-white hover:bg-rose-600 hover:shadow-rose-500/20'
+                        : 'bg-indigo-600 text-white hover:bg-indigo-700 hover:shadow-indigo-500/20'
+                }`}
         >
             {isCopied ? (
                 <>

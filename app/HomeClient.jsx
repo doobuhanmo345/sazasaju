@@ -15,6 +15,7 @@ import BasicAnaBanner from '@/components/banner/BasicAnaBanner';
 import IconWrapper from '@/components/menuicons/IconWrapper';
 import SazaTalkInputBanner from '@/components/banner/SazatalkInputBanner';
 import LoveIcons from '../components/menuicons/LoveIcons';
+import SazaTalkLoveBanner from '@/components/banner/SazatalkLoveBanner';
 
 
 export default function HomeClient() {
@@ -98,6 +99,7 @@ export default function HomeClient() {
       >
         <MainIcons />
       </IconWrapper>
+
       <IconWrapper
         title={
           <>

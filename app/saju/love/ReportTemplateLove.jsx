@@ -30,6 +30,11 @@ export default function ReportTemplateLove({ storageKey }) {
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [userData, router]);
+    const sajuOhter = userData?.usageHistory?.[storageKey]?.saju2 || userData?.usageHistory?.[storageKey]?.partnerSaju || null
+    const genderOther = userData?.usageHistory?.[storageKey]?.gender2 || userData?.usageHistory?.[storageKey]?.partnerGender || null
+    const sajuOtherString = `${sajuOhter?.sky3}${sajuOhter?.grd3}년 ${sajuOhter?.sky2}${sajuOhter?.grd2}월 ${sajuOhter?.sky1}${sajuOhter?.grd1}일 ${sajuOhter?.sky0}${sajuOhter?.grd0}시`;
+    const saju = '-사주:' + sajuOtherString + '-성별:' + genderOther;
+
 
     if (!data) return <div className="p-10 text-center">No Result Found</div>;
 
@@ -153,7 +158,7 @@ export default function ReportTemplateLove({ storageKey }) {
                 >
                     ← {language !== 'ko' ? 'Check Another Topic' : '다른 애정운 보기'}
                 </button>
-                <AfterReport fortuneType="love" storageKey={storageKey} data={data?.summary} />
+                <AfterReport fortuneType="love" storageKey={storageKey} data={data?.summary} saju={saju} />
             </div>
         </div>
     );
