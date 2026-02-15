@@ -51,7 +51,7 @@ export default function AdminPage() {
   const [selectedUserForReply, setSelectedUserForReply] = useState(null);
   const [selectedMsgId, setSelectedMsgId] = useState(null);
   const [showProcessed, setShowProcessed] = useState(false);
-  const [maintenanceMode, setMaintenanceMode] = useState(false); // [NEW] Maintenance Mode State
+
 
   // 1단계: 거절 버튼 클릭 시 모달 열기
   const openRejectModal = (app) => {
@@ -146,11 +146,20 @@ export default function AdminPage() {
   }, [userData?.uid, userData?.role]);
 
   // [NEW] Maintenance Mode Listener
+  const [maintenanceMode, setMaintenanceMode] = useState(false);
+  const [maintenancePeriod, setMaintenancePeriod] = useState('');
+  const [maintenanceMessageKo, setMaintenanceMessageKo] = useState('');
+  const [maintenanceMessageEn, setMaintenanceMessageEn] = useState('');
+
   useEffect(() => {
     if (!userData || (userData.role !== 'admin' && userData.role !== 'super_admin')) return;
     const unsub = onSnapshot(doc(db, 'settings', 'general'), (doc) => {
       if (doc.exists()) {
-        setMaintenanceMode(doc.data().maintenanceMode || false);
+        const data = doc.data();
+        setMaintenanceMode(data.maintenanceMode || false);
+        setMaintenancePeriod(data.maintenancePeriod || '');
+        setMaintenanceMessageKo(data.maintenanceMessageKo || '');
+        setMaintenanceMessageEn(data.maintenanceMessageEn || '');
       }
     });
     return unsub;
@@ -304,6 +313,73 @@ export default function AdminPage() {
               />
             </button>
           </div>
+          {/* [NEW] Maintenance Settings Form */}
+          {maintenanceMode && (
+            <div className="mt-6 pt-6 border-t border-red-200 dark:border-red-900/30 space-y-4">
+              <div>
+                <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-1">
+                  Maintenance Period (점검 시간)
+                </label>
+                <input
+                  type="text"
+                  placeholder="예: 2026.02.15 20:00 ~ 2026.02.17 08:00"
+                  className="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-white focus:ring-2 focus:ring-indigo-500"
+                  value={maintenancePeriod || ''}
+                  onChange={(e) => setMaintenancePeriod(e.target.value)}
+                />
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-1">
+                    Message (KR)
+                  </label>
+                  <textarea
+                    rows={3}
+                    placeholder="한국어 점검 메시지"
+                    className="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-white focus:ring-2 focus:ring-indigo-500"
+                    value={maintenanceMessageKo || ''}
+                    onChange={(e) => setMaintenanceMessageKo(e.target.value)}
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-1">
+                    Message (EN)
+                  </label>
+                  <textarea
+                    rows={3}
+                    placeholder="English Maintenance Message"
+                    className="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-white focus:ring-2 focus:ring-indigo-500"
+                    value={maintenanceMessageEn || ''}
+                    onChange={(e) => setMaintenanceMessageEn(e.target.value)}
+                  />
+                </div>
+              </div>
+
+              <div className="flex justify-end">
+                <button
+                  onClick={async () => {
+                    try {
+                      await import('firebase/firestore').then(({ setDoc, doc }) =>
+                        setDoc(doc(db, 'settings', 'general'), {
+                          maintenancePeriod,
+                          maintenanceMessageKo,
+                          maintenanceMessageEn
+                        }, { merge: true })
+                      );
+                      alert('점검 설정이 저장되었습니다.');
+                    } catch (error) {
+                      console.error('Save failed:', error);
+                      alert('저장 실패');
+                    }
+                  }}
+                  className="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg text-sm font-medium transition-colors"
+                >
+                  Save Settings
+                </button>
+              </div>
+            </div>
+          )}
         </section>
 
         {/* 3. 편집 횟수 수정 (기존 로직 유지) */}

@@ -4,9 +4,12 @@ import React from 'react';
 import Image from 'next/image';
 import { useLanguage } from '@/contexts/useLanguageContext';
 
-export default function MaintenancePage() {
+export default function MaintenancePage({ settings }) {
     const { language } = useLanguage();
     const isKo = language === 'ko';
+
+    const customMessage = isKo ? settings?.messageKo : settings?.messageEn;
+    const period = settings?.period;
 
     return (
         <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-b from-slate-50 to-slate-100 px-6 text-center">
@@ -28,10 +31,10 @@ export default function MaintenancePage() {
                 {isKo ? '서비스 점검 중입니다' : 'System Maintenance'}
             </h1>
 
-            <p className="text-slate-500 mb-8 max-w-md break-keep leading-relaxed text-sm md:text-base">
-                {isKo
+            <p className="text-slate-500 mb-8 max-w-md break-keep leading-relaxed text-sm md:text-base whitespace-pre-wrap">
+                {customMessage || (isKo
                     ? '더 나은 서비스를 제공하기 위해 서버 점검 및 시스템 업그레이드를 진행하고 있습니다. 이용에 불편을 드려 죄송합니다.'
-                    : 'We are currently performing scheduled maintenance to improve our services. We apologize for any inconvenience.'
+                    : 'We are currently performing scheduled maintenance to improve our services. We apologize for any inconvenience.')
                 }
             </p>
 
@@ -41,7 +44,7 @@ export default function MaintenancePage() {
                         {isKo ? '점검 예정 시간' : 'Maintenance Schedule'}
                     </span>
                     <span className="text-sm font-semibold text-slate-700 font-mono bg-slate-50 py-2 px-3 rounded-lg border border-slate-100">
-                        {isKo ? '2026.02.15 20:00 ~ 2026.02.17 08:00' : 'Until completion'}
+                        {period || (isKo ? '2026.02.15 20:00 ~ 2026.02.17 08:00' : 'Until completion')}
                     </span>
                 </div>
             </div>

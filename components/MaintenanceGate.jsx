@@ -9,18 +9,26 @@ import { useAuthContext } from '@/contexts/useAuthContext';
 
 export default function MaintenanceGate({ children }) {
     const [isMaintenanceMode, setIsMaintenanceMode] = useState(false);
+    const [maintenanceInfo, setMaintenanceInfo] = useState({});
     const [isLoading, setIsLoading] = useState(true);
     const pathname = usePathname();
     const { userData, user } = useAuthContext();
 
     useEffect(() => {
         // Listen to real-time updates of the maintenance setting
-        const unsub = onSnapshot(doc(db, 'settings', 'general'), (doc) => {
+        const unsub = onSnapshot(doc(db, 'settings', 'general'), (docSnap) => {
             setIsLoading(false);
-            if (doc.exists()) {
-                setIsMaintenanceMode(doc.data().maintenanceMode || false);
+            if (docSnap.exists()) {
+                const data = docSnap.data();
+                setIsMaintenanceMode(data.maintenanceMode || false);
+                setMaintenanceInfo({
+                    period: data.maintenancePeriod || '',
+                    messageKo: data.maintenanceMessageKo || '',
+                    messageEn: data.maintenanceMessageEn || ''
+                });
             } else {
                 setIsMaintenanceMode(false);
+                setMaintenanceInfo({});
             }
         }, (error) => {
             console.error("Maintenance check failed:", error);
@@ -52,7 +60,7 @@ export default function MaintenanceGate({ children }) {
     const isAdminUser = userData?.role === 'admin' || userData?.role === 'super_admin';
 
     if (isMaintenanceMode && !isExemptRoute && !isAdminUser) {
-        return <MaintenancePage />;
+        return <MaintenancePage settings={maintenanceInfo} />;
     }
 
     return <>{children}</>;
