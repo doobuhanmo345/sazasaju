@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import ShareTemplate from '@/app/saju/share/ShareTemplate';
 import ViewSazaResult from '@/app/saju/sazatalk/ViewSazaResult';
 
@@ -9,6 +9,10 @@ import ViewSazaResult from '@/app/saju/sazatalk/ViewSazaResult';
  */
 export default function SazaShareTemplate({ shareData, language }) {
     const { aiResult, displayName, userQuestion } = shareData || {};
+    const [messages, setMessages] = useState([
+
+    ]);
+
 
     if (!shareData) {
         return (
@@ -19,7 +23,10 @@ export default function SazaShareTemplate({ shareData, language }) {
             </div>
         );
     }
+    console.log(messages)
     const parsedResult = typeof aiResult === 'string' ? JSON.parse(aiResult) : aiResult;
+    console.log(parsedResult)
+
     return (
         <ShareTemplate language={language} fortuneType="saza">
 
@@ -27,7 +34,7 @@ export default function SazaShareTemplate({ shareData, language }) {
                 <div className="text-center mb-8">
                     <h1 className="text-3xl md:text-4xl font-black text-slate-800 mb-3">
                         {displayName}
-                        {language === 'ko' ? '님의 사자톡 결과' : "'s SazaTalk Result"}
+                        {language === 'ko' ? '님의 사자톡' : "'s SazaTalk"}
                     </h1>
                     <p className="text-sm text-gray-500">
                         {language === 'ko' ? '사자와의 특별한 상담 내용입니다.' : 'A special consultation with Saza.'}
@@ -41,19 +48,25 @@ export default function SazaShareTemplate({ shareData, language }) {
                             <div className="w-28 h-7 bg-black rounded-full mx-auto mb-4"></div>{' '}
                             <div className="flex items-center gap-4 px-8 py-2">
                                 <div className="relative">
-                                    <div className="w-12 h-12 bg-white rounded-2xl flex items-center justify-center shadow-lg border border-indigo-100/50 text-2xl">
-                                        🦁
+                                    <div className="w-12 h-12 bg-white rounded-2xl flex items-center overflow-hidden justify-center shadow-lg border border-indigo-100/50 text-2xl">
+                                        <div className="w-14 h-14 rounded-[15px] flex items-center justify-center mr-2 flex-shrink-0 shadow-sm bg-white overflow-hidden border border-indigo-100">
+                                            <img
+                                                src="/images/brand/saza_teacher.png"
+                                                alt="Saza"
+                                                className="object-cover w-full h-full"
+                                            />
+                                        </div>
                                     </div>
 
                                     <div className="absolute -right-1 -bottom-1 w-4 h-4 bg-green-500 border-[3px] border-[#F2ECE4] rounded-full shadow-sm"></div>
                                 </div>
                                 <div className="flex flex-col gap-0.5">
                                     <span className="text-xs font-black text-indigo-500/80 uppercase tracking-[0.15em] leading-none">
-                                        Saza AI Analyst
+                                        Saza's Analyst
                                     </span>
                                     {/* 메인 타이틀: 가독성 높은 폰트 두께와 색상 정제 */}
                                     <span className="text-lg font-black text-slate-800 tracking-tight">
-                                        사자사주 분석팀
+                                        사자
                                     </span>
                                 </div>
                             </div>

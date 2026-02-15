@@ -46,7 +46,7 @@ export default function ShareTemplate({
         <div className="min-h-screen bg-gradient-to-br from-gray-50 via-slate-50 to-gray-50 pb-24">
             <style>{shareStyleSimple}</style>
 
-            <div className="max-w-3xl mx-auto sm:px-4 px-0 py-8">
+            <div className="max-w-3xl mx-auto sm:px-4 px-0">
 
                 {/* <div className="text-center mb-8">
                     <div className="inline-flex items-center gap-2 px-5 py-2.5 bg-white rounded-full shadow-lg border border-indigo-100">
@@ -64,7 +64,7 @@ export default function ShareTemplate({
                     {/* Decorative Header */}
                     <div className={`sm:block hidden h-2 w-full bg-gradient-to-r ${gradientColors}`}></div>
                     {/* Content from children */}
-                    <div className="p-6 md:p-8">
+                    <div className="p-2 md:p-8">
                         {children}
                     </div>
                 </div>
