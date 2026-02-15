@@ -10,13 +10,49 @@ import {
 } from '@heroicons/react/24/outline';
 import { useLanguage } from '@/contexts/useLanguageContext';
 import { useUsageLimit } from '@/contexts/useUsageLimit';
+import { useAuthContext } from '@/contexts/useAuthContext';
 import BackButton from '@/ui/BackButton';
 
 export default function CreditClient() {
     const router = useRouter();
     const { language } = useLanguage();
     const { MAX_EDIT_COUNT } = useUsageLimit();
+    const { user, userData } = useAuthContext();
     const isKo = language === 'ko';
+
+    // [NEW] Log user visit to credit page
+    const hasLogged = React.useRef(false);
+
+    React.useEffect(() => {
+        if (!user || !userData) return;
+
+        // Exclude admins and super_admins
+        if (userData.role === 'admin' || userData.role === 'super_admin') return;
+
+        if (hasLogged.current) return;
+        hasLogged.current = true;
+
+        const logVisit = async () => {
+            try {
+                const { doc, setDoc, collection, serverTimestamp } = await import('firebase/firestore');
+                const { db } = await import('@/lib/firebase');
+
+                // Generate a unique ID for the log entry
+                const newDocRef = doc(collection(db, 'menu_click_logs'));
+                const uniqueId = newDocRef.id;
+
+                await setDoc(doc(db, 'menu_click_logs', `credit_${uniqueId}`), {
+                    userUid: user.uid,
+                    userNickname: user.displayName || userData.displayName,
+                    enteredAt: serverTimestamp(),
+                }, { merge: true });
+            } catch (error) {
+                // console.error('Failed to log credit page visit:', error);
+            }
+        };
+
+        logVisit();
+    }, [user, userData?.role]);
 
     const benefits = [
         {
