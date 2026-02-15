@@ -68,20 +68,6 @@ export default function SazaTalkResultModal({ question, answer, onClose, message
             document.body.removeChild(container);
         }
     };
-    const service = new SajuAnalysisService({
-        user,
-        userData: targetProfile,
-        language,
-        maxEditCount: MAX_EDIT_COUNT,
-        uiText: UI_TEXT,
-        langPrompt,
-        hanja,
-        setEditCount,
-        setLoading,
-        setAiResult,
-        setStep,
-        handleCancelHelper,
-    });
 
     return (
         <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm animate-in fade-in duration-300">
