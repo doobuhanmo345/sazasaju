@@ -23,9 +23,9 @@ export default function SazaShareTemplate({ shareData, language }) {
             </div>
         );
     }
-    console.log(messages)
+
     const parsedResult = typeof aiResult === 'string' ? JSON.parse(aiResult) : aiResult;
-    console.log(parsedResult)
+
 
     return (
         <ShareTemplate language={language} fortuneType="saza">

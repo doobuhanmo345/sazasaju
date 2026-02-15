@@ -182,7 +182,7 @@ const NewYearAdEn = () => {
       setStep(1);
     } else if (step === 1) {
       setStep(0.5);
-      console.log(step);
+
     }
   };
   const isFormValid = getProgress() === 100;

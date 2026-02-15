@@ -8,7 +8,6 @@ import { SparklesIcon } from '@heroicons/react/24/outline';
  * WealthShareTemplate - 재물운 공유 템플릿
  */
 export default function WealthShareTemplate({ shareData, language }) {
-    console.log(language)
     const { displayName, aiResult } = shareData || {};
     // aiResult might be a string (JSON) or an object
     const aiData = typeof aiResult === 'string' ? JSON.parse(aiResult) : aiResult;
