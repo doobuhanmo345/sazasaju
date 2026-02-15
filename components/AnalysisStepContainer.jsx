@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter, usePathname } from 'next/navigation';
 
 export const AnalysisStepContainer = ({
   guideContent, // 안내 페이지에 보여줄 JSX
@@ -16,9 +16,13 @@ export const AnalysisStepContainer = ({
     if (onStart) onStart();
     setStage('loading');
   };
-  if (stage === 'result') {
-    router.push('result');
-  }
+  const pathname = usePathname();
+
+  useEffect(() => {
+    if (stage === 'result') {
+      router.push(`${pathname}/result`);
+    }
+  }, [stage, pathname, router]);
   const handleReset = () => {
     setStage('guide');
   };
