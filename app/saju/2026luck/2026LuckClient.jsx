@@ -19,6 +19,7 @@ import { useRouter } from 'next/navigation';
 import AnalyzeButton from '@/ui/AnalyzeButton';
 import YearlyLuckAppeal from '@/app/saju/2026luck/YearlyLuckAppeal';
 import YearlyLuckPreview from '@/app/saju/2026luck/YearlyLuckPreview';
+import style from '@/data/styleConstants';
 
 export default function YearlyLuckPage() {
   const { loading, setLoading, setLoadingType, aiResult, setAiResult, handleCancelHelper } = useLoading();

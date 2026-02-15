@@ -18,6 +18,7 @@ import SelBd from '@/app/saju/match/SelBd';
 import SelectPerson from '@/ui/SelectPerson';
 import AnalyzeButton from '@/ui/AnalyzeButton';
 import { calculateSaju } from '@/lib/sajuCalculator';
+import style from '@/data/styleConstants';
 
 
 export default function ReunionPage() {
