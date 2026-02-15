@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import Router from 'next/router';
 
 export const AnalysisStepContainer = ({
   guideContent, // 안내 페이지에 보여줄 JSX

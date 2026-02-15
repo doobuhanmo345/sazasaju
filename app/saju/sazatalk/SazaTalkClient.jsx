@@ -22,6 +22,7 @@ import SazaTalkAppeal from '@/app/saju/sazatalk/SazaTalkAppeal';
 import SazaTalkResultModal from '@/components/SazaTalkResultModal';
 import style from '@/data/styleConstants';
 
+
 // Dynamic import for heavy html2canvas
 const html2canvas = dynamic(() => import('html2canvas'), { ssr: false });
 
