@@ -13,6 +13,7 @@ import { UI_TEXT, langPrompt, hanja } from '@/data/constants';
 import { classNames, parseAiResponse } from '@/utils/helpers';
 import EnergyBadge from '@/ui/EnergyBadge';
 
+
 const SazaTalkLoveBanner = ({ saju = null, relation = null }) => {
     const router = useRouter();
     const { language } = useLanguage();
@@ -57,10 +58,10 @@ const SazaTalkLoveBanner = ({ saju = null, relation = null }) => {
                 isKo ? "같이 하면 좋은 활동은 무엇인가요?" : "What activities are good for us?"
             ];
         }
-        if (relation === 'Parent / Child') {
+        if (relation === 'family') {
             return [
                 isKo ? "우리 아이의 숨겨진 재능은?" : "What is my child's hidden talent?",
-                isKo ? "아이를 더 잘 이해하려면?" : "How can I understand my child better?",
+                isKo ? "엄마를 더 잘 이해하려면?" : "How can I understand my child better?",
                 isKo ? "갈등을 어떻게 해결하면 좋을까요?" : "How should we resolve conflicts?"
             ];
         }
@@ -78,7 +79,7 @@ const SazaTalkLoveBanner = ({ saju = null, relation = null }) => {
             isKo ? "그 사람과 결혼해도 될까요" : "Should I marry him/her?",
         ];
     };
-
+    console.log(relation)
     const suggestions = getSuggestions();
 
     const targetProfile = selectedProfile || userData;
@@ -162,7 +163,7 @@ const SazaTalkLoveBanner = ({ saju = null, relation = null }) => {
                             src={(() => {
                                 if (relation === 'Friend') return "/images/banner/saza_match_friend.png";
                                 if (relation === 'business') return "/images/banner/saza_match_business.png";
-                                if (relation === 'Parent / Child') return "/images/banner/saza_match_family.png";
+                                if (relation === 'family') return "/images/banner/saza_match_family.png";
 
                                 return "/images/banner/sazatalk_love.png";
                             })()}

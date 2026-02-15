@@ -59,6 +59,7 @@ export default function MatchClient() {
   const { setEditCount, MAX_EDIT_COUNT, isLocked } = useUsageLimit();
   const [step, setStep] = useState('intro')
   const [selectedRel, setSelectedRel] = useState(null)
+  const [prompt, setPrompt] = useState('');
   const prevData = userData?.usageHistory?.ZMatchAnalysis;
 
 
@@ -121,6 +122,7 @@ export default function MatchClient() {
       bg: 'bg-rose-50',
       border: 'border-rose-200',
       activeBorder: 'border-rose-500 ring-rose-200',
+      prompt: '연인 관계는 서로에 대한 애정과 신뢰를 바탕으로 한 관계입니다. '
     },
     {
       id: 'some',
@@ -133,6 +135,7 @@ export default function MatchClient() {
       bg: 'bg-pink-50',
       border: 'border-pink-200',
       activeBorder: 'border-pink-500 ring-pink-200',
+      prompt: '썸 관계는 서로에 대한 호감은 있지만 아직 연인 관계로 발전하지 않은 관계입니다. '
     },
     {
       id: 'married',
@@ -145,6 +148,7 @@ export default function MatchClient() {
       bg: 'bg-purple-50',
       border: 'border-purple-200',
       activeBorder: 'border-purple-500 ring-purple-200',
+      prompt: '부부 관계는 서로에 대한 애정과 신뢰를 바탕으로 한 관계입니다. '
     },
     {
       id: 'family',
@@ -157,6 +161,7 @@ export default function MatchClient() {
       bg: 'bg-orange-50',
       border: 'border-orange-200',
       activeBorder: 'border-orange-500 ring-orange-200',
+      prompt: '나이차이가 20살 이상 나면 부모자식 관계로 설정. 내담자보다 나이가 많으면 부모. 20살 이하로 차이나면 형제로 설정.'
     },
     {
       id: 'business',
@@ -169,6 +174,7 @@ export default function MatchClient() {
       bg: 'bg-slate-50',
       border: 'border-slate-200',
       activeBorder: 'border-slate-600 ring-slate-200',
+      prompt: '사업 파트너 관계는 서로의 이익을 위해 협력하는 관계입니다. '
     },
     {
       id: 'friend',
@@ -181,6 +187,7 @@ export default function MatchClient() {
       bg: 'bg-emerald-50',
       border: 'border-emerald-200',
       activeBorder: 'border-emerald-500 ring-emerald-200',
+      prompt: '내담자가 학생의 나이일 경우와 아닐경우 그에 맞게 다르게 대답해줘.'
     },
     {
       id: 'etc',
@@ -193,23 +200,10 @@ export default function MatchClient() {
       bg: 'bg-indigo-50',
       border: 'border-indigo-200',
       activeBorder: 'border-indigo-500 ring-indigo-200',
+      prompt: '기타 관계는 서로의 이익을 위해 협력하는 관계입니다. 두 사람의 관계가 얼마나 깊은지, 서로에게 얼마나 의지하는지 등을 고려하여 관계를 설정해주세요.'
     },
   ];
-  const moneyCategories = language === 'ko'
-    ? [
-      { id: 'business', label: '사업 및 장사운', icon: '💼' },
-      { id: 'investment', label: '주식 및 재테크', icon: '📈' },
-      { id: 'job', label: '취업 및 승진', icon: '🏆' },
-      { id: 'unexpected', label: '뜻밖의 횡재수', icon: '🎁' },
-      { id: 'general', label: '전반적인 흐름', icon: '💰' },
-    ]
-    : [
-      { id: 'business', label: 'Business Fortune', icon: '💼' },
-      { id: 'investment', label: 'Financial Management Fortune', icon: '📈' },
-      { id: 'job', label: 'Career Fortune', icon: '🏆' },
-      { id: 'unexpected', label: 'Unexpected windful', icon: '🎁' },
-      { id: 'general', label: 'General wealth flow', icon: '💰' },
-    ];
+
 
   const service = useMemo(() => new SajuAnalysisService({
     user,
@@ -257,6 +251,7 @@ export default function MatchClient() {
           inputDate,
           inputDate2,
           relationship: selectedRel,
+          prompt: prompt
 
         })
 
@@ -357,7 +352,7 @@ export default function MatchClient() {
                   return (
                     <button
                       key={type.id}
-                      onClick={() => setSelectedRel(type.id)}
+                      onClick={() => { setSelectedRel(type.id); setPrompt(type.prompt) }}
                       className={`
                         relative flex-shrink-0 w-28 sm:w-32 flex flex-col items-center p-4 rounded-2xl border-2 
                         transition-all duration-300 hover:scale-105 active:scale-95

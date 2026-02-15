@@ -103,6 +103,7 @@ export const match_var = [
   { key: '{{DEFAULT_INSTRUCTION}}', label: '(DB)defualt instruction' },
   { key: '{{matchFormat}}', label: '(DB)match_format' },
   { key: '{{relationLabel}}', label: 'relationshipLabel, selected Rel' },
+  { key: '{{relPrompt}}', label: 'relPrompt' },
   { key: '{{gender}}', label: '성별' },
   { key: '{{displayName}}', label: '사용자 이름' },
   { key: '{{mySajuStr}}', label: '사주' },
