@@ -13,7 +13,7 @@ import { UI_TEXT, langPrompt, hanja } from '@/data/constants';
 import { classNames, parseAiResponse } from '@/utils/helpers';
 import EnergyBadge from '@/ui/EnergyBadge';
 
-const SazaTalkLoveBanner = ({ saju = null }) => {
+const SazaTalkLoveBanner = ({ saju = null, relation = null }) => {
     const router = useRouter();
     const { language } = useLanguage();
     const { user, userData, selectedProfile } = useAuthContext();
@@ -42,11 +42,44 @@ const SazaTalkLoveBanner = ({ saju = null }) => {
         }
     ]);
 
-    const suggestions = [
-        isKo ? "나의 인연은 어디서 만날 수 있을까요?" : "Where can I meet my soulmate?",
-        isKo ? "우리에게 맞는 데이트 장소는?" : "What's the perfect date spot for us?",
-        isKo ? "그 사람과 결혼해도 될까요" : "Should I marry him/her?",
-    ];
+    const getSuggestions = () => {
+        if (relation === 'business') {
+            return [
+                isKo ? "이 사람과 사업을 같이 해도 될까요?" : "Can I do business with this person?",
+                isKo ? "우리의 파트너십이 성공할까요?" : "Will our partnership be successful?",
+                isKo ? "주의해야 할 점은 무엇인가요?" : "What should I be careful about?"
+            ];
+        }
+        if (relation === 'Friend') {
+            return [
+                isKo ? "우리 우정은 오래 지속될까요?" : "Will our friendship last long?",
+                isKo ? "우리는 서로에게 어떤 존재인가요?" : "What do we mean to each other?",
+                isKo ? "같이 하면 좋은 활동은 무엇인가요?" : "What activities are good for us?"
+            ];
+        }
+        if (relation === 'Parent / Child') {
+            return [
+                isKo ? "우리 아이의 숨겨진 재능은?" : "What is my child's hidden talent?",
+                isKo ? "아이를 더 잘 이해하려면?" : "How can I understand my child better?",
+                isKo ? "갈등을 어떻게 해결하면 좋을까요?" : "How should we resolve conflicts?"
+            ];
+        }
+        if (relation === 'Others') {
+            return [
+                isKo ? "이 사람과 더 친해질 수 있을까요?" : "Can I get closer to this person?",
+                isKo ? "상대방은 저를 어떻게 생각하나요?" : "What does this person think of me?",
+                isKo ? "우리 관계의 발전 가능성은?" : "Is there potential for our relationship?"
+            ];
+        }
+        // Default (Love)
+        return [
+            isKo ? "나의 인연은 어디서 만날 수 있을까요?" : "Where can I meet my soulmate?",
+            isKo ? "우리에게 맞는 데이트 장소는?" : "What's the perfect date spot for us?",
+            isKo ? "그 사람과 결혼해도 될까요" : "Should I marry him/her?",
+        ];
+    };
+
+    const suggestions = getSuggestions();
 
     const targetProfile = selectedProfile || userData;
     const [progress, setProgress] = useState(0);
@@ -126,8 +159,16 @@ const SazaTalkLoveBanner = ({ saju = null }) => {
                     {/* 상단: 배너 콘텐츠 */}
                     <div className="relative h-[150px] flex flex-col justify-center px-6 pt-4 cursor-pointer" onClick={() => setIsOpen(true)}>
                         <img
-                            src="/images/banner/sazatalk_love.png"
-                            className="absolute xs:left-12 left-[-10px] -top-26 xs:h-[180%] h-[150%] w-auto object-contain pointer-events-none z-10"
+                            src={(() => {
+                                if (relation === 'Friend') return "/images/banner/saza_match_friend.png";
+                                if (relation === 'business') return "/images/banner/saza_match_business.png";
+                                if (relation === 'Parent / Child') return "/images/banner/saza_match_family.png";
+
+                                return "/images/banner/sazatalk_love.png";
+                            })()}
+                            className=
+                            "absolute pointer-events-none z-10 xs:left-12 left-[-10px] -top-26 xs:h-[180%] h-[150%] w-auto object-contain"
+
                             alt="mascot"
                         />
 
@@ -136,7 +177,7 @@ const SazaTalkLoveBanner = ({ saju = null }) => {
                                 {isKo ? '더 알고 싶은' : 'Find your destiny,'} <br />
 
                                 <div className="font-serif italic font-medium text-rose-500">
-                                    {isKo ? '애정운 질문' : 'Check your'}
+                                    {isKo ? '질문' : 'Check your'}
                                 </div>
 
 

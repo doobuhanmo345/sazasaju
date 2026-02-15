@@ -34,6 +34,11 @@ export default function ReportTemplateMatch({ storageKey }) {
 
     const savedRecord = userData?.usageHistory?.[storageKey];
     const relationLabel = savedRecord?.relation || 'relationship';
+    const sajuOhter = userData?.usageHistory?.[storageKey]?.saju2 || userData?.usageHistory?.[storageKey]?.partnerSaju || null
+    const genderOther = userData?.usageHistory?.[storageKey]?.gender2 || userData?.usageHistory?.[storageKey]?.partnerGender || null
+    const sajuOtherString = `${sajuOhter?.sky3}${sajuOhter?.grd3}년 ${sajuOhter?.sky2}${sajuOhter?.grd2}월 ${sajuOhter?.sky1}${sajuOhter?.grd1}일 ${sajuOhter?.sky0}${sajuOhter?.grd0}시`;
+    const relation = userData?.usageHistory?.[storageKey]?.relation
+    const saju = '-사주:' + sajuOtherString + '-성별:' + genderOther + '-관계:' + relation;
 
     return (
         <div className="w-full max-w-4xl mx-auto px-4 py-8 animate-in fade-in duration-500">
@@ -231,7 +236,7 @@ export default function ReportTemplateMatch({ storageKey }) {
             </div>
 
 
-            <AfterReport fortuneType="match" data={data?.summary} />
+            <AfterReport fortuneType="match" data={data?.summary} saju={saju} relation={relation} />
         </div>
     );
 }

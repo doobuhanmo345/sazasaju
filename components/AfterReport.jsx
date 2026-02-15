@@ -11,7 +11,7 @@ import ShareLinkButton from './ShareLinkButton';
 import SazatalkLoveBanner from './banner/SazatalkLoveBanner';
 
 
-export default function AfterReport({ fortuneType = 'basic', storageKey = false, data, saju = null }) {
+export default function AfterReport({ fortuneType = 'basic', storageKey = false, data, saju = null, relation = null }) {
   const { aiResult } = useLoading();
   const { language } = useLanguage();
   const navigate = useRouter();
@@ -45,7 +45,7 @@ export default function AfterReport({ fortuneType = 'basic', storageKey = false,
 
 
         {isLove && (
-          <SazatalkLoveBanner saju={saju} />
+          <SazatalkLoveBanner saju={saju} relation={relation} />
         )}
         {!isLove && (
           <div>
