@@ -116,7 +116,7 @@ export default function EditProfilePage() {
   if (!user) return null;
 
   return (
-    <div className="min-h-screen bg-white dark:bg-slate-950">
+    <div className="min-h-screen bg-slate-50/50 dark:bg-slate-950">
       {/* Hero Section - History Style */}
       <div className="relative overflow-hidden bg-white dark:bg-slate-900 pt-6 pb-16 sm:pt-12 sm:pb-20 px-6 border-b border-slate-100 dark:border-slate-800">
         <HeroBg />

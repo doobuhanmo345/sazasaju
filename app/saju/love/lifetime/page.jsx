@@ -13,6 +13,8 @@ import EnergyBadge from '@/ui/EnergyBadge';
 import LoadingFourPillar from '@/components/LoadingFourPillar';
 import { SajuAnalysisService, AnalysisPresets } from '@/lib/SajuAnalysisService';
 import AnalyzeButton from '@/ui/AnalyzeButton';
+import style from '@/data/styleConstants';
+
 export default function LifetimeLovePage() {
     const { language } = useLanguage();
     const router = useRouter();
@@ -130,7 +132,7 @@ export default function LifetimeLovePage() {
             {/* Hero Section */}
             <div className="mx-auto  text-center px-6 animate-in fade-in slide-in-from-bottom-5 duration-700">
                 <div>
-                    <h2 className="text-3xl font-black text-slate-800 dark:text-white mb-4 tracking-tight">
+                    <h2 className={style.sajuTitle}>
                         {language === 'ko' ? '나의 연애 완전 분석' : "Your Ultimate Love Blueprint"}
 
                         <br />
@@ -140,7 +142,7 @@ export default function LifetimeLovePage() {
                         </span>
                     </h2>
                 </div>
-                <div className="space-y-4 text-slate-600 dark:text-slate-400 mb-10 leading-relaxed break-keep">
+                <div className={style.sajuDesc}>
                     {language === 'ko' ? (
                         <>
                             나의 <strong>타고난 연애 패턴</strong>과 <strong>이상형</strong>, 그리고 <strong>치명적인 약점</strong>까지. <br />

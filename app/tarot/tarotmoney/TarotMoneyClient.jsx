@@ -18,6 +18,7 @@ import { DateService } from '@/utils/dateService';
 import StartButton from '@/ui/StartButton';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
+import style from '@/data/styleConstants';
 
 export default function TarotMoneyPage() {
   const router = useRouter();
@@ -118,13 +119,13 @@ export default function TarotMoneyPage() {
     if (step === 'intro') {
       return (
         <div className="max-w-lg mx-auto text-center px-6 animate-in fade-in duration-700 pt-10">
-          <h2 className="relative text-3xl font-black text-slate-800 dark:text-slate-100 mb-4">
+          <h2 className={style.sajuTitle}>
             <div className="opacity-40 absolute left-1/2 -translate-x-1/2 w-20 h-20 bg-amber-100 dark:bg-amber-900/30 rounded-full flex items-center justify-center mx-auto mb-6">
               <BanknotesIcon className="w-10 h-10 text-amber-600" />
             </div>
             {language === 'ko' ? '황금빛 금전운 분석' : 'Tarot Wealth luck'}
           </h2>
-          <p className="text-slate-500 dark:text-slate-400 mb-10 text-sm">
+          <p className={style.sajuDesc}>
             {language === 'ko' ? <>당신의 재물 흐름과 부의 기회를<br />타로 카드로 정밀하게 진단해 드립니다.</> : 'Diagnose my wealth flow and opportunities'}
           </p>
           <div className="m-auto my-3 max-w-sm rounded-2xl overflow-hidden shadow-sm border border-slate-100 dark:border-slate-800">

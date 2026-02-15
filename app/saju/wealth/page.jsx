@@ -11,6 +11,7 @@ import {
 } from '@heroicons/react/24/outline';
 import { useLanguage } from '@/contexts/useLanguageContext';
 import WealthAppeal from '@/app/saju/wealth/WealthAppeal';
+import style from '@/data/styleConstants';
 
 export default function WealthLandingPage() {
   const router = useRouter();
@@ -82,7 +83,7 @@ export default function WealthLandingPage() {
   return (
     <div className="w-full animate-in fade-in slide-in-from-bottom-5 duration-700">
       <div className="max-w-lg mx-auto text-center px-6 mb-12">
-        <h2 className="text-3xl font-black text-slate-800 dark:text-white mb-4 tracking-tight">
+        <h2 className={style.sajuTitle}>
           {language === 'ko' ? '오행으로 읽는' : 'Reading the Five Elements'}
           <br />
           <span className="relative text-emerald-600 dark:text-emerald-500">
@@ -91,13 +92,13 @@ export default function WealthLandingPage() {
           </span>
         </h2>
 
-        <div className="space-y-4 text-slate-600 dark:text-slate-400 mb-10 leading-relaxed break-keep">
-          <p className="text-base">
+        <div className={style.sajuDesc}>
 
-            {language === 'ko' ? <><strong>타고난 금전의 그릇</strong>과 <strong>재물이 모이는 시기</strong><br />당신의 재물 지도 분석합니다.<br /><strong>주제를 선택</strong>하면 그 주제로 <br />당신의 사주를 정밀하게 분석해 드립니다. </> :
-              <>Analyzing your<strong> financial map</strong>.<br />What financial insight do you need?<br /><strong>Select a topic</strong> for a precise analysis based on your Saju.</>}
 
-          </p>
+          {language === 'ko' ? <><strong>타고난 금전의 그릇</strong>과 <strong>재물이 모이는 시기</strong><br />당신의 재물 지도 분석합니다.<br /><strong>주제를 선택</strong>하면 그 주제로 <br />당신의 사주를 정밀하게 분석해 드립니다. </> :
+            <>Analyzing your<strong> financial map</strong>.<br />What financial insight do you need?<br /><strong>Select a topic</strong> for a precise analysis based on your Saju.</>}
+
+
           <div className="m-auto max-w-sm rounded-2xl overflow-hidden shadow-sm border border-slate-100 dark:border-slate-800">
 
           </div>

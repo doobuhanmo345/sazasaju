@@ -19,6 +19,8 @@ import LoadingFourPillar from '@/components/LoadingFourPillar';
 import { SajuAnalysisService, AnalysisPresets } from '@/lib/SajuAnalysisService';
 import BasicAnaAppeal from '@/app/saju/basic/BasicAnaAppeal';
 import BasicAnaPreview from '@/app/saju/basic/BasicAnaPreview';
+import style from '@/data/styleConstants';
+
 
 export default function BasicAnaPage() {
   const router = useRouter();
@@ -175,17 +177,17 @@ export default function BasicAnaPage() {
                 </>
               )}
             </h2>
-            <div className="space-y-4 text-slate-600 dark:text-slate-400 mb-10 leading-relaxed break-keep">
-              <p className="text-sm">
-                {language === 'ko' ? (
-                  <>
-                    사주상 <strong>타고난 기질</strong>이 각 상황에서 어떻게 나타나는지,<br />
-                    그리고 <strong>10년마다 찾아오는 대운의 흐름</strong>까지 알려드려요"
-                  </>
-                ) : (
-                  'My innate color and the period of change that comes every ten years. Analyzing your destiny map.'
-                )}
-              </p>
+            <div className={style.sajuDesc}>
+
+              {language === 'ko' ? (
+                <>
+                  사주상 <strong>타고난 기질</strong>이 각 상황에서 어떻게 나타나는지,<br />
+                  그리고 <strong>10년마다 찾아오는 대운의 흐름</strong>까지 알려드려요"
+                </>
+              ) : (
+                'My innate color and the period of change that comes every ten years. Analyzing your destiny map.'
+              )}
+
               <div className="m-auto max-w-sm rounded-2xl overflow-hidden shadow-sm border border-slate-100 dark:border-slate-800">
                 <Image
                   src="/images/introcard/basicana_1.webp"

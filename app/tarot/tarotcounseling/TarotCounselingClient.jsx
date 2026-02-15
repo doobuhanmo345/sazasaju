@@ -21,6 +21,7 @@ import TarotLoading from '@/app/tarot/TarotLoading';
 import StartButton from '@/ui/StartButton';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
+import style from '@/data/styleConstants';
 
 export default function TarotCounselingPage() {
   const router = useRouter();
@@ -99,8 +100,8 @@ export default function TarotCounselingPage() {
           <div className="opacity-40 absolute left-1/2 -translate-x-1/2 w-20 h-20 bg-amber-100 dark:bg-amber-900/30 rounded-full flex items-center justify-center mx-auto mb-6">
             <ChatBubbleLeftRightIcon className="w-10 h-10 text-purple-600" />
           </div>
-          <h2 className="text-3xl font-black text-slate-800 dark:text-white mb-4">{language === 'ko' ? '심층 고민 상담' : 'In-depth tarot counselling'}</h2>
-          <p className="text-slate-500 mb-10 text-sm break-keep">
+          <h2 className={style.sajuTitle}>{language === 'ko' ? '심층 고민 상담' : 'In-depth tarot counselling'}</h2>
+          <p className={style.sajuDesc}>
             {language === 'ko' ? <>말 못 할 고민이 있나요? 78장의 카드가<br />당신의 마음을 읽고 해답을 찾아드립니다.</> : 'Is there any unspoken concerns? 78 Tarot card will rad your mind and provide answers'}
           </p>
           <div className="m-auto my-3 max-w-sm rounded-2xl overflow-hidden shadow-sm border border-slate-100 dark:border-slate-800">

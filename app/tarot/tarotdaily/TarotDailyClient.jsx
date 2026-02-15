@@ -18,6 +18,7 @@ import { DateService } from '@/utils/dateService';
 import StartButton from '@/ui/StartButton';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
+import style from '@/data/styleConstants';
 
 export default function TarotDailyPage() {
   const router = useRouter();
@@ -98,10 +99,10 @@ export default function TarotDailyPage() {
     if (step === 'intro') {
       return (
         <div className="max-w-lg mx-auto text-center px-6 animate-in fade-in duration-700 pt-10">
-          <h2 className="text-3xl font-black text-slate-800 dark:text-white mb-4">
+          <h2 className={style.sajuTitle}>
             {language === 'ko' ? <>오늘의 <span className="text-indigo-600">타로 운명</span></> : <>Tarot <span className="text-indigo-600">Luck of the day</span></>}
           </h2>
-          <p className="text-slate-600 dark:text-slate-400 mb-8 text-sm break-keep">
+          <p className={style.sajuDesc}>
             {language === 'ko' ? '무의식이 이끄는 오늘의 조언을 확인해보세요.' : 'Follow your unconsciousness to check out the advice of the day.'}
           </p>
           <div className="mb-10 flex justify-center">

@@ -14,6 +14,7 @@ import LoadingFourPillar from '@/components/LoadingFourPillar';
 import { SajuAnalysisService, AnalysisPresets, getPromptFromDB } from '@/lib/SajuAnalysisService';
 import AnalyzeButton from '@/ui/AnalyzeButton';
 import { calculateSaju } from '@/lib/sajuCalculator';
+import style from '@/data/styleConstants';
 
 export default function AvoidPage() {
     const { language } = useLanguage();
@@ -129,7 +130,7 @@ export default function AvoidPage() {
         <div className="w-full animate-in fade-in duration-500">
             <div className="mx-auto  text-center px-6 animate-in fade-in slide-in-from-bottom-5 duration-700">
                 <div>
-                    <h2 className=" text-3xl font-black text-slate-800 dark:text-white mb-4 tracking-tight">
+                    <h2 className={style.sajuTitle}>
                         {language === 'ko' ? '나와 안 맞는 사람' : "by Saza's Saju reading"}
 
                         <br />
@@ -139,7 +140,7 @@ export default function AvoidPage() {
                         </span>
                     </h2>
                 </div>
-                <div className="space-y-4 text-slate-600 dark:text-slate-400 mb-10 leading-relaxed break-keep">
+                <div className={style.sajuDesc}>
                     <p className="text-md">
                         {language === 'ko' ? (
                             <>

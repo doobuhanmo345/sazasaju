@@ -22,6 +22,7 @@ import AnalyzeButton from '@/ui/AnalyzeButton';
 import InterviewAppeal from '@/app/saju/interview/InterviewAppeal';
 import InterviewPreview from '@/app/saju/interview/InterviewPreview';
 import ToTopButton from '@/ui/ToTopButton';
+import style from '@/data/styleConstants';
 const INTERVIEW_GROUPS = [
   {
     id: 'category',

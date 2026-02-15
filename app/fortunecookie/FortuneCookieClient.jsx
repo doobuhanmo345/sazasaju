@@ -183,7 +183,7 @@ export default function FortuneCookieClient() {
                 src="/images/introcard/cookie_2.png"
                 alt="cookie started"
                 className="w-60 h-auto mx-auto"
-                priority
+
               />
             </div>
 
@@ -226,7 +226,7 @@ export default function FortuneCookieClient() {
                           src="/images/introcard/cookie_result.webp"
                           alt="cookie result"
                           className="w-full h-auto"
-                          priority
+
                         />
                       </div>
                       <p className="text-slate-800 dark:text-amber-100 text-xl font-bold leading-relaxed mb-6 break-keep px-4">

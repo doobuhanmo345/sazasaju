@@ -19,6 +19,7 @@ import { SajuAnalysisService, AnalysisPresets } from '@/lib/SajuAnalysisService'
 import { useRouter } from 'next/navigation';
 import { reportStyle } from '@/data/aiResultConstants';
 import TodaysLuckPreview from '@/app/saju/todaysluck/TodaysLuckPreview';
+import style from '@/data/styleConstants';
 
 export default function TodaysLuckPage() {
   const { loading, setLoading, setLoadingType, aiResult, setAiResult, handleCancelHelper } = useLoading();
@@ -120,7 +121,7 @@ export default function TodaysLuckPage() {
     return (
       <div className="mx-auto  text-center px-6 animate-in fade-in slide-in-from-bottom-5 duration-700">
         <div>
-          <h2 className=" text-3xl font-black text-slate-800 dark:text-white mb-4 tracking-tight">
+          <h2 className={style.sajuTitle}>
             {language === 'ko' ? '사자가 읽어주는' : "by Saza's Saju reading"}
 
             <br />
@@ -130,18 +131,18 @@ export default function TodaysLuckPage() {
             </span>
           </h2>
         </div>
-        <div className="space-y-4 text-slate-600 dark:text-slate-400 mb-10 leading-relaxed break-keep">
-          <p className="text-sm">
-            {language === 'ko' ? (
-              <>
-                사주로 보는
-                <strong>오늘의 재물운, 연애운</strong>부터 <strong>오늘의 방향과 컬러</strong>
-                까지! 운명 지도 분석.
-              </>
-            ) : (
-              'Including ‘Total score’, ‘Daily short report: Wealth, Love etc.’, ‘Lucky color, direction, keywords of the day’'
-            )}
-          </p>
+        <div className={style.sajuDesc}>
+
+          {language === 'ko' ? (
+            <>
+              사주로 보는
+              <strong>오늘의 재물운, 연애운</strong>부터 <strong>오늘의 방향과 컬러</strong>
+              까지! 운명 지도 분석.
+            </>
+          ) : (
+            'Including ‘Total score’, ‘Daily short report: Wealth, Love etc.’, ‘Lucky color, direction, keywords of the day’'
+          )}
+
 
           <div className="m-auto max-w-sm rounded-2xl overflow-hidden shadow-sm border border-slate-100 dark:border-slate-800">
             <div className="m-auto max-w-sm rounded-2xl overflow-hidden shadow-sm border border-slate-100 dark:border-slate-800">

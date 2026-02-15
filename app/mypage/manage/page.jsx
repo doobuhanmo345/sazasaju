@@ -63,9 +63,9 @@ export default function ProfileManagePage() {
 
   // Render List
   return (
-    <div className="min-h-screen bg-white dark:bg-slate-950">
+    <div className="min-h-screen bg-slate-50/50 dark:bg-slate-950">
       {/* Hero Section - History Style */}
-      <div className="relative overflow-hidden bg-white dark:bg-slate-900 pt-6 pb-12 sm:pt-12 sm:pb-20 px-6 border-b border-slate-100 dark:border-slate-800">
+      <div className="relative overflow-hidden bg-white dark:bg-slate-900 pt-6 pb-12 sm:pt-12 sm:pb-20 px-6">
         <HeroBg />
         <BackButton title={language === 'ko' ? '프로필 전환' : 'Profile Management'} />
         <div className="relative z-10 max-w-lg mx-auto text-center flex flex-col items-center">

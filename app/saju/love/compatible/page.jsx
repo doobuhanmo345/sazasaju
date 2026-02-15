@@ -14,6 +14,7 @@ import LoadingFourPillar from '@/components/LoadingFourPillar';
 import { SajuAnalysisService, AnalysisPresets, getPromptFromDB } from '@/lib/SajuAnalysisService';
 import AnalyzeButton from '@/ui/AnalyzeButton';
 import { calculateSaju } from '@/lib/sajuCalculator';
+import style from '@/data/styleConstants';
 export default function CompatiblePage() {
     const { language } = useLanguage();
     const router = useRouter();
@@ -132,7 +133,7 @@ export default function CompatiblePage() {
         <div className="w-full animate-in fade-in duration-500">
             <div className="mx-auto  text-center px-6 animate-in fade-in slide-in-from-bottom-5 duration-700">
                 <div>
-                    <h2 className=" text-3xl font-black text-slate-800 dark:text-white mb-4 tracking-tight">
+                    <h2 className={style.sajuTitle}>
                         {language === 'ko' ? '운명의 인연 찾기' : "Discover Your Destiny"}
                         <br />
                         <span className="relative text-amber-600 dark:text-amber-500">
@@ -140,23 +141,21 @@ export default function CompatiblePage() {
                         </span>
                     </h2>
                 </div>
-                <div className="space-y-4 text-slate-600 dark:text-slate-400 mb-10 leading-relaxed break-keep">
-                    <p className="text-md">
-                        {language === 'ko' ? (
-                            <>
-                                단순한 호감을 넘어, 사주학적으로 <br />당신의 기운을 북돋아 줄 상대를 분석합니다.
-                                <br />
-                                서로의 부족한 오행을 채워주고 시너지를 낼 수 있는<br /> 최고의 인연을 확인해 보세요.
-                            </>
-                        ) : (
-                            <>
-                                Find the soul who balances your cosmic energy.
-                                <br />
-                                Discover how your Five Elements align to create a destiny-altering synergy.
-                            </>
-                        )}
-                    </p>
+                <div className={style.sajuDesc}>
 
+                    {language === 'ko' ? (
+                        <>
+                            단순한 호감을 넘어, 사주학적으로 <br />당신의 기운을 북돋아 줄 상대를 분석합니다.
+                            <br />
+                            서로의 부족한 오행을 채워주고 시너지를 낼 수 있는<br /> 최고의 인연을 확인해 보세요.
+                        </>
+                    ) : (
+                        <>
+                            Find the soul who balances your cosmic energy.
+                            <br />
+                            Discover how your Five Elements align to <br />create a destiny-altering synergy.
+                        </>
+                    )}
                     <div className="m-auto max-w-sm rounded-2xl overflow-hidden shadow-sm border border-slate-100 dark:border-slate-800">
                         <Image
                             src="/images/introcard/love_compatible.webp"

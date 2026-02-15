@@ -21,6 +21,7 @@ import ViewSazaResult from '@/app/saju/sazatalk/ViewSazaResult';
 import { parseAiResponse } from '@/utils/helpers';
 import { aiSajuStyle } from '@/data/aiResultConstants';
 import SazaTalkAppeal from '@/app/saju/sazatalk/SazaTalkAppeal';
+import style from '@/data/styleConstants';
 
 const DISABLED_STYLE = 'bg-gray-200 dark:bg-gray-700 text-gray-400 cursor-not-allowed';
 
@@ -338,7 +339,7 @@ function ChatClientContent() {
                                 </span>
                             </div>
                         </div>
-                        <h2 className=" text-3xl font-black text-slate-800 dark:text-white mb-4 tracking-tight">
+                        <h2 className={style.sajuTitle}>
                             {language === 'ko' ? '오행으로 물어보는' : 'Reading the Five Elements'}
                             <br />
                             <span className="relative text-violet-600 dark:text-violet-400">
@@ -346,16 +347,16 @@ function ChatClientContent() {
                                 <div className="absolute inset-0 bg-violet-200/50 dark:bg-violet-900/30 blur-md rounded-full scale-100"></div>
                             </span>
                         </h2>
-                        <div className="space-y-4 text-slate-600 dark:text-slate-400 mb-10 leading-relaxed break-keep">
-                            <p className="text-sm">
-                                {language === 'ko' ? (
-                                    <>
-                                        <strong>사자</strong>에게 당신의 고민을 물어보세요.
-                                    </>
-                                ) : (
-                                    "Ask Saza what's in your mind"
-                                )}
-                            </p>
+                        <div className={style.sajuDesc}>
+
+                            {language === 'ko' ? (
+                                <>
+                                    <strong>사자</strong>에게 당신의 고민을 물어보세요.
+                                </>
+                            ) : (
+                                "Ask Saza what's in your mind"
+                            )}
+
 
                             <div className="m-auto max-w-sm rounded-2xl overflow-hidden shadow-sm border border-slate-100 dark:border-slate-800">
                             </div>
@@ -427,20 +428,20 @@ function ChatClientContent() {
                                     <div className="absolute inset-0 bg-violet-200/50 dark:bg-violet-900/30 blur-md rounded-full scale-100"></div>
                                 </span>
                             </h2>
-                            <div className="space-y-4 text-slate-600 dark:text-slate-400 mb-10 leading-relaxed break-keep">
-                                <div className="text-sm">
-                                    {language === 'ko' ? (
-                                        <>
-                                            <p>27인의 명리 해석을 집대성하여 </p>
-                                            <p>어떤 고민도 차분하게 듣고 해결책을 드려요</p>
-                                        </>
-                                    ) : (
-                                        <>
-                                            <p>Synthesized from 27 expert Myeongni interpretations</p>
-                                            <p>listens calmly to your concerns and provides solutions.</p>
-                                        </>
-                                    )}
-                                </div>
+                            <div className={style.sajuDesc}>
+
+                                {language === 'ko' ? (
+                                    <>
+                                        <p>27인의 명리 해석을 집대성하여 </p>
+                                        <p>어떤 고민도 차분하게 듣고 해결책을 드려요</p>
+                                    </>
+                                ) : (
+                                    <>
+                                        <p>Synthesized from 27 expert Myeongni interpretations</p>
+                                        <p>listens calmly to your concerns and provides solutions.</p>
+                                    </>
+                                )}
+
                             </div>
                         </div>
 

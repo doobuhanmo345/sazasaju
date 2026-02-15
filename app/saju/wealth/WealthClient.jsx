@@ -34,6 +34,7 @@ import WealthAppeal from '@/app/saju/wealth/WealthAppeal';
 import { SajuAnalysisService, AnalysisPresets } from '@/lib/SajuAnalysisService';
 import { parseAiResponse } from '@/utils/helpers';
 import { UI_TEXT, langPrompt, hanja } from '@/data/constants';
+import style from '@/data/styleConstants';
 
 export default function Wealth({ }) {
   const { language } = useLanguage();
@@ -325,7 +326,7 @@ export default function Wealth({ }) {
       {step === 0 && (
         <div className="w-full animate-in fade-in slide-in-from-bottom-5 duration-700">
           <div className="max-w-lg mx-auto text-center px-6 mb-12">
-            <h2 className="text-3xl font-black text-slate-800 dark:text-white mb-4 tracking-tight">
+            <h2 className={style.sajuTitle}>
               {language === 'ko' ? '오행으로 읽는' : 'Reading the Five Elements'}
               <br />
               <span className="relative text-emerald-600 dark:text-emerald-500">
@@ -334,13 +335,13 @@ export default function Wealth({ }) {
               </span>
             </h2>
 
-            <div className="space-y-4 text-slate-600 dark:text-slate-400 mb-10 leading-relaxed break-keep">
-              <p className="text-sm">
-                <strong>{language === 'ko' ? '타고난 금전의 그릇' : 'Innate Wealth Capacity'}</strong>
-                {language === 'ko' ? '과 ' : ' and '}
-                <strong>{language === 'ko' ? '재물이 모이는 시기' : 'Strategic Financial Timing'}</strong>
-                {language === 'ko' ? ', 당신의 재물 지도 분석.' : ', Analyzing your financial map.'}
-              </p>
+            <div className={style.sajuDesc}>
+
+              <strong>{language === 'ko' ? '타고난 금전의 그릇' : 'Innate Wealth Capacity'}</strong>
+              {language === 'ko' ? '과 ' : ' and '}
+              <strong>{language === 'ko' ? '재물이 모이는 시기' : 'Strategic Financial Timing'}</strong>
+              {language === 'ko' ? ', 당신의 재물 지도 분석.' : ', Analyzing your financial map.'}
+
               <div className="m-auto max-w-sm rounded-2xl overflow-hidden shadow-sm border border-slate-100 dark:border-slate-800">
                 <Image
                   src="/images/introcard/wealth_1.webp"

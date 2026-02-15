@@ -49,7 +49,7 @@ export default function TarotClient() {
     ];
 
     return (
-        <div className="min-h-screen bg-white dark:bg-slate-950 font-pretendard pb-40">
+        <div className="min-h-screen bg-white dark:bg-slate-950 font-pretendard">
 
 
             {/* Hero Header */}

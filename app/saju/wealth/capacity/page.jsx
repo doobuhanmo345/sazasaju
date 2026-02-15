@@ -14,7 +14,7 @@ import LoadingFourPillar from '@/components/LoadingFourPillar';
 import { SajuAnalysisService, AnalysisPresets } from '@/lib/SajuAnalysisService';
 import AnalyzeButton from '@/ui/AnalyzeButton';
 import { getPromptFromDB } from '@/lib/SajuAnalysisService';
-
+import style from '@/data/styleConstants';
 export default function CapacityPage() {
     const { language } = useLanguage();
     const router = useRouter();
@@ -147,17 +147,17 @@ export default function CapacityPage() {
     return (
         <div className="w-full animate-in fade-in duration-500">
             <div className="mx-auto  text-center px-6 animate-in fade-in slide-in-from-bottom-5 duration-700">
+                <h2 className={style.sajuTitle}>
+                    {language === 'ko' ? '나의 타고난 부의 그릇은?' : "What Is My Natural Wealth Capacity?"}
 
-                <div className="space-y-4 text-slate-600 dark:text-slate-400 mb-10 leading-relaxed break-keep">
-                    <h2 className="text-3xl font-black text-slate-800 dark:text-white mb-4 tracking-tight">
-                        {language === 'ko' ? '나의 타고난 부의 그릇은?' : "What Is My Natural Wealth Capacity?"}
+                    <br />
+                    <span className="relative text-amber-600 dark:text-amber-500">
+                        {language === 'ko' ? '얼마나 벌 수 있고 언제 부자가 될까' : "How Much Can I Earn — And When?"}
+                        <div className="absolute inset-0 bg-amber-200/50 dark:bg-amber-800/60 blur-md rounded-full scale-100"></div>
+                    </span>
+                </h2>
+                <div className={style.sajuDesc}>
 
-                        <br />
-                        <span className="relative text-amber-600 dark:text-amber-500">
-                            {language === 'ko' ? '얼마나 벌 수 있고 언제 부자가 될까' : "How Much Can I Earn — And When?"}
-                            <div className="absolute inset-0 bg-amber-200/50 dark:bg-amber-800/60 blur-md rounded-full scale-100"></div>
-                        </span>
-                    </h2>
                     <p className="text-md text-slate-600 dark:text-slate-400 mb-6 leading-relaxed break-keep">
                         {language === 'ko' ? (
                             <>

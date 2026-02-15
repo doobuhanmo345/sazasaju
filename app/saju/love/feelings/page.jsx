@@ -17,6 +17,7 @@ import SelBd from '@/app/saju/match/SelBd';
 import SelectPerson from '@/ui/SelectPerson';
 import AnalyzeButton from '@/ui/AnalyzeButton';
 import { calculateSaju } from '@/lib/sajuCalculator';
+import style from '@/data/styleConstants';
 
 export default function FeelingsPage() {
     const { language } = useLanguage();
@@ -174,7 +175,7 @@ export default function FeelingsPage() {
 
             <div className="mx-auto  text-center px-6 animate-in fade-in slide-in-from-bottom-5 duration-700">
                 <div>
-                    <h2 className=" text-3xl font-black text-slate-800 dark:text-white mb-4 tracking-tight">
+                    <h2 className={style.sajuTitle}>
                         {language === 'ko' ? '사자가 읽어주는' : "by Saza's Saju reading"}
 
                         <br />
@@ -184,16 +185,16 @@ export default function FeelingsPage() {
                         </span>
                     </h2>
                 </div>
-                <div className="space-y-4 text-slate-600 dark:text-slate-400 mb-10 leading-relaxed break-keep">
-                    <p className="text-md">
-                        {language === 'ko' ? (
-                            <>
-                                그 사람은 나를 어떻게 생각하고 있을까요?<br /> <strong>상대방의 속마음</strong>과 진심을 사주로 분석해드립니다.
-                            </>
-                        ) : (
-                            'What is he/she thinking about me? We analyze the other person\'s hidden thoughts and true feelings through Saju.'
-                        )}
-                    </p>
+                <div className={style.sajuDesc}>
+
+                    {language === 'ko' ? (
+                        <>
+                            그 사람은 나를 어떻게 생각하고 있을까요?<br /> <strong>상대방의 속마음</strong>과 진심을 사주로 분석해드립니다.
+                        </>
+                    ) : (
+                        'What is he/she thinking about me? We analyze the other person\'s hidden thoughts and true feelings through Saju.'
+                    )}
+
 
                     <div className="m-auto max-w-sm rounded-2xl overflow-hidden shadow-sm border border-slate-100 dark:border-slate-800">
                         <Image

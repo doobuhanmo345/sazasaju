@@ -14,6 +14,7 @@ import LoadingFourPillar from '@/components/LoadingFourPillar';
 import { SajuAnalysisService, AnalysisPresets } from '@/lib/SajuAnalysisService';
 import AnalyzeButton from '@/ui/AnalyzeButton';
 import { getPromptFromDB } from '@/lib/SajuAnalysisService';
+import style from '@/data/styleConstants';
 export default function BusinessPage() {
     const { language } = useLanguage();
     const router = useRouter();
@@ -146,7 +147,7 @@ export default function BusinessPage() {
         <div className="w-full animate-in fade-in duration-500">
             <div className="mx-auto  text-center px-6 animate-in fade-in slide-in-from-bottom-5 duration-700">
                 <div>
-                    <h2 className="text-3xl font-black text-slate-800 dark:text-white mb-4 tracking-tight">
+                    <h2 className={style.sajuTitle}>
                         {language === 'ko' ? '사업 성패의 결정적 한 수' : "Your Business Success Blueprint"}
 
                         <br />
@@ -156,7 +157,7 @@ export default function BusinessPage() {
                         </span>
                     </h2>
                 </div>
-                <div className="space-y-4 text-slate-600 dark:text-slate-400 mb-10 leading-relaxed break-keep">
+                <div className={style.sajuDesc}>
                     {language === 'ko' ? (
                         <>
                             당신의 <strong>사업적 성공 가능성</strong>과 <br />가장 운이 따르는 <strong>최적의 창업 시기</strong>를 분석합니다. <br />

@@ -25,6 +25,7 @@ import StartButton from '@/ui/StartButton';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import { handleCancelHelper } from '../../../lib/helpers';
+import style from '@/data/styleConstants';
 
 export default function TarotLovePage() {
   const router = useRouter();
@@ -127,8 +128,8 @@ export default function TarotLovePage() {
           <div className="opacity-40 absolute left-1/2 -translate-x-1/2 w-20 h-20 bg-amber-100 dark:bg-amber-900/30 rounded-full flex items-center justify-center mx-auto mb-6">
             <HeartIcon className="w-10 h-10 text-rose-500 fill-rose-500 animate-pulse" />
           </div>
-          <h2 className="text-3xl font-black text-slate-800 dark:text-slate-100 mb-4">{language === 'ko' ? '타로 연애운' : 'Love Fortune'}</h2>
-          <p className="text-slate-500 dark:text-slate-400 mb-10 text-sm">
+          <h2 className={style.sajuTitle}>{language === 'ko' ? '타로 연애운' : 'Love Fortune'}</h2>
+          <p className={style.sajuDesc}>
             {language === 'ko' ? <>새로운 인연에서 부터 현재 인연, 그리고 과거의 인연<br />궁합이나 관계에 대해서 알려드립니다.</> : <>From the past to future, Check out the love and relationship status</>}
           </p>
           <div className="m-auto my-3 max-w-sm rounded-2xl overflow-hidden shadow-sm border border-slate-100 dark:border-slate-800">
@@ -176,22 +177,18 @@ export default function TarotLovePage() {
               style={{ transformStyle: 'preserve-3d' }}>
               <div className="w-full h-full transition-transform duration-700 shadow-xl rounded-2xl relative" style={{ transformStyle: 'preserve-3d', transform: flippedIdx === i ? 'rotateY(180deg)' : 'rotateY(0deg)' }}>
                 <div className="absolute inset-0 w-full h-full z-10 [backface-visibility:hidden]" style={{ backfaceVisibility: 'hidden', WebkitBackfaceVisibility: 'hidden' }}>
-                  <Image
+                  <img
                     src="/images/tarot/cardback.png"
                     alt="tarot card"
-                    fill
                     className="object-cover rounded-md border border-white/10"
-                    sizes="(max-width: 768px) 33vw, 20vw"
                   />
                 </div>
                 <div className="absolute inset-0 w-full h-full z-20 bg-white dark:bg-slate-800 flex items-center justify-center rounded-md overflow-hidden" style={{ backfaceVisibility: 'hidden', WebkitBackfaceVisibility: 'hidden', transform: 'rotateY(180deg)' }}>
                   {cardPicked && (
-                    <Image
+                    <img
                       src={`/images/tarot/${cardPicked.id}.jpg`}
                       alt={cardPicked.kor}
-                      fill
                       className="object-cover"
-                      sizes="(max-width: 768px) 33vw, 20vw"
                     />
                   )}
                 </div>

@@ -15,6 +15,7 @@ import { SajuAnalysisService, AnalysisPresets } from '@/lib/SajuAnalysisService'
 import AnalyzeButton from '@/ui/AnalyzeButton';
 import { getPromptFromDB } from '@/lib/SajuAnalysisService';
 import { calculateSaju } from '@/lib/sajuCalculator';
+import style from '@/data/styleConstants.js'
 export default function TimingPage() {
     const { language } = useLanguage();
     const router = useRouter();
@@ -182,7 +183,7 @@ export default function TimingPage() {
         <div className="w-full animate-in fade-in duration-500">
             <div className="mx-auto  text-center px-6 animate-in fade-in slide-in-from-bottom-5 duration-700">
                 <div>
-                    <h2 className="text-3xl font-black text-slate-800 dark:text-white mb-4 tracking-tight">
+                    <h2 className={style.sajuTitle}>
                         {language === 'ko' ? '재물 흐름의 결정적 순간' : "The Critical Moment of Wealth Flow"}
 
                         <br />
@@ -193,7 +194,7 @@ export default function TimingPage() {
                     </h2>
 
                 </div>
-                <div className="space-y-4 text-slate-600 dark:text-slate-400 mb-10 leading-relaxed break-keep">
+                <div className={style.sajuDesc}>
                     {language === 'ko' ? (
                         <>
                             단기 자금 흐름부터 <strong>2026년 재물운</strong>까지 한눈에. <br />

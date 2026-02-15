@@ -14,6 +14,7 @@ import LoadingFourPillar from '@/components/LoadingFourPillar';
 import { SajuAnalysisService, AnalysisPresets, getPromptFromDB } from '@/lib/SajuAnalysisService';
 import AnalyzeButton from '@/ui/AnalyzeButton';
 import { calculateSaju } from '@/lib/sajuCalculator';
+import style from '@/data/styleConstants';
 
 export default function LoveTimingPage() {
     const { language } = useLanguage();
@@ -136,7 +137,7 @@ export default function LoveTimingPage() {
         <div className="w-full animate-in fade-in duration-500">
             <div className="mx-auto  text-center px-6 animate-in fade-in slide-in-from-bottom-5 duration-700">
                 <div>
-                    <h2 className=" text-3xl font-black text-slate-800 dark:text-white mb-4 tracking-tight">
+                    <h2 className={style.sajuTitle}>
                         {language === 'ko' ? '운명의 인연 찾기' : "Discover Your Destiny"}
                         <br />
                         <span className="relative text-sky-600 dark:text-sky-500">
@@ -144,23 +145,23 @@ export default function LoveTimingPage() {
                         </span>
                     </h2>
                 </div>
-                <div className="space-y-4 text-slate-600 dark:text-slate-400 mb-10 leading-relaxed break-keep">
-                    <p className="text-md">
-                        {language === 'ko' ? (
-                            <>
-                                언제쯤 솔로를 탈출할 수 있을까요? <br />
-                                <strong>새로운 인연</strong>이 찾아오는 시기와 <strong>연애운</strong>이 가장 좋은 달을 분석해드립니다.
-                            </>
-                        ) : (
-                            <>
-                                "Ready to find your significant other?
-                                <br />
-                                We pinpoint the timing of your next encounter and analyze your strongest months for love luck."
-                                <br />
-                                Discover how your Five Elements align to create a destiny-altering synergy.
-                            </>
-                        )}
-                    </p>
+                <div className={style.sajuDesc}>
+
+                    {language === 'ko' ? (
+                        <>
+                            언제쯤 솔로를 탈출할 수 있을까요? <br />
+                            <strong>새로운 인연</strong>이 찾아오는 시기와 <strong>연애운</strong>이 가장 좋은 달을 분석해드립니다.
+                        </>
+                    ) : (
+                        <>
+                            "Ready to find your significant other?
+                            <br />
+                            We pinpoint the timing of your next encounter and analyze your strongest months for love luck."
+                            <br />
+                            Discover how your Five Elements align to create a destiny-altering synergy.
+                        </>
+                    )}
+
 
                     <div className="m-auto max-w-sm rounded-2xl overflow-hidden shadow-sm border border-slate-100 dark:border-slate-800">
                         <Image

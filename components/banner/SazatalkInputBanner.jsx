@@ -167,11 +167,9 @@ const SazatalkInputBanner = () => {
                                 <div key={msg.id || idx} className={classNames("flex items-start", msg.role === 'user' ? "justify-end" : "justify-start", msg.role === 'saza-advice' ? "justify-center w-full my-2" : "")}>
                                     {(msg.role === 'saza') && (
                                         <div className="w-10 h-10 rounded-[15px] flex items-center justify-center mr-2 flex-shrink-0 shadow-sm bg-white overflow-hidden border border-indigo-100">
-                                            <Image
+                                            <img
                                                 src="/images/brand/saza_teacher.png"
                                                 alt="Saza"
-                                                width={40}
-                                                height={40}
                                                 className="object-cover w-full h-full"
                                             />
                                         </div>

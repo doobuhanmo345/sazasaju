@@ -306,7 +306,7 @@ export default function MatchClient() {
                 {language === 'ko' ? '사주로 보는' : 'Reading the Fate'}
                 <br />
                 <span className="relative text-rose-600 dark:text-rose-500">
-                  {language === 'ko' ? '운명적 궁합 & 조화' : 'Destined Match & Harmony'}
+                  {language === 'ko' ? '운명적 궁합 & 조화' : 'Destined Match'}
                   <div className="absolute inset-0 bg-rose-200/50 dark:bg-rose-800/60 blur-md rounded-full scale-100"></div>
                 </span>
               </h2>

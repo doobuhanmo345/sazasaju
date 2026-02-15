@@ -22,6 +22,7 @@ import SelBirthAppeal from '@/app/saju/selbirth/SelBirthAppeal';
 import SelBirthPreview from '@/app/saju/selbirth/SelBirthPreview';
 import { useRouter } from 'next/navigation';
 import ToTopButton from '@/ui/ToTopButton';
+import style from '@/data/styleConstants';
 export default function SelBirthPage() {
   const router = useRouter();
   const { loading, setLoading, aiResult, setAiResult, setLastParams, handleCancelHelper } = useLoading();
@@ -198,7 +199,7 @@ export default function SelBirthPage() {
           <div className="inline-block px-2 py-1 mb-4 bg-emerald-50 dark:bg-emerald-900/20 rounded text-xs font-black tracking-[0.2em] text-emerald-600 dark:text-emerald-400 uppercase">
             Step 01. 정보 입력
           </div>
-          <h2 className="text-3xl font-black text-slate-800 dark:text-white leading-tight">
+          <h2 className={style.sajuTitle}>
             {language === 'ko' ? '최고의 순간을 위한' : 'For the Best Moment'} <br />
             <span className="text-emerald-600 dark:text-emerald-400">
               {language === 'ko' ? '정보를 알려주세요' : 'Please Enter Info'}

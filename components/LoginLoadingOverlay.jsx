@@ -7,10 +7,8 @@ export default function LoginLoadingOverlay({ onCancel }) {
     <div className="fixed inset-0 z-[10000] flex flex-col items-center justify-center bg-white/80 dark:bg-slate-900/80 backdrop-blur-md animate-in fade-in duration-500">
       <div className="relative mb-8 flex justify-center items-center">
         <div className="w-16 h-16 bg-indigo-600 rounded-[2.5rem] flex items-center justify-center shadow-2xl animate-optimize-bounce overflow-visible">
-          <Image
+          <img
             src="/images/brand/splash_saza.png"
-            width={144}
-            height={144}
             className="absolute max-w-none object-contain transform"
             alt="splash logo"
             style={{ pointerEvents: 'none' }}

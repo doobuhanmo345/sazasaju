@@ -115,7 +115,7 @@ export default function YearlyLuckPage() {
 
     return (
       <div className=" mx-auto text-center px-6 animate-in fade-in slide-in-from-bottom-5 duration-700">
-        <h2 className=" text-3xl font-black text-slate-800 dark:text-white mb-4 tracking-tight">
+        <h2 className={style.sajuTitle}>
           {language === 'ko' ? '오행으로 읽는' : 'Reading the Five Elements'}
           <br />
           <span className="relative text-red-600 dark:text-red-400">
@@ -125,7 +125,7 @@ export default function YearlyLuckPage() {
         </h2>
         {/* 설명문구 */}
         <div className="space-y-4 text-slate-600 dark:text-slate-400 mb-10 leading-relaxed break-keep text-center">
-          <p className="text-sm">
+          <p className="text-md">
             {language === 'ko' ? (
               <>
                 <strong>붉은 말의 해</strong>, 사주에 숨겨진 월별 건강운, 재물운, 연애운.

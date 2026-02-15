@@ -298,16 +298,16 @@ export default function HistoryClient() {
 
     if (loadingUser) {
         return (
-            <div className="min-h-screen bg-white dark:bg-slate-950 flex items-center justify-center">
+            <div className="min-h-screen bg-slate-50/50 dark:bg-slate-950 flex items-center justify-center">
                 <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-indigo-500"></div>
             </div>
         );
     }
 
     return (
-        <div className="min-h-screen bg-white dark:bg-slate-950">
+        <div className="min-h-screen bg-slate-50/50 dark:bg-slate-950">
             {/* Hero Section - Tutorial Style */}
-            <div className="relative overflow-hidden bg-white dark:bg-slate-900 pt-6 pb-12 sm:pt-12 sm:pb-20 px-6 border-b border-slate-100 dark:border-slate-800">
+            <div className="relative overflow-hidden bg-white dark:bg-slate-900 pt-6 pb-12 sm:pt-12 sm:pb-20 px-6">
                 <HeroBg />
                 {/* Glassy Back Button */}
                 <BackButton title={isKo ? '상담 기록' : 'Consultation History'} />

@@ -15,6 +15,7 @@ import { SajuAnalysisService, AnalysisPresets } from '@/lib/SajuAnalysisService'
 import { calculateSaju } from '@/lib/sajuCalculator';
 import AnalyzeButton from '@/ui/AnalyzeButton';
 import { getPromptFromDB } from '@/lib/SajuAnalysisService';
+import style from '@/data/styleConstants';
 
 export default function MonthlyLovePage() {
     const { language } = useLanguage();
@@ -155,7 +156,7 @@ export default function MonthlyLovePage() {
         <div className="w-full animate-in fade-in duration-500">
             <div className="mx-auto  text-center px-6 animate-in fade-in slide-in-from-bottom-5 duration-700">
                 <div>
-                    <h2 className=" text-3xl font-black text-slate-800 dark:text-white mb-4 tracking-tight">
+                    <h2 className={style.sajuTitle}>
                         {language === 'ko' ? '새로운 만남과 연애운' : "New Meeting and Love Fortune"}
                         <br />
                         <span className="relative text-emerald-600 dark:text-emerald-500">
@@ -163,20 +164,19 @@ export default function MonthlyLovePage() {
                         </span>
                     </h2>
                 </div>
-                <div className="space-y-4 text-slate-600 dark:text-slate-400 mb-10 leading-relaxed break-keep">
-                    <p className="text-md">
-                        {language === 'ko' ? (
-                            <>
-                                이번 달, 당신의 사랑은 어떤 모습일까요? <br />
-                                <strong>새로운 설렘</strong>이 시작될 기회와 <strong>기존의 인연</strong>이 더 깊어지는 시기를 분석해 드립니다.
-                            </>
-                        ) : (
-                            <>
-                                What does love have in store for you this month? <br />
-                                We analyze opportunities for <strong>new sparks</strong> to ignite and identify the perfect timing for <strong>existing bonds</strong> to grow deeper.
-                            </>
-                        )}
-                    </p>
+                <div className={style.sajuDesc}>
+
+                    {language === 'ko' ? (
+                        <>
+                            이번 달, 당신의 사랑은 어떤 모습일까요? <br />
+                            <strong>새로운 설렘</strong>이 시작될 기회와 <strong>기존의 인연</strong>이 더 깊어지는 시기를 분석해 드립니다.
+                        </>
+                    ) : (
+                        <>
+                            What does love have in store for you this month? <br />
+                            We analyze opportunities for <strong>new sparks</strong> to ignite and identify the perfect timing for <strong>existing bonds</strong> to grow deeper.
+                        </>
+                    )}
 
                     <div className="m-auto max-w-sm rounded-2xl overflow-hidden shadow-sm border border-slate-100 dark:border-slate-800">
                         <Image

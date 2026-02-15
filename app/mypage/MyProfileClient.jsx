@@ -45,7 +45,7 @@ export default function MyProfileClient() {
     }
 
     return (
-        <div className="min-h-screen bg-white dark:bg-slate-950 pb-24 overflow-x-hidden selection:bg-indigo-100 dark:selection:bg-indigo-900/40">
+        <div className="min-h-screen bg-slate-50/50 dark:bg-slate-950 pb-24 overflow-x-hidden selection:bg-indigo-100 dark:selection:bg-indigo-900/40">
 
             <MyProfileHero
                 iljuImagePath={iljuImagePath}

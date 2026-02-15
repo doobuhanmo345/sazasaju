@@ -18,6 +18,7 @@ import AnalyzeButton from '@/ui/AnalyzeButton';
 import FirstDateAppeal from '@/app/saju/date/FirstDateAppeal';
 import FirstDatePreview from '@/app/saju/date/FirstDatePreview';
 import ToTopButton from '@/ui/ToTopButton';
+import style from '@/data/styleConstants';
 
 const GET_FIRST_DATE_OPTIONS = (gender = 'female') => {
   const isMale = gender === 'male';
@@ -322,7 +323,7 @@ export default function FirstDatePage() {
               <div className="inline-block px-2 py-1 mb-4 bg-rose-50 dark:bg-rose-900/20 rounded text-xs font-black tracking-[0.2em] text-rose-500 uppercase">
                 First Encounter
               </div>
-              <h2 className="text-3xl font-black text-slate-800 dark:text-white leading-[1.2] tracking-tight">
+              <h2 className={style.sajuTitle}>
                 {language === 'ko' ? '사자가 준비한' : "Saza's Perfect"}
                 <br />
                 <span className="relative text-rose-600 dark:text-rose-500">

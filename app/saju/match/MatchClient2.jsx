@@ -266,7 +266,7 @@ export default function MatchPage() {
             <div className="relative max-w-3xl mx-auto px-4 mb-12">
               {/* Header */}
               <div className="max-w-lg mx-auto text-center mb-8">
-                <h2 className="text-3xl font-black text-slate-800 dark:text-white mb-4 tracking-tight">
+                <h2 className={style.sajuTitle}>
                   {language === 'ko' ? '사주로 보는' : 'Reading the Fate'}
                   <br />
                   <span className="relative text-rose-600 dark:text-rose-500">
