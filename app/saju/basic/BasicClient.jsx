@@ -105,7 +105,7 @@ export default function BasicAnaPage() {
         const data = calculateSajuData(inputDate, gender, isTimeUnknown, language);
         if (!data) return;
 
-        const preset = AnalysisPresets.basic({ saju, gender }, data);
+        const preset = AnalysisPresets.basic({ saju, gender, sajuDesc, }, data);
 
         // [CRITICAL FIX] 친구 프로필 분석 시 메인 유저의 saju 데이터 덮어쓰기 방지
         if (targetProfile) {
@@ -117,7 +117,7 @@ export default function BasicAnaPage() {
                 ZApiAnalysis: {
                   result,
                   saju: targetProfile?.saju,
-                  sajuDesc,
+
                   language: service.language,
                   gender: targetProfile?.gender,
                   targetName: targetProfile.displayName, // 누구 사주인지 기록

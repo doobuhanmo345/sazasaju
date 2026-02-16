@@ -90,7 +90,7 @@ export default function FirstDatePage() {
   const { loading, setLoading, setLoadingType, setAiResult, aiResult, handleCancelHelper } = useLoading();
   const [selectedDate, setSelectedDate] = useState(null);
   const detailSectionRef = useRef(null);
-  const { userData, user, selectedProfile } = useAuthContext();
+  const { userData, user, selectedProfile, sajuDesc } = useAuthContext();
   const router = useRouter();
   const [question, setQuestion] = useState('');
   // 컨텍스트 스위칭
@@ -209,6 +209,7 @@ export default function FirstDatePage() {
             sajuDate: selectedDateSaju,
             question: question,
             type: 'firstdate',
+            sajuDesc: sajuDesc,
             promptAdd: dbPrompt,
           }),
         );

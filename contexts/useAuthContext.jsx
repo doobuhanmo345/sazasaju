@@ -399,7 +399,7 @@ export function AuthContextProvider({ children }) {
         ...prev,
         editCount: userDataEditCount,
         credits: userDataCredits,
-        userRole: userRole,
+        role: userRole,
         dailyUsage: userData.dailyUsage || {},
         lastEditDate: userData.lastEditDate || '',
 

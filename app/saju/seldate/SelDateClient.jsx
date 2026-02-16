@@ -32,7 +32,7 @@ const PURPOSE_OPTIONS = [
 export default function SelDatePage() {
   const { loading, setLoading, setLoadingType, setAiResult, aiResult, handleCancelHelper } = useLoading(); // aiResult added
 
-  const { userData, user, selectedProfile } = useAuthContext();
+  const { sajuDesc, userData, user, selectedProfile } = useAuthContext();
   const router = useRouter();
   // 컨텍스트 스위칭
   const targetProfile = selectedProfile || userData;
@@ -158,6 +158,7 @@ export default function SelDatePage() {
         await service.analyze(
           AnalysisPresets.selDate({
             saju,
+            sajuDesc,
             gender,
             startDate,
             endDate,

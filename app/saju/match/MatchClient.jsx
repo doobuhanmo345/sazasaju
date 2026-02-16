@@ -18,6 +18,7 @@ import { SajuAnalysisService, AnalysisPresets } from '@/lib/SajuAnalysisService'
 import SelectPerson from '@/ui/SelectPerson';
 import LoadingFourPillar from '@/components/LoadingFourPillar';
 import { getEng } from '@/utils/helpers';
+import style from '@/data/styleConstants';
 
 export default function MatchClient() {
   const router = useRouter();
@@ -298,7 +299,7 @@ export default function MatchClient() {
           <div className="relative max-w-4xl mx-auto px-4 mb-12">
             {/* Header */}
             <div className="max-w-lg mx-auto text-center mb-8">
-              <h2 className="text-4xl font-black text-slate-800 dark:text-white mb-4">
+              <h2 className={style.sajuTitle}>
                 {language === 'ko' ? '사주로 보는' : 'Reading the Fate'}
                 <br />
                 <span className="relative text-rose-600 dark:text-rose-500">
@@ -306,7 +307,7 @@ export default function MatchClient() {
                   <div className="absolute inset-0 bg-rose-200/50 dark:bg-rose-800/60 blur-md rounded-full scale-100"></div>
                 </span>
               </h2>
-              <p className="text-base text-slate-600 dark:text-slate-400 leading-relaxed break-keep max-w-xl mx-auto">
+              <p className={style.sajuDesc}>
                 <strong className="text-slate-700 dark:text-slate-300">{language === 'ko' ? '두 사람의 에너지 조화' : 'Harmony of Two Energies'}</strong>
                 {language === 'ko' ? '와 ' : ' and '}
                 <strong className="text-slate-700 dark:text-slate-300">{language === 'ko' ? '서로에게 미치는 영향' : 'Mutual Impact on Fate'}</strong>
