@@ -15,6 +15,7 @@ import {
   getTenGodType,
   ohaengKorean,
 } from '@/data/sajuInt';
+import { useAuthContext } from '@/contexts/useAuthContext';
 import { ENG_MAP, UI_TEXT, HANJA_MAP } from '@/data/constants';
 import { ILJU_DATA, ILJU_DATA_EN } from '@/data/ilju_data';
 import html2canvas from 'html2canvas';
@@ -22,10 +23,10 @@ import FourPillarVis from '@/components/FourPillarVis';
 import { useLanguage } from '@/contexts/useLanguageContext';
 import { getEng } from '@/lib/helpers';
 
-const BasicAna = ({ inputDate, saju, inputGender, isTimeUnknown, handleSetViewMode }) => {
+const BasicAna = ({ }) => {
   const { language } = useLanguage();
   const [selectedDae, setSelectedDae] = useState(null);
-
+  const { userData } = useAuthContext();
   const handleShare = async (id) => {
     const el = document.getElementById(id);
     if (!el) {
@@ -79,6 +80,11 @@ const BasicAna = ({ inputDate, saju, inputGender, isTimeUnknown, handleSetViewMo
       el.style.visibility = prevVisibility || 'hidden';
     }
   };
+  const inputDate = userData?.birthDate;
+  const saju = userData?.saju;
+  const inputGender = userData?.gender;
+  const isTimeUnknown = false;
+  const handleSetViewMode = () => { };
 
   const sajuData = useMemo(() => {
     if (!inputDate || !inputDate.includes('T')) return null;
@@ -363,7 +369,7 @@ const BasicAna = ({ inputDate, saju, inputGender, isTimeUnknown, handleSetViewMo
       return null;
     }
   }, [saju, inputGender, language, inputDate]);
-
+  console.log(sajuData)
   useEffect(() => {
     if (sajuData?.currentDaewoon) {
       setSelectedDae(sajuData.currentDaewoon);
@@ -611,12 +617,12 @@ const BasicAna = ({ inputDate, saju, inputGender, isTimeUnknown, handleSetViewMo
           >
             {language !== 'ko' ? 'Share Result' : '분석 결과 저장'}
           </button>
-          <button
+          {/* <button
             onClick={handleSetViewMode}
             className="flex-1 py-3 bg-white dark:bg-slate-700 text-slate-700 dark:text-white border border-slate-200 dark:border-slate-600 rounded-xl font-bold transition-all hover:bg-slate-50 dark:hover:bg-slate-600"
           >
             {language !== 'ko' ? 'Back' : '돌아가기'}
-          </button>
+          </button> */}
         </div>
       </div>
     </div>

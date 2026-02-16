@@ -27,7 +27,7 @@ export default function SelBirthPage() {
   const router = useRouter();
   const { loading, setLoading, aiResult, setAiResult, setLastParams, handleCancelHelper } = useLoading();
 
-  const { userData, user, selectedProfile } = useAuthContext();
+  const { sajuDesc, userData, user, selectedProfile } = useAuthContext();
   // 컨텍스트 스위칭
   const targetProfile = selectedProfile || userData;
   const { birthDate: inputDate, isTimeUnknown, gender, saju } = targetProfile || {};
@@ -163,6 +163,7 @@ export default function SelBirthPage() {
         await service.analyze(
           AnalysisPresets.selBirth({
             saju,
+            sajuDesc,
             gender,
             startDate,
             endDate,

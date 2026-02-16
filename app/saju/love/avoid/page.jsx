@@ -19,7 +19,7 @@ import style from '@/data/styleConstants';
 export default function AvoidPage() {
     const { language } = useLanguage();
     const router = useRouter();
-    const { user, userData, selectedProfile } = useAuthContext();
+    const { sajuDesc, user, userData, selectedProfile } = useAuthContext();
     const { MAX_EDIT_COUNT, isLocked, setEditCount } = useUsageLimit();
     const { loading, setLoading, setAiResult, handleCancelHelper } = useLoading();
     const targetProfile = selectedProfile || userData;
@@ -97,6 +97,7 @@ export default function AvoidPage() {
         try {
             const preset = AnalysisPresets.love({
                 saju,
+                sajuDesc,
                 gender,
                 q1,
                 q2,

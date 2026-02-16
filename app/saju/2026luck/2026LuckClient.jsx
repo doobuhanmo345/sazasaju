@@ -24,7 +24,7 @@ import style from '@/data/styleConstants';
 export default function YearlyLuckPage() {
   const { loading, setLoading, setLoadingType, aiResult, setAiResult, handleCancelHelper } = useLoading();
   const [sajuData, setSajuData] = useState(null);
-  const { userData, user, selectedProfile } = useAuthContext(); // selectedProfile 추가
+  const { userData, user, selectedProfile, sajuDesc } = useAuthContext(); // selectedProfile 추가
   const router = useRouter();
   // 컨텍스트 스위칭
   const targetProfile = selectedProfile || userData;
@@ -84,7 +84,7 @@ export default function YearlyLuckPage() {
       handleCancelHelper: handleCancelHelper,
     });
   }, [user, targetProfile, language]); // 필요한 의존성만
-  console.log(handleCancelHelper)
+
   const handleStartClick = async (onstart) => {
     // [UX FIX] 로딩 화면을 먼저 보여줌
     onstart();
@@ -101,13 +101,14 @@ export default function YearlyLuckPage() {
     setAiResult('');
     try {
       onstart(); // [NEW] 로딩화면 먼저 진입
-      await service.analyze(AnalysisPresets.newYear({ saju, gender }), (result) => {
+      await service.analyze(AnalysisPresets.newYear({ saju, sajuDesc, gender }), (result) => {
         console.log('✅ 신년운세 완료!');
       });
     } catch (error) {
       console.error(error);
     }
   };
+
 
   const sajuGuide = (onStart) => {
     if (loading) {

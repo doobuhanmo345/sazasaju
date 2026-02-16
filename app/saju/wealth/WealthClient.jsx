@@ -39,7 +39,7 @@ import style from '@/data/styleConstants';
 export default function Wealth({ }) {
   const { language } = useLanguage();
   const router = useRouter();
-  const { user, userData, selectedProfile } = useAuthContext();
+  const { sajuDesc, user, userData, selectedProfile } = useAuthContext();
   const { MAX_EDIT_COUNT, isLocked, setEditCount, editCount } = useUsageLimit();
   const { setLoading, setAiResult, handleCancelHelper } = useLoading();
   // 컨텍스트 스위칭
@@ -266,6 +266,7 @@ export default function Wealth({ }) {
       await service.analyze(
         AnalysisPresets.wealth({
           saju,
+          sajuDesc,
           gender,
           q1,
           q2,

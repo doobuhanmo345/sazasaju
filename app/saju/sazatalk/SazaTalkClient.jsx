@@ -99,7 +99,7 @@ function SazaTalkContent() {
   const searchParams = useSearchParams();
   const initialQuery = searchParams.get('q');
   const { loading, setLoading, setLoadingType, aiResult, setAiResult, handleCancelHelper } = useLoading();
-  const { userData, user, selectedProfile } = useAuthContext();
+  const { sajuDesc, userData, user, selectedProfile } = useAuthContext();
 
   const targetProfile = selectedProfile || userData;
   const { saju, gender, birthDate: inputDate } = targetProfile || {};
@@ -319,6 +319,7 @@ function SazaTalkContent() {
       const result = await service.analyze(
         AnalysisPresets.saza({
           saju: saju,
+          sajuDesc,
           gender: gender,
           inputDate: inputDate,
           question: userQuestion,

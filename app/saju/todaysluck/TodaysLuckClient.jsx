@@ -25,7 +25,7 @@ export default function TodaysLuckPage() {
   const { loading, setLoading, setLoadingType, aiResult, setAiResult, handleCancelHelper } = useLoading();
 
   const [sajuData, setSajuData] = useState(null);
-  const { userData, user, selectedProfile } = useAuthContext(); // selectedProfile 추가
+  const { sajuDesc, userData, user, selectedProfile } = useAuthContext(); // selectedProfile 추가
   const router = useRouter();
 
   // 컨텍스트 스위칭
@@ -104,7 +104,7 @@ export default function TodaysLuckPage() {
 
     setAiResult('');
     try {
-      await service.analyze(AnalysisPresets.daily({ saju, gender, selectedDate }), (result) => {
+      await service.analyze(AnalysisPresets.daily({ saju, gender, sajuDesc, selectedDate }), (result) => {
         console.log('✅ 오늘의 운세 완료!');
         setLoading(false);
         setAiResult(result);

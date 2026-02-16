@@ -21,7 +21,7 @@ export default function DayLuckPage() {
   const [loading, setLoading] = useState(false);
   const [question, setQuestion] = useState('');
   const [selectedDateSaju, setSelectedDateSaju] = useState(null);
-  const { userData, user, isDailyDone } = useAuthContext();
+  const { sajuDesc, userData, user, isDailyDone } = useAuthContext();
   const { birthDate: inputDate, isTimeUnknown, gender, saju } = userData || {};
 
   const { language } = useLanguage();
@@ -74,6 +74,7 @@ export default function DayLuckPage() {
       await service.analyze(
         AnalysisPresets.dailySpecific({
           saju: saju,
+          sajuDesc,
           gender: gender,
           selectedDate: selectedDate,
           question: question,

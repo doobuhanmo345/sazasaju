@@ -26,7 +26,7 @@ export default function BasicAnaPage() {
   const router = useRouter();
   const [sajuData, setSajuData] = useState(null);
   const { loading, setLoading, setLoadingType, setAiResult, aiResult, handleCancelHelper } = useLoading();
-  const { userData, user, selectedProfile } = useAuthContext(); // selectedProfile 추가
+  const { sajuDesc, userData, user, selectedProfile } = useAuthContext(); // selectedProfile 추가
 
   // 컨텍스트 스위칭: 선택된 프로필이 있으면 그것을 사용, 없으면 본인 정보
   const targetProfile = selectedProfile || userData;
@@ -117,9 +117,10 @@ export default function BasicAnaPage() {
                 ZApiAnalysis: {
                   result,
                   saju: targetProfile?.saju,
+                  sajuDesc,
                   language: service.language,
                   gender: targetProfile?.gender,
-                  targetName: targetProfile.displayName || 'Friend', // 누구 사주인지 기록
+                  targetName: targetProfile.displayName, // 누구 사주인지 기록
                 },
               },
               // 친구 분석은 카운트 증가 안 함 (옵션) -> 일단 기록은 남기되 메인 데이터 보호

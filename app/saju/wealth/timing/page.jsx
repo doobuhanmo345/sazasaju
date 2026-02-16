@@ -19,7 +19,7 @@ import style from '@/data/styleConstants.js'
 export default function TimingPage() {
     const { language } = useLanguage();
     const router = useRouter();
-    const { user, userData, selectedProfile } = useAuthContext();
+    const { sajuDesc, user, userData, selectedProfile } = useAuthContext();
     const { MAX_EDIT_COUNT, isLocked, setEditCount } = useUsageLimit();
     const { loading, setLoading, setAiResult, handleCancelHelper } = useLoading();
     const targetProfile = selectedProfile || userData;
@@ -150,6 +150,7 @@ export default function TimingPage() {
         try {
             const preset = AnalysisPresets.wealth({
                 saju,
+                sajuDesc,
                 gender,
                 q1,
                 q2,

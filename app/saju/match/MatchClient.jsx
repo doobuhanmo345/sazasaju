@@ -21,7 +21,7 @@ import { getEng } from '@/utils/helpers';
 
 export default function MatchClient() {
   const router = useRouter();
-  const { user, userData, selectedProfile, savedProfiles } = useAuthContext()
+  const { sajuDesc, user, userData, selectedProfile, savedProfiles } = useAuthContext()
   const { setAiResult, aiResult, loading, setLoading, handleCancelHelper } = useLoading()
   const targetProfile = selectedProfile || userData;
   // [FIX] birthTime이 별도로 있는 경우 합쳐서 ISO 포맷으로 만듦
@@ -245,6 +245,7 @@ export default function MatchClient() {
 
         const preset = AnalysisPresets.match({
           saju,
+          sajuDesc,
           saju2,
           gender,
           gender2,

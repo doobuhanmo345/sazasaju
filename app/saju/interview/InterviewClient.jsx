@@ -142,7 +142,7 @@ export default function InterviewPage() {
 
   const [question, setQuestion] = useState('');
 
-  const { userData, user, selectedProfile } = useAuthContext();
+  const { userData, user, selectedProfile, sajuDesc } = useAuthContext();
   const router = useRouter();
 
   // 컨텍스트 스위칭
@@ -230,6 +230,7 @@ export default function InterviewPage() {
         await service.analyze(
           AnalysisPresets.dailySpecific({
             saju: saju,
+            sajuDesc,
             gender: gender,
             selectedDate: selectedDate,
             sajuDate: selectedDateSaju,

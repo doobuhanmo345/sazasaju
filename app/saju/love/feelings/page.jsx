@@ -22,7 +22,7 @@ import style from '@/data/styleConstants';
 export default function FeelingsPage() {
     const { language } = useLanguage();
     const router = useRouter();
-    const { user, userData, selectedProfile, savedProfiles } = useAuthContext();
+    const { sajuDesc, user, userData, selectedProfile, savedProfiles } = useAuthContext();
     const { MAX_EDIT_COUNT, isLocked, setEditCount } = useUsageLimit();
     const { loading, setLoading, setAiResult, handleCancelHelper } = useLoading();
     const targetProfile = selectedProfile || userData;
@@ -142,6 +142,7 @@ export default function FeelingsPage() {
         try {
             const preset = AnalysisPresets.love({
                 saju,
+                sajuDesc,
                 gender,
                 q1,
                 q2: promptQ2,

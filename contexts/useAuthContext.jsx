@@ -8,6 +8,7 @@ import { getRomanizedIlju } from '@/data/sajuInt';
 import { calculateSaju } from '@/lib/sajuCalculator';
 import { specialPaths } from '@/lib/constants';
 import { ProfileService } from '@/lib/profileService';
+import { calculateSajuData, defaultSajuPrompt } from '@/lib/sajuLogic';
 
 const AuthContext = createContext();
 
@@ -242,8 +243,33 @@ export function AuthContextProvider({ children }) {
 
   // 3️⃣ 인앱 브라우저 체크
 
+  // 4️⃣ [NEW] 전역 사주 프롬프트 (설명) 생성 - selectedProfile 기준
+  const sajuDesc = useMemo(() => {
+    const target = selectedProfile || userData;
+    const isUser = target && userData && target.uid === userData.uid;
+    if (!target || !target.birthDate) return '';
 
-  // 4️⃣ 로그인 감시 (최초 1회만 실행)
+    try {
+      // calculateSajuData: (inputDate, inputGender, isTimeUnknown, language)
+      const data = calculateSajuData(
+        isUser ? target.birthDate : target.birthDate + 'T' + target.birthTime,
+        target.gender,
+        target.isTimeUnknown || false,
+        language
+      );
+
+      if (!data) return '';
+
+      // defaultSajuPrompt: Returns array of strings
+      const promptArray = defaultSajuPrompt(data);
+      return Array.isArray(promptArray) ? promptArray.join('\n') : promptArray;
+    } catch (e) {
+      console.error('Global Saju Prompt Error:', e);
+      return '';
+    }
+  }, [selectedProfile, userData, language]);
+
+  // 5️⃣ 로그인 감시 (최초 1회만 실행)
   useEffect(() => {
     const unsubscribe = onUserStateChange((firebaseUser) => {
       if (firebaseUser) {
@@ -469,7 +495,9 @@ export function AuthContextProvider({ children }) {
         addProfile, // 프로필 추가 함수
         removeProfile, // 프로필 삭제 함수
         updateSavedProfile, // 프로필 수정 함수
+        updateSavedProfile, // 프로필 수정 함수
         ...status, // selectedProfile 기준 상태
+        sajuDesc, // [NEW] 전역 사주 프롬프트 (설명)
       }}
     >
       {children}

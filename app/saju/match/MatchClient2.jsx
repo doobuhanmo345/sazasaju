@@ -119,7 +119,7 @@ const RELATION_TYPES = [
 
 export default function MatchPage() {
   const { language } = useLanguage();
-  const { user, userData, selectedProfile, savedProfiles } = useAuthContext();
+  const { sajuDesc, user, userData, selectedProfile, savedProfiles } = useAuthContext();
   const targetProfile = selectedProfile || userData;
   const { birthDate: inputDate, isTimeUnknown, gender, saju } = targetProfile || {};
   const { MAX_EDIT_COUNT, isLocked, setEditCount, editCount } = useUsageLimit();
@@ -216,6 +216,7 @@ export default function MatchPage() {
       await service.analyze(
         AnalysisPresets.match({
           saju,
+          sajuDesc,
           saju2,
           gender,
           gender2,

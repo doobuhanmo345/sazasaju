@@ -15,7 +15,7 @@ import EnergyBadge from '@/ui/EnergyBadge';
 const SazatalkInputBanner = () => {
     const router = useRouter();
     const { language } = useLanguage();
-    const { user, userData, selectedProfile } = useAuthContext();
+    const { sajuDesc, user, userData, selectedProfile } = useAuthContext();
     const { setLoading, setAiResult, handleCancelHelper } = useLoading();
     const { setEditCount, MAX_EDIT_COUNT } = useUsageLimit();
     const [isOpen, setIsOpen] = useState(false);
@@ -341,6 +341,7 @@ const SazatalkInputBanner = () => {
                                             const result = await service.analyze(
                                                 AnalysisPresets.saza({
                                                     saju: targetProfile.saju,
+                                                    sajuDesc,
                                                     gender: targetProfile.gender,
                                                     inputDate: targetProfile.birthDate,
                                                     question: question,

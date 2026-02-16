@@ -17,7 +17,7 @@ import EnergyBadge from '@/ui/EnergyBadge';
 const SazaTalkLoveBanner = ({ saju = null, relation = null }) => {
     const router = useRouter();
     const { language } = useLanguage();
-    const { user, userData, selectedProfile } = useAuthContext();
+    const { sajuDesc, user, userData, selectedProfile } = useAuthContext();
     const { setLoading, setAiResult, handleCancelHelper } = useLoading();
     const { setEditCount, MAX_EDIT_COUNT } = useUsageLimit();
     const [isOpen, setIsOpen] = useState(false);
@@ -79,7 +79,6 @@ const SazaTalkLoveBanner = ({ saju = null, relation = null }) => {
             isKo ? "그 사람과 결혼해도 될까요" : "Should I marry him/her?",
         ];
     };
-    console.log(relation)
     const suggestions = getSuggestions();
 
     const targetProfile = selectedProfile || userData;
@@ -392,6 +391,7 @@ const SazaTalkLoveBanner = ({ saju = null, relation = null }) => {
                                             const result = await service.analyze(
                                                 AnalysisPresets.saza({
                                                     saju: targetProfile.saju,
+                                                    sajuDesc,
                                                     gender: targetProfile.gender,
                                                     inputDate: targetProfile.birthDate,
                                                     question: question,
