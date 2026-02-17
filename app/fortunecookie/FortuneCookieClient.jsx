@@ -256,7 +256,6 @@ export default function FortuneCookieClient() {
                         src="/images/introcard/cookie_1.png"
                         alt="select cookie"
                         className="w-60 h-auto mx-auto"
-                        priority
                       />
                     </div>
                     <div className="flex gap-8 items-center justify-center">

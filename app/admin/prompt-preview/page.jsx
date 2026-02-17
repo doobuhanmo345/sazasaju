@@ -3,6 +3,12 @@
 import { useState, useEffect } from 'react';
 import { useAuthContext } from '@/contexts/useAuthContext';
 import { SajuAnalysisService, AnalysisPresets } from '@/lib/SajuAnalysisService';
+import { calculateSajuData, createPromptForGemini } from '@/lib/sajuLogic'; // [MODIFIED]
+
+// ...
+
+
+
 import { useLoading } from '@/contexts/useLoadingContext';
 import { useLanguage } from '@/contexts/useLanguageContext';
 
@@ -58,6 +64,8 @@ export default function PromptPreviewPage() {
 
             const service = new SajuAnalysisService(mockContext);
             let presetConfig;
+            let fullPrompt = '';
+            let variables = {};
 
             // Select preset config
             switch (selectedPreset) {
@@ -67,9 +75,24 @@ export default function PromptPreviewPage() {
                 case 'newYear':
                     presetConfig = AnalysisPresets.newYear({ ...params });
                     break;
-                case 'basic':
-                    presetConfig = AnalysisPresets.basic({ ...params }, targetProfile.saju); // basic takes 2 args
+                case 'basic': {
+                    // [NEW] Calculate Saju Data for Basic Analysis
+                    const { birthDate, birthTime, gender } = targetProfile;
+                    const inputDate = `${birthDate}T${birthTime || '00:00'}`;
+                    const sajuData = calculateSajuData(inputDate, gender, !birthTime, language);
+
+                    if (!sajuData) {
+                        throw new Error('사주 데이터 계산 실패');
+                    }
+
+                    // Generate directly to capture variables
+                    const { prompt, variables: vars } = await createPromptForGemini(sajuData, language);
+                    fullPrompt = prompt;
+                    variables = vars;
+
+                    presetConfig = AnalysisPresets.basic({ ...params }, sajuData);
                     break;
+                }
                 case 'wealth':
                     presetConfig = AnalysisPresets.wealth({ ...params });
                     break;
@@ -96,22 +119,36 @@ export default function PromptPreviewPage() {
                     presetConfig = AnalysisPresets.daily({ ...params, selectedDate: new Date().toISOString().split('T')[0] });
             }
 
-            let fullPrompt = '';
-            let variables = {};
-
-            if (presetConfig.useCustomPromptBuilder && presetConfig.customPromptBuilder) {
-                fullPrompt = await presetConfig.customPromptBuilder(presetConfig.params, service);
-                variables = { info: 'Custom Builder used - vars not available directly' };
-            } else {
-                const prompts = await service.fetchPrompts(presetConfig.promptPaths);
-                // Simulate buildPromptVars
-                variables = presetConfig.buildPromptVars(prompts, presetConfig.params, service);
-                fullPrompt = service.replaceVariables(prompts[presetConfig.promptPaths[0]], variables);
+            if (!fullPrompt) {
+                if (presetConfig.useCustomPromptBuilder && presetConfig.customPromptBuilder) {
+                    fullPrompt = await presetConfig.customPromptBuilder(presetConfig.params, service);
+                    variables = { info: 'Custom Builder used - vars not available directly' };
+                } else {
+                    const prompts = await service.fetchPrompts(presetConfig.promptPaths);
+                    // Simulate buildPromptVars
+                    variables = presetConfig.buildPromptVars(prompts, presetConfig.params, service);
+                    fullPrompt = service.replaceVariables(prompts[presetConfig.promptPaths[0]], variables);
+                }
             }
 
             // Add language instruction same as real service
+            // Only add if not basic, because createPromptForGemini might handle it? 
+            // Actually createPromptForGemini includes it? No, checking logic.
+            // createPromptForGemini uses template which might not have it.
+            // Let's check logic. SajuAnalysisService adds it at line 468.
+
+            // For basic, createPromptForGemini does NOT seem to include standard lang instruction wrapper.
+            // Wait, createPromptForGemini uses DB templates.
+
+            // Let's blindly add it for consistency with service unless it's basic and we suspect double add.
+            // SajuAnalysisService adds it *after* getting prompt from builder.
+            // So we should add it here too.
+
             const languageInstruction = service.langPrompt(service.language);
-            fullPrompt = `${languageInstruction}\n\n${fullPrompt}\n\n${languageInstruction}`;
+            // Check if already includes to avoid dupes (rough check)
+            if (!fullPrompt.includes(languageInstruction)) {
+                fullPrompt = `${languageInstruction}\n\n${fullPrompt}\n\n${languageInstruction}`;
+            }
 
 
             setGeneratedPrompt(fullPrompt);

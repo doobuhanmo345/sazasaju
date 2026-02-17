@@ -235,10 +235,22 @@ exports.processAnalysisQueue = onDocumentCreated(
           };
 
           // Decide whether to increment editCount (free) or deduct credit (paid)
-          if (params?.useCredit) {
-            userUpdates.credits = admin.firestore.FieldValue.increment(-1);
+          // [MODIFIED] Split Payment Support
+          const usedFree = params?.usedFree || 0;
+          const usedCredit = params?.usedCredit || 0;
+          const cost = params?.cost || 1;
+
+          if (usedFree > 0 || usedCredit > 0) {
+            // New logic with explicit split
+            if (usedFree > 0) userUpdates.editCount = admin.firestore.FieldValue.increment(usedFree);
+            if (usedCredit > 0) userUpdates.credits = admin.firestore.FieldValue.increment(-usedCredit);
           } else {
-            userUpdates.editCount = admin.firestore.FieldValue.increment(1);
+            // Fallback for legacy calls (or if param wasn't set correctly)
+            if (params?.useCredit) {
+              userUpdates.credits = admin.firestore.FieldValue.increment(-cost);
+            } else {
+              userUpdates.editCount = admin.firestore.FieldValue.increment(cost);
+            }
           }
 
           // Specific persistence logic based on type
