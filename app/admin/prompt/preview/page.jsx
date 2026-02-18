@@ -4,6 +4,8 @@ import { useState, useEffect } from 'react';
 import { useAuthContext } from '@/contexts/useAuthContext';
 import { SajuAnalysisService, AnalysisPresets } from '@/lib/SajuAnalysisService';
 import { calculateSajuData, createPromptForGemini } from '@/lib/sajuLogic'; // [MODIFIED]
+import Link from 'next/link'; // [NEW]
+import { ArrowLeftIcon } from '@heroicons/react/24/outline'; // [NEW]
 
 // ...
 
@@ -188,11 +190,11 @@ export default function PromptPreviewPage() {
                     </select>
                 </div>
 
-                <div className="mb-4">
+                <div>
                     <button
                         onClick={handleGenerate}
                         disabled={loading}
-                        className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 disabled:bg-gray-400"
+                        className="bg-purple-600 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded w-full flex items-center justify-center gap-2"
                     >
                         {loading ? 'Generating...' : 'Generate Prompt'}
                     </button>
