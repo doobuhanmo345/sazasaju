@@ -12,6 +12,7 @@ import Footer from '@/components/Footer';
 import MenuBar from '@/components/MenuBar';
 import LoginModal from '@/components/LoginModal';
 import ContactModal from '@/components/ContactModal';
+import GlobalPopup from '@/components/GlobalPopup';
 import MessageModal from '@/app/messages/MessageModal';
 import AppBanner from '@/components/AppBanner';
 import CreditModal from '@/components/CreditModal';
@@ -107,6 +108,8 @@ export default function ClientWrapper({ children }) {
         isOpen={isLoginModalOpen}
         onClose={closeLoginModal}
       />
+
+      <GlobalPopup />
 
       <MessageModal
         isOpen={msgModalData.isOpen}

@@ -11,6 +11,7 @@ import {
     XMarkIcon
 } from '@heroicons/react/24/outline';
 import MessageModal from '@/app/messages/MessageModal';
+import BatchMessageModal from './BatchMessageModal';
 
 export default function AdminUsersPage() {
     const { user, userData } = useAuthContext();
@@ -32,6 +33,10 @@ export default function AdminUsersPage() {
     const [viewMode, setViewMode] = useState('credits');
     const [availableKeys, setAvailableKeys] = useState([]);
 
+    // Batch Selection State
+    const [selectedUserIds, setSelectedUserIds] = useState(new Set());
+    const [isBatchModalOpen, setIsBatchModalOpen] = useState(false);
+
     const USERS_PER_PAGE = 20;
 
     // Dynamically extract keys from loaded users
@@ -49,6 +54,25 @@ export default function AdminUsersPage() {
 
     // If the current viewMode is not in valid keys (and we have keys), reset or keep? 
     // We'll trust the state persistence for now, but defaulting to 'credits' or first available is strict.
+
+    const handleSelectAll = (e) => {
+        if (e.target.checked) {
+            const allIds = new Set(users.map(u => u.id));
+            setSelectedUserIds(allIds);
+        } else {
+            setSelectedUserIds(new Set());
+        }
+    };
+
+    const handleSelectUser = (id) => {
+        const newSelected = new Set(selectedUserIds);
+        if (newSelected.has(id)) {
+            newSelected.delete(id);
+        } else {
+            newSelected.add(id);
+        }
+        setSelectedUserIds(newSelected);
+    };
 
     const fetchUsers = async (isNext = false) => {
         setLoading(true);
@@ -255,7 +279,15 @@ export default function AdminUsersPage() {
                     <p className="text-sm text-gray-500 mt-1">전체 사용자 목록 및 관리</p>
                 </div>
 
-                <div className="flex flex-col md:flex-row gap-3 w-full md:w-auto">
+                <div className="flex flex-col md:flex-row gap-3 w-full md:w-auto items-center">
+                    {selectedUserIds.size > 0 && (
+                        <button
+                            onClick={() => setIsBatchModalOpen(true)}
+                            className="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-2xl font-bold text-sm transition-all shadow-lg shadow-blue-500/20 active:scale-95 whitespace-nowrap"
+                        >
+                            Send to {selectedUserIds.size} Users
+                        </button>
+                    )}
                     {/* View Mode Selector - Dynamic */}
                     <select
                         value={viewMode}
@@ -288,7 +320,15 @@ export default function AdminUsersPage() {
                     <table className="min-w-full divide-y divide-gray-100 dark:divide-gray-800">
                         <thead className="bg-gray-50 dark:bg-gray-900/50">
                             <tr>
-                                <th scope="col" className="px-8 py-5 text-left text-xs font-black text-gray-400 uppercase tracking-widest pl-12">
+                                <th scope="col" className="px-4 py-5 text-center">
+                                    <input
+                                        type="checkbox"
+                                        className="w-5 h-5 rounded-lg border-2 border-gray-300 text-blue-600 focus:ring-blue-500 cursor-pointer"
+                                        onChange={handleSelectAll}
+                                        checked={users.length > 0 && selectedUserIds.size === users.length}
+                                    />
+                                </th>
+                                <th scope="col" className="px-8 py-5 text-left text-xs font-black text-gray-400 uppercase tracking-widest pl-2">
                                     User
                                 </th>
                                 {/* Hidden on small screens if needed, but keeping for now */}
@@ -313,6 +353,14 @@ export default function AdminUsersPage() {
                             ) : (
                                 users.map((u) => (
                                     <tr key={u.id} className="hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors">
+                                        <td className="px-4 py-5 text-center">
+                                            <input
+                                                type="checkbox"
+                                                className="w-5 h-5 rounded-lg border-2 border-gray-300 text-blue-600 focus:ring-blue-500 cursor-pointer"
+                                                checked={selectedUserIds.has(u.id)}
+                                                onChange={() => handleSelectUser(u.id)}
+                                            />
+                                        </td>
                                         <td className="px-8 py-5 whitespace-nowrap">
                                             <div className="flex items-center">
                                                 <div className="h-10 w-10 flex-shrink-0">
@@ -437,6 +485,12 @@ export default function AdminUsersPage() {
                 onClose={() => setIsMessageModalOpen(false)}
                 receiverId={selectedUserForMessage?.uid}
                 receiverName={selectedUserForMessage?.displayName}
+            />
+
+            <BatchMessageModal
+                isOpen={isBatchModalOpen}
+                onClose={() => setIsBatchModalOpen(false)}
+                selectedUsers={users.filter(u => selectedUserIds.has(u.id))}
             />
         </div>
     );
