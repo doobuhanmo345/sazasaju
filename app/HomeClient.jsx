@@ -16,6 +16,10 @@ import IconWrapper from '@/components/menuicons/IconWrapper';
 import SazaTalkInputBanner from '@/components/banner/SazatalkInputBanner';
 import LoveIcons from '../components/menuicons/LoveIcons';
 import SazaTalkLoveBanner from '@/components/banner/SazatalkLoveBanner';
+import ReunionBanner from '../components/banner/ReunionBanner';
+import LoveLuckBanner from '@/components/banner/LoveLuckBanner';
+import WealthLuckBanner from '@/components/banner/WealthLuckBanner';
+import SoloEscapeBanner from '@/components/banner/SoloEscapeBanner';
 
 
 export default function HomeClient() {
@@ -80,6 +84,10 @@ export default function HomeClient() {
       <NewYearBanner />
 
       <BasicAnaBanner inputDate={inputDate} isTimeUnknown={isTimeUnknown} gender={gender} />
+      <ReunionBanner />
+      <LoveLuckBanner />
+      <SoloEscapeBanner />
+      <WealthLuckBanner />
 
       <IconWrapper
         title={

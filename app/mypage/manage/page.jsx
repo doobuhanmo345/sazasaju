@@ -126,7 +126,7 @@ export default function ProfileManagePage() {
 
               <div className="flex items-center gap-2 shrink-0">
                 <button
-                  onClick={(e) => { e.stopPropagation(); router.push('mypage/profile/edit'); }}
+                  onClick={(e) => { e.stopPropagation(); router.push('/mypage/profile/edit'); }}
                   className="p-3 hover:bg-white dark:hover:bg-slate-800 rounded-xl transition-all active:scale-90"
                   title={language === "ko" ? '수정' : 'Edit'}
                 >

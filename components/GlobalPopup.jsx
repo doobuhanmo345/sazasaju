@@ -55,11 +55,18 @@ export default function GlobalPopup() {
         return () => unsubscribe();
     }, [user]);
 
-    const handleClose = async () => {
+    const handleDismiss = () => {
+        if (!currentPopup) return;
+        // Just remove from local queue, do NOT update DB (so it shows again on reload)
+        const closingId = currentPopup.id;
+        setPopupQueue(prev => prev.filter(p => p.id !== closingId));
+    };
+
+    const handleDontShowAgain = async () => {
         if (!currentPopup) return;
 
         try {
-            // Optimistically remove from queue for instant UI feedback
+            // Optimistically remove
             const closingId = currentPopup.id;
             setPopupQueue(prev => prev.filter(p => p.id !== closingId));
 
@@ -77,12 +84,12 @@ export default function GlobalPopup() {
         <div className="fixed inset-0 z-[300] flex items-center justify-center p-6">
             {/* Backdrop */}
             <div
-                className="absolute inset-0 bg-slate-900/60 backdrop-blur-md animate-in fade-in duration-300"
-                onClick={handleClose}
+                className="absolute inset-0 bg-white/60 backdrop-blur-sm animate-in fade-in duration-300"
+                onClick={handleDismiss}
             />
 
             {/* Modal Container */}
-            <div className="relative w-full max-w-sm bg-white dark:bg-slate-900/80 backdrop-blur-2xl rounded-[2.5rem] shadow-2xl shadow-indigo-500/10 border border-white/20 dark:border-slate-800 overflow-visible transform animate-in zoom-in-95 duration-300">
+            <div className="relative w-full max-w-sm bg-white dark:bg-slate-900/80 backdrop-blur-2xl rounded-[2.5rem] shadow-2xl shadow-indigo-500/30 border border-white/20 dark:border-slate-800 overflow-visible transform animate-in zoom-in-95 duration-300">
 
                 {/* Decorative Background Blur Elements inside the modal */}
                 <div className="absolute -top-24 -left-24 w-64 h-64 bg-indigo-500/10 rounded-full blur-3xl pointer-events-none" />
@@ -99,7 +106,7 @@ export default function GlobalPopup() {
 
                 {/* Header */}
                 <div className="relative p-8 pb-0 pt-16 text-center z-10">
-                    <h3 className="text-xl font-black text-slate-800 dark:text-white mb-2">
+                    <h3 className="text-3xl font-black text-slate-800 dark:text-white mb-2">
                         {currentPopup.title || (language === 'ko' ? '알림' : 'Notice')}
                     </h3>
                     {popupQueue.length > 1 && (
@@ -111,21 +118,29 @@ export default function GlobalPopup() {
 
                 {/* Content */}
                 <div className="relative p-8 pt-4 space-y-8 z-10">
-                    <div className="text-sm text-slate-500 dark:text-slate-400 text-center leading-relaxed whitespace-pre-wrap font-medium">
+                    <div className="text-lg text-slate-500 dark:text-slate-400 text-center leading-relaxed whitespace-pre-wrap font-medium">
                         {currentPopup.message}
                     </div>
 
-                    <button
-                        onClick={handleClose}
-                        className="w-full h-14 bg-slate-900 dark:bg-white hover:bg-slate-800 dark:hover:bg-slate-100 text-white dark:text-slate-900 rounded-2xl flex items-center justify-center gap-2 font-bold text-sm transition-all active:scale-[0.97] shadow-xl shadow-slate-200/20 dark:shadow-none"
-                    >
-                        {language === 'ko' ? '확인했습니다' : 'I Understand'}
-                    </button>
+                    <div className="flex gap-3">
+                        <button
+                            onClick={handleDontShowAgain}
+                            className="w-full h-14 bg-slate-900 dark:bg-white hover:bg-slate-800 dark:hover:bg-slate-100 text-white dark:text-slate-900 rounded-2xl flex items-center justify-center gap-2 font-bold text-sm transition-all active:scale-[0.97] shadow-xl shadow-slate-200/20 dark:shadow-none"
+                        >
+                            {language === 'ko' ? '다시는 보지 않기' : 'Don\'t show again'}
+                        </button>
+                        <button
+                            onClick={handleDismiss}
+                            className="w-full h-12 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 font-bold text-xs transition-colors"
+                        >
+                            {language === 'ko' ? '닫기' : 'Close'}
+                        </button>
+                    </div>
                 </div>
 
                 {/* Close X (Top Right) */}
                 <button
-                    onClick={handleClose}
+                    onClick={handleDismiss}
                     className="absolute top-4 right-4 p-2 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-full transition-colors text-slate-400 z-20"
                 >
                     <XMarkIcon className="w-6 h-6" />

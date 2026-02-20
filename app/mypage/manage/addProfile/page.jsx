@@ -64,7 +64,7 @@ function AddProfileContent() {
             } else {
                 await addProfile(formData);
             }
-            router.push('/profile/manage');
+            router.push('/mypage/manage');
         } catch (error) {
             console.error('Failed to save profile:', error);
             alert(language === 'ko' ? '저장 실패: ' + error.message : 'Failed to save: ' + error.message);
