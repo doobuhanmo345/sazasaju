@@ -317,10 +317,11 @@ const SazaTalkLoveBanner = ({ saju = null, relation = null }) => {
                                 </div>
                             )}
                             <textarea
+                                maxLength={150}
                                 value={inputValue}
                                 onChange={(e) => setInputValue(e.target.value)}
                                 className="w-full min-h-[140px] max-h-[300px] py-2 text-base font-black text-slate-900 dark:text-white outline-none resize-none leading-relaxed placeholder:font-normal placeholder:text-slate-300 dark:placeholder:text-slate-500 bg-transparent"
-                                placeholder={isKo ? "고민을 무엇이든 물어보세요!\n(ex. 작년에 헤어진 인연과 재회할 수 있을까요?)" : "Ask anything"}
+                                placeholder={isKo ? "고민을 무엇이든 물어보세요!\n(ex. 작년에 헤어진 인연과 재회할 수 있을까요?)-최대길이 150자" : "Ask anything-max 150 characters"}
                             />
                             <div className="flex justify-end mt-2">
                                 <button
@@ -383,9 +384,22 @@ const SazaTalkLoveBanner = ({ saju = null, relation = null }) => {
                                             // 4. 이전 대화 기록 추출 (최근 10개 메시지 = 약 5회 분량)
                                             const chatHistory = messages
                                                 .slice(1) // 환영 인사 제외
-                                                .filter(m => m.role === 'user' || m.role === 'saza-advice') // [Modified] content가 아닌 saza(advice)만 포함
+                                                .filter(m => m.text && m.text.trim()) // 빈 메시지 제외
+                                                .reduce((acc, m) => {
+                                                    if (m.role === 'user') {
+                                                        acc.push(m);
+                                                    } else {
+                                                        // 연속된 Saza 메시지라면 마지막 메시지로 덮어쓰기
+                                                        if (acc.length > 0 && acc[acc.length - 1].role !== 'user') {
+                                                            acc[acc.length - 1] = m;
+                                                        } else {
+                                                            acc.push(m);
+                                                        }
+                                                    }
+                                                    return acc;
+                                                }, [])
                                                 .map(m => `${m.role === 'user' ? 'User' : 'Saza'}: ${m.text}`)
-                                                .slice(-20)
+                                                .slice(-10)
                                                 .join('\n');
 
                                             const result = await service.analyze(
