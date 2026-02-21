@@ -54,7 +54,7 @@ export const daily_s_var = [
 
 export const saza_var = [
   { key: '{{DEFAULT_INSTRUCTION}}', label: '(DB)defualt instruction' },
-  { key: '{{STRICT_PROMPT}}', label: '(DB)saza_strict' },
+  { key: '{{SAZA_STRICT}}', label: '(DB)saza_strict' },
   { key: '{{targetFormat}}', label: '(DB)saza_format' },
   { key: '{{myQuestion}}', label: '사용자 질문' },
   { key: '{{sajuInfo}}', label: '사주 정보' },
