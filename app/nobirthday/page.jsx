@@ -22,6 +22,7 @@ export default function NoBirthdayPage() {
   const { user, userData, updateProfileData, logout } = useAuthContext();
   const { language } = useLanguage();
   const [formData, setFormData] = useState({
+    email: userData?.email || user?.email || '',
     displayName: userData?.displayName || user?.displayName || '',
     birthDate: '',
     birthTime: '12:00',
@@ -138,6 +139,10 @@ export default function NoBirthdayPage() {
         updatedAt: todayDate,
         saju: saju,
       };
+
+      if (userData?.provider === 'kakao') {
+        updateData.email = formData.email;
+      }
 
       setIsWelcome(true);
 
@@ -300,6 +305,33 @@ export default function NoBirthdayPage() {
 
       <div className={`${containerClass} animate-in fade-in slide-in-from-bottom-12 duration-1000`}>
         <form onSubmit={handleSubmit} className="">
+
+          {userData?.provider === 'kakao' && (
+            <div className="space-y-4 pb-12">
+              <header className="px-1 border-b border-slate-100 dark:border-slate-800 pb-2">
+                <div className="flex items-baseline gap-3">
+                  <h2 className="text-xl font-light text-slate-900 dark:text-white tracking-tight">
+                    <span className="italic font-serif text-indigo-600/80 dark:text-indigo-400/80">
+                      {language === 'ko' ? '이메일 (선택)' : 'Email (Optional)'}
+                    </span>
+                  </h2>
+                </div>
+              </header>
+              <div className="space-y-3">
+                <label className="text-xs font-black text-slate-400 dark:text-slate-600 uppercase tracking-widest ml-1">EMAIL</label>
+                <div className="flex items-center gap-4">
+                  <input
+                    type="email"
+                    name="email"
+                    value={formData.email}
+                    onChange={handleChange}
+                    placeholder={language === 'ko' ? '이메일 주소' : 'Email Address'}
+                    className="flex-1 bg-transparent border-b border-slate-200 dark:border-slate-800 rounded-none px-1 py-3 text-slate-800 dark:text-white focus:border-indigo-500/50 outline-none transition-all font-medium placeholder:text-slate-300 dark:placeholder:text-slate-700 text-lg"
+                  />
+                </div>
+              </div>
+            </div>
+          )}
 
           <div className="space-y-4 pb-12">
             <header className="px-1 border-b border-slate-100 dark:border-slate-800 pb-2">
