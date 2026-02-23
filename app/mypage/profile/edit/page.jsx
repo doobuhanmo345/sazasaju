@@ -30,6 +30,7 @@ export default function EditProfilePage() {
 
   // Form State
   const [formData, setFormData] = useState({
+    email: '',
     displayName: '',
     birthDate: '',
     birthTime: '12:00',
@@ -47,6 +48,7 @@ export default function EditProfilePage() {
       const bTime = userData.birthDate ? userData.birthDate.split('T')[1] : '12:00';
 
       setFormData({
+        email: userData.email || user?.email || '',
         displayName: userData.displayName || user?.displayName || '',
         birthDate: bDate,
         birthTime: bTime,
@@ -101,6 +103,10 @@ export default function EditProfilePage() {
         updatedAt: todayDate,
         saju: manse,
       };
+
+      if (userData?.provider === 'kakao') {
+        updateData.email = formData.email;
+      }
 
       await updateProfileData(updateData);
       // alert 대신 즉시 뒤로가기 수행 (사용자 체감 속도 향상)
@@ -169,15 +175,22 @@ export default function EditProfilePage() {
               {/* Email */}
               <div>
                 <label className="block text-xs font-black text-indigo-500 uppercase tracking-wider mb-2 ml-1">
-                  {language === 'ko' ? '이메일 (수정 불가)' : 'Email (Read Only)'}
+                  {userData?.provider === 'kakao'
+                    ? (language === 'ko' ? '이메일' : 'Email')
+                    : (language === 'ko' ? '이메일 (수정 불가)' : 'Email (Read Only)')}
                 </label>
                 <div className="relative">
                   <EnvelopeIcon className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
                   <input
                     type="email"
-                    value={user?.email || ''}
-                    readOnly
-                    className="w-full bg-gray-100/50 dark:bg-slate-950/50 border border-gray-100 dark:border-slate-800 rounded-2xl pl-12 pr-4 py-4 text-gray-500 cursor-not-allowed outline-none font-medium"
+                    name="email"
+                    value={userData?.provider === 'kakao' ? formData.email : (userData?.email || user?.email || '')}
+                    onChange={userData?.provider === 'kakao' ? handleChange : undefined}
+                    readOnly={userData?.provider !== 'kakao'}
+                    className={`w-full border rounded-2xl pl-12 pr-4 py-4 outline-none transition-all font-medium ${userData?.provider === 'kakao'
+                        ? 'bg-white dark:bg-slate-950 border-slate-100 dark:border-slate-800 text-gray-800 dark:text-white focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500'
+                        : 'bg-gray-100/50 dark:bg-slate-950/50 border-gray-100 dark:border-slate-800 text-gray-500 cursor-not-allowed'
+                      }`}
                   />
                 </div>
               </div>
