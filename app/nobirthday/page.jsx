@@ -312,7 +312,7 @@ export default function NoBirthdayPage() {
                 <div className="flex items-baseline gap-3">
                   <h2 className="text-xl font-light text-slate-900 dark:text-white tracking-tight">
                     <span className="italic font-serif text-indigo-600/80 dark:text-indigo-400/80">
-                      {language === 'ko' ? '이메일 (선택)' : 'Email (Optional)'}
+                      {language === 'ko' ? '이메일' : 'Email'}
                     </span>
                   </h2>
                 </div>
