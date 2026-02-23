@@ -51,11 +51,15 @@ export default function NoBirthdayPage() {
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
+    if (!user && !userData) {
+      router.push('/');
+      return;
+    }
     if (!!userData?.birthDate && !formData.birthDate) {
       router.push('/')
     };
     setMounted(true);
-  }, [userData?.birthDate]);
+  }, [user, userData, formData.birthDate, router]);
 
 
 
@@ -178,7 +182,7 @@ export default function NoBirthdayPage() {
   };
 
   const containerClass = "w-full max-w-xl relative z-10";
-
+  console.log(user, userData)
   if (!mounted) return null;
 
   if (isIntro) {
@@ -557,6 +561,14 @@ export default function NoBirthdayPage() {
           </div>
         </form>
       </div>
+
+      {/* Logout button placed fixed at bottom left */}
+      <button
+        onClick={logout}
+        className="fixed bottom-4 left-4 text-[10px] text-slate-400 hover:text-slate-600 dark:text-slate-500 dark:hover:text-slate-300 z-50 transition-colors"
+      >
+        {language === 'ko' ? '로그아웃' : 'Logout'}
+      </button>
     </div>
   );
 }

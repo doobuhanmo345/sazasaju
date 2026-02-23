@@ -97,7 +97,7 @@ exports.verifyNaverToken = onCall(async (request) => {
     const uid = `naver:${profile.id}`;
     const email = profile.email || `${profile.id}@naver.user`;
     const displayName = profile.name || profile.nickname || 'Naver User';
-    const photoURL = profile.profile_image || '';
+    const photoURL = profile.profile_image || null;
 
     const customToken = await admin.auth().createCustomToken(uid, {
       provider: 'naver.com'
@@ -132,12 +132,35 @@ exports.verifyKakaoToken = onCall(async (request) => {
 
     const uid = `kakao:${profile.id}`;
     const kakaoAccount = profile.kakao_account || {};
-    const email = kakaoAccount.email || `${profile.id}@kakao.user`;
+    const email = kakaoAccount.email || null; // ✅ 가짜 이메일 제거
+    const emailVerified = kakaoAccount.is_email_verified || false;
     const displayName = kakaoAccount.profile?.nickname || 'Kakao User';
-    const photoURL = kakaoAccount.profile?.profile_image_url || '';
+    const photoURL = kakaoAccount.profile?.profile_image_url || null;
+
+    // ✅ 핵심 추가: Firebase Auth에 유저 생성 or 업데이트
+    try {
+      // 기존 유저가 있으면 업데이트
+      await admin.auth().updateUser(uid, {
+        displayName,
+        photoURL,
+        ...(email && { email, emailVerified }), // 이메일 있을 때만 설정
+      });
+    } catch (err) {
+      if (err.code === 'auth/user-not-found') {
+        // 신규 유저 생성
+        await admin.auth().createUser({
+          uid,
+          displayName,
+          photoURL,
+          ...(email && { email, emailVerified }),
+        });
+      } else {
+        throw err;
+      }
+    }
 
     const customToken = await admin.auth().createCustomToken(uid, {
-      provider: 'kakao.com'
+      provider: 'kakao.com',
     });
 
     return { customToken, email, displayName, photoURL };
@@ -146,7 +169,6 @@ exports.verifyKakaoToken = onCall(async (request) => {
     throw new HttpsError('internal', 'Kakao authentication failed');
   }
 });
-
 /**
  * Analysis Queue Processor
  * Firestore 트리거: analysis_queue 컬렉션에 새 문서 생성 시 자동 실행
