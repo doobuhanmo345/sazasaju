@@ -187,21 +187,21 @@ export default function CreditClient() {
                 <div className="pt-12 border-t border-slate-100 dark:border-slate-800">
                     <div className="flex items-center gap-2 mb-4">
                         <span className="w-1.5 h-1.5 rounded-full bg-indigo-500 animate-pulse" />
-                        <span className="text-[10px] font-black text-indigo-500 tracking-widest uppercase">Credit Store</span>
+                        <span className="text-[10px] font-black text-indigo-500 tracking-widest uppercase">System Update</span>
                     </div>
                     <h3 className="text-xl font-black mb-3 text-slate-800 dark:text-white">
-                        {isKo ? '크레딧 결제하기' : 'Buy Credits'}
+                        {isKo ? '자동 결제 시스템 준비 중' : 'Automated Store Coming Soon'}
                     </h3>
                     <p className="text-sm text-slate-400 dark:text-slate-500 mb-8 leading-relaxed break-keep font-medium">
                         {isKo
-                            ? '더욱 편리한 결제를 위해 토스페이먼츠 스토어를 오픈했습니다. 지금 바로 크레딧을 충전해보세요!'
-                            : 'Our credit store is now open. Recharge your credits instantly!'}
+                            ? '더욱 편리한 이용을 위해 토스페이먼츠 연동을 진행하고 있습니다. 지금 즉시 크레딧 충전이 필요하신 분은 문의하기를 통해 도와드릴게요!'
+                            : 'We are currently integrating Toss Payments for a seamless experience. If you need credits right away, please contact us!'}
                     </p>
                     <button
-                        onClick={() => router.push('/credit/store')}
+                        onClick={() => router.push('/messages?tab=inquiry')}
                         className="w-full py-5 bg-slate-900 dark:bg-white text-white dark:text-slate-900 rounded-[2rem] font-black text-sm transition-all active:scale-[0.98] shadow-xl shadow-slate-200 dark:shadow-none"
                     >
-                        {isKo ? '결제하러 가기' : 'Go to Store'}
+                        {isKo ? '크레딧 충전 문의하기' : 'Inquire Now'}
                     </button>
                 </div>
 
