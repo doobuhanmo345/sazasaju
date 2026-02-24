@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { useAuthContext } from "@/contexts/useAuthContext";
 import { useRouter } from "next/navigation";
 
-const clientKey = "test_gck_docs_Ovk5rk1EwkEbP0W43n07xlzm";
+const clientKey = "test_gck_ma60RZblrqNK7ENO2NOz8wzYWBn1";
 
 export default function CreditStorePage() {
     const { user } = useAuthContext();
@@ -106,8 +106,9 @@ export default function CreditStorePage() {
         }
 
         try {
-            // orderId 생성 (타임스탬프 기반)
-            const orderId = `ORDER_${user.uid}_${Date.now()}`;
+            // orderId 생성 (타임스탬프 기반, 특수문자 제거 및 길이 제한)
+            const safeUid = user.uid.replace(/[^a-zA-Z0-9-_]/g, '_');
+            const orderId = `ORD_${safeUid}_${Date.now()}`.substring(0, 64);
 
             await widgets.requestPayment({
                 orderId: orderId,
@@ -141,8 +142,8 @@ export default function CreditStorePage() {
                             key={product.id}
                             onClick={() => handleProductSelect(product)}
                             className={`relative p-6 rounded-2xl border-2 cursor-pointer transition-all ${selectedProduct?.id === product.id
-                                    ? 'border-indigo-500 bg-indigo-50/50 dark:bg-indigo-900/20 shadow-lg scale-[1.02]'
-                                    : 'border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 hover:border-indigo-200'
+                                ? 'border-indigo-500 bg-indigo-50/50 dark:bg-indigo-900/20 shadow-lg scale-[1.02]'
+                                : 'border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 hover:border-indigo-200'
                                 }`}
                         >
                             {product.popular && (

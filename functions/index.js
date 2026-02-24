@@ -132,22 +132,19 @@ exports.verifyKakaoToken = onCall(async (request) => {
 
     const uid = `kakao:${profile.id}`;
     const kakaoAccount = profile.kakao_account || {};
-    const email = kakaoAccount.email || null; // ✅ 가짜 이메일 제거
+    const email = kakaoAccount.email || null;
     const emailVerified = kakaoAccount.is_email_verified || false;
-    const displayName = kakaoAccount.profile?.nickname || 'Kakao User';
-    const photoURL = kakaoAccount.profile?.profile_image_url || null;
+    const displayName = kakaoAccount.profile?.nickname || '';
+    // const photoURL = kakaoAccount.profile?.profile_image_url || null;
 
-    // ✅ 핵심 추가: Firebase Auth에 유저 생성 or 업데이트
     try {
-      // 기존 유저가 있으면 업데이트
       await admin.auth().updateUser(uid, {
         displayName,
         photoURL,
-        ...(email && { email, emailVerified }), // 이메일 있을 때만 설정
+        ...(email && { email, emailVerified }),
       });
     } catch (err) {
       if (err.code === 'auth/user-not-found') {
-        // 신규 유저 생성
         await admin.auth().createUser({
           uid,
           displayName,
@@ -158,6 +155,14 @@ exports.verifyKakaoToken = onCall(async (request) => {
         throw err;
       }
     }
+
+    // ✅ 파이어스토어에 유저 정보 저장
+    await admin.firestore().collection('users').doc(uid).set({
+      email: email || null,
+      displayName,
+      photoURL,
+      updatedAt: admin.firestore.FieldValue.serverTimestamp(),
+    }, { merge: true });
 
     const customToken = await admin.auth().createCustomToken(uid, {
       provider: 'kakao.com',
