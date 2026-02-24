@@ -1,4 +1,8 @@
 'use client';
+import { loadTossPayments, ANONYMOUS } from "@tosspayments/tosspayments-sdk";
+import { useEffect, useState } from "react";
+
+
 
 import React from 'react';
 import { useRouter } from 'next/navigation';
@@ -12,6 +16,7 @@ import { useLanguage } from '@/contexts/useLanguageContext';
 import { useUsageLimit } from '@/contexts/useUsageLimit';
 import { useAuthContext } from '@/contexts/useAuthContext';
 import BackButton from '@/ui/BackButton';
+const clientKey = "live_ck_P9BRQmyarYYw2LoNY5NXrJ07KzLN";
 
 export default function CreditClient() {
     const router = useRouter();
@@ -78,23 +83,75 @@ export default function CreditClient() {
         }
     ];
 
-    const plans = [
+    const [selectedProduct, setSelectedProduct] = useState(null);
+
+    const products = [
         {
+            id: 'credit_1',
             name: isKo ? '라이트' : 'Lite',
-            credits: '1',
-            price: '1000',
-            originalPrice: '1000',
+            credits: 1,
+            price: 1000,
+            originalPrice: 1000,
             discount: '',
+            desc: '1회 분석 이용권'
         },
         {
+            id: 'credit_3',
             name: isKo ? '베스트' : 'Best',
-            credits: '3',
-            price: '2000',
-            originalPrice: '3990',
+            credits: 3,
+            price: 2000,
+            originalPrice: 3990,
             discount: '50%',
+            desc: '3회 분석 이용권 (할인)',
             recommended: true,
-        },
+            popular: true
+        }
     ];
+    useEffect(() => {
+        if (!selectedProduct && products.length > 0) {
+            setSelectedProduct(products[0]);
+        }
+    }, []);
+
+    const handlePayment = async () => {
+        if (!user) {
+            alert("로그인이 필요합니다.");
+            return;
+        }
+
+        if (!selectedProduct) {
+            alert("상품을 선택해주세요.");
+            return;
+        }
+
+        try {
+            const tossPayments = await loadTossPayments(clientKey);
+            const customerKey = user.uid.replace(/[^a-zA-Z0-9-_.= @]/g, '_');
+            const payment = tossPayments.payment({ customerKey });
+
+            const safeUid = user.uid.replace(/[^a-zA-Z0-9-_]/g, '_');
+            const orderId = `ORD_${safeUid}_${Date.now()}`.substring(0, 64);
+
+            await payment.requestPayment({
+                method: "CARD",
+                amount: {
+                    currency: "KRW",
+                    value: selectedProduct.price,
+                },
+                orderId: orderId,
+                orderName: selectedProduct.name,
+                successUrl: `${window.location.origin}/credit/success?userId=${user.uid}&creditsToAdd=${selectedProduct.credits}`,
+                failUrl: `${window.location.origin}/credit/fail`,
+                customerEmail: user.email,
+                customerName: user.displayName || "Customer",
+            });
+        } catch (error) {
+            console.error('결제 요청 에러:', error);
+        }
+    };
+    //결제
+
+
 
     return (
         <div className="min-h-screen bg-white dark:bg-slate-950 font-pretendard pb-20">
@@ -143,67 +200,64 @@ export default function CreditClient() {
 
                 {/* Pricing Selection */}
                 <div className="space-y-4 mb-16">
-                    {plans.map((plan, idx) => (
-                        <div
-                            key={idx}
-                            className={`relative p-6 rounded-[2.5rem] border-2 transition-all duration-300 ${plan.recommended
-                                ? 'border-indigo-600 bg-indigo-50/20 dark:bg-indigo-900/10'
-                                : 'border-slate-100 dark:border-slate-800 bg-white dark:bg-slate-900'
-                                }`}
-                        >
-                            {plan.recommended && (
-                                <div className="absolute -top-3 left-8 bg-indigo-600 text-white text-xs font-black px-3 py-1 rounded-full uppercase tracking-widest">
-                                    Best Choice
-                                </div>
-                            )}
+                    {products.map((product) => {
+                        const isSelected = selectedProduct?.id === product.id;
+                        return (
+                            <div
+                                key={product.id}
+                                onClick={() => setSelectedProduct(product)}
+                                className={`relative p-6 rounded-[2.5rem] border-2 cursor-pointer transition-all duration-300 ${isSelected
+                                    ? 'border-indigo-600 bg-indigo-50/20 dark:bg-indigo-900/10 scale-[1.02] shadow-lg'
+                                    : 'border-slate-100 dark:border-slate-800 bg-white dark:bg-slate-900 hover:border-indigo-200'
+                                    }`}
+                            >
+                                {product.recommended && (
+                                    <div className="absolute -top-3 left-8 bg-indigo-600 text-white text-xs font-black px-3 py-1 rounded-full uppercase tracking-widest shadow-md">
+                                        Best Choice
+                                    </div>
+                                )}
 
-                            <div className="flex items-center justify-between">
-                                <div className="flex items-center gap-4">
-                                    <div className={`p-3 rounded-2xl ${plan.recommended ? 'bg-indigo-600 text-white' : 'bg-slate-50 dark:bg-slate-800 text-slate-400'}`}>
-                                        <BoltIcon className="w-5 h-5 stroke-[1.5]" />
-                                    </div>
-                                    <div>
-                                        <div className="flex items-center gap-2">
-                                            <span className="font-black text-lg text-slate-800 dark:text-white">{plan.credits} Credits</span>
-                                            {plan.price !== plan.originalPrice && (
-                                                <span className="text-[10px] bg-rose-100 dark:bg-rose-900/50 text-rose-600 dark:text-rose-400 font-black px-1.5 py-0.5 rounded">-{plan.discount}</span>
-                                            )}
+                                <div className="flex items-center justify-between">
+                                    <div className="flex items-center gap-4">
+                                        <div className={`p-3 rounded-2xl transition-colors ${isSelected ? 'bg-indigo-600 text-white' : 'bg-slate-50 dark:bg-slate-800 text-slate-400'}`}>
+                                            <BoltIcon className="w-5 h-5 stroke-[1.5]" />
                                         </div>
-                                        <span className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">{plan.name} Package</span>
+                                        <div>
+                                            <div className="flex items-center gap-2">
+                                                <span className="font-black text-lg text-slate-800 dark:text-white">{product.credits} Credits</span>
+                                                {product.price !== product.originalPrice && (
+                                                    <span className="text-[10px] bg-rose-100 dark:bg-rose-900/50 text-rose-600 dark:text-rose-400 font-black px-1.5 py-0.5 rounded">-{product.discount}</span>
+                                                )}
+                                            </div>
+                                            <span className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">{product.name} Package</span>
+                                        </div>
                                     </div>
-                                </div>
-                                <div className="text-right">
-                                    {plan.price !== plan.originalPrice && (
-                                        <div className="text-slate-300 dark:text-slate-600 text-xs line-through font-bold mb-0.5">₩{plan.originalPrice}</div>
-                                    )}
-                                    <div className="text-2xl font-black text-slate-900 dark:text-white">₩{plan.price}</div>
+                                    <div className="text-right">
+                                        {product.price !== product.originalPrice && (
+                                            <div className="text-slate-300 dark:text-slate-600 text-xs line-through font-bold mb-0.5">₩{product.originalPrice.toLocaleString()}</div>
+                                        )}
+                                        <div className="text-2xl font-black text-slate-900 dark:text-white">₩{product.price.toLocaleString()}</div>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    ))}
+                        );
+                    })}
                 </div>
+                <button
 
-                {/* Minimal Inquiry Banner */}
-                <div className="pt-12 border-t border-slate-100 dark:border-slate-800">
-                    <div className="flex items-center gap-2 mb-4">
-                        <span className="w-1.5 h-1.5 rounded-full bg-indigo-500 animate-pulse" />
-                        <span className="text-[10px] font-black text-indigo-500 tracking-widest uppercase">Credit Store</span>
-                    </div>
-                    <h3 className="text-xl font-black mb-3 text-slate-800 dark:text-white">
-                        {isKo ? '크레딧 결제하기' : 'Buy Credits'}
-                    </h3>
-                    <p className="text-sm text-slate-400 dark:text-slate-500 mb-8 leading-relaxed break-keep font-medium">
-                        {isKo
-                            ? '더욱 편리한 결제를 위해 토스페이먼츠 스토어를 오픈했습니다. 지금 바로 크레딧을 충전해보세요!'
-                            : 'Our credit store is now open. Recharge your credits instantly!'}
-                    </p>
-                    <button
-                        onClick={() => router.push('/credit/store')}
-                        className="w-full py-5 bg-slate-900 dark:bg-white text-white dark:text-slate-900 rounded-[2rem] font-black text-sm transition-all active:scale-[0.98] shadow-xl shadow-slate-200 dark:shadow-none"
-                    >
-                        {isKo ? '결제하러 가기' : 'Go to Store'}
-                    </button>
-                </div>
+                    className="w-full py-5 bg-slate-900 dark:bg-white text-white dark:text-slate-900 rounded-[2rem] font-black text-sm transition-all active:scale-[0.98] shadow-xl shadow-slate-200 dark:shadow-none"
+                    disabled={!selectedProduct}
+                    onClick={handlePayment}
+                >
+                    {selectedProduct ? `${selectedProduct.price.toLocaleString()}원 결제하기` : '상품을 선택해주세요'}
+                </button>
+                <p className="mt-4 text-xs text-center text-slate-400">
+                    위 주문 내용을 확인하였으며, 정보 제공 등에 동의합니다.
+                </p>
+
+
+
+
 
                 {/* Footer Note */}
                 <p className="mt-12 text-center text-xs text-slate-400 font-medium tracking-tight">
