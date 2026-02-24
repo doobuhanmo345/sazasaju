@@ -4,21 +4,16 @@ import { useEffect, useState } from "react";
 import { useAuthContext } from "@/contexts/useAuthContext";
 import { useRouter } from "next/navigation";
 
-const clientKey = "test_gck_ma60RZblrqNK7ENO2NOz8wzYWBn1";
+const clientKey = "live_ck_P9BRQmyarYYw2LoNY5NXrJ07KzLN";
 
 export default function CreditStorePage() {
     const { user } = useAuthContext();
     const router = useRouter();
 
-    const [amount, setAmount] = useState({
-        currency: "KRW",
-        value: 1000,
-    });
     const [selectedProduct, setSelectedProduct] = useState(null);
-    const [ready, setReady] = useState(false);
-    const [widgets, setWidgets] = useState(null);
 
     const products = [
+
         {
             id: 'credit_1',
             name: '1 Credit',
@@ -37,60 +32,8 @@ export default function CreditStorePage() {
     ];
 
     useEffect(() => {
-        async function fetchPaymentWidgets() {
-            try {
-                const tossPayments = await loadTossPayments(clientKey);
-                const customerKey = user ? user.uid.replace(/[^a-zA-Z0-9-_.= @]/g, '_') : ANONYMOUS;
-                const widgets = tossPayments.widgets({ customerKey });
-                setWidgets(widgets);
-            } catch (error) {
-                console.error("Error fetching payment widget:", error);
-            }
-        }
-
-        fetchPaymentWidgets();
-    }, [user]);
-
-    useEffect(() => {
-        async function renderPaymentWidgets() {
-            if (widgets == null) {
-                return;
-            }
-
-            await widgets.setAmount(amount);
-
-            await widgets.renderPaymentMethods({
-                selector: "#payment-method",
-                variantKey: "DEFAULT",
-            });
-
-            await widgets.renderAgreement({
-                selector: "#agreement",
-                variantKey: "AGREEMENT",
-            });
-
-            setReady(true);
-        }
-
-        renderPaymentWidgets();
-    }, [widgets]);
-
-    const handleProductSelect = async (product) => {
-        setSelectedProduct(product);
-        const newAmount = {
-            currency: "KRW",
-            value: product.price,
-        };
-        setAmount(newAmount);
-
-        if (widgets) {
-            await widgets.setAmount(newAmount);
-        }
-    };
-
-    useEffect(() => {
         if (!selectedProduct && products.length > 0) {
-            handleProductSelect(products[0]);
+            setSelectedProduct(products[0]);
         }
     }, []);
 
@@ -106,14 +49,21 @@ export default function CreditStorePage() {
         }
 
         try {
-            // orderId 생성 (타임스탬프 기반, 특수문자 제거 및 길이 제한)
+            const tossPayments = await loadTossPayments(clientKey);
+            const customerKey = user.uid.replace(/[^a-zA-Z0-9-_.= @]/g, '_');
+            const payment = tossPayments.payment({ customerKey });
+
             const safeUid = user.uid.replace(/[^a-zA-Z0-9-_]/g, '_');
             const orderId = `ORD_${safeUid}_${Date.now()}`.substring(0, 64);
 
-            await widgets.requestPayment({
+            await payment.requestPayment({
+                method: "CARD",
+                amount: {
+                    currency: "KRW",
+                    value: selectedProduct.price,
+                },
                 orderId: orderId,
                 orderName: selectedProduct.name,
-                // successUrl에 필요한 정보 전달
                 successUrl: `${window.location.origin}/credit/success?userId=${user.uid}&creditsToAdd=${selectedProduct.credits}`,
                 failUrl: `${window.location.origin}/credit/fail`,
                 customerEmail: user.email,
@@ -140,7 +90,7 @@ export default function CreditStorePage() {
                     {products.map((product) => (
                         <div
                             key={product.id}
-                            onClick={() => handleProductSelect(product)}
+                            onClick={() => setSelectedProduct(product)}
                             className={`relative p-6 rounded-2xl border-2 cursor-pointer transition-all ${selectedProduct?.id === product.id
                                 ? 'border-indigo-500 bg-indigo-50/50 dark:bg-indigo-900/20 shadow-lg scale-[1.02]'
                                 : 'border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 hover:border-indigo-200'
@@ -167,12 +117,9 @@ export default function CreditStorePage() {
                 </div>
 
                 <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-xl p-6 border border-slate-200 dark:border-slate-700">
-                    <div id="payment-method" />
-                    <div id="agreement" />
-
                     <button
-                        className="w-full mt-8 py-4 px-6 rounded-xl font-bold text-lg text-white bg-indigo-600 hover:bg-indigo-500 active:bg-indigo-700 transition-colors shadow-lg shadow-indigo-200 dark:shadow-none disabled:opacity-50 disabled:cursor-not-allowed"
-                        disabled={!ready}
+                        className="w-full py-4 px-6 rounded-xl font-bold text-lg text-white bg-indigo-600 hover:bg-indigo-500 active:bg-indigo-700 transition-colors shadow-lg shadow-indigo-200 dark:shadow-none disabled:opacity-50 disabled:cursor-not-allowed"
+                        disabled={!selectedProduct}
                         onClick={handlePayment}
                     >
                         {selectedProduct ? `${selectedProduct.price.toLocaleString()}원 결제하기` : '상품을 선택해주세요'}
