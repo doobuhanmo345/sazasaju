@@ -3,6 +3,8 @@ import { AppProvider } from '@/contexts/AppProvider';
 import { LoadingProvider } from '@/contexts/useLoadingContext';
 import ClientWrapper from '@/components/ClientWrapper';
 import MaintenanceGate from '@/components/MaintenanceGate';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 export const metadata = {
   title: {
@@ -73,6 +75,7 @@ export default function RootLayout({ children }) {
           <LoadingProvider>
             <MaintenanceGate>
               <ClientWrapper>
+                <ToastContainer />
                 {children}
               </ClientWrapper>
             </MaintenanceGate>

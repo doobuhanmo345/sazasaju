@@ -9,6 +9,7 @@ import { calculateSaju } from '@/lib/sajuCalculator';
 import { specialPaths } from '@/lib/constants';
 import { ProfileService } from '@/lib/profileService';
 import { calculateSajuData, defaultSajuPrompt } from '@/lib/sajuLogic';
+import { toast } from 'react-toastify';
 
 const AuthContext = createContext();
 
@@ -427,10 +428,7 @@ export function AuthContextProvider({ children }) {
     setIsLoggingIn(true);
     try {
       if (provider === 'kakao') {
-        const { emailConflict } = await loginWithKakao();
-        if (emailConflict) {
-          toast.warn('이미 다른 방법으로 가입된 이메일이에요. 카카오로 계속 진행합니다.');
-        }
+        await loginWithKakao();
       } else if (provider === 'naver') {
         await loginWithNaver();
       } else {
@@ -438,6 +436,10 @@ export function AuthContextProvider({ children }) {
       }
     } catch (error) {
       if (error.code === 'auth/popup-closed-by-user') return;
+      if (error.message === 'email-conflict') {
+        toast.error('이미 Google로 가입된 이메일이에요. Google 로그인을 이용해주세요.');
+        return;
+      }
       console.error('😡Login Error:', error);
     } finally {
       setIsLoggingIn(false);

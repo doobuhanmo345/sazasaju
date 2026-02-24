@@ -135,7 +135,6 @@ exports.verifyKakaoToken = onCall(async (request) => {
     const email = kakaoAccount.email || null;
     const emailVerified = kakaoAccount.is_email_verified || false;
     const displayName = kakaoAccount.profile?.nickname || '';
-    let emailConflict = false;
 
     // Firebase Auth 유저 생성/업데이트
     try {
@@ -145,7 +144,6 @@ exports.verifyKakaoToken = onCall(async (request) => {
       });
     } catch (err) {
       if (err.code === 'auth/user-not-found') {
-        // 신규 유저 → 이메일 없어도, 동의 안 해도 uid로 생성
         try {
           await admin.auth().createUser({
             uid,
@@ -154,17 +152,14 @@ exports.verifyKakaoToken = onCall(async (request) => {
           });
         } catch (createErr) {
           if (createErr.code === 'auth/email-already-exists') {
-            // 이메일이 다른 계정(Google 등)에 이미 사용 중
-            emailConflict = true;
-            await admin.auth().createUser({ uid, displayName });
-          } else {
-            throw createErr;
+            // Google 등으로 이미 가입된 이메일 → 가입 차단
+            throw new HttpsError('already-exists', 'email-conflict');
           }
+          throw createErr;
         }
       } else if (err.code === 'auth/email-already-exists') {
-        // 기존 유저 업데이트 시 이메일 충돌
-        emailConflict = true;
-        await admin.auth().updateUser(uid, { displayName });
+        // Google 등으로 이미 가입된 이메일 → 가입 차단
+        throw new HttpsError('already-exists', 'email-conflict');
       } else {
         throw err;
       }
@@ -172,7 +167,7 @@ exports.verifyKakaoToken = onCall(async (request) => {
 
     // Firestore 유저 정보 저장
     await admin.firestore().collection('users').doc(uid).set({
-      email: emailConflict ? null : (email || null),
+      email: email || null,
       displayName,
       updatedAt: admin.firestore.FieldValue.serverTimestamp(),
     }, { merge: true });
@@ -181,14 +176,12 @@ exports.verifyKakaoToken = onCall(async (request) => {
       provider: 'kakao.com',
     });
 
-    return {
-      customToken,
-      email: emailConflict ? null : email,
-      displayName,
-      emailConflict, // 클라이언트에서 "이미 다른 방법으로 가입된 이메일" 안내 가능
-    };
+    return { customToken, email, displayName };
 
   } catch (error) {
+    // HttpsError는 그대로 던지기 (email-conflict 등)
+    if (error instanceof HttpsError) throw error;
+
     const errCode = error.code || 'unknown';
     const errMsg = error.response?.data || error.message;
     console.error('Kakao verification error:', errCode, errMsg);
