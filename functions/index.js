@@ -135,32 +135,45 @@ exports.verifyKakaoToken = onCall(async (request) => {
     const email = kakaoAccount.email || null;
     const emailVerified = kakaoAccount.is_email_verified || false;
     const displayName = kakaoAccount.profile?.nickname || '';
-    // const photoURL = kakaoAccount.profile?.profile_image_url || null;
+    let emailConflict = false;
 
+    // Firebase Auth 유저 생성/업데이트
     try {
       await admin.auth().updateUser(uid, {
         displayName,
-        photoURL,
         ...(email && { email, emailVerified }),
       });
     } catch (err) {
       if (err.code === 'auth/user-not-found') {
-        await admin.auth().createUser({
-          uid,
-          displayName,
-          photoURL,
-          ...(email && { email, emailVerified }),
-        });
+        // 신규 유저 → 이메일 없어도, 동의 안 해도 uid로 생성
+        try {
+          await admin.auth().createUser({
+            uid,
+            displayName,
+            ...(email && { email, emailVerified }),
+          });
+        } catch (createErr) {
+          if (createErr.code === 'auth/email-already-exists') {
+            // 이메일이 다른 계정(Google 등)에 이미 사용 중
+            emailConflict = true;
+            await admin.auth().createUser({ uid, displayName });
+          } else {
+            throw createErr;
+          }
+        }
+      } else if (err.code === 'auth/email-already-exists') {
+        // 기존 유저 업데이트 시 이메일 충돌
+        emailConflict = true;
+        await admin.auth().updateUser(uid, { displayName });
       } else {
         throw err;
       }
     }
 
-    // ✅ 파이어스토어에 유저 정보 저장
+    // Firestore 유저 정보 저장
     await admin.firestore().collection('users').doc(uid).set({
-      email: email || null,
+      email: emailConflict ? null : (email || null),
       displayName,
-      photoURL,
       updatedAt: admin.firestore.FieldValue.serverTimestamp(),
     }, { merge: true });
 
@@ -168,10 +181,18 @@ exports.verifyKakaoToken = onCall(async (request) => {
       provider: 'kakao.com',
     });
 
-    return { customToken, email, displayName, photoURL };
+    return {
+      customToken,
+      email: emailConflict ? null : email,
+      displayName,
+      emailConflict, // 클라이언트에서 "이미 다른 방법으로 가입된 이메일" 안내 가능
+    };
+
   } catch (error) {
-    console.error('Kakao verification error:', error.response?.data || error.message);
-    throw new HttpsError('internal', 'Kakao authentication failed');
+    const errCode = error.code || 'unknown';
+    const errMsg = error.response?.data || error.message;
+    console.error('Kakao verification error:', errCode, errMsg);
+    throw new HttpsError('internal', `Kakao authentication failed: ${errCode}`);
   }
 });
 /**

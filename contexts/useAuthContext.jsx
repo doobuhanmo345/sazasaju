@@ -427,16 +427,17 @@ export function AuthContextProvider({ children }) {
     setIsLoggingIn(true);
     try {
       if (provider === 'kakao') {
-        await loginWithKakao();
+        const { emailConflict } = await loginWithKakao();
+        if (emailConflict) {
+          toast.warn('이미 다른 방법으로 가입된 이메일이에요. 카카오로 계속 진행합니다.');
+        }
       } else if (provider === 'naver') {
         await loginWithNaver();
       } else {
         await login();
       }
     } catch (error) {
-      if (error.code === 'auth/popup-closed-by-user') {
-        return;
-      }
+      if (error.code === 'auth/popup-closed-by-user') return;
       console.error('😡Login Error:', error);
     } finally {
       setIsLoggingIn(false);

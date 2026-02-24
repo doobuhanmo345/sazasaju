@@ -49,7 +49,7 @@ export default function HomeClient() {
       return '2024-01-01T00:00';
     }
   });
-
+  console.log(user, userData)
   // Data Sync Effect
   useEffect(() => {
     if (user && userData) {
