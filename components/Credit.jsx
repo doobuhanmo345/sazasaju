@@ -3,6 +3,7 @@ import { BoltIcon, CurrencyDollarIcon } from "@heroicons/react/24/outline";
 import { useUsageLimit } from "@/contexts/useUsageLimit";
 import { useRouter } from "next/navigation";
 import { useAuthContext } from "@/contexts/useAuthContext";
+import { CircleStackIcon } from '@heroicons/react/24/solid';
 
 export default function Credit() {
     const { editCount, MAX_EDIT_COUNT } = useUsageLimit();
@@ -51,7 +52,7 @@ export default function Credit() {
                         onClick={() => router.push('/credit')}
                         className="flex items-center gap-0.5 border-r border-slate-300 dark:border-slate-600 pr-1.5 mr-1.5 hover:opacity-70 transition-opacity"
                     >
-                        <CurrencyDollarIcon className="w-3.5 h-3.5 text-indigo-500" />
+                        <CircleStackIcon className="w-3.5 h-3.5 text-indigo-500" />
                         <span className="text-xs font-black font-mono text-slate-700 dark:text-slate-200 min-w-[12px] text-center">
                             {userData?.credits || 0}
                         </span>

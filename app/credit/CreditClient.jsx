@@ -1,7 +1,7 @@
 'use client';
 import { loadTossPayments, ANONYMOUS } from "@tosspayments/tosspayments-sdk";
 import { useEffect, useState } from "react";
-
+import { CircleStackIcon } from '@heroicons/react/24/solid';
 
 
 import React from 'react';
@@ -61,7 +61,7 @@ export default function CreditClient() {
 
     const benefits = [
         {
-            icon: <BoltIcon className="w-5 h-5 text-amber-500" />,
+            icon: <CircleStackIcon className="w-5 h-5 text-amber-500" />,
             title: isKo ? '매일 리셋되는 무료 혜택' : 'Daily Free Credits',
             desc: isKo
                 ? `매일 ${MAX_EDIT_COUNT}회의 무료 분석 기회`
@@ -88,23 +88,35 @@ export default function CreditClient() {
     const products = [
         {
             id: 'credit_1',
-            name: isKo ? '라이트' : 'Lite',
+            name: isKo ? '1 크레딧' : '1 Credit',
+            subName: isKo ? '라이트' : 'Lite',
             credits: 1,
             price: 1000,
             originalPrice: 1000,
             discount: '',
-            desc: '1회 분석 이용권'
+            desc: isKo ? ['가벼운 단일 사주 분석', '사자톡 추가 질문'] : ['1 analysis ticket', 'Good for quick questions']
         },
         {
             id: 'credit_3',
-            name: isKo ? '베스트' : 'Best',
+            name: isKo ? '2+1 크레딧' : '2+1 Credits',
+            subName: isKo ? '베스트' : 'Best',
             credits: 3,
             price: 2000,
-            originalPrice: 3990,
-            discount: '50%',
-            desc: '3회 분석 이용권 (할인)',
+            originalPrice: 3000,
+            discount: '33%',
+            desc: isKo ? ['3개의 테마 사주 분석', '보너스 1 크레딧 제공'] : ['Most popular choice', 'Provides 3 tickets'],
             recommended: true,
             popular: true
+        },
+        {
+            id: 'credit_5',
+            name: isKo ? '5+5 크레딧' : '5+5 Credits',
+            subName: isKo ? '프로' : 'Pro',
+            credits: 10,
+            price: 5000,
+            originalPrice: 10000,
+            discount: '50%',
+            desc: isKo ? ['전체 테마 사주 분석', '보너스 5 크레딧 제공'] : ['Best value package', 'Deep and thorough analysis']
         }
     ];
     useEffect(() => {
@@ -157,7 +169,7 @@ export default function CreditClient() {
         <div className="min-h-screen bg-white dark:bg-slate-950 font-pretendard pb-20">
             <BackButton title={isKo ? '크레딧 구매' : 'Get Credits'} />
 
-            <div className="max-w-xl mx-auto px-6 pt-24">
+            <div className="max-w-4xl mx-auto px-6 pt-24">
                 {/* Simple Hero */}
                 <div className="mb-14 text-center">
                     <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-indigo-50 dark:bg-indigo-900/30 rounded-full text-indigo-600 dark:text-indigo-400 text-[10px] font-black uppercase tracking-widest mb-4">
@@ -167,9 +179,9 @@ export default function CreditClient() {
                     <h2 className="text-3xl font-black leading-tight tracking-tight mb-4 text-slate-800 dark:text-white">
                         {isKo ? (
                             <>
-                                하루 {MAX_EDIT_COUNT}개의 크레딧이<br />
+                                오늘 무료 분석이 {MAX_EDIT_COUNT - userData?.editCount} 회 남았습니다.<br />
                                 <span className="bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
-                                    모자라다면?
+                                    지금 바로 더 보고싶다면?
                                 </span>
                             </>
                         ) : (
@@ -184,14 +196,14 @@ export default function CreditClient() {
                 </div>
 
                 {/* Minimal Benefits Grid */}
-                <div className="grid grid-cols-1 gap-6 mb-16">
+                <div className="grid grid-cols-1 gap-4 mb-16 max-w-xl mx-auto">
                     {benefits.map((benefit, idx) => (
-                        <div key={idx} className="flex items-start gap-4 p-4 rounded-3xl bg-slate-50/50 dark:bg-slate-900/40 border border-slate-100/50 dark:border-white/[0.03]">
-                            <div className="shrink-0 w-10 h-10 bg-white dark:bg-slate-800 rounded-xl flex items-center justify-center shadow-sm">
+                        <div key={idx} className="flex items-start gap-4 p-5 rounded-3xl bg-slate-50/50 dark:bg-slate-900/40 border border-slate-100/50 dark:border-white/[0.03]">
+                            <div className="shrink-0 w-12 h-12 bg-white dark:bg-slate-800 rounded-2xl flex items-center justify-center shadow-sm">
                                 {benefit.icon}
                             </div>
-                            <div>
-                                <h4 className="font-black text-sm text-slate-800 dark:text-white mb-0.5">{benefit.title}</h4>
+                            <div className="flex flex-col justify-center">
+                                <h4 className="font-black text-sm text-slate-800 dark:text-white mb-1">{benefit.title}</h4>
                                 <p className="text-xs text-slate-400 dark:text-slate-500 font-medium leading-tight">{benefit.desc}</p>
                             </div>
                         </div>
@@ -199,58 +211,72 @@ export default function CreditClient() {
                 </div>
 
                 {/* Pricing Selection */}
-                <div className="space-y-4 mb-16">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16">
                     {products.map((product) => {
                         const isSelected = selectedProduct?.id === product.id;
                         return (
                             <div
                                 key={product.id}
                                 onClick={() => setSelectedProduct(product)}
-                                className={`relative p-6 rounded-[2.5rem] border-2 cursor-pointer transition-all duration-300 ${isSelected
-                                    ? 'border-indigo-600 bg-indigo-50/20 dark:bg-indigo-900/10 scale-[1.02] shadow-lg'
+                                className={`relative rounded-[2.5rem] border-2 cursor-pointer transition-all duration-300 flex flex-col h-full overflow-hidden ${isSelected
+                                    ? 'border-indigo-600 md:scale-105 shadow-xl md:z-10 bg-white dark:bg-slate-900'
                                     : 'border-slate-100 dark:border-slate-800 bg-white dark:bg-slate-900 hover:border-indigo-200'
                                     }`}
                             >
                                 {product.recommended && (
-                                    <div className="absolute -top-3 left-8 bg-indigo-600 text-white text-xs font-black px-3 py-1 rounded-full uppercase tracking-widest shadow-md">
+                                    <div className="absolute top-0 left-1/2 -translate-x-1/2 bg-indigo-600 text-white text-[10px] font-black px-4 py-1.5 rounded-b-xl uppercase tracking-widest shadow-md whitespace-nowrap z-10">
                                         Best Choice
                                     </div>
                                 )}
 
-                                <div className="flex items-center justify-between">
-                                    <div className="flex items-center gap-4">
-                                        <div className={`p-3 rounded-2xl transition-colors ${isSelected ? 'bg-indigo-600 text-white' : 'bg-slate-50 dark:bg-slate-800 text-slate-400'}`}>
-                                            <BoltIcon className="w-5 h-5 stroke-[1.5]" />
+                                <div className="p-8 pb-6 bg-white dark:bg-transparent">
+                                    <div className="flex items-center justify-between mb-8">
+                                        <div className={`p-3.5 rounded-2xl transition-colors ${isSelected ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-200 dark:shadow-none' : 'bg-slate-50 dark:bg-slate-800 text-slate-400'}`}>
+                                            <CircleStackIcon className="w-6 h-6 stroke-[1.5]" />
                                         </div>
-                                        <div>
-                                            <div className="flex items-center gap-2">
-                                                <span className="font-black text-lg text-slate-800 dark:text-white">{product.credits} Credits</span>
-                                                {product.price !== product.originalPrice && (
-                                                    <span className="text-[10px] bg-rose-100 dark:bg-rose-900/50 text-rose-600 dark:text-rose-400 font-black px-1.5 py-0.5 rounded">-{product.discount}</span>
-                                                )}
-                                            </div>
-                                            <span className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">{product.name} Package</span>
+                                        <div className="text-right">
+                                            {product.price !== product.originalPrice && (
+                                                <div className="text-slate-300 dark:text-slate-600 text-[11px] line-through font-bold mb-0.5">₩{product.originalPrice.toLocaleString()}</div>
+                                            )}
+                                            <div className="text-xl font-black text-slate-900 dark:text-white">₩{product.price.toLocaleString()}</div>
                                         </div>
                                     </div>
-                                    <div className="text-right">
+
+                                    <div className="mb-2 flex items-center gap-2">
+                                        <span className="font-black text-2xl text-slate-800 dark:text-white">{product.name}</span>
                                         {product.price !== product.originalPrice && (
-                                            <div className="text-slate-300 dark:text-slate-600 text-xs line-through font-bold mb-0.5">₩{product.originalPrice.toLocaleString()}</div>
+                                            <span className="text-[10px] bg-rose-100 dark:bg-rose-900/50 text-rose-600 dark:text-rose-400 font-black px-1.5 py-0.5 rounded">-{product.discount}</span>
                                         )}
-                                        <div className="text-2xl font-black text-slate-900 dark:text-white">₩{product.price.toLocaleString()}</div>
                                     </div>
+
+                                    <span className="text-xs text-slate-400 font-bold uppercase tracking-wider block">{product.subName}</span>
+                                </div>
+
+                                <div className={`p-8 pt-6 mt-auto border-t ${isSelected ? 'bg-indigo-50/50 dark:bg-indigo-900/20 border-indigo-100 dark:border-indigo-500/20' : 'bg-slate-50 dark:bg-slate-800/50 border-slate-100 dark:border-slate-800'}`}>
+                                    <ul className="space-y-2.5">
+                                        {product.desc.map((descLine, i) => (
+                                            <li key={i} className="flex items-start gap-2.5">
+                                                <div className={`shrink-0 w-1.5 h-1.5 rounded-full mt-1.5 ${isSelected ? 'bg-indigo-500' : 'bg-slate-300 dark:bg-slate-600'}`} />
+                                                <span className={`text-sm font-medium leading-relaxed ${isSelected ? 'text-indigo-900 dark:text-indigo-200' : 'text-slate-500 dark:text-slate-400'}`}>
+                                                    {descLine}
+                                                </span>
+                                            </li>
+                                        ))}
+                                    </ul>
                                 </div>
                             </div>
                         );
                     })}
                 </div>
-                <button
-
-                    className="w-full py-5 bg-slate-900 dark:bg-white text-white dark:text-slate-900 rounded-[2rem] font-black text-sm transition-all active:scale-[0.98] shadow-xl shadow-slate-200 dark:shadow-none"
-                    disabled={!selectedProduct}
-                    onClick={handlePayment}
-                >
-                    {selectedProduct ? `${selectedProduct.price.toLocaleString()}원 결제하기` : '상품을 선택해주세요'}
-                </button>
+                <div className="flex justify-center">
+                    <button
+                        className="w-full md:w-96 py-5 bg-slate-900 dark:bg-white text-white dark:text-slate-900 rounded-[2rem] font-black text-base transition-all active:scale-[0.98] shadow-xl shadow-slate-200 dark:shadow-none"
+                        disabled={!selectedProduct}
+                        onClick={handlePayment}
+                    >
+                        {selectedProduct ? `${selectedProduct.price.toLocaleString()}원 결제하기` : '상품을 선택해주세요'}
+                    </button>
+                </div>
                 <p className="mt-4 text-xs text-center text-slate-400">
                     위 주문 내용을 확인하였으며, 정보 제공 등에 동의합니다.
                 </p>

@@ -4,20 +4,22 @@ import {
   HomeIcon,
   SparklesIcon,
   IdentificationIcon,
-  UserCircleIcon
+  UserCircleIcon,
+  CircleStackIcon
 } from '@heroicons/react/24/outline';
 import {
   HomeIcon as HomeIconSolid,
   SparklesIcon as SparklesIconSolid,
   IdentificationIcon as IdentificationIconSolid,
-  UserCircleIcon as UserCircleIconSolid
+  UserCircleIcon as UserCircleIconSolid,
+  CircleStackIcon as CircleStackIconSolid
 } from '@heroicons/react/24/solid';
 
 import { useAuthContext } from '@/contexts/useAuthContext';
 import { useLanguage } from '@/contexts/useLanguageContext';
 
 export default function MenuBar() {
-  const { user, openLoginModal, selectedProfile } = useAuthContext();
+  const { user, openLoginModal, selectedProfile, iljuImagePath } = useAuthContext();
   const router = useRouter();
   const pathname = usePathname();
   const { language } = useLanguage();
@@ -29,7 +31,7 @@ export default function MenuBar() {
       <div className="max-w-md mx-auto flex justify-between items-center px-3">
         <button
           onClick={() => router.push('/')}
-          className={`relative flex min-w-[82px] flex-col items-center gap-1.5 transition-all duration-200 active:scale-90 px-2 py-2.5 rounded-2xl group ${pathname === '/' ? 'text-indigo-600 active:bg-indigo-100/50' : 'text-slate-400 hover:text-slate-600 hover:bg-slate-50 dark:hover:bg-slate-800/50 active:bg-slate-100 dark:active:bg-slate-800'}`}
+          className={`relative flex flex-1 max-w-[82px] min-w-[60px] flex-col items-center gap-1.5 transition-all duration-200 active:scale-90 px-1 py-2.5 rounded-2xl group ${pathname === '/' ? 'text-indigo-600 active:bg-indigo-100/50' : 'text-slate-400 hover:text-slate-600 hover:bg-slate-50 dark:hover:bg-slate-800/50 active:bg-slate-100 dark:active:bg-slate-800'}`}
         >
           {pathname === '/' && (
             <div className="absolute inset-0 bg-indigo-50 dark:bg-indigo-500/15 rounded-2xl -z-10 animate-in fade-in zoom-in-95 duration-500" />
@@ -44,7 +46,7 @@ export default function MenuBar() {
 
         <button
           onClick={() => router.push('/fortune')}
-          className={`relative flex min-w-[82px] flex-col items-center gap-1.5 transition-all duration-200 active:scale-90 px-2 py-2.5 rounded-2xl group ${pathname === '/fortune' ? 'text-indigo-600 active:bg-indigo-100/50' : 'text-slate-400 hover:text-slate-600 hover:bg-slate-50 dark:hover:bg-slate-800/50 active:bg-slate-100 dark:active:bg-slate-800'}`}
+          className={`relative flex flex-1 max-w-[82px] min-w-[60px] flex-col items-center gap-1.5 transition-all duration-200 active:scale-90 px-1 py-2.5 rounded-2xl group ${pathname === '/fortune' ? 'text-indigo-600 active:bg-indigo-100/50' : 'text-slate-400 hover:text-slate-600 hover:bg-slate-50 dark:hover:bg-slate-800/50 active:bg-slate-100 dark:active:bg-slate-800'}`}
         >
           {pathname === '/fortune' && (
             <div className="absolute inset-0 bg-indigo-50 dark:bg-indigo-500/15 rounded-2xl -z-10 animate-in fade-in zoom-in-95 duration-500" />
@@ -59,7 +61,7 @@ export default function MenuBar() {
 
         <button
           onClick={() => router.push('/tarot')}
-          className={`relative flex min-w-[82px] flex-col items-center gap-1.5 transition-all duration-200 active:scale-90 px-2 py-2.5 rounded-2xl group ${pathname === '/tarot' ? 'text-indigo-600 active:bg-indigo-100/50' : 'text-slate-400 hover:text-slate-600 hover:bg-slate-50 dark:hover:bg-slate-800/50 active:bg-slate-100 dark:active:bg-slate-800'}`}
+          className={`relative flex flex-1 max-w-[82px] min-w-[60px] flex-col items-center gap-1.5 transition-all duration-200 active:scale-90 px-1 py-2.5 rounded-2xl group ${pathname === '/tarot' ? 'text-indigo-600 active:bg-indigo-100/50' : 'text-slate-400 hover:text-slate-600 hover:bg-slate-50 dark:hover:bg-slate-800/50 active:bg-slate-100 dark:active:bg-slate-800'}`}
         >
           {pathname === '/tarot' && (
             <div className="absolute inset-0 bg-indigo-50 dark:bg-indigo-500/15 rounded-2xl -z-10 animate-in fade-in zoom-in-95 duration-500" />
@@ -73,6 +75,21 @@ export default function MenuBar() {
         </button>
 
         <button
+          onClick={() => router.push('/credit')}
+          className={`relative flex flex-1 max-w-[82px] min-w-[60px] flex-col items-center gap-1.5 transition-all duration-200 active:scale-90 px-1 py-2.5 rounded-2xl group ${pathname === '/credit' ? 'text-indigo-600 active:bg-indigo-100/50' : 'text-slate-400 hover:text-slate-600 hover:bg-slate-50 dark:hover:bg-slate-800/50 active:bg-slate-100 dark:active:bg-slate-800'}`}
+        >
+          {pathname === '/credit' && (
+            <div className="absolute inset-0 bg-indigo-50 dark:bg-indigo-500/15 rounded-2xl -z-10 animate-in fade-in zoom-in-95 duration-500" />
+          )}
+          {pathname === '/credit' ? (
+            <CircleStackIconSolid className="w-6 h-6 transition-transform" />
+          ) : (
+            <CircleStackIcon className="w-6 h-6 transition-transform group-hover:scale-110" />
+          )}
+          <span className="text-[10px] font-black uppercase tracking-widest">{isKo ? '상점' : 'Shop'}</span>
+        </button>
+
+        <button
           onClick={() => {
             if (!user) {
               openLoginModal();
@@ -80,13 +97,21 @@ export default function MenuBar() {
               router.push('/mypage');
             }
           }}
-          className={`relative flex min-w-[82px] flex-col items-center gap-1.5 transition-all duration-200 active:scale-90 px-2 py-2.5 rounded-2xl group ${pathname === '/mypage' ? 'text-indigo-600 active:bg-indigo-100/50' : 'text-slate-400 hover:text-slate-600 hover:bg-slate-50 dark:hover:bg-slate-800/50 active:bg-slate-100 dark:active:bg-slate-800'}`}
+          className={`relative flex flex-1 max-w-[82px] min-w-[60px] flex-col items-center gap-1.5 transition-all duration-200 active:scale-90 px-1 py-2.5 rounded-2xl group ${pathname === '/mypage' ? 'text-indigo-600 active:bg-indigo-100/50' : 'text-slate-400 hover:text-slate-600 hover:bg-slate-50 dark:hover:bg-slate-800/50 active:bg-slate-100 dark:active:bg-slate-800'}`}
         >
           {pathname === '/mypage' && (
             <div className="absolute inset-0 bg-indigo-50 dark:bg-indigo-500/15 rounded-2xl -z-10 animate-in fade-in zoom-in-95 duration-500" />
           )}
           <div className="relative">
-            {pathname === '/mypage' ? (
+            {user && selectedProfile ? (
+              <div className={`w-6 h-6 rounded-full overflow-hidden border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 transition-transform ${pathname !== '/mypage' ? 'group-hover:scale-110' : ''}`}>
+                <img
+                  src={iljuImagePath}
+                  alt={selectedProfile.displayName || "Profile"}
+                  className="w-full h-full object-cover"
+                />
+              </div>
+            ) : pathname === '/mypage' ? (
               <UserCircleIconSolid className="w-6 h-6 transition-transform" />
             ) : (
               <UserCircleIcon className="w-6 h-6 transition-transform group-hover:scale-110" />
@@ -98,7 +123,7 @@ export default function MenuBar() {
           <span className="text-[10px] font-black max-w-[4rem] truncate uppercase tracking-widest">
             {user && selectedProfile
               ? selectedProfile.displayName
-              : (user ? (isKo ? '내 정보' : 'Profile') : (isKo ? '마이 페이지' : 'My Page'))
+              : (user ? (isKo ? '내 정보' : 'Profile') : (isKo ? '내 정보' : 'My Page'))
             }
           </span>
         </button>
