@@ -19,13 +19,13 @@ const ReportTemplateNewYear = ({ }) => {
   const [data, setData] = useState(null);
   useEffect(() => {
     // 1. aiResult가 있으면 우선 사용 (방금 분석 완료)
-    if (aiResult) {
-      const parsedData = parseAiResponse(aiResult);
-      if (parsedData) {
-        setData(parsedData);
-        return;
-      }
-    }
+    // if (aiResult) {
+    //   const parsedData = parseAiResponse(aiResult);
+    //   if (parsedData) {
+    //     setData(parsedData);
+    //     return;
+    //   }
+    // }
 
     // 2. aiResult가 없으면 DB에서 로드 (새로고침/나중에 보기)
     if (userData && !aiResult) {

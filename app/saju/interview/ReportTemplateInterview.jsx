@@ -23,13 +23,13 @@ const ReportTemplateInterview = ({ }) => {
 
   useEffect(() => {
     // 1. aiResult가 있으면 우선 사용 (방금 분석한 결과)
-    if (aiResult) {
-      const parsedData = parseAiResponse(aiResult);
-      if (parsedData) {
-        setData(parsedData);
-        return;
-      }
-    }
+    // if (aiResult) {
+    //   const parsedData = parseAiResponse(aiResult);
+    //   if (parsedData) {
+    //     setData(parsedData);
+    //     return;
+    //   }
+    // }
 
     // 2. 없으면 DB에서 로드 (persistence - 직접 URL 접근)
     if (userData && !aiResult) {
