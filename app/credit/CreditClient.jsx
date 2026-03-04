@@ -2,8 +2,6 @@
 import { loadTossPayments, ANONYMOUS } from "@tosspayments/tosspayments-sdk";
 import { useEffect, useState } from "react";
 import { CircleStackIcon } from '@heroicons/react/24/solid';
-
-
 import React from 'react';
 import { useRouter } from 'next/navigation';
 import {
