@@ -7,6 +7,9 @@ import { useAuthContext } from '@/contexts/useAuthContext';
 import { toymdt, parseAiResponse } from '@/utils/helpers';
 import { useLoading } from '@/contexts/useLoadingContext';
 import AfterReport from '@/components/AfterReport';
+import { useRouter } from 'next/navigation';
+import { doc, updateDoc, increment, deleteField } from 'firebase/firestore';
+import { db } from '@/lib/firebase';
 
 export default function ReportTemplateSelBirth() {
   const { aiResult, lastParams } = useLoading();
@@ -29,12 +32,43 @@ export default function ReportTemplateSelBirth() {
       const savedResult = userData?.usageHistory?.ZSelBirth?.result;
       if (savedResult) {
         const parsed = parseAiResponse(savedResult);
-        if (parsed) {
+
+        const isValid =
+          parsed &&
+          parsed.keyword &&
+          parsed.overview &&
+          parsed.bestDates?.length > 0 &&
+          parsed.summary;
+
+        if (isValid) {
           setData(parsed);
+        } else {
+          const restoreCredit = async () => {
+            if (userData?.uid) {
+              const userRef = doc(db, 'users', userData.uid);
+              try {
+                await updateDoc(userRef, {
+                  Credits: increment(1),
+                  'usageHistory.ZSelBirth': deleteField(),
+                });
+                alert(
+                  language !== 'ko'
+                    ? '1 Credit has been refunded due to incomplete analysis data. Please try again.'
+                    : '분석 에러로 데이터가 충분하지 않아 1 크레딧이 환불되었습니다. 다시 시도해주세요.'
+                );
+              } catch (error) {
+                console.error('Failed to restore credit:', error);
+              }
+            }
+            router.replace('/saju/selbirth');
+          };
+          restoreCredit();
         }
+      } else {
+        router.replace('/saju/selbirth');
       }
     }
-  }, [aiResult, userData]);
+  }, [aiResult, userData, router, language]);
 
   useEffect(() => {
     setIsLoaded(true);

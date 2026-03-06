@@ -9,6 +9,8 @@ import { useLoading } from '@/contexts/useLoadingContext';
 import { parseAiResponse } from '@/utils/helpers';
 import AfterReport from '@/components/AfterReport';
 import { useRouter } from 'next/navigation';
+import { doc, updateDoc, increment, deleteField } from 'firebase/firestore';
+import { db } from '@/lib/firebase';
 
 const ReportTemplateInterview = ({ }) => {
   const { aiResult } = useLoading();
@@ -23,31 +25,60 @@ const ReportTemplateInterview = ({ }) => {
 
   useEffect(() => {
     // 1. aiResult가 있으면 우선 사용 (방금 분석한 결과)
-    // if (aiResult) {
-    //   const parsedData = parseAiResponse(aiResult);
-    //   if (parsedData) {
-    //     setData(parsedData);
-    //     return;
-    //   }
-    // }
+    if (aiResult) {
+      const parsedData = parseAiResponse(aiResult);
+      if (parsedData) {
+        setData(parsedData);
+      }
+    }
 
     // 2. 없으면 DB에서 로드 (persistence - 직접 URL 접근)
     if (userData && !aiResult) {
       const savedResult = userData?.usageHistory?.Zinterview?.result;
       if (savedResult) {
         const parsed = parseAiResponse(savedResult);
-        if (parsed) {
+
+        const isValid =
+          parsed &&
+          parsed.interviewType &&
+          parsed.interviewDate &&
+          parsed.section01?.mood &&
+          parsed.passIndex &&
+          parsed.section03?.anxietySolution &&
+          parsed.section04?.actionGuideline &&
+          parsed.summary;
+
+        if (isValid) {
           setData(parsed);
         } else {
-          // 파싱 실패 -> 리다이렉트
-          router.push('/saju/interview');
+          // 파싱 실패 또는 데이터 누락 -> 환불 및 리다이렉트
+          const restoreCredit = async () => {
+            if (userData?.uid) {
+              const userRef = doc(db, 'users', userData.uid);
+              try {
+                await updateDoc(userRef, {
+                  Credits: increment(1),
+                  'usageHistory.Zinterview': deleteField(),
+                });
+                alert(
+                  language !== 'ko'
+                    ? '1 Credit has been refunded due to incomplete analysis data. Please try again.'
+                    : '분석 에러로 데이터가 충분하지 않아 1 크레딧이 환불되었습니다. 다시 시도해주세요.'
+                );
+              } catch (error) {
+                console.error('Failed to restore credit:', error);
+              }
+            }
+            router.push('/saju/interview');
+          };
+          restoreCredit();
         }
       } else {
         // 데이터 없으면 리다이렉트
         router.push('/saju/interview');
       }
     }
-  }, [aiResult, userData, router]);
+  }, [aiResult, userData, router, language]);
 
   useEffect(() => {
     setIsLoaded(true);

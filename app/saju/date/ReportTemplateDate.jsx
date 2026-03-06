@@ -9,7 +9,8 @@ import { useLoading } from '@/contexts/useLoadingContext';
 import { parseAiResponse } from '@/utils/helpers';
 import AfterReport from '@/components/AfterReport';
 import { useRouter } from 'next/navigation';
-
+import { doc, updateDoc, increment, deleteField } from 'firebase/firestore';
+import { db } from '@/lib/firebase';
 
 const ReportTemplateDate = ({ }) => {
   const { aiResult } = useLoading();
@@ -24,13 +25,12 @@ const ReportTemplateDate = ({ }) => {
 
   useEffect(() => {
     // 1. aiResult가 있으면 우선 사용
-    // if (aiResult) {
-    //   const parsedData = parseAiResponse(aiResult);
-    //   if (parsedData) {
-    //     setData(parsedData);
-    //     return;
-    //   }
-    // }
+    if (aiResult) {
+      const parsedData = parseAiResponse(aiResult);
+      if (parsedData) {
+        setData(parsedData);
+      }
+    }
 
     // 2. 없으면 DB에서 로드 (persistence - 직접 URL 접근)
     if (userData && !aiResult) {
@@ -38,18 +38,56 @@ const ReportTemplateDate = ({ }) => {
       const savedResult = userData?.usageHistory?.Zfirstdate?.result;
       if (savedResult) {
         const parsed = parseAiResponse(savedResult);
-        if (parsed) {
+
+        // 필수 구성 성분이 모두 있는지 확인
+        const isValid =
+          parsed &&
+          parsed.meetingDate &&
+          parsed.temperature &&
+          parsed.section01?.mood &&
+          parsed.section01?.point &&
+          parsed.section01?.description &&
+          parsed.section02?.innerThoughts &&
+          parsed.section02?.warning &&
+          parsed.section02?.signal &&
+          parsed.section03?.chemistryScore &&
+          parsed.section03?.goldenTime &&
+          parsed.section03?.location &&
+          parsed.section04?.contactAdvice &&
+          parsed.section04?.possibility &&
+          parsed.summary;
+
+        if (isValid) {
           setData(parsed);
         } else {
-          // 파싱 실패 -> 리다이렉트
-          router.push('/saju/date');
+          // 파싱 실패 또는 구성 성분 누락 -> 크레딧 환불 및 데이터 삭제 후 리다이렉트
+          const restoreCredit = async () => {
+            if (userData?.uid) {
+              const userRef = doc(db, 'users', userData.uid);
+              try {
+                await updateDoc(userRef, {
+                  Credits: increment(1),
+                  'usageHistory.Zfirstdate': deleteField(),
+                });
+                alert(
+                  language !== 'ko'
+                    ? '1 Credit has been refunded due to incomplete analysis data. Please try again.'
+                    : '분석 에러로 데이터가 충분하지 않아 1 크레딧이 환불되었습니다. 다시 시도해주세요.'
+                );
+              } catch (error) {
+                console.error('Failed to restore credit:', error);
+              }
+            }
+            router.push('/saju/date');
+          };
+          restoreCredit();
         }
       } else {
         // No Data -> Redirect
         router.push('/saju/date');
       }
     }
-  }, [aiResult, userData, router]);
+  }, [aiResult, userData, router, language]);
 
   useEffect(() => {
     setIsLoaded(true);

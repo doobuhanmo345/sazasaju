@@ -6,6 +6,9 @@ import { useState, useEffect } from 'react';
 import { parseAiResponse } from '@/utils/helpers';
 import ViewTarotResult from '@/app/tarot/ViewTarotResult';
 import { useRouter } from 'next/navigation';
+import { useLanguage } from '@/contexts/useLanguageContext';
+import { doc, updateDoc, increment, deleteField } from 'firebase/firestore';
+import { db } from '@/lib/firebase';
 
 // Map storageKey to parent page path
 const getParentPath = (storageKey) => {
@@ -29,6 +32,7 @@ export default function ReportTemplateTarot({ storageKey }) {
     const [cardInfo, setCardInfo] = useState({ id: null });
     const [loading, setLoading] = useState(true);
     const router = useRouter();
+    const { language } = useLanguage();
 
     useEffect(() => {
         // 1. Context Result (Fresh Analysis)
@@ -46,7 +50,21 @@ export default function ReportTemplateTarot({ storageKey }) {
             const saved = userData?.usageHistory?.[storageKey];
             if (saved && saved.result) {
                 const parsed = parseAiResponse(saved.result);
-                if (parsed) {
+
+                const isValid =
+                    parsed &&
+                    parsed.title &&
+                    parsed.subTitle &&
+                    parsed.cardName &&
+                    parsed.tags?.length > 0 &&
+                    parsed.description &&
+                    parsed.analysisTitle &&
+                    parsed.analysisList?.length > 0 &&
+                    parsed.adviceTitle &&
+                    parsed.adviceList?.length > 0 &&
+                    parsed.footerTags?.length > 0;
+
+                if (isValid) {
                     setData(parsed);
                     // Reconstruct card info if available
                     if (saved.cardId) {
@@ -58,15 +76,33 @@ export default function ReportTemplateTarot({ storageKey }) {
                     }
                     setLoading(false);
                 } else {
-                    // Parsing failed -> redirect
-                    router.push(getParentPath(storageKey));
+                    const restoreCredit = async () => {
+                        if (userData?.uid) {
+                            const userRef = doc(db, 'users', userData.uid);
+                            try {
+                                await updateDoc(userRef, {
+                                    Credits: increment(1),
+                                    [`usageHistory.${storageKey}`]: deleteField(),
+                                });
+                                alert(
+                                    language !== 'ko'
+                                        ? '1 Credit has been refunded due to incomplete analysis data. Please try again.'
+                                        : '분석 에러로 데이터가 충분하지 않아 1 크레딧이 환불되었습니다. 다시 시도해주세요.'
+                                );
+                            } catch (error) {
+                                console.error('Failed to restore credit:', error);
+                            }
+                        }
+                        router.push(getParentPath(storageKey));
+                    };
+                    restoreCredit();
                 }
             } else {
                 // No data -> redirect
                 router.push(getParentPath(storageKey));
             }
         }
-    }, [aiResult, userData, storageKey, router]);
+    }, [aiResult, userData, storageKey, router, language]);
 
     // Loading State
     if (loading || !data) {

@@ -8,6 +8,8 @@ import { parseAiResponse } from '@/utils/helpers';
 import { useRouter } from 'next/navigation';
 import { useLoading } from '@/contexts/useLoadingContext';
 import AfterReport from '@/components/AfterReport';
+import { doc, updateDoc, increment, deleteField } from 'firebase/firestore';
+import { db } from '@/lib/firebase';
 
 export default function ReportTemplateWealth({ storageKey }) {
     const { userData } = useAuthContext();
@@ -17,19 +19,54 @@ export default function ReportTemplateWealth({ storageKey }) {
     const [data, setData] = useState(null);
 
     useEffect(() => {
-        if (userData) {
+        if (aiResult) {
+            const parsedData = parseAiResponse(aiResult);
+            if (parsedData) setData(parsedData);
+        }
+
+        if (userData && !aiResult) {
             const savedResult = userData?.usageHistory?.[storageKey]?.result;
             if (savedResult) {
                 const parsed = parseAiResponse(savedResult);
-                if (parsed) {
+
+                const isValid =
+                    parsed &&
+                    parsed.header?.title &&
+                    parsed.header?.summary &&
+                    parsed.contents?.length > 0 &&
+                    parsed.conclusion?.title &&
+                    parsed.summary;
+
+                if (isValid) {
                     setData(parsed);
+                } else {
+                    const restoreCredit = async () => {
+                        if (userData?.uid) {
+                            const userRef = doc(db, 'users', userData.uid);
+                            try {
+                                await updateDoc(userRef, {
+                                    Credits: increment(1),
+                                    [`usageHistory.${storageKey}`]: deleteField(),
+                                });
+                                alert(
+                                    language !== 'ko'
+                                        ? '1 Credit has been refunded due to incomplete analysis data. Please try again.'
+                                        : '분석 에러로 데이터가 충분하지 않아 1 크레딧이 환불되었습니다. 다시 시도해주세요.'
+                                );
+                            } catch (error) {
+                                console.error('Failed to restore credit:', error);
+                            }
+                        }
+                        router.replace('/saju/wealth');
+                    };
+                    restoreCredit();
                 }
             } else {
                 router.replace('/saju/wealth');
             }
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [userData, router]);
+    }, [userData, router, language, storageKey]);
 
     if (!data) return <div className="p-10 text-center">No Result Found</div>;
 

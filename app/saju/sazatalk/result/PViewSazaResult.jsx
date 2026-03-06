@@ -11,6 +11,9 @@ import ShareButton from '@/components/ShareButton';
 import ShareLinkButton from '@/components/ShareLinkButton';
 import { useAuthContext } from '@/contexts/useAuthContext';
 import { useRouter } from 'next/navigation';
+import { doc, updateDoc, increment, deleteField } from 'firebase/firestore';
+import { db } from '@/lib/firebase';
+
 export default function ViewSazaResult({
 
 
@@ -23,13 +26,42 @@ export default function ViewSazaResult({
   const question = userData?.usageHistory?.Zsazatalk?.question;
   const result = userData?.usageHistory?.Zsazatalk?.result;
   useEffect(() => {
+    // aiResult 체크 추가 필요하면 여기서 할 수도 있으나 코딩 컨벤션에 맞추어 result 처리
     if (result) {
       const parsedData = parseAiResponse(result);
-      if (parsedData) {
+
+      const isValid =
+        parsedData &&
+        parsedData.contents &&
+        parsedData.saza;
+
+      if (isValid) {
         setData(parsedData);
+      } else {
+        // 파싱 실패 또는 데이터 누락 -> 환불 및 리다이렉트
+        const restoreCredit = async () => {
+          if (userData?.uid) {
+            const userRef = doc(db, 'users', userData.uid);
+            try {
+              await updateDoc(userRef, {
+                Credits: increment(1),
+                'usageHistory.Zsazatalk': deleteField(),
+              });
+              alert(
+                language !== 'ko'
+                  ? '1 Credit has been refunded due to incomplete analysis data. Please try again.'
+                  : '분석 에러로 데이터가 충분하지 않아 1 크레딧이 환불되었습니다. 다시 시도해주세요.'
+              );
+            } catch (error) {
+              console.error('Failed to restore credit:', error);
+            }
+          }
+          router.replace('/saju/sazatalk');
+        };
+        restoreCredit();
       }
     }
-  }, [result]);
+  }, [result, userData, router, language]);
 
   const handleCopy = async () => {
     try {

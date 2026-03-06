@@ -8,6 +8,8 @@ import { parseAiResponse } from '@/utils/helpers';
 import { useRouter } from 'next/navigation';
 import { useLoading } from '@/contexts/useLoadingContext';
 import AfterReport from '@/components/AfterReport';
+import { doc, updateDoc, increment, deleteField } from 'firebase/firestore';
+import { db } from '@/lib/firebase';
 
 export default function ReportTemplateMatch({ storageKey }) {
     const { userData } = useAuthContext();
@@ -17,18 +19,56 @@ export default function ReportTemplateMatch({ storageKey }) {
     const [data, setData] = useState(null);
 
     useEffect(() => {
-        if (userData) {
+        if (aiResult) {
+            const parsedData = parseAiResponse(aiResult);
+            if (parsedData) setData(parsedData);
+        }
+
+        if (userData && !aiResult) {
             const savedResult = userData?.usageHistory?.[storageKey]?.result;
             if (savedResult) {
                 const parsed = parseAiResponse(savedResult);
-                if (parsed) {
+
+                const isValid =
+                    parsed &&
+                    parsed.score &&
+                    parsed.title &&
+                    parsed.vibe &&
+                    parsed.insights?.me &&
+                    parsed.insights?.target &&
+                    parsed.pros?.length > 0 &&
+                    parsed.cons?.length > 0 &&
+                    parsed.advice;
+
+                if (isValid) {
                     setData(parsed);
+                } else {
+                    const restoreCredit = async () => {
+                        if (userData?.uid) {
+                            const userRef = doc(db, 'users', userData.uid);
+                            try {
+                                await updateDoc(userRef, {
+                                    Credits: increment(1),
+                                    [`usageHistory.${storageKey}`]: deleteField(),
+                                });
+                                alert(
+                                    language !== 'ko'
+                                        ? '1 Credit has been refunded due to incomplete analysis data. Please try again.'
+                                        : '분석 에러로 데이터가 충분하지 않아 1 크레딧이 환불되었습니다. 다시 시도해주세요.'
+                                );
+                            } catch (error) {
+                                console.error('Failed to restore credit:', error);
+                            }
+                        }
+                        router.replace('/saju/match');
+                    };
+                    restoreCredit();
                 }
             } else {
                 router.replace('/saju/match');
             }
         }
-    }, [userData, router, storageKey]);
+    }, [userData, router, storageKey, language]);
 
     if (!data) return <div className="p-10 text-center">No Result Found</div>;
 

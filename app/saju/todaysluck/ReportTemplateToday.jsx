@@ -9,6 +9,8 @@ import AfterReport from '@/components/AfterReport';
 
 import { useRouter } from 'next/navigation';
 import { useAuthContext } from '@/contexts/useAuthContext';
+import { doc, updateDoc, increment, deleteField } from 'firebase/firestore';
+import { db } from '@/lib/firebase';
 
 const ReportTemplateToday = ({ }) => {
   const { aiResult } = useLoading();
@@ -21,14 +23,12 @@ const ReportTemplateToday = ({ }) => {
   const [data, setData] = useState(null); // 파싱된 데이터를 담을 로컬 상태
 
   useEffect(() => {
-    // 1. aiResult가 있으면 우선 사용
-    // if (aiResult) {
-    //   const parsedData = parseAiResponse(aiResult);
-    //   if (parsedData) {
-    //     setData(parsedData);
-    //     return;
-    //   }
-    // }
+    if (aiResult) {
+      const parsedData = parseAiResponse(aiResult);
+      if (parsedData) {
+        setData(parsedData);
+      }
+    }
 
     // 2. 없으면 DB에서 로드 (persistence)
     if (userData && !aiResult) {
@@ -38,15 +38,47 @@ const ReportTemplateToday = ({ }) => {
       const savedResult = userData?.usageHistory?.ZLastDaily?.result;
       if (savedResult) {
         const parsed = parseAiResponse(savedResult);
-        if (parsed) {
+
+        const isValid =
+          parsed &&
+          parsed.today?.date &&
+          parsed.today?.score !== undefined &&
+          parsed.today?.summary &&
+          parsed.lucky_elements?.direction?.title &&
+          parsed.tomorrow?.date &&
+          parsed.summary;
+
+        if (isValid) {
           setData(parsed);
+        } else {
+          const restoreCredit = async () => {
+            if (userData?.uid) {
+              const userRef = doc(db, 'users', userData.uid);
+              try {
+                await updateDoc(userRef, {
+                  Credits: increment(1),
+                  'usageHistory.ZLastDaily': deleteField(),
+                });
+                alert(
+                  language !== 'ko'
+                    ? '1 Credit has been refunded due to incomplete analysis data. Please try again.'
+                    : '분석 에러로 데이터가 충분하지 않아 1 크레딧이 환불되었습니다. 다시 시도해주세요.'
+                );
+              } catch (error) {
+                console.error('Failed to restore credit:', error);
+              }
+            }
+            router.replace('/saju/todaysluck');
+          };
+          restoreCredit();
         }
       } else {
         // No Data -> Redirect
         router.replace('/saju/todaysluck');
       }
     }
-  }, [aiResult, userData, router]);
+  }, [aiResult, userData, router, language]);
+  console.log(data, 1);
   useEffect(() => {
     if (data?.today?.score) {
       // 렌더링 직후 0인 상태에서 점수값으로 변경하여 애니메이션 유도

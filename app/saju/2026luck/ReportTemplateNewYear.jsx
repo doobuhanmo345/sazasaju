@@ -8,6 +8,8 @@ import { parseAiResponse } from '@/utils/helpers';
 import AfterReport from '@/components/AfterReport';
 import { useRouter } from 'next/navigation';
 import { useAuthContext } from '@/contexts/useAuthContext';
+import { doc, updateDoc, increment, deleteField } from 'firebase/firestore';
+import { db } from '@/lib/firebase';
 
 const ReportTemplateNewYear = ({ }) => {
   const { aiResult } = useLoading();
@@ -19,25 +21,53 @@ const ReportTemplateNewYear = ({ }) => {
   const [data, setData] = useState(null);
   useEffect(() => {
     // 1. aiResult가 있으면 우선 사용 (방금 분석 완료)
-    // if (aiResult) {
-    //   const parsedData = parseAiResponse(aiResult);
-    //   if (parsedData) {
-    //     setData(parsedData);
-    //     return;
-    //   }
-    // }
+    if (aiResult) {
+      const parsedData = parseAiResponse(aiResult);
+      if (parsedData) {
+        setData(parsedData);
+      }
+    }
 
     // 2. aiResult가 없으면 DB에서 로드 (새로고침/나중에 보기)
     if (userData && !aiResult) {
       const savedResult = userData?.usageHistory?.ZNewYear?.result;
       if (savedResult) {
         const parsed = parseAiResponse(savedResult);
-        if (parsed) {
+
+        const isValid =
+          parsed &&
+          parsed.year_info?.header_sub &&
+          parsed.total_analysis?.main_content &&
+          parsed.monthly_analysis?.length > 0 &&
+          parsed.special_periods?.label_main &&
+          parsed.summary;
+
+        if (isValid) {
           setData(parsed);
+        } else {
+          const restoreCredit = async () => {
+            if (userData?.uid) {
+              const userRef = doc(db, 'users', userData.uid);
+              try {
+                await updateDoc(userRef, {
+                  Credits: increment(1),
+                  'usageHistory.ZNewYear': deleteField(),
+                });
+                alert(
+                  isEn
+                    ? '1 Credit has been refunded due to incomplete analysis data. Please try again.'
+                    : '분석 에러로 데이터가 충분하지 않아 1 크레딧이 환불되었습니다. 다시 시도해주세요.'
+                );
+              } catch (error) {
+                console.error('Failed to restore credit:', error);
+              }
+            }
+            router.replace('/saju/2026luck');
+          };
+          restoreCredit();
         }
       } else {
         // 데이터 없음 -> 리다이렉트
-        // alert(isEn ? "No result found." : "분석 결과가 없습니다.");
         router.replace('/saju/2026luck');
       }
     }

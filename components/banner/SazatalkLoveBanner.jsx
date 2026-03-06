@@ -12,6 +12,8 @@ import { SajuAnalysisService, AnalysisPresets } from '@/lib/SajuAnalysisService'
 import { UI_TEXT, langPrompt, hanja } from '@/data/constants';
 import { classNames, parseAiResponse } from '@/utils/helpers';
 import EnergyBadge from '@/ui/EnergyBadge';
+import { doc, updateDoc, increment } from 'firebase/firestore';
+import { db } from '@/lib/firebase';
 
 
 const SazaTalkLoveBanner = ({ saju = null, relation = null }) => {
@@ -192,7 +194,7 @@ const SazaTalkLoveBanner = ({ saju = null, relation = null }) => {
 
             {/* 2. 카카오톡 스타일 전체 화면 모달 (Portal 사용) */}
             {isOpen && mounted && createPortal(
-                <div className="fixed inset-0 z-[9999] flex items-end justify-center bg-[#abc1d1] sm:bg-black/50 backdrop-blur-sm animate-in fade-in duration-300">
+                <div id="sazatalk-modal" className="fixed inset-0 z-[9999] flex items-end justify-center bg-[#abc1d1] sm:bg-black/50 backdrop-blur-sm animate-in fade-in duration-300">
                     <div className="relative w-full max-w-lg h-full sm:h-[90vh] bg-[#abc1d1] sm:rounded-t-[32px] overflow-hidden flex flex-col animate-in slide-in-from-bottom-full duration-500">
 
                         {/* 헤더 */}
@@ -336,6 +338,21 @@ const SazaTalkLoveBanner = ({ saju = null, relation = null }) => {
                                         const userMsg = { id: Date.now().toString(), role: 'user', text: question };
                                         setMessages(prev => [...prev, userMsg]);
 
+                                        // 1.5. 특정 날짜 입력 제한
+                                        const dateRegex = /(\d{2,4}년)?\s*\d{1,2}월\s*\d{1,2}일|\d{4}[-./]\d{1,2}[-./]\d{1,2}/;
+                                        if (dateRegex.test(question)) {
+                                            setTimeout(() => {
+                                                setMessages(prev => [...prev, {
+                                                    id: 'date-error',
+                                                    role: 'saza',
+                                                    text: isKo
+                                                        ? '특정 날짜와 관련된 운세나 택일은 사자톡에서 지원하지 않아요. 날짜운 등의 다른 메뉴를 이용해 주시겠어요?'
+                                                        : 'SazaTalk does not support fortune-telling or date selection for specific dates. Please use other features like Date Luck.'
+                                                }]);
+                                            }, 800);
+                                            return;
+                                        }
+
                                         // 2. 비로그인 처리
                                         if (!user) {
                                             setTimeout(() => {
@@ -422,36 +439,42 @@ const SazaTalkLoveBanner = ({ saju = null, relation = null }) => {
                                                     // 하나씩 순차적으로 추가 (약간의 딜레이)
                                                     const parts = [];
                                                     if (Array.isArray(parsed.contents)) {
-                                                        parsed.contents.forEach(c => {
-                                                            if (typeof c === 'string') parts.push({ type: 'content', text: c });
-                                                            else if (c.detail) parts.push({ type: 'content', text: c.detail });
-                                                        });
+                                                        parts.push(...parsed.contents);
                                                     } else if (typeof parsed.contents === 'string') {
-                                                        parts.push({ type: 'content', text: parsed.contents });
+                                                        parts.push(parsed.contents);
                                                     }
-
                                                     if (parsed.saza) {
-                                                        const sazaAdvice = typeof parsed.saza === 'object' ? parsed.saza.advice : parsed.saza;
-                                                        parts.push({ type: 'advice', text: sazaAdvice });
+                                                        parts.push(parsed.saza);
                                                     }
 
-                                                    // 순차적으로 메시지 추가
                                                     for (let i = 0; i < parts.length; i++) {
-                                                        // 각 메시지 전에 1초의 간격 (로딩 점이 보이도록)
-                                                        await new Promise(r => setTimeout(r, 1000));
-
-                                                        setMessages(prev => [...prev, {
-                                                            id: `${Date.now()}-${i}`,
-                                                            role: parts[i].type === 'advice' ? 'saza-advice' : 'saza',
-                                                            text: parts[i].text
-                                                        }]);
+                                                        setTimeout(() => {
+                                                            setMessages(prev => [...prev, {
+                                                                id: Date.now().toString() + i,
+                                                                role: 'saza',
+                                                                text: parts[i]
+                                                            }]);
+                                                        }, i * 1500 + 500);
                                                     }
                                                 } else {
-                                                    // 파싱 실패 시 통짜 전송
+                                                    // 파싱 실패 또는 데이터 누락 시 환불 및 안내 메시지
+                                                    if (userData?.uid) {
+                                                        const userRef = doc(db, 'users', userData.uid);
+                                                        try {
+                                                            await updateDoc(userRef, {
+                                                                Credits: increment(1),
+                                                            });
+                                                        } catch (error) {
+                                                            console.error('Failed to restore credit:', error);
+                                                        }
+                                                    }
+
                                                     setMessages(prev => [...prev, {
                                                         id: Date.now().toString(),
                                                         role: 'saza',
-                                                        text: result
+                                                        text: isKo
+                                                            ? '원활한 사주 풀이에 실패했어요. 크레딧은 소모되지 않았으니, 질문을 조금 다르게 다시 입력해 주시겠어요?'
+                                                            : 'Analysis failed. No credits were consumed, so please try asking your question differently.'
                                                     }]);
                                                 }
                                             }

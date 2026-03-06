@@ -8,6 +8,8 @@ import { parseAiResponse } from '@/utils/helpers';
 import { useRouter } from 'next/navigation';
 import { useLoading } from '@/contexts/useLoadingContext';
 import AfterReport from '@/components/AfterReport';
+import { doc, updateDoc, increment, deleteField } from 'firebase/firestore';
+import { db } from '@/lib/firebase';
 
 export default function ReportTemplateLove({ storageKey }) {
     const { userData } = useAuthContext();
@@ -17,19 +19,53 @@ export default function ReportTemplateLove({ storageKey }) {
     const [data, setData] = useState(null);
 
     useEffect(() => {
-        if (userData) {
+        if (aiResult) {
+            const parsedData = parseAiResponse(aiResult);
+            if (parsedData) setData(parsedData);
+        }
+
+        if (userData && !aiResult) {
             const savedResult = userData?.usageHistory?.[storageKey]?.result;
             if (savedResult) {
                 const parsed = parseAiResponse(savedResult);
-                if (parsed) {
+
+                const isValid =
+                    parsed &&
+                    parsed.header?.title &&
+                    parsed.header?.summary &&
+                    parsed.contents?.length > 0 &&
+                    parsed.conclusion?.title;
+
+                if (isValid) {
                     setData(parsed);
+                } else {
+                    const restoreCredit = async () => {
+                        if (userData?.uid) {
+                            const userRef = doc(db, 'users', userData.uid);
+                            try {
+                                await updateDoc(userRef, {
+                                    Credits: increment(1),
+                                    [`usageHistory.${storageKey}`]: deleteField(),
+                                });
+                                alert(
+                                    language !== 'ko'
+                                        ? '1 Credit has been refunded due to incomplete analysis data. Please try again.'
+                                        : '분석 에러로 데이터가 충분하지 않아 1 크레딧이 환불되었습니다. 다시 시도해주세요.'
+                                );
+                            } catch (error) {
+                                console.error('Failed to restore credit:', error);
+                            }
+                        }
+                        router.replace('/saju/love');
+                    };
+                    restoreCredit();
                 }
             } else {
                 router.replace('/saju/love');
             }
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [userData, router]);
+    }, [userData, router, language, storageKey]);
     const sajuOhter = userData?.usageHistory?.[storageKey]?.saju2 || userData?.usageHistory?.[storageKey]?.partnerSaju || null
     const genderOther = userData?.usageHistory?.[storageKey]?.gender2 || userData?.usageHistory?.[storageKey]?.partnerGender || null
     const sajuOtherString = `${sajuOhter?.sky3}${sajuOhter?.grd3}년 ${sajuOhter?.sky2}${sajuOhter?.grd2}월 ${sajuOhter?.sky1}${sajuOhter?.grd1}일 ${sajuOhter?.sky0}${sajuOhter?.grd0}시`;

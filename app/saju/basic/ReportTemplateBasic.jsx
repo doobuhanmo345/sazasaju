@@ -16,7 +16,8 @@ import { aiSajuStyle } from '@/data/saju_data_prompt';
 import { useLoading } from '@/contexts/useLoadingContext';
 import AfterReport from '@/components/AfterReport';
 import { parseAiResponse } from '@/utils/helpers';
-
+import { doc, updateDoc, increment, deleteField } from 'firebase/firestore';
+import { db } from '@/lib/firebase';
 
 const ReportTemplateBasic = ({ shareData }) => {
   const { aiResult } = useLoading();
@@ -43,21 +44,60 @@ const ReportTemplateBasic = ({ shareData }) => {
       }
       return;
     }
+    if (aiResult) {
+      const parsedData = parseAiResponse(aiResult);
+      if (parsedData) {
+        setData(parsedData);
+      }
+    }
 
     if (!userData) return; // Wait for load
     // DB에 저장된 결과가 있으면 로드
-    const savedResult = userData?.usageHistory?.ZApiAnalysis?.result;
-    if (savedResult) {
-      const parsedData = parseAiResponse(savedResult);
-      if (parsedData) {
-        setData(parsedData); // 파싱 성공 시 데이터 세팅
+    if (!aiResult) {
+      const savedResult = userData?.usageHistory?.ZApiAnalysis?.result;
+      if (savedResult) {
+        const parsedData = parseAiResponse(savedResult);
+
+        const isValid =
+          parsedData &&
+          parsedData.corePersonality?.title &&
+          parsedData.personalityOverview?.desc &&
+          parsedData.lensInterpretations?.wealth?.summary &&
+          parsedData.timingAndFlow?.principle &&
+          parsedData.environmentGuide?.summary &&
+          parsedData.finalConclusion?.title;
+
+        if (isValid) {
+          setData(parsedData); // 파싱 성공 시 데이터 세팅
+        } else {
+          const restoreCredit = async () => {
+            if (userData?.uid) {
+              const userRef = doc(db, 'users', userData.uid);
+              try {
+                await updateDoc(userRef, {
+                  Credits: increment(1),
+                  'usageHistory.ZApiAnalysis': deleteField(),
+                });
+                alert(
+                  language !== 'ko'
+                    ? '1 Credit has been refunded due to incomplete analysis data. Please try again.'
+                    : '분석 에러로 데이터가 충분하지 않아 1 크레딧이 환불되었습니다. 다시 시도해주세요.'
+                );
+              } catch (error) {
+                console.error('Failed to restore credit:', error);
+              }
+            }
+            router.replace('/saju/basic');
+          };
+          restoreCredit();
+        }
+      } else {
+        // 결과가 없으면 메인으로 리다이렉트
+        alert("저장된 결과가 없습니다. 다시 분석해주세요.");
+        router.replace('/saju/basic');
       }
-    } else {
-      // 결과가 없으면 메인으로 리다이렉트
-      alert("저장된 결과가 없습니다. 다시 분석해주세요.");
-      router.replace('/saju/basic');
     }
-  }, [userData, router, shareData]);
+  }, [aiResult, userData, router, shareData, language]);
 
   const isEn = language !== 'ko';
   const t = (char) => (isEn ? ENG_MAP[char] || char : char);

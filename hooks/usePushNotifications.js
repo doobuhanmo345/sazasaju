@@ -119,6 +119,11 @@ export const usePushNotifications = (onNavigate) => {
         // Foreground message handling
         const unsubOnMessage = onMessage(msg, (payload) => {
           console.log('✅Foreground message received:', payload);
+
+          if (window.location.pathname.includes('/result') || document.getElementById('sazatalk-modal')) {
+            console.log('✅Suppressing foreground notification on result page or sazatalk modal');
+            return;
+          }
           // You could show a custom toast here if desired
           if (payload.notification && window.confirm(`${payload.notification.title}\n${payload.notification.body}\n\n이동하시겠습니까?`)) {
             const url = payload.data?.url || payload.fcmOptions?.link;
