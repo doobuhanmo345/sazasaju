@@ -259,6 +259,22 @@ const SazaTalkLoveBanner = ({ saju = null, relation = null }) => {
                                                     : "bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 rounded-tl-none"
                                             )}>
                                                 <p className="whitespace-pre-wrap">{msg.text}</p>
+                                                {msg.actionButtons && (
+                                                    <div className="flex flex-col gap-2 mt-3">
+                                                        {msg.actionButtons.map((btn, idx) => (
+                                                            <button
+                                                                key={idx}
+                                                                onClick={() => {
+                                                                    setIsOpen(false);
+                                                                    router.push(btn.href);
+                                                                }}
+                                                                className="w-full text-center bg-rose-50 dark:bg-slate-700 hover:bg-rose-100 transition-colors text-rose-600 dark:text-rose-400 py-2 rounded-xl font-bold text-sm"
+                                                            >
+                                                                {btn.label}
+                                                            </button>
+                                                        ))}
+                                                    </div>
+                                                )}
                                             </div>
                                         </div>
                                     )}
@@ -343,11 +359,32 @@ const SazaTalkLoveBanner = ({ saju = null, relation = null }) => {
                                         if (dateRegex.test(question)) {
                                             setTimeout(() => {
                                                 setMessages(prev => [...prev, {
-                                                    id: 'date-error',
+                                                    id: 'date-error-' + Date.now(),
                                                     role: 'saza',
                                                     text: isKo
-                                                        ? '특정 날짜와 관련된 운세나 택일은 사자톡에서 지원하지 않아요. 날짜운 등의 다른 메뉴를 이용해 주시겠어요?'
-                                                        : 'SazaTalk does not support fortune-telling or date selection for specific dates. Please use other features like Date Luck.'
+                                                        ? '특정 날짜와 관련된 운세나 택일은 사자톡에서 지원하지 않아요. 아래 메뉴를 이용해 보시겠어요?'
+                                                        : 'SazaTalk does not support fortune-telling or date selection for specific dates. Please use the menus below.',
+                                                    actionButtons: isKo
+                                                        ? [
+                                                            { label: '� 특정일 데이트 전략', href: '/saju/date' },
+                                                            { label: '💔 피해야 할 사람', href: '/saju/love/avoid' },
+                                                            { label: '💖 잘 맞는 사람', href: '/saju/love/compatible' },
+                                                            { label: '💌 재회운', href: '/saju/love/reunion' },
+                                                            { label: '💭 그 사람의 속마음', href: '/saju/love/feelings' },
+                                                            { label: '�📅 길일 받기', href: '/saju/seldate' },
+                                                            { label: '👔 면접 시험', href: '/saju/interview' },
+                                                            { label: '� 궁합 보기', href: '/saju/match' }
+                                                        ]
+                                                        : [
+                                                            { label: '� Date Strategy', href: '/saju/date' },
+                                                            { label: '💔 People to Avoid', href: '/saju/love/avoid' },
+                                                            { label: '💖 Compatible Match', href: '/saju/love/compatible' },
+                                                            { label: '💌 Reunion Luck', href: '/saju/love/reunion' },
+                                                            { label: '💭 Their True Feelings', href: '/saju/love/feelings' },
+                                                            { label: '�📅 Date Selection', href: '/saju/seldate' },
+                                                            { label: '👔 Interview Luck', href: '/saju/interview' },
+                                                            { label: '� Match Reading', href: '/saju/match' }
+                                                        ]
                                                 }]);
                                             }, 800);
                                             return;
@@ -357,7 +394,7 @@ const SazaTalkLoveBanner = ({ saju = null, relation = null }) => {
                                         if (!user) {
                                             setTimeout(() => {
                                                 setMessages(prev => [...prev, {
-                                                    id: 'login-req',
+                                                    id: 'login-req-' + Date.now(),
                                                     role: 'saza',
                                                     text: isKo
                                                         ? '상담을 진행하려면 로그인이 필요해요. 로그인 후 사자에게 다시 물어봐 주세요!'
@@ -371,7 +408,7 @@ const SazaTalkLoveBanner = ({ saju = null, relation = null }) => {
                                         if (!targetProfile?.birthDate) {
                                             setTimeout(() => {
                                                 setMessages(prev => [...prev, {
-                                                    id: 'saju-req',
+                                                    id: 'saju-req-' + Date.now(),
                                                     role: 'saza',
                                                     text: isKo
                                                         ? '정확한 상담을 위해 사주 정보(생년월일)를 먼저 등록해 주세요.'
