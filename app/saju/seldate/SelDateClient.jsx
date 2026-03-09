@@ -92,6 +92,7 @@ export default function SelDatePage() {
     return isSame;
   }, [prevData, startDate, endDate, selectedPurpose, language, gender, saju]);
   const [isButtonClicked, setIsButtonClicked] = useState(false);
+  const [justAnalyzed, setJustAnalyzed] = useState(false);
   const isDisabled = !isAnalysisDone && isLocked;
 
   const handleQuickSelect = (amount, unit = 'months') => {
@@ -155,7 +156,7 @@ export default function SelDatePage() {
 
       setAiResult('');
       try {
-        await service.analyze(
+        const result = await service.analyze(
           AnalysisPresets.selDate({
             saju,
             sajuDesc,
@@ -165,6 +166,7 @@ export default function SelDatePage() {
             purpose: purposeText,
           }),
         );
+        if (result) setJustAnalyzed(true);
         // 콜백 제거 -> useEffect에서 처리
       } catch (error) {
         console.error(error);
@@ -371,10 +373,10 @@ export default function SelDatePage() {
 
   // [NEW] Reactive Redirect
   useEffect(() => {
-    if (isButtonClicked && !loading && isAnalysisDone && prevData?.result && prevData?.result?.length > 0) {
+    if (isButtonClicked && !loading && (isAnalysisDone || justAnalyzed)) {
       router.push('/saju/seldate/result');
     }
-  }, [isButtonClicked, prevData, router, isAnalysisDone, loading]);
+  }, [isButtonClicked, prevData, router, isAnalysisDone, loading, justAnalyzed]);
 
   return (
     <>

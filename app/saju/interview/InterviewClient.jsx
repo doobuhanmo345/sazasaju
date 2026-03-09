@@ -173,6 +173,7 @@ export default function InterviewPage() {
   }, [prevData, gender, saju, selectedDate, question]);
 
   const [isButtonClicked, setIsButtonClicked] = useState(false);
+  const [justAnalyzed, setJustAnalyzed] = useState(false);
   // Client-side Title Update for Localization (Static Export Support)
   useEffect(() => {
     if (language === 'ko') {
@@ -227,7 +228,7 @@ export default function InterviewPage() {
 
       setAiResult('');
       try {
-        await service.analyze(
+        const result = await service.analyze(
           AnalysisPresets.dailySpecific({
             saju: saju,
             sajuDesc,
@@ -239,6 +240,7 @@ export default function InterviewPage() {
             promptAdd: dbPrompt,
           }),
         );
+        if (result) setJustAnalyzed(true);
         // 콜백 제거
       } catch (error) {
         console.error(error);
@@ -450,10 +452,10 @@ export default function InterviewPage() {
 
   // [NEW] Reactive Redirect
   useEffect(() => {
-    if (isButtonClicked && !loading && isAnalysisDone && prevData?.result && prevData?.result?.length > 0) {
+    if (isButtonClicked && !loading && (isAnalysisDone || justAnalyzed)) {
       router.push('/saju/interview/result');
     }
-  }, [isButtonClicked, prevData, router, isAnalysisDone, loading]);
+  }, [isButtonClicked, prevData, router, isAnalysisDone, loading, justAnalyzed]);
 
   return (
     <>

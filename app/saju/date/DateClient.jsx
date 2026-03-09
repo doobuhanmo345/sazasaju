@@ -159,6 +159,7 @@ export default function FirstDatePage() {
     return true;
   }, [prevData, gender, saju, selDateString, question, selectedDate]);
   const [isButtonClicked, setIsButtonClicked] = useState(false);
+  const [justAnalyzed, setJustAnalyzed] = useState(false);
 
 
   const isDisabled = !user || loading || !selectedDate;
@@ -201,7 +202,7 @@ export default function FirstDatePage() {
 
 
       try {
-        await service.analyze(
+        const result = await service.analyze(
           AnalysisPresets.dailySpecific({
             saju: saju,
             gender: gender,
@@ -213,6 +214,7 @@ export default function FirstDatePage() {
             promptAdd: dbPrompt,
           }),
         );
+        if (result) setJustAnalyzed(true);
 
       } catch (error) {
         console.error(error);
@@ -418,10 +420,10 @@ export default function FirstDatePage() {
 
   // [NEW] Reactive Redirect
   useEffect(() => {
-    if (isButtonClicked && !loading && isAnalysisDone && prevData?.result && prevData?.result?.length > 0) {
+    if (isButtonClicked && !loading && (isAnalysisDone || justAnalyzed)) {
       router.push('/saju/date/result');
     }
-  }, [isButtonClicked, prevData, router, isAnalysisDone, loading]);
+  }, [isButtonClicked, prevData, router, isAnalysisDone, loading, justAnalyzed]);
   if (loading) {
 
     return <LoadingFourPillar saju={saju} isTimeUnknown={isTimeUnknown} isAnalysisDone={isAnalysisDone} />;

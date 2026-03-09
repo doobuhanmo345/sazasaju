@@ -2,7 +2,7 @@
 
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 import { UserPlusIcon, SparklesIcon, ExclamationTriangleIcon, LockClosedIcon, TicketIcon } from '@heroicons/react/24/outline';
 import { useAuthContext } from '@/contexts/useAuthContext';
 import { useLanguage } from '@/contexts/useLanguageContext';
@@ -26,6 +26,7 @@ export default function CompatiblePage() {
     const loveEnergy = useConsumeEnergy();
 
     const [isButtonClicked, setIsButtonClicked] = useState(false);
+    const [justAnalyzed, setJustAnalyzed] = useState(false);
     const [promptQ1, setPromptQ1] = useState('나와 잘 맞는 사람.');
     const [promptQ2, setPromptQ2] = useState('나의 천생연분 유형');
     const [loadingPrompts, setLoadingPrompts] = useState(true);
@@ -66,16 +67,20 @@ export default function CompatiblePage() {
 
     // [REMOVED] SUB_Q_TYPES
 
-    const service = new SajuAnalysisService({
-        user,
-        userData: targetProfile,
-        language,
-        maxEditCount: MAX_EDIT_COUNT,
-        setEditCount,
-        setLoading,
-        setAiResult,
-        handleCancelHelper,
-    });
+    const service = useMemo(
+        () =>
+            new SajuAnalysisService({
+                user,
+                userData: targetProfile,
+                language,
+                maxEditCount: MAX_EDIT_COUNT,
+                setEditCount,
+                setLoading,
+                setAiResult,
+                handleCancelHelper,
+            }),
+        [user, targetProfile, language, MAX_EDIT_COUNT, setEditCount, setLoading, setAiResult],
+    );
 
     const prevData = userData?.usageHistory?.ZLoveCompatible;
     const isAnalysisDone = (() => {
@@ -111,17 +116,18 @@ export default function CompatiblePage() {
                 partnerGender: null,
             });
 
-            await service.analyze(preset);
+            const result = await service.analyze(preset);
+            if (result) setJustAnalyzed(true);
         } catch (error) {
             console.error(error);
         }
     };
 
     useEffect(() => {
-        if (isButtonClicked && !loading && isAnalysisDone && prevData?.result && prevData?.result?.length > 0) {
+        if (isButtonClicked && !loading && (isAnalysisDone || justAnalyzed)) {
             router.push('/saju/love/compatible/result');
         }
-    }, [isButtonClicked, prevData, router, isAnalysisDone, loading]);
+    }, [isButtonClicked, prevData, router, isAnalysisDone, loading, justAnalyzed]);
 
     const isDisabled = (loading && !loveEnergy.isConsuming) || !user || loading || loadingPrompts;
     const isDisabled2 = !isAnalysisDone && isLocked;

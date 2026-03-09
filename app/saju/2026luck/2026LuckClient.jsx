@@ -50,6 +50,7 @@ export default function YearlyLuckPage() {
 
   const isDisabled2 = !isTargetOthers && !isAnalysisDone && isLocked;
   const [isButtonClicked, setIsButtonClicked] = useState(false);
+  const [justAnalyzed, setJustAnalyzed] = useState(false);
   // Client-side Title Update for Localization (Static Export Support)
   useEffect(() => {
     if (language === 'ko') {
@@ -100,10 +101,10 @@ export default function YearlyLuckPage() {
 
     setAiResult('');
     try {
-      onstart(); // [NEW] 로딩화면 먼저 진입
-      await service.analyze(AnalysisPresets.newYear({ saju, sajuDesc, gender }), (result) => {
+      const result = await service.analyze(AnalysisPresets.newYear({ saju, sajuDesc, gender }), (res) => {
         console.log('✅ 신년운세 완료!');
       });
+      if (result) setJustAnalyzed(true);
     } catch (error) {
       console.error(error);
     }
@@ -241,10 +242,10 @@ export default function YearlyLuckPage() {
 
   // [NEW] Reactive Redirect
   useEffect(() => {
-    if (isButtonClicked && !loading && isAnalysisDone && prevData?.result && prevData?.result?.length > 0) {
+    if (isButtonClicked && !loading && (isAnalysisDone || justAnalyzed)) {
       router.push('/saju/2026luck/result');
     }
-  }, [loading, prevData, router]);
+  }, [isButtonClicked, loading, prevData, router, isAnalysisDone, justAnalyzed]);
 
   return (
     <>

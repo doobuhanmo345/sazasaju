@@ -2,7 +2,7 @@
 
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 import { ClockIcon, SparklesIcon, ExclamationTriangleIcon, LockClosedIcon, TicketIcon } from '@heroicons/react/24/outline';
 import { useAuthContext } from '@/contexts/useAuthContext';
 import { useLanguage } from '@/contexts/useLanguageContext';
@@ -26,6 +26,7 @@ export default function LoveTimingPage() {
     const { gender, saju, isTimeUnknown } = targetProfile || {};
     const loveEnergy = useConsumeEnergy();
     const [isButtonClicked, setIsButtonClicked] = useState(false);
+    const [justAnalyzed, setJustAnalyzed] = useState(false);
     const [promptQ1, setPromptQ1] = useState('솔로 탈출 시기.');
     const [promptQ2, setPromptQ2] = useState('언제쯤 인연이 찾아올지');
     const [loadingPrompts, setLoadingPrompts] = useState(true);
@@ -68,16 +69,20 @@ export default function LoveTimingPage() {
 
     // [REMOVED] SUB_Q_TYPES
 
-    const service = new SajuAnalysisService({
-        user,
-        userData: targetProfile,
-        language,
-        maxEditCount: MAX_EDIT_COUNT,
-        setEditCount,
-        setLoading,
-        setAiResult,
-        handleCancelHelper,
-    });
+    const service = useMemo(
+        () =>
+            new SajuAnalysisService({
+                user,
+                userData: targetProfile,
+                language,
+                maxEditCount: MAX_EDIT_COUNT,
+                setEditCount,
+                setLoading,
+                setAiResult,
+                handleCancelHelper,
+            }),
+        [user, targetProfile, language, MAX_EDIT_COUNT, setEditCount, setLoading, setAiResult],
+    );
 
     const prevData = userData?.usageHistory?.ZLoveTiming;
 
@@ -113,7 +118,8 @@ export default function LoveTimingPage() {
                 partnerSaju: null,
                 partnerGender: null,
             });
-            await service.analyze(preset);
+            const result = await service.analyze(preset);
+            if (result) setJustAnalyzed(true);
         } catch (error) {
             console.error(error);
         }
@@ -121,10 +127,10 @@ export default function LoveTimingPage() {
 
 
     useEffect(() => {
-        if (isButtonClicked && !loading && isAnalysisDone && prevData?.result && prevData?.result?.length > 0) {
+        if (isButtonClicked && !loading && (isAnalysisDone || justAnalyzed)) {
             router.push('/saju/love/timing/result');
         }
-    }, [isButtonClicked, prevData, router, isAnalysisDone, loading]);
+    }, [isButtonClicked, prevData, router, isAnalysisDone, loading, justAnalyzed]);
 
     const isDisabled = (loading && !loveEnergy.isConsuming) || !user || loading || loadingPrompts;
     const isDisabled2 = !isAnalysisDone && isLocked;

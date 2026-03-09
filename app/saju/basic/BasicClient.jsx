@@ -58,6 +58,7 @@ export default function BasicAnaPage() {
   }, [targetProfile]);
   const isDisabled2 = !isAnalysisDone && isLocked;
   const [isButtonClicked, setIsButtonClicked] = useState(false);
+  const [justAnalyzed, setJustAnalyzed] = useState(false);
   // Client-side Title Update for Localization (Static Export Support)
   useEffect(() => {
     if (language === 'ko') {
@@ -128,10 +129,10 @@ export default function BasicAnaPage() {
             };
           };
         }
-        onstart(); // 로딩화면 진입 (분석 시작 전)
-        await service.analyze(preset, (result) => {
+        const result = await service.analyze(preset, (res) => {
           console.log('✅ 평생운세 완료!');
         });
+        if (result) setJustAnalyzed(true);
       } catch (error) {
         console.error(error);
         alert(UI_TEXT.error?.[language] || 'An error occurred.');
@@ -290,10 +291,10 @@ export default function BasicAnaPage() {
 
   // ✅ 4. 스크롤 로직 & 리다이렉트 (loading이 false가 되고 결과가 있을 때 이동)
   useEffect(() => {
-    if (isButtonClicked && !loading && isAnalysisDone && prevData?.result && prevData?.result?.length > 0) {
+    if (isButtonClicked && !loading && (isAnalysisDone || justAnalyzed)) {
       router.push('/saju/basic/result');
     }
-  }, [isButtonClicked, prevData, router, isAnalysisDone, loading]);
+  }, [isButtonClicked, prevData, router, isAnalysisDone, loading, justAnalyzed]);
 
   return (
     <>

@@ -2,7 +2,7 @@
 
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 import { BriefcaseIcon, SparklesIcon, ExclamationTriangleIcon, LockClosedIcon, TicketIcon } from '@heroicons/react/24/outline';
 import { useAuthContext } from '@/contexts/useAuthContext';
 import { useLanguage } from '@/contexts/useLanguageContext';
@@ -27,6 +27,7 @@ export default function BusinessPage() {
     const [prompt, setPrompt] = useState()
     const [selectedSubQ, setSelectedSubQ] = useState(null);
     const [isButtonClicked, setIsButtonClicked] = useState(false);
+    const [justAnalyzed, setJustAnalyzed] = useState(false);
     const isKo = language === 'ko'
     useEffect(() => {
         if (language === 'ko') {
@@ -63,16 +64,20 @@ export default function BusinessPage() {
         },
     ];
 
-    const service = new SajuAnalysisService({
-        user,
-        userData: targetProfile,
-        language,
-        maxEditCount: MAX_EDIT_COUNT,
-        setEditCount,
-        setLoading,
-        setAiResult,
-        handleCancelHelper
-    });
+    const service = useMemo(
+        () =>
+            new SajuAnalysisService({
+                user,
+                userData: targetProfile,
+                language,
+                maxEditCount: MAX_EDIT_COUNT,
+                setEditCount,
+                setLoading,
+                setAiResult,
+                handleCancelHelper,
+            }),
+        [user, targetProfile, language, MAX_EDIT_COUNT, setEditCount, setLoading, setAiResult],
+    );
 
     const prevData = userData?.usageHistory?.ZWealthBusiness;
     const isAnalysisDone = (() => {
@@ -124,17 +129,18 @@ export default function BusinessPage() {
             preset.type = 'wealthBusiness';
             preset.cacheKey = 'ZWealthBusiness';
 
-            await service.analyze(preset);
+            const result = await service.analyze(preset);
+            if (result) setJustAnalyzed(true);
         } catch (error) {
             console.error(error);
         }
     };
 
     useEffect(() => {
-        if (isButtonClicked && !loading && isAnalysisDone && prevData?.result && prevData?.result?.length > 0) {
+        if (isButtonClicked && !loading && (isAnalysisDone || justAnalyzed)) {
             router.push('/saju/wealth/business/result');
         }
-    }, [isButtonClicked, prevData, router, isAnalysisDone, loading]);
+    }, [isButtonClicked, prevData, router, isAnalysisDone, loading, justAnalyzed]);
 
     const isDisabled = (loading && !wealthEnergy.isConsuming) || !user || loading;
     const isDisabled2 = !isAnalysisDone && isLocked;

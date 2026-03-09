@@ -105,6 +105,7 @@ export default function SelBirthPage() {
     return true;
   }, [prevData, gender, saju, dueDate, partnerBirthInfo, partnerTimeUnknown, birthMethod, babyGender, startDate, endDate]);
   const [isButtonClicked, setIsButtonClicked] = useState(false);
+  const [justAnalyzed, setJustAnalyzed] = useState(false);
   const isDisabled = !user || loading || !dueDate;
 
   const service = useMemo(
@@ -160,7 +161,7 @@ export default function SelBirthPage() {
 
         const purposeText = `${language === 'ko' ? '출산 택일' : 'Childbirth Selection'} (${methodText}, ${genderText})`;
 
-        await service.analyze(
+        const result = await service.analyze(
           AnalysisPresets.selBirth({
             saju,
             sajuDesc,
@@ -175,6 +176,7 @@ export default function SelBirthPage() {
             babyGender,
           }),
         );
+        if (result) setJustAnalyzed(true);
         // 콜백 제거
 
       } catch (error) {
@@ -188,10 +190,10 @@ export default function SelBirthPage() {
 
   // [NEW] Reactive Redirect
   useEffect(() => {
-    if (isButtonClicked && !loading && isAnalysisDone && prevData?.result && prevData?.result?.length > 0) {
+    if (isButtonClicked && !loading && (isAnalysisDone || justAnalyzed)) {
       router.push('/saju/selbirth/result');
     }
-  }, [isButtonClicked, prevData, router, isAnalysisDone, loading]);
+  }, [isButtonClicked, prevData, router, isAnalysisDone, loading, justAnalyzed]);
 
   const renderInput = (onStart) => {
     return (

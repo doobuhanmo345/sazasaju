@@ -1,7 +1,7 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 import Image from 'next/image';
 import {
   CircleStackIcon,
@@ -41,7 +41,7 @@ export default function Wealth({ }) {
   const router = useRouter();
   const { sajuDesc, user, userData, selectedProfile } = useAuthContext();
   const { MAX_EDIT_COUNT, isLocked, setEditCount, editCount } = useUsageLimit();
-  const { setLoading, setAiResult, handleCancelHelper } = useLoading();
+  const { loading, setLoading, setAiResult, handleCancelHelper } = useLoading();
   // 컨텍스트 스위칭
   const targetProfile = selectedProfile || userData;
   const { birthDate: inputDate, isTimeUnknown, gender, saju } = targetProfile || {};
@@ -62,6 +62,7 @@ export default function Wealth({ }) {
   const [progress, setProgress] = useState(0);
   const [data, setData] = useState(null);
   const [isButtonClicked, setIsButtonClicked] = useState(false);
+  const [justAnalyzed, setJustAnalyzed] = useState(false);
   const wealthEnergy = useConsumeEnergy();
 
   const totalStep = 4;
@@ -244,16 +245,20 @@ export default function Wealth({ }) {
     return () => clearInterval(interval);
   }, [loading, isCachedLoading]);
 
-  const service = new SajuAnalysisService({
-    user,
-    userData: targetProfile,
-    language,
-    maxEditCount: MAX_EDIT_COUNT,
-    setEditCount,
-    setLoading,
-    setAiResult,
-    handleCancelHelper
-  });
+  const service = useMemo(
+    () =>
+      new SajuAnalysisService({
+        user,
+        userData: targetProfile,
+        language,
+        maxEditCount: MAX_EDIT_COUNT,
+        setEditCount,
+        setLoading,
+        setAiResult,
+        handleCancelHelper,
+      }),
+    [user, targetProfile, language, MAX_EDIT_COUNT, setEditCount, setLoading, setAiResult],
+  );
 
   const handleWealthAnalysis = async () => {
     setAiResult('');
@@ -263,7 +268,7 @@ export default function Wealth({ }) {
     const qprompt = SUB_Q_TYPES?.[selectedQ]?.find((i) => i.id === selectedSubQ)?.prompt;
 
     try {
-      await service.analyze(
+      const result = await service.analyze(
         AnalysisPresets.wealth({
           saju,
           sajuDesc,
@@ -274,6 +279,7 @@ export default function Wealth({ }) {
           language,
         })
       );
+      if (result) setJustAnalyzed(true);
       setStep(4);
     } catch (error) {
       console.error(error);
@@ -305,11 +311,11 @@ export default function Wealth({ }) {
   const isDisabled = (loading && !wealthEnergy.isConsuming) || !user || loading;
   const isDisabled2 = !isAnalysisDone && isLocked;
   useEffect(() => {
-    if (isButtonClicked && !loading && isAnalysisDone && prevData?.result && prevData?.result?.length > 0) {
+    if (isButtonClicked && !loading && (isAnalysisDone || justAnalyzed)) {
       // [NEW] Reactive Redirect
       router.push('/saju/wealth/result');
     }
-  }, [isButtonClicked, prevData, router, isAnalysisDone, loading]);
+  }, [isButtonClicked, prevData, router, isAnalysisDone, loading, justAnalyzed]);
 
   return (
     <div className="w-full">

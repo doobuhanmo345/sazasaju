@@ -2,7 +2,7 @@
 
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 import { ChatBubbleLeftRightIcon, SparklesIcon, ExclamationTriangleIcon, LockClosedIcon, TicketIcon, HeartIcon, ChevronDownIcon } from '@heroicons/react/24/outline';
 import { useAuthContext } from '@/contexts/useAuthContext';
 import { useLanguage } from '@/contexts/useLanguageContext';
@@ -30,6 +30,7 @@ export default function FeelingsPage() {
     const loveEnergy = useConsumeEnergy();
 
     const [isButtonClicked, setIsButtonClicked] = useState(false);
+    const [justAnalyzed, setJustAnalyzed] = useState(false);
     const [showPartnerInput, setShowPartnerInput] = useState(false);
     const [promptQ2, setPromptQ2] = useState('그 사람이 나를 어떻게 생각하는지');
     const [loadingPrompts, setLoadingPrompts] = useState(true);
@@ -93,16 +94,20 @@ export default function FeelingsPage() {
 
     // [REMOVED] SUB_Q_TYPES
 
-    const service = new SajuAnalysisService({
-        user,
-        userData: targetProfile,
-        language,
-        maxEditCount: MAX_EDIT_COUNT,
-        setEditCount,
-        setLoading,
-        setAiResult,
-        handleCancelHelper,
-    });
+    const service = useMemo(
+        () =>
+            new SajuAnalysisService({
+                user,
+                userData: targetProfile,
+                language,
+                maxEditCount: MAX_EDIT_COUNT,
+                setEditCount,
+                setLoading,
+                setAiResult,
+                handleCancelHelper,
+            }),
+        [user, targetProfile, language, MAX_EDIT_COUNT, setEditCount, setLoading, setAiResult],
+    );
 
     const prevData = userData?.usageHistory?.ZLoveFeelings;
     const isAnalysisDone = (() => {
@@ -152,17 +157,18 @@ export default function FeelingsPage() {
                 partnerGender: finalPartnerGender,
             });
 
-            await service.analyze(preset);
+            const result = await service.analyze(preset);
+            if (result) setJustAnalyzed(true);
         } catch (error) {
             console.error(error);
         }
     };
 
     useEffect(() => {
-        if (isButtonClicked && !loading && isAnalysisDone && prevData?.result && prevData?.result?.length > 0) {
+        if (isButtonClicked && !loading && (isAnalysisDone || justAnalyzed)) {
             router.push('/saju/love/feelings/result');
         }
-    }, [isButtonClicked, prevData, router, isAnalysisDone, loading]);
+    }, [isButtonClicked, prevData, router, isAnalysisDone, loading, justAnalyzed]);
     const isDisabled = (loading && !loveEnergy.isConsuming) || !user || loading || loadingPrompts;
     const isDisabled2 = !isAnalysisDone && isLocked;
 

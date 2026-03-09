@@ -1,6 +1,6 @@
 'use client';
 
-import { useRef, useState, useEffect } from 'react';
+import { useRef, useState, useEffect, useMemo } from 'react';
 import Image from 'next/image';
 import { AnalysisStepContainer } from '@/components/AnalysisStepContainer';
 import { useSajuCalculator } from '@/hooks/useSajuCalculator';
@@ -55,6 +55,7 @@ export default function TodaysLuckPage() {
   console.log(prevData?.selectedDate, new Date().toISOString().split('T')[0], selectedDate)
 
   const [isButtonClicked, setIsButtonClicked] = useState(false);
+  const [justAnalyzed, setJustAnalyzed] = useState(false);
   const isDisabled2 = !isTargetOthers && !isAnalysisDone && isLocked;
   // Client-side Title Update for Localization (Static Export Support)
   useEffect(() => {
@@ -74,19 +75,23 @@ export default function TodaysLuckPage() {
     }
   }, [inputDate, gender, isTimeUnknown, language]);
 
-  const service = new SajuAnalysisService({
-    user,
-    userData: targetProfile, // AI 분석에 타겟 프로필 전달
-    language,
-    maxEditCount: MAX_EDIT_COUNT,
-    uiText: UI_TEXT,
-    langPrompt,
-    hanja,
-    setEditCount,
-    setLoading,
-    setAiResult,
-    handleCancelHelper
-  });
+  const service = useMemo(
+    () =>
+      new SajuAnalysisService({
+        user,
+        userData: targetProfile,
+        language,
+        maxEditCount: MAX_EDIT_COUNT,
+        uiText: UI_TEXT,
+        langPrompt,
+        hanja,
+        setEditCount,
+        setLoading,
+        setAiResult,
+        handleCancelHelper,
+      }),
+    [user, targetProfile, language, MAX_EDIT_COUNT, setEditCount, setLoading, setAiResult],
+  );
 
   const handleStartClick = async (onstart) => {
     // [UX FIX] 로딩 화면을 먼저 보여줌
@@ -104,11 +109,12 @@ export default function TodaysLuckPage() {
 
     setAiResult('');
     try {
-      await service.analyze(AnalysisPresets.daily({ saju, gender, sajuDesc, selectedDate }), (result) => {
+      const result = await service.analyze(AnalysisPresets.daily({ saju, gender, sajuDesc, selectedDate }), (res) => {
         console.log('✅ 오늘의 운세 완료!');
         setLoading(false);
-        setAiResult(result);
+        setAiResult(res);
       });
+      if (result) setJustAnalyzed(true);
     } catch (error) {
       console.error(error);
     }
@@ -243,10 +249,10 @@ export default function TodaysLuckPage() {
 
   // [NEW] Reactive Redirect
   useEffect(() => {
-    if (isButtonClicked && !loading && isAnalysisDone && prevData?.result && prevData?.result?.length > 0) {
+    if (isButtonClicked && !loading && (isAnalysisDone || justAnalyzed)) {
       router.push('/saju/todaysluck/result');
     }
-  }, [isButtonClicked, prevData, router, isAnalysisDone, loading]);
+  }, [isButtonClicked, prevData, router, isAnalysisDone, loading, justAnalyzed]);
 
   return (
     <>

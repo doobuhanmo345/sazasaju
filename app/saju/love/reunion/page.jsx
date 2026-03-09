@@ -2,7 +2,7 @@
 
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 import { ArrowPathIcon, SparklesIcon, ExclamationTriangleIcon, LockClosedIcon, TicketIcon } from '@heroicons/react/24/outline';
 import { HeartIcon, ChevronDownIcon } from '@heroicons/react/24/outline';
 import { useAuthContext } from '@/contexts/useAuthContext';
@@ -31,6 +31,7 @@ export default function ReunionPage() {
     const { gender, saju, isTimeUnknown } = targetProfile || {};
     const loveEnergy = useConsumeEnergy();
     const [isButtonClicked, setIsButtonClicked] = useState(false);
+    const [justAnalyzed, setJustAnalyzed] = useState(false);
     const [showPartnerInput, setShowPartnerInput] = useState(false);
     const [promptQ1, setPromptQ1] = useState('재회 가능성.');
     const [promptQ2, setPromptQ2] = useState('다시 만날 운명이 있을지');
@@ -91,16 +92,20 @@ export default function ReunionPage() {
 
     // [REMOVED] SUB_Q_TYPES
 
-    const service = new SajuAnalysisService({
-        user,
-        userData: targetProfile,
-        language,
-        maxEditCount: MAX_EDIT_COUNT,
-        setEditCount,
-        setLoading,
-        setAiResult,
-        handleCancelHelper,
-    });
+    const service = useMemo(
+        () =>
+            new SajuAnalysisService({
+                user,
+                userData: targetProfile,
+                language,
+                maxEditCount: MAX_EDIT_COUNT,
+                setEditCount,
+                setLoading,
+                setAiResult,
+                handleCancelHelper,
+            }),
+        [user, targetProfile, language, MAX_EDIT_COUNT, setEditCount, setLoading, setAiResult],
+    );
 
     const prevData = userData?.usageHistory?.ZLoveReunion;
     const isAnalysisDone = (() => {
@@ -142,17 +147,18 @@ export default function ReunionPage() {
                 partnerSaju: showPartnerInput ? partnerSaju : null,
                 partnerGender: showPartnerInput ? partnerGender : null,
             });
-            await service.analyze(preset);
+            const result = await service.analyze(preset);
+            if (result) setJustAnalyzed(true);
         } catch (error) {
             console.error(error);
         }
     };
 
     useEffect(() => {
-        if (isButtonClicked && !loading && isAnalysisDone && prevData?.result && prevData?.result?.length > 0) {
+        if (isButtonClicked && !loading && (isAnalysisDone || justAnalyzed)) {
             router.push('/saju/love/reunion/result');
         }
-    }, [isButtonClicked, prevData, router, isAnalysisDone, loading]);
+    }, [isButtonClicked, prevData, router, isAnalysisDone, loading, justAnalyzed]);
 
 
     const isDisabled = (loading && !loveEnergy.isConsuming) || !user || loading || loadingPrompts;
