@@ -379,42 +379,42 @@ exports.processAnalysisQueue = onDocumentCreated(
         }
       }
 
+      /*
+      // 6. Delete completed queue document to prevent stale UI
+      try {
+        await snapshot.ref.delete();
+        console.log(`[processAnalysisQueue] Deleted completed queue document ${docId}`);
+      } catch (deleteError) {
+        console.error(`[processAnalysisQueue] Failed to delete queue document ${docId}:`, deleteError);
+      }
+      */
+      console.log(`[processAnalysisQueue] Successfully processed ${docId}`);
+    } catch (error) {
+      console.error(`[processAnalysisQueue] Error processing ${docId}:`, error);
 
-      6. Delete completed queue document to prevent stale UI
-      y {
-        ait snapshot.ref.delete();
-        nsole.log(`[processAnalysisQueue] Deleted completed queue document ${docId}`);
-      catch (deleteError) {
-          nsole.error(`[processAnalysisQueue] Failed to delete queue document ${docId}:`, deleteError);
+      // 5. 에러 처리
+      await snapshot.ref.update({
+        status: 'failed',
+        error: error.message || 'Unknown error occurred',
+        failedAt: admin.firestore.FieldValue.serverTimestamp(),
+      });
 
-
-          nsole.log(`[processAnalysisQueue] Successfully processed ${docId}`);
-    catch (error) {
-            nsole.error(`[processAnalysisQueue] Error processing ${docId}:`, error);
-
-            5. 에러 처리
-      ait snapshot.ref.update({
-              atus: 'failed',
-              ror: error.message || 'Unknown error occurred',
-              iledAt: admin.firestore.FieldValue.serverTimestamp(),
-      ;
-
-            6. Release isAnalyzing lock on error
-      nst userId = data.userId;
-            (userId) {
-        y {
-          ait admin.firestore().collection('users').doc(userId).update({
-              Analyzing: false,
-              alysisStartedAt: null,
-              datedAt: admin.firestore.FieldValue.serverTimestamp()
-          ;
-                nsole.log(`[processAnalysisQueue] Released isAnalyzing lock after error for user ${userId}`);
-        catch (lockError) {
-                  nsole.error(`[processAnalysisQueue] Failed to release lock after error for user ${userId}:`, lockError);
-        
-      
-    
-  
+      // 6. Release isAnalyzing lock on error
+      const userId = data.userId;
+      if (userId) {
+        try {
+          await admin.firestore().collection('users').doc(userId).update({
+            isAnalyzing: false,
+            analysisStartedAt: null,
+            updatedAt: admin.firestore.FieldValue.serverTimestamp()
+          });
+          console.log(`[processAnalysisQueue] Released isAnalyzing lock after error for user ${userId}`);
+        } catch (lockError) {
+          console.error(`[processAnalysisQueue] Failed to release lock after error for user ${userId}:`, lockError);
+        }
+      }
+    }
+  }
 );
 
 /**
