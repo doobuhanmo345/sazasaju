@@ -96,7 +96,13 @@ const ReportTemplateToday = ({ }) => {
       {/* 헤더 */}
       <header className="fortune-header">
         <h1 className="fortune-main-title">{isEn ? 'Daily Fortune' : '오늘의 운세 리포트'}</h1>
-        <p className="fortune-date-text">{data?.today?.date}</p>
+        <p className="fortune-date-text">
+          {new Date().toLocaleDateString(isEn ? 'en-US' : 'ko-KR', {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric',
+          })}
+        </p>
       </header>
 
       {/* 메인 총운 및 점수 바 */}
