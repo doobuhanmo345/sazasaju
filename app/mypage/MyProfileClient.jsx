@@ -1,9 +1,10 @@
 'use client';
 
-import React, { useCallback } from 'react';
+import React, { useCallback, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuthContext } from '@/contexts/useAuthContext';
 import { useLanguage } from '@/contexts/useLanguageContext';
+import ConfirmModal from '@/components/ConfirmModal';
 import MyCredit from './MyCredit';
 import SelectedProfile from './SelectedProfile';
 import UserProfile from './userProfile';
@@ -19,12 +20,16 @@ export default function MyProfileClient() {
     const { language } = useLanguage();
     const isKo = language === 'ko';
 
+    const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
+
     const handleLogout = useCallback(async () => {
-        if (confirm(isKo ? '로그아웃 하시겠습니까?' : 'Are you sure you want to log out?')) {
-            await logout();
-            router.push('/');
-        }
-    }, [logout, router, isKo]);
+        await logout();
+        router.push('/');
+    }, [logout, router]);
+
+    const openLogoutModal = useCallback(() => {
+        setIsLogoutModalOpen(true);
+    }, []);
 
     if (!user) {
         return (
@@ -66,7 +71,7 @@ export default function MyProfileClient() {
                 <MenuSection
                     isKo={isKo}
                     userData={userData}
-                    handleLogout={handleLogout}
+                    handleLogout={openLogoutModal}
                     router={router}
                 />
             </div>
@@ -74,6 +79,17 @@ export default function MyProfileClient() {
             <div className="px-10 max-w-lg mx-auto mt-20 opacity-20">
                 <UserProfile />
             </div>
+
+            <ConfirmModal
+                isOpen={isLogoutModalOpen}
+                title={isKo ? '로그아웃' : 'Logout'}
+                message={isKo ? '정말 로그아웃 하시겠습니까?' : 'Are you sure you want to log out?'}
+                confirmLabel={isKo ? '로그아웃' : 'Logout'}
+                cancelLabel={isKo ? '취소' : 'Cancel'}
+                onConfirm={handleLogout}
+                onCancel={() => setIsLogoutModalOpen(false)}
+                danger
+            />
         </div>
     );
 }
