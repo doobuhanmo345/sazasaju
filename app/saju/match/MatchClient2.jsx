@@ -202,7 +202,7 @@ export default function MatchPage() {
 
   const service = useMemo(() => new SajuAnalysisService({
     user,
-    userData,
+    userData: targetProfile,
     language,
     maxEditCount: MAX_EDIT_COUNT,
     setEditCount,
