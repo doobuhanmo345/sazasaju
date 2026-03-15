@@ -1,0 +1,13 @@
+{{language}}
+{{DEFAULT_INSTRUCTION}}
+## 분석방법
+----
+##[SAJU DATA]
+Relationship: {{relationLabel}}: {{relPrompt}}
+{{membersInfo}}
+{{langPrompt}} {{hanjaPrompt}}
+
+##**[JSON TEMPLATE TO FILL]**
+**JSON 포멧을 엄격히 유지할 것 !IMPORTANT**
+{{targetFormat}}
+**JSON 포멧을 엄격히 유지할 것 !IMPORTANT**
